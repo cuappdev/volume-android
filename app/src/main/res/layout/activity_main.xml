@@ -12,16 +12,18 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-    <include
+    <com.example.volume_android.views.WebviewTop
+        android:id="@+id/webview_top"
+        app:layout_constraintTop_toTopOf="parent"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        layout="@layout/webview_top_fragment"
-        app:layout_constraintTop_toTopOf="parent"/>
+        android:layout_height="wrap_content"/>
 
-    <include
+    <com.example.volume_android.views.WebviewBottom
+        android:id="@+id/webview_bot"
+        app:layout_constraintBottom_toBottomOf="parent"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        layout="@layout/bottom_webview_actions"
-        app:layout_constraintBottom_toBottomOf="parent"/>
+        android:layout_height="wrap_content"/>
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
