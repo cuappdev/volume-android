@@ -23,10 +23,9 @@
         style="@style/roboto_gray"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Article Name"
+        android:text="Reading in Volume"
         android:textColor="#979797"
         android:textSize="10dp"
-        android:layout_marginBottom="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
@@ -38,9 +37,10 @@
         android:layout_height="wrap_content"
         android:src="@drawable/ic_book"
         android:layout_marginRight="15dp"
-        app:layout_constraintBottom_toBottomOf="@id/webview_readingtext"
+
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="@id/webview_article_name" />
+        app:layout_constraintTop_toTopOf="@+id/webview_article_name" />
 
     <ImageView
         android:id="@+id/webview_compass"
@@ -48,9 +48,10 @@
         android:layout_height="wrap_content"
         android:src="@drawable/ic_compass"
         android:layout_marginRight="15dp"
-        app:layout_constraintBottom_toBottomOf="@id/webview_readingtext"
+
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintRight_toLeftOf="@+id/webview_book"
-        app:layout_constraintTop_toTopOf="@id/webview_article_name" />
+        app:layout_constraintTop_toTopOf="@+id/webview_article_name" />
 
 
 
