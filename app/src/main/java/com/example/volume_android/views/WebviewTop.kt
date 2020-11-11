@@ -9,6 +9,8 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.view.marginBottom
+import androidx.core.view.marginTop
 import com.example.volume_android.R
 
 class WebviewTop @JvmOverloads constructor(
@@ -33,6 +35,9 @@ class WebviewTop @JvmOverloads constructor(
     fun minimize(b: Boolean) {
 
         if (b) {
+            val param = name.layoutParams as ViewGroup.MarginLayoutParams
+            param.setMargins(0,20,0,10)
+            name.layoutParams = param
             readingText.visibility = View.GONE
             compass.visibility = View.GONE
             book.visibility = View.GONE
@@ -40,6 +45,9 @@ class WebviewTop @JvmOverloads constructor(
 
         }
         else{
+            val param = name.layoutParams as ViewGroup.MarginLayoutParams
+            param.setMargins(0,20,0,0)
+            name.layoutParams = param
             readingText.visibility = View.VISIBLE
             compass.visibility = View.VISIBLE
             book.visibility = View.VISIBLE
