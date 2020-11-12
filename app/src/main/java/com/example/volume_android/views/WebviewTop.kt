@@ -28,7 +28,6 @@ class WebviewTop @JvmOverloads constructor(
         name = findViewById(R.id.webview_article_name)
         readingText = findViewById(R.id.webview_readingtext)
         compass = findViewById(R.id.webview_compass)
-        book = findViewById(R.id.webview_book)
 
     }
 
@@ -40,8 +39,6 @@ class WebviewTop @JvmOverloads constructor(
             name.layoutParams = param
             readingText.visibility = View.GONE
             compass.visibility = View.GONE
-            book.visibility = View.GONE
-
 
         }
         else{
@@ -50,7 +47,6 @@ class WebviewTop @JvmOverloads constructor(
             name.layoutParams = param
             readingText.visibility = View.VISIBLE
             compass.visibility = View.VISIBLE
-            book.visibility = View.VISIBLE
         }
 
 
