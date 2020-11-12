@@ -36,6 +36,9 @@ dependencies {
     implementation "androidx.core:core-ktx:+"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation 'com.google.android.material:material:1.2.1'
+
+    //Circular Images
+    implementation 'de.hdodenhof:circleimageview:3.1.0'
 }
 repositories {
     mavenCentral()
