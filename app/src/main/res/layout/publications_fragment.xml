@@ -43,7 +43,7 @@
         android:text="Publication Name"
         app:layout_constraintTop_toBottomOf="@+id/publication_logo"
         app:layout_constraintLeft_toLeftOf="parent"
-        style="@style/futura_black"
+        style="@style/begum_black_bold"
         android:layout_marginLeft="15dp"/>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -235,6 +235,34 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/divider"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/social_media_holder"
+        app:layout_constraintRight_toRightOf="parent"
+        android:src="@drawable/ic_divider"
+        android:layout_marginTop="40dp"/>
+
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/article_title"
+        app:layout_constraintTop_toBottomOf="@id/divider"
+        app:layout_constraintLeft_toLeftOf="@id/publicantion_name"
+        android:src="@drawable/ic_articles"
+        android:layout_marginTop="40dp"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:id="@+id/article_rv"
+        app:layout_constraintTop_toBottomOf="@+id/article_title"/>
 
 
 
