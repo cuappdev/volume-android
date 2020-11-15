@@ -75,7 +75,164 @@
             android:textSize="15dp"
             style="@style/futura_black_bold"/>
 
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:id="@+id/count_holder"
+        app:layout_constraintLeft_toLeftOf="@+id/publicantion_name"
+        app:layout_constraintTop_toBottomOf="@+id/publicantion_name">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/begum_grey"
+            android:textSize="12dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:text="10 articles"
+            android:id="@+id/article_count"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/begum_grey"
+            app:layout_constraintLeft_toRightOf="@+id/article_count"
+            app:layout_constraintTop_toTopOf="@id/article_count"
+            app:layout_constraintBottom_toBottomOf="@+id/article_count"
+            android:text="."
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="10dp"
+            android:textSize="20dp"
+            android:id="@+id/dot"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/shout_count"
+            android:textSize="12dp"
+            app:layout_constraintLeft_toRightOf="@+id/dot"
+            app:layout_constraintTop_toTopOf="@+id/article_count"
+            android:text="205 shout-outs"
+            style="@style/begum_grey"
+            android:layout_marginLeft="10dp"/>
+
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <TextView
+        android:layout_width="380dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/publication_description"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginLeft="15dp"
+        android:text="We are a group of passionate food enthusiasts who come together to publish a diversity of recipes, articles and stories. Once each semester, we publish our magazine Crème de Cornell to highlight a theme in our submitted writings. "
+        app:layout_constraintTop_toBottomOf="@+id/count_holder"
+        style="@style/helvetica_black"
+        android:textSize="14dp"
+        android:layout_marginTop="5dp"/>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toLeftOf="@id/publicantion_name"
+        app:layout_constraintTop_toBottomOf="@id/publication_description"
+        android:layout_marginTop="10dp"
+        android:id="@+id/social_media_holder">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/insta_holder"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/insta_pic"
+                android:src="@drawable/ic_insta"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/insta_text"
+                android:text="Instagram"
+                style="@style/helvetica_orange"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toRightOf="@+id/insta_pic"
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginLeft="5dp"
+                android:textSize="12dp"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/fb_holder"
+            app:layout_constraintLeft_toRightOf="@+id/insta_holder"
+            android:layout_marginLeft="20dp"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/fb_pic"
+                android:src="@drawable/ic_fb"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/fb_text"
+                android:text="Facebook"
+                style="@style/helvetica_orange"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toRightOf="@+id/fb_pic"
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginLeft="5dp"
+                android:textSize="12dp"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/link_holder"
+            app:layout_constraintLeft_toRightOf="@+id/fb_holder"
+            android:layout_marginLeft="20dp"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/link_pic"
+                android:src="@drawable/ic_link"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/link_text"
+                android:text="cremedecornell.net"
+                app:layout_constraintLeft_toRightOf="@+id/link_pic"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_marginLeft="5dp"
+                style="@style/helvetica_orange"
+                android:textSize="12dp"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
