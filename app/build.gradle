@@ -1,6 +1,7 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-android'
+apply plugin: "com.apollographql.apollo"
 
 android {
     compileSdkVersion 29
@@ -25,6 +26,16 @@ android {
 
 }
 
+apollo {
+    // instruct the compiler to generate Kotlin models
+    generateKotlinModels.set(true)
+}
+
+
+repositories {
+    mavenCentral()
+}
+
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
@@ -39,7 +50,19 @@ dependencies {
 
     //Circular Images
     implementation 'de.hdodenhof:circleimageview:3.1.0'
+
+
+    //Apollo
+    implementation("com.apollographql.apollo:apollo-runtime:2.4.5")
+    // optional: if you want to use the normalized cache
+    implementation("com.apollographql.apollo:apollo-normalized-cache-sqlite:2.4.5")
+    // optional: for coroutines support
+    implementation("com.apollographql.apollo:apollo-coroutines-support:2.4.5")
+    // optional: for RxJava3 support
+    implementation("com.apollographql.apollo:apollo-rx3-support:2.4.5")
+    // optional: if you just want the generated models and parsers and write your own HTTP code/cache code, you can remove apollo-runtime
+    // and use apollo-api instead
+    implementation("com.apollographql.apollo:apollo-api:2.4.5")
+
 }
-repositories {
-    mavenCentral()
-}
+
