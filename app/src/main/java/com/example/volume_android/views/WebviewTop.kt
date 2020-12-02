@@ -35,15 +35,14 @@ class WebviewTop @JvmOverloads constructor(
 
         if (b) {
             val param = name.layoutParams as ViewGroup.MarginLayoutParams
-            param.setMargins(0,20,0,10)
+            param.setMargins(0, 20, 0, 10)
             name.layoutParams = param
             readingText.visibility = View.GONE
             compass.visibility = View.GONE
 
-        }
-        else{
+        } else {
             val param = name.layoutParams as ViewGroup.MarginLayoutParams
-            param.setMargins(0,20,0,0)
+            param.setMargins(0, 20, 0, 0)
             name.layoutParams = param
             readingText.visibility = View.VISIBLE
             compass.visibility = View.VISIBLE
