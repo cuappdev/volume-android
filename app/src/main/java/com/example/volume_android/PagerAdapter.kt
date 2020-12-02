@@ -19,8 +19,7 @@ class PagerAdapter(fragmentManager: FragmentManager): FragmentPagerAdapter(fragm
         return when (position) {
             0 -> HomeFragment()
             1 -> PublicationsFragment()
-            2 -> SavedPublicationsFragment()
-            else -> return HomeFragment()
+            else -> SavedPublicationsFragment()
         }
     }
 
