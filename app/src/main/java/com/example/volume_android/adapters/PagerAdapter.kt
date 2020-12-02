@@ -1,4 +1,4 @@
-package com.example.volume_android
+package com.example.volume_android.adapters
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager

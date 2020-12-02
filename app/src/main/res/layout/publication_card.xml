@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/publication_card_logo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:src="@drawable/logo_template"/>
+
+        <TextView
+            android:id="@+id/publication_card_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/begum_black_bold"
+            android:layout_marginTop="5dp"
+            android:textSize="18dp"
+            android:layout_marginLeft="10dp"
+            app:layout_constraintLeft_toRightOf="@id/publication_card_logo"
+            android:text="Creme de Cornell"
+            app:layout_constraintTop_toTopOf="@id/publication_card_logo"/>
+
+        <TextView
+            android:id="@+id/publication_card_description"
+            style="@style/roboto_gray"
+            android:layout_width="wrap_content"
+            android:textSize="12dp"
+            android:layout_marginTop="5dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/publication_card_name"
+            app:layout_constraintLeft_toLeftOf="@id/publication_card_name"
+            android:text="A description about Creme de Cornell"/>
+
+        <ImageView
+            android:id="@+id/publication_card_smallline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/publication_card_description"
+            app:layout_constraintLeft_toLeftOf="@id/publication_card_description"
+            android:src="@drawable/ic_smalllinesvg"
+            android:layout_marginTop="5dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/roboto_black"
+            android:textSize="12dp"
+            app:layout_constraintLeft_toRightOf="@id/publication_card_smallline"
+            app:layout_constraintTop_toTopOf="@id/publication_card_smallline"
+            app:layout_constraintBottom_toBottomOf="@id/publication_card_smallline"
+            android:layout_marginLeft="5dp"
+            android:text=' "We cream for Cornell" '/>
+
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="@id/publication_card_name"
+            android:src="@drawable/ic_followplussvg"
+            android:layout_marginRight="10dp"/>
+
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.cardview.widget.CardView>
