@@ -18,12 +18,11 @@ class WebviewBottom @JvmOverloads constructor(
         LayoutInflater.from(context).inflate(R.layout.bottom_webview_actions, this, true)
     }
 
-    fun minimize(b: Boolean){
+    fun minimize(b: Boolean) {
 
-        if (b){
+        if (b) {
             this.visibility = View.GONE
-        }
-        else{
+        } else {
             this.visibility = View.VISIBLE
         }
     }

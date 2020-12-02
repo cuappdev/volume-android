@@ -18,7 +18,7 @@ class ObservableWebView @JvmOverloads constructor(
     private lateinit var top: WebviewTop
     private lateinit var bot: WebviewBottom
 
-    fun setTopBot(top1: WebviewTop, bot1: WebviewBottom){
+    fun setTopBot(top1: WebviewTop, bot1: WebviewBottom) {
         top = top1
         bot = bot1
     }

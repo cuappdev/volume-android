@@ -23,7 +23,7 @@
             android:id="@+id/article_img"
             android:layout_width="90dp"
             android:layout_height="90dp"
-            android:src="@drawable/ic_launcher_background"
+            android:src="@drawable/articleimg"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 

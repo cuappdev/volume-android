@@ -7,15 +7,15 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.example.volume_android.R
 
-class PublicationsFragment : Fragment() {
+class OnboardingFrag2 : Fragment() {
 
     companion object {
-        fun newInstance(): PublicationsFragment = PublicationsFragment()
+        fun newInstance(): OnboardingFrag2 = OnboardingFrag2()
     }
 
     override fun onCreateView(inflater: LayoutInflater,
                               container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.publications_fragment, container, false)
+        return inflater.inflate(R.layout.onboardingfrag2, container, false)
     }
 }

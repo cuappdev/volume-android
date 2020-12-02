@@ -1,4 +1,4 @@
-package com.example.volume_android
+package com.example.volume_android.adapters
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
@@ -9,7 +9,7 @@ import com.example.volume_android.fragments.SavedPublicationsFragment
 
 private const val COUNT = 3
 
-class PagerAdapter(fragmentManager: FragmentManager): FragmentPagerAdapter(fragmentManager) {
+class PagerAdapter(fragmentManager: FragmentManager) : FragmentPagerAdapter(fragmentManager) {
 
     override fun getCount(): Int {
         return COUNT
@@ -23,5 +23,5 @@ class PagerAdapter(fragmentManager: FragmentManager): FragmentPagerAdapter(fragm
         }
     }
 
-    
+
 }
