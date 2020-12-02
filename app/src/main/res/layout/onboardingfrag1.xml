@@ -10,7 +10,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        android:src="@drawable/ic_onboarding1svg"/>
+        android:src="@drawable/onboardingpage1" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
