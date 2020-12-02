@@ -6,23 +6,102 @@
     android:layout_height="match_parent">
 
     <ImageView
-        android:id="@+id/imageView"
+        android:id="@+id/volume_title_logo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="2dp"
-        android:layout_marginTop="3dp"
+        android:layout_marginStart="6dp"
+        android:layout_marginTop="36dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_volumesvg" />
+        app:srcCompat="@drawable/volume_title"
+        tools:srcCompat="@drawable/volume_title" />
 
-    <Button
-        android:id="@+id/toOnboarding"
+    <TextView
+        android:id="@+id/big_red_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="2dp"
-        android:layout_marginTop="1dp"
-        android:text="Button"
-        app:layout_constraintStart_toEndOf="@+id/imageView"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_marginStart="12dp"
+        android:text="The Big Red "
+        android:textSize="20sp"
+        style="@style/begum_black"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="108dp"
+        tools:layout_editor_absoluteY="102dp" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/big_red_rv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/big_red_tv"/>
+
+    <TextView
+        android:id="@+id/follwing_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="43dp"
+        android:text="Following"
+        style="@style/begum_black"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/big_red_rv" />
+
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/follwing_rv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/follwing_tv"/>
+
+
+    <ImageView
+        android:id="@+id/volume_logo_more_articles"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:srcCompat="@drawable/volume_logo"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/follwing_rv"/>
+
+    <TextView
+        android:id="@+id/more_articles_message"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="You're up to date!"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/volume_logo_more_articles"/>
+
+
+    <TextView
+        android:id="@+id/more_articles_message_long"
+        android:layout_width="291dp"
+        android:layout_height="44dp"
+        android:text="You've seen all the new articles from the publications you have been following"
+        android:textAlignment="center"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/more_articles_message" />
+
+    <TextView
+        android:id="@+id/other_articles"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="20dp"
+        android:text="Other Articles"
+        style="@style/begum_black"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/more_articles_message_long" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/other_articles"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

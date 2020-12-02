@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/pub_name_article_layout"
+            style="@style/begum_black"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Creme de Cornell"
+            android:textSize="12dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/article_title"
+            style="@style/helvetica_bold"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:text="Sangkhaya: Thai Pandan Custard Dip"
+            android:textSize="16dp"
+            android:layout_marginTop="6dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/pub_name_article_layout" />
+
+        <ImageView
+            android:id="@+id/article_img"
+            android:layout_width="90dp"
+            android:layout_height="90dp"
+            android:src="@drawable/ic_launcher_background"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/desc_holder"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent">
+
+            <TextView
+                android:id="@+id/post_time"
+                style="@style/begum_grey"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="6h ago"
+                android:textSize="10dp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/dot"
+                android:layout_width="4dp"
+                android:layout_height="4dp"
+                android:layout_marginLeft="5dp"
+                android:src="@drawable/smalldot"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toRightOf="@+id/post_time"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
+            <TextView
+                android:id="@+id/article_shout_count"
+                style="@style/begum_grey"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:text="15 shout-outs"
+                android:textSize="10dp"
+                app:layout_constraintLeft_toRightOf="@+id/dot"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/article_bookmark_icon"
+                style="@style/begum_grey"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                app:layout_constraintLeft_toRightOf="@+id/article_shout_count"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/ic_bookmark_gold"
+                android:visibility="gone"/>
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.cardview.widget.CardView>
