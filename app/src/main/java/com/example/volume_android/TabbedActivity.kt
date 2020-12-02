@@ -1,10 +1,9 @@
 package com.example.volume_android
 
 import android.os.Bundle
-import android.os.PersistableBundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.ViewUtils
 import androidx.viewpager.widget.ViewPager
+import com.example.volume_android.adapters.PagerAdapter
 import com.google.android.material.tabs.TabItem
 import com.google.android.material.tabs.TabLayout
 
