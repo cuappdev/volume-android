@@ -24,6 +24,7 @@
         android:layout_marginStart="12dp"
         android:text="The Big Red "
         android:textSize="20sp"
+        style="@style/begum_black"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:layout_marginTop="108dp"
@@ -43,6 +44,7 @@
         android:layout_marginStart="12dp"
         android:layout_marginTop="43dp"
         android:text="Following"
+        style="@style/begum_black"
         android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/big_red_rv" />
@@ -92,6 +94,7 @@
         android:layout_marginStart="12dp"
         android:layout_marginTop="20dp"
         android:text="Other Articles"
+        style="@style/begum_black"
         android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/more_articles_message_long" />
