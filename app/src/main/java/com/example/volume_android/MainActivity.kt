@@ -11,7 +11,7 @@ import com.example.volume_android.views.WebviewBottom
 import com.example.volume_android.views.WebviewTop
 import kotlinx.android.synthetic.main.activity_main.*
 
-class MainActivity: AppCompatActivity() {
+class MainActivity : AppCompatActivity() {
 
     private lateinit var webView: ObservableWebView
     private lateinit var topWebView: WebviewTop

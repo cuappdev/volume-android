@@ -7,9 +7,9 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.example.volume_android.R
 
-class PublicationsFragment: Fragment() {
+class PublicationsFragment : Fragment() {
 
-    companion object{
+    companion object {
         fun newInstance(): PublicationsFragment = PublicationsFragment()
     }
 

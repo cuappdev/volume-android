@@ -45,5 +45,4 @@
         app:layout_constraintTop_toTopOf="@+id/webview_article_name" />
 
 
-
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -7,9 +7,9 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.example.volume_android.R
 
-class OnboardingFrag2: Fragment() {
+class OnboardingFrag2 : Fragment() {
 
-    companion object{
+    companion object {
         fun newInstance(): OnboardingFrag2 = OnboardingFrag2()
     }
 
