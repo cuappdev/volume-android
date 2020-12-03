@@ -1,26 +1,107 @@
 package com.example.volume_android
 
 import android.os.Bundle
+import android.util.Log
+import android.view.View
+import android.view.ViewGroup
+import android.view.animation.Animation
+import android.view.animation.Transformation
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.viewpager.widget.ViewPager
 import com.example.volume_android.adapters.OnboardingPageAdapter
-import com.example.volume_android.adapters.PagerAdapter
-import com.google.android.material.tabs.TabItem
 import com.google.android.material.tabs.TabLayout
+import org.w3c.dom.Text
+
 
 class OnboardingFragHolder : AppCompatActivity() {
 
     private lateinit var viewPager: ViewPager
-    private lateinit var tabbedLayout: TabLayout
+    private lateinit var volLogo: ImageView
+    private lateinit var volMsg: TextView
+    private lateinit var divider: ImageView
+    private lateinit var vPager: ViewPager
+    private lateinit var nextButton: ImageView
+    private lateinit var holderLayout: ConstraintLayout
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.onboarding_holder)
+
+        var initialClick = true
+        Log.d("Test",initialClick.toString())
+
         viewPager = findViewById(R.id.onboarding_pageviewer)
+        volLogo = findViewById(R.id.vol_logo)
+        volMsg = findViewById(R.id.onboarding_msg)
+        divider = findViewById(R.id.onboarding_divider)
+        vPager = findViewById(R.id.onboarding_pageviewer)
+        nextButton = findViewById(R.id.onboarding_button)
+        holderLayout = findViewById(R.id.holder_layout)
 
         val fragmentAdapter = OnboardingPageAdapter(supportFragmentManager)
         viewPager.adapter = fragmentAdapter
+
+        val shortAnimationDuration = resources.getInteger(android.R.integer.config_shortAnimTime)
+
+        fun View.fadeIn() {
+            apply {
+                // Set the content view to 0% opacity but visible, so that it is visible
+                // (but fully transparent) during the animation.
+                alpha = 0f
+                visibility = View.VISIBLE
+
+                // Animate the content view to 100% opacity, and clear any animation
+                // listener set on the view.
+                animate()
+                        .alpha(1f)
+                        .setDuration(shortAnimationDuration.toLong())
+                        .setListener(null)
+            }
+        }
+
+            fun View.setMarginTop(marginStart: Int, interpolatedTime: Float) {
+
+                val params = layoutParams as ViewGroup.MarginLayoutParams
+                val topMargStart = params.topMargin
+                val animateMargin = topMargStart +  ((marginStart - topMargStart) * interpolatedTime).toInt()
+                params.setMargins(params.leftMargin, animateMargin, params.rightMargin, params.bottomMargin)
+                layoutParams = params
+            }
+
+            val slideUp: Animation = object : Animation() {
+                override fun applyTransformation(interpolatedTime: Float, t: Transformation?) {
+                    val top = 100
+                    volLogo.setMarginTop(top, interpolatedTime)
+                }
+            }
+            slideUp.duration = 1000 // in ms
+            slideUp.setAnimationListener( object: Animation.AnimationListener {
+                override fun onAnimationRepeat(animation: Animation?) {
+                }
+
+                override fun onAnimationEnd(animation: Animation?) {
+                    volMsg.fadeIn()
+                    divider.fadeIn()
+                    vPager.fadeIn()
+                    nextButton.fadeIn()
+                }
+
+                override fun onAnimationStart(animation: Animation?) {
+                }
+                // All the other override functions
+            })
+
+            holderLayout.setOnClickListener {
+                if (initialClick) {
+                    volLogo.startAnimation(slideUp)
+                    initialClick = false
+                }
+
+            }
 
     }
 }
