@@ -16,6 +16,6 @@ class PublicationsFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater,
                               container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.publications_fragment, container, false)
+        return inflater.inflate(R.layout.all_publications, container, false)
     }
 }
