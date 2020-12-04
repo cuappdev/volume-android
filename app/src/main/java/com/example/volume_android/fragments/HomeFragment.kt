@@ -13,8 +13,6 @@ import com.example.volume_android.R
 
 class HomeFragment : Fragment() {
 
-    lateinit var button: Button
-
     companion object {
         fun newInstance(): HomeFragment = HomeFragment()
         private const val TAG = "HomeFragment"
@@ -24,11 +22,6 @@ class HomeFragment : Fragment() {
                               container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         val view1 = inflater.inflate(R.layout.home_fragment, container, false)
-        button = view1?.findViewById(R.id.button12)!!
-        button.setOnClickListener {
-            Log.d(TAG,"button clicked")
-        }
-
         return view1
     }
 }

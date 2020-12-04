@@ -24,6 +24,7 @@
         android:layout_marginTop="108dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_big_read_text"
         tools:srcCompat="@drawable/ic_big_read_text" />
 
     <androidx.recyclerview.widget.RecyclerView
@@ -33,17 +34,16 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/big_red_tv"/>
 
-    <TextView
+    <ImageView
         android:id="@+id/follwing_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="12dp"
         android:layout_marginTop="43dp"
-        android:text="Following"
-        style="@style/begum_black"
-        android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/big_red_rv" />
+        app:layout_constraintTop_toBottomOf="@+id/big_red_rv"
+        app:srcCompat="@drawable/ic_following_text"
+        tools:srcCompat="@drawable/ic_following_text" />
 
 
     <androidx.recyclerview.widget.RecyclerView
@@ -83,31 +83,20 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/more_articles_message" />
 
-    <TextView
+    <ImageView
         android:id="@+id/other_articles"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="12dp"
         android:layout_marginTop="20dp"
-        android:text="Other Articles"
-        style="@style/begum_black"
-        android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/more_articles_message_long" />
+        app:layout_constraintTop_toBottomOf="@+id/more_articles_message_long"
+        app:srcCompat="@drawable/ic_other_articles_text"
+        tools:srcCompat="@drawable/ic_other_articles_text" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/other_articles"/>
-
-    <Button
-        android:id="@+id/button12"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="46dp"
-        android:layout_marginBottom="46dp"
-        android:text="Button"
-        app:layout_constraintBottom_toTopOf="@+id/big_red_rv"
-        app:layout_constraintEnd_toEndOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>
