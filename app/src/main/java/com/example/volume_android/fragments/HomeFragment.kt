@@ -23,7 +23,6 @@ class HomeFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater,
                               container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        Log.d("HOMEFRAGMENT", "oncreateview")
         val view1 = inflater.inflate(R.layout.home_fragment, container, false)
         button = view1?.findViewById(R.id.button12)!!
         button.setOnClickListener {

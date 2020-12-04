@@ -1,19 +1,22 @@
 package com.example.volume_android
 
+import android.content.Context
+import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.Animation
 import android.view.animation.Transformation
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.viewpager.widget.ViewPager
 import com.example.volume_android.adapters.OnboardingPageAdapter
-import com.google.android.material.tabs.TabLayout
-import org.w3c.dom.Text
+import com.example.volume_android.fragments.HomeFragment
 
 
 class OnboardingFragHolder : AppCompatActivity() {
@@ -23,13 +26,21 @@ class OnboardingFragHolder : AppCompatActivity() {
     private lateinit var volMsg: TextView
     private lateinit var divider: ImageView
     private lateinit var vPager: ViewPager
-    private lateinit var nextButton: ImageView
+    private lateinit var nextButton: Button
     private lateinit var holderLayout: ConstraintLayout
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.onboarding_holder)
+
+        val sharedPreferences : SharedPreferences = getSharedPreferences("prefs", Context.MODE_PRIVATE)
+        val firstStart = sharedPreferences.getBoolean("firstStart", true)
+
+        if(!firstStart){
+            val intent = Intent(this, TabbedActivity::class.java)
+            this?.startActivity(intent)
+        }
 
         var initialClick = true
         Log.d("Test",initialClick.toString())
@@ -44,6 +55,33 @@ class OnboardingFragHolder : AppCompatActivity() {
 
         val fragmentAdapter = OnboardingPageAdapter(supportFragmentManager)
         viewPager.adapter = fragmentAdapter
+
+        viewPager?.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
+
+            override fun onPageScrollStateChanged(state: Int) {
+            }
+
+            override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
+            }
+            override fun onPageSelected(position: Int) {
+                when (position) {
+                    0 -> nextButton.setText("Next")
+                    1 -> nextButton.setText("Start Reading")
+                }
+            }
+
+        })
+
+        nextButton.setOnClickListener {
+            var current = viewPager.currentItem
+            val context = it.context
+
+            when(current){
+                0 -> viewPager.setCurrentItem(1)
+                1 -> {val intent = Intent(context, TabbedActivity::class.java)
+                context?.startActivity(intent)}
+            }
+        }
 
         val shortAnimationDuration = resources.getInteger(android.R.integer.config_shortAnimTime)
 
@@ -92,7 +130,6 @@ class OnboardingFragHolder : AppCompatActivity() {
 
                 override fun onAnimationStart(animation: Animation?) {
                 }
-                // All the other override functions
             })
 
             holderLayout.setOnClickListener {
@@ -102,6 +139,9 @@ class OnboardingFragHolder : AppCompatActivity() {
                 }
 
             }
+        val sharedPrefEditor : SharedPreferences.Editor = sharedPreferences.edit()
+        sharedPrefEditor.putBoolean("firstStart", false)
+        sharedPrefEditor.apply()
 
     }
 }
