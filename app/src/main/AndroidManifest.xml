@@ -13,6 +13,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".MainActivity"></activity>
+        <activity android:name=".PublicationProfileActivity"></activity>
         <activity android:name=".TabbedActivity">
         </activity>
         <activity android:name=".OnboardingFragHolder">

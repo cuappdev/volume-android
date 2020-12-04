@@ -5,10 +5,11 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
 import com.example.volume_android.fragments.OnboardingFrag1
 import com.example.volume_android.fragments.OnboardingFrag2
+import com.example.volume_android.models.Publication
 
 private const val COUNT = 3
 
-class OnboardingPageAdapter(fragmentManager: FragmentManager) : FragmentPagerAdapter(fragmentManager) {
+class OnboardingPageAdapter(fragmentManager: FragmentManager, val publications : List<Publication>) : FragmentPagerAdapter(fragmentManager) {
 
     override fun getCount(): Int {
         return COUNT
@@ -17,7 +18,7 @@ class OnboardingPageAdapter(fragmentManager: FragmentManager) : FragmentPagerAda
     override fun getItem(position: Int): Fragment {
         return when (position) {
             0 -> OnboardingFrag1()
-            else -> OnboardingFrag2()
+            else -> OnboardingFrag2(publications = publications)
         }
     }
 

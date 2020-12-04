@@ -1,27 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
+    app:cardBackgroundColor="@color/creamy_white"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_marginTop="5dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <ImageView
             android:id="@+id/publication_card_logo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginLeft="5dp"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            android:src="@drawable/logo_template" />
+            android:src="@drawable/cremelogotrans" />
 
         <TextView
             android:id="@+id/publication_card_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             style="@style/begum_black_bold"
-            android:layout_marginTop="5dp"
             android:textSize="18dp"
             android:layout_marginLeft="10dp"
             app:layout_constraintLeft_toRightOf="@id/publication_card_logo"
@@ -49,6 +52,7 @@
             android:layout_marginTop="5dp" />
 
         <TextView
+            android:id="@+id/publication_card_quote"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             style="@style/roboto_black"
@@ -61,6 +65,7 @@
 
 
         <ImageView
+            android:id="@+id/publication_card_follow"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintRight_toRightOf="parent"

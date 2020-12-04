@@ -17,6 +17,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.viewpager.widget.ViewPager
 import com.example.volume_android.adapters.OnboardingPageAdapter
 import com.example.volume_android.fragments.HomeFragment
+import com.example.volume_android.models.Publication
 
 
 class OnboardingFragHolder : AppCompatActivity() {
@@ -37,10 +38,10 @@ class OnboardingFragHolder : AppCompatActivity() {
         val sharedPreferences : SharedPreferences = getSharedPreferences("prefs", Context.MODE_PRIVATE)
         val firstStart = sharedPreferences.getBoolean("firstStart", true)
 
-        if(!firstStart){
-            val intent = Intent(this, TabbedActivity::class.java)
-            this?.startActivity(intent)
-        }
+//        if(!firstStart){
+//            val intent = Intent(this, TabbedActivity::class.java)
+//            this?.startActivity(intent)
+//        }
 
         var initialClick = true
         Log.d("Test",initialClick.toString())
@@ -53,8 +54,20 @@ class OnboardingFragHolder : AppCompatActivity() {
         nextButton = findViewById(R.id.onboarding_button)
         holderLayout = findViewById(R.id.holder_layout)
 
-        val fragmentAdapter = OnboardingPageAdapter(supportFragmentManager)
+
+        //TODO: This is fake data for onboarding
+        val onboardingdata : ArrayList<Publication>  = ArrayList()
+        onboardingdata.add(Publication("We are Creme de Cornell", 1, "url", "Creme de Cornell", "rssName", "rssUrl", 10.0f, "website"))
+        onboardingdata.add(Publication("We are Creme de Cornell", 2, "url", "Creme de Cornell", "rssName", "rssUrl", 10.0f, "website"))
+        onboardingdata.add(Publication("We are Creme de Cornell", 3, "url", "Creme de Cornell", "rssName", "rssUrl", 10.0f, "website"))
+        onboardingdata.add(Publication("We are Creme de Cornell", 4, "url", "Creme de Cornell", "rssName", "rssUrl", 10.0f, "website"))
+        onboardingdata.add(Publication("We are Creme de Cornell", 5, "url", "Creme de Cornell", "rssName", "rssUrl", 10.0f, "website"))
+        onboardingdata.add(Publication("We are Creme de Cornell", 6, "url", "Creme de Cornell", "rssName", "rssUrl", 10.0f, "website"))
+
+
+        val fragmentAdapter = OnboardingPageAdapter(supportFragmentManager, onboardingdata)
         viewPager.adapter = fragmentAdapter
+
 
         viewPager?.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
 
