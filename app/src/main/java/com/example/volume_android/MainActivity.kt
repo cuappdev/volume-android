@@ -24,8 +24,11 @@ class MainActivity : AppCompatActivity() {
         topWebView = findViewById(R.id.webview_top)
         bottomWebView = findViewById(R.id.webview_bot)
 
+        //GrabURL
+        val link = intent.getStringExtra("articleURL")
+
         webView = findViewById(R.id.webview)
-        webView.loadUrl("https://www.nyt.com/")
+        webView.loadUrl(link)
         webview.setTopBot(topWebView, bottomWebView)
 
         //Code to prevent from launching in external browser

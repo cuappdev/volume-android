@@ -5,6 +5,7 @@ import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager.widget.ViewPager
 import com.example.volume_android.adapters.PagerAdapter
+import com.example.volume_android.models.Publication
 import com.google.android.material.tabs.TabItem
 import com.google.android.material.tabs.TabLayout
 
@@ -19,7 +20,21 @@ class TabbedActivity : AppCompatActivity() {
         viewPager = findViewById(R.id.view_pager_fragments)
         tabbedLayout = findViewById(R.id.tab_layout)
 
-        val fragmentAdapter = PagerAdapter(supportFragmentManager)
+        //TODO: Fake data
+        val onboardingdata : ArrayList<Publication>  = ArrayList()
+        onboardingdata.add(Publication("We are Creme de Cornell", 1, "url", "Creme de Cornell", "rssName", "rssUrl", 10.0f, "website"))
+        onboardingdata.add(Publication("We are Creme de Cornell", 2, "url", "Creme de Cornell", "rssName", "rssUrl", 10.0f, "website"))
+        onboardingdata.add(Publication("We are Creme de Cornell", 3, "url", "Creme de Cornell", "rssName", "rssUrl", 10.0f, "website"))
+        onboardingdata.add(Publication("We are Creme de Cornell", 4, "url", "Creme de Cornell", "rssName", "rssUrl", 10.0f, "website"))
+        onboardingdata.add(Publication("We are Creme de Cornell", 5, "url", "Creme de Cornell", "rssName", "rssUrl", 10.0f, "website"))
+        onboardingdata.add(Publication("We are Creme de Cornell", 6, "url", "Creme de Cornell", "rssName", "rssUrl", 10.0f, "website"))
+        onboardingdata.add(Publication("We are Creme de Cornell", 7, "url", "Creme de Cornell", "rssName", "rssUrl", 10.0f, "website"))
+        onboardingdata.add(Publication("We are Creme de Cornell", 8, "url", "Creme de Cornell", "rssName", "rssUrl", 10.0f, "website"))
+        onboardingdata.add(Publication("We are Creme de Cornell", 9, "url", "Creme de Cornell", "rssName", "rssUrl", 10.0f, "website"))
+
+
+
+        val fragmentAdapter = PagerAdapter(supportFragmentManager, onboardingdata)
         viewPager.adapter = fragmentAdapter
         tabbedLayout.setupWithViewPager(viewPager)
 

@@ -6,10 +6,11 @@ import androidx.fragment.app.FragmentPagerAdapter
 import com.example.volume_android.fragments.HomeFragment
 import com.example.volume_android.fragments.PublicationsFragment
 import com.example.volume_android.fragments.SavedPublicationsFragment
+import com.example.volume_android.models.Publication
 
 private const val COUNT = 3
 
-class PagerAdapter(fragmentManager: FragmentManager) : FragmentPagerAdapter(fragmentManager) {
+class PagerAdapter(fragmentManager: FragmentManager, val publications: List<Publication>) : FragmentPagerAdapter(fragmentManager) {
 
     override fun getCount(): Int {
         return COUNT
@@ -18,7 +19,7 @@ class PagerAdapter(fragmentManager: FragmentManager) : FragmentPagerAdapter(frag
     override fun getItem(position: Int): Fragment {
         return when (position) {
             0 -> HomeFragment()
-            1 -> PublicationsFragment()
+            1 -> PublicationsFragment(publications)
             else -> SavedPublicationsFragment()
         }
     }
