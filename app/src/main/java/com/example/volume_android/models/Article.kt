@@ -7,6 +7,7 @@ class Article(
         val imageURL: String,
         val publicationID: String,
         val shoutouts: Float,
-        val title: String
+        val title: String,
+        val pubName: String?
 ) {
 }

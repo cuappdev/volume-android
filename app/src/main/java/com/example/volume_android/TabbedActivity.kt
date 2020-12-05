@@ -5,6 +5,7 @@ import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager.widget.ViewPager
 import com.example.volume_android.adapters.PagerAdapter
+import com.example.volume_android.models.Article
 import com.example.volume_android.models.Publication
 import com.google.android.material.tabs.TabItem
 import com.google.android.material.tabs.TabLayout
@@ -32,9 +33,17 @@ class TabbedActivity : AppCompatActivity() {
         onboardingdata.add(Publication("We are Creme de Cornell", 8, "url", "Creme de Cornell", "rssName", "rssUrl", 10.0f, "website"))
         onboardingdata.add(Publication("We are Creme de Cornell", 9, "url", "Creme de Cornell", "rssName", "rssUrl", 10.0f, "website"))
 
+        val articledata: ArrayList<Article> = ArrayList()
+        articledata.add(Article("https://www.cremedecornell.net/blog/2020/7/26/sangkhaya-thai-pandan-custard-dip/", "fakedate", 1, "url", "1A", 10.0f, "Sangkhaya: Thai Pandan Custard Dip","Creme de Cornell"))
+        articledata.add(Article("https://www.cremedecornell.net/blog/2020/7/26/sangkhaya-thai-pandan-custard-dip/", "fakedate", 2, "url", "1A", 10.0f, "Sangkhaya: Thai Pandan Custard Dip","Creme de Cornel"))
+        articledata.add(Article("https://www.cremedecornell.net/blog/2020/7/26/sangkhaya-thai-pandan-custard-dip/", "fakedate", 3, "url", "1A", 10.0f, "Sangkhaya: Thai Pandan Custard Dip","Creme de Cornel"))
+        articledata.add(Article("https://www.cremedecornell.net/blog/2020/7/26/sangkhaya-thai-pandan-custard-dip/", "fakedate", 4, "url", "1A", 10.0f, "Sangkhaya: Thai Pandan Custard Dip","Creme de Cornel"))
+        articledata.add(Article("https://www.cremedecornell.net/blog/2020/7/26/sangkhaya-thai-pandan-custard-dip/", "fakedate", 5, "url", "1A", 10.0f, "Sangkhaya: Thai Pandan Custard Dip","Creme de Cornel"))
 
 
-        val fragmentAdapter = PagerAdapter(supportFragmentManager, onboardingdata)
+
+
+        val fragmentAdapter = PagerAdapter(supportFragmentManager, onboardingdata, articledata)
         viewPager.adapter = fragmentAdapter
         tabbedLayout.setupWithViewPager(viewPager)
 
