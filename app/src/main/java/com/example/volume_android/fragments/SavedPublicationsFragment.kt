@@ -8,29 +8,26 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.volume_android.OnboardingFragHolder
 import com.example.volume_android.R
+import com.example.volume_android.adapters.SavedArticlesAdapter
+import com.example.volume_android.models.Article
 
-class SavedPublicationsFragment : Fragment() {
+class SavedPublicationsFragment(val articles: List<Article>) : Fragment() {
 
-    private lateinit var toArticleButton: Button
+    private lateinit var savedArticlesRV: RecyclerView
 
-    companion object {
-        fun newInstance(): SavedPublicationsFragment = SavedPublicationsFragment()
-    }
 
     override fun onCreateView(inflater: LayoutInflater,
                               container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        val view = inflater.inflate(R.layout.saved_fragment, container, false)
-
-        Log.d("TEST", "Created")
-
-        toArticleButton = view?.findViewById(R.id.article_view)!!
-        toArticleButton.setOnClickListener {
-            val intent = Intent(activity, OnboardingFragHolder::class.java)
-            activity?.startActivity(intent)
-        }
+        val view = inflater.inflate(R.layout.bookmarks_page, container, false)
+        savedArticlesRV = view.findViewById(R.id.saved_articles_rv)
+        savedArticlesRV.adapter = SavedArticlesAdapter(articles)
+        val layoutManager: LinearLayoutManager = LinearLayoutManager(view.context)
+        savedArticlesRV.layoutManager = layoutManager
         return view
     }
 }
