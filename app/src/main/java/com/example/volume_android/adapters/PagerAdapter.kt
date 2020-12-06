@@ -21,7 +21,7 @@ class PagerAdapter(fragmentManager: FragmentManager, val publications: List<Publ
         return when (position) {
             0 -> HomeFragment(articles)
             1 -> PublicationsFragment(publications)
-            else -> SavedPublicationsFragment()
+            else -> SavedPublicationsFragment(articles)
         }
     }
 
