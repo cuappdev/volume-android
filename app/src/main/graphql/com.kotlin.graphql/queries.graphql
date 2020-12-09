@@ -1,0 +1,6 @@
+query testQuery{
+    getAllArticles{
+        id
+        title
+    }
+}

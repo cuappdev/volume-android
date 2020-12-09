@@ -23,6 +23,13 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
 
 }
 
@@ -30,7 +37,6 @@ apollo {
     // instruct the compiler to generate Kotlin models
     generateKotlinModels.set(true)
 }
-
 
 repositories {
     mavenCentral()
@@ -48,6 +54,12 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation 'com.google.android.material:material:1.2.1'
 
+    implementation 'com.squareup.okhttp3:okhttp:4.4.0'
+    implementation 'com.squareup.okhttp3:logging-interceptor:3.2.0'
+
+
+
+
     //Circular Images
     implementation 'de.hdodenhof:circleimageview:3.1.0'
 
@@ -63,6 +75,8 @@ dependencies {
 //    // optional: if you just want the generated models and parsers and write your own HTTP code/cache code, you can remove apollo-runtime
 //    // and use apollo-api instead
 //    implementation("com.apollographql.apollo:apollo-api:2.4.5")
+    implementation 'com.apollographql.apollo:apollo-runtime:2.4.5'
+    implementation 'com.apollographql.apollo:apollo-android-support:2.4.5'
 
 }
 
