@@ -1,6 +1,11 @@
-query testQuery{
+query queryAllArticles{
     getAllArticles{
         id
         title
+        publicationID
+        articleURL
+        imageURL
+        date
+        shoutouts
     }
 }

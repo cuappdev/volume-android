@@ -16,6 +16,7 @@ import com.example.volume_android.adapters.BigReadHomeAdapter
 import com.example.volume_android.adapters.HomeFollowingArticleAdapters
 import com.example.volume_android.models.Article
 import com.example.volume_android.models.Publication
+import com.example.volume_android.networking.GraphQlUtil
 
 class HomeFragment(val articles: List<Article>) : Fragment() {
 
@@ -42,6 +43,12 @@ class HomeFragment(val articles: List<Article>) : Fragment() {
         val linearLayoutManager3: LinearLayoutManager = LinearLayoutManager(view1.context)
         otherArticles.layoutManager = linearLayoutManager3
         otherArticles.adapter = HomeFollowingArticleAdapters(articles)
+
+
+        val networkUtil = GraphQlUtil()
+        networkUtil.getAllArticles()
+
+
         return view1
     }
 }
