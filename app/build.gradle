@@ -55,13 +55,7 @@ dependencies {
     implementation 'com.google.android.material:material:1.2.1'
 
     implementation 'com.squareup.okhttp3:okhttp:4.4.0'
-    implementation 'com.squareup.okhttp3:logging-interceptor:3.2.0'
-
-
-
-
-    //Circular Images
-    implementation 'de.hdodenhof:circleimageview:3.1.0'
+    implementation 'com.squareup.okhttp3:logging-interceptor:4.4.0'
 
 
 //    //Apollo

@@ -3,11 +3,10 @@ package com.example.volume_android.models
 class Article(
         val articleURL: String,
         val date: String,
-        val id: Int,
+        val id: String,
         val imageURL: String,
         val publicationID: String,
-        val shoutouts: Float,
+        val shoutouts: Double,
         val title: String,
-        val pubName: String?
 ) {
 }

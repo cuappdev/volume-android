@@ -23,22 +23,22 @@ class TabbedActivity : AppCompatActivity() {
 
         //TODO: Fake data
         val onboardingdata : ArrayList<Publication>  = ArrayList()
-        onboardingdata.add(Publication("We are Creme de Cornell", 1, "url", "Creme de Cornell", "rssName", "rssUrl", 10.0f, "website"))
-        onboardingdata.add(Publication("We are Creme de Cornell", 2, "url", "Creme de Cornell", "rssName", "rssUrl", 10.0f, "website"))
-        onboardingdata.add(Publication("We are Creme de Cornell", 3, "url", "Creme de Cornell", "rssName", "rssUrl", 10.0f, "website"))
-        onboardingdata.add(Publication("We are Creme de Cornell", 4, "url", "Creme de Cornell", "rssName", "rssUrl", 10.0f, "website"))
-        onboardingdata.add(Publication("We are Creme de Cornell", 5, "url", "Creme de Cornell", "rssName", "rssUrl", 10.0f, "website"))
-        onboardingdata.add(Publication("We are Creme de Cornell", 6, "url", "Creme de Cornell", "rssName", "rssUrl", 10.0f, "website"))
-        onboardingdata.add(Publication("We are Creme de Cornell", 7, "url", "Creme de Cornell", "rssName", "rssUrl", 10.0f, "website"))
-        onboardingdata.add(Publication("We are Creme de Cornell", 8, "url", "Creme de Cornell", "rssName", "rssUrl", 10.0f, "website"))
-        onboardingdata.add(Publication("We are Creme de Cornell", 9, "url", "Creme de Cornell", "rssName", "rssUrl", 10.0f, "website"))
+        onboardingdata.add(Publication("We are Creme de Cornell", "", "url", "Creme de Cornell", "rssName", "rssUrl", 10.0, "website"))
+        onboardingdata.add(Publication("We are Creme de Cornell", "2", "url", "Creme de Cornell", "rssName", "rssUrl", 10.0, "website"))
+        onboardingdata.add(Publication("We are Creme de Cornell", "3", "url", "Creme de Cornell", "rssName", "rssUrl", 10.0, "website"))
+        onboardingdata.add(Publication("We are Creme de Cornell", "4", "url", "Creme de Cornell", "rssName", "rssUrl", 10.0, "website"))
+        onboardingdata.add(Publication("We are Creme de Cornell", "5", "url", "Creme de Cornell", "rssName", "rssUrl", 10.0, "website"))
+        onboardingdata.add(Publication("We are Creme de Cornell", "6", "url", "Creme de Cornell", "rssName", "rssUrl", 10.0, "website"))
+        onboardingdata.add(Publication("We are Creme de Cornell", "7", "url", "Creme de Cornell", "rssName", "rssUrl", 10.0, "website"))
+        onboardingdata.add(Publication("We are Creme de Cornell", "8", "url", "Creme de Cornell", "rssName", "rssUrl", 10.0, "website"))
+        onboardingdata.add(Publication("We are Creme de Cornell", "9", "url", "Creme de Cornell", "rssName", "rssUrl", 10.0, "website"))
 
         val articledata: ArrayList<Article> = ArrayList()
-        articledata.add(Article("https://www.cremedecornell.net/blog/2020/7/26/sangkhaya-thai-pandan-custard-dip/", "fakedate", 1, "url", "1A", 10.0f, "Sangkhaya: Thai Pandan Custard Dip","Creme de Cornell"))
-        articledata.add(Article("https://www.cremedecornell.net/blog/2020/7/26/sangkhaya-thai-pandan-custard-dip/", "fakedate", 2, "url", "1A", 10.0f, "Sangkhaya: Thai Pandan Custard Dip","Creme de Cornel"))
-        articledata.add(Article("https://www.cremedecornell.net/blog/2020/7/26/sangkhaya-thai-pandan-custard-dip/", "fakedate", 3, "url", "1A", 10.0f, "Sangkhaya: Thai Pandan Custard Dip","Creme de Cornel"))
-        articledata.add(Article("https://www.cremedecornell.net/blog/2020/7/26/sangkhaya-thai-pandan-custard-dip/", "fakedate", 4, "url", "1A", 10.0f, "Sangkhaya: Thai Pandan Custard Dip","Creme de Cornel"))
-        articledata.add(Article("https://www.cremedecornell.net/blog/2020/7/26/sangkhaya-thai-pandan-custard-dip/", "fakedate", 5, "url", "1A", 10.0f, "Sangkhaya: Thai Pandan Custard Dip","Creme de Cornel"))
+        articledata.add(Article("https://www.cremedecornell.net/blog/2020/7/26/sangkhaya-thai-pandan-custard-dip/", "fakedate", "1", "url", "1A", 10.0, "Sangkhaya: Thai Pandan Custard Dip"))
+        articledata.add(Article("https://www.cremedecornell.net/blog/2020/7/26/sangkhaya-thai-pandan-custard-dip/", "fakedate", "2", "url", "1A", 10.0, "Sangkhaya: Thai Pandan Custard Dip"))
+        articledata.add(Article("https://www.cremedecornell.net/blog/2020/7/26/sangkhaya-thai-pandan-custard-dip/", "fakedate", "3", "url", "1A", 10.0, "Sangkhaya: Thai Pandan Custard Dip"))
+        articledata.add(Article("https://www.cremedecornell.net/blog/2020/7/26/sangkhaya-thai-pandan-custard-dip/", "fakedate", "4", "url", "1A", 10.0, "Sangkhaya: Thai Pandan Custard Dip"))
+        articledata.add(Article("https://www.cremedecornell.net/blog/2020/7/26/sangkhaya-thai-pandan-custard-dip/", "fakedate", "5", "url", "1A", 10.0, "Sangkhaya: Thai Pandan Custard Dip"))
 
 
 

@@ -57,12 +57,12 @@ class OnboardingFragHolder : AppCompatActivity() {
 
         //TODO: This is fake data for onboarding
         val onboardingdata : ArrayList<Publication>  = ArrayList()
-        onboardingdata.add(Publication("We are Creme de Cornell", 1, "url", "Creme de Cornell", "rssName", "rssUrl", 10.0f, "website"))
-        onboardingdata.add(Publication("We are Creme de Cornell", 2, "url", "Creme de Cornell", "rssName", "rssUrl", 10.0f, "website"))
-        onboardingdata.add(Publication("We are Creme de Cornell", 3, "url", "Creme de Cornell", "rssName", "rssUrl", 10.0f, "website"))
-        onboardingdata.add(Publication("We are Creme de Cornell", 4, "url", "Creme de Cornell", "rssName", "rssUrl", 10.0f, "website"))
-        onboardingdata.add(Publication("We are Creme de Cornell", 5, "url", "Creme de Cornell", "rssName", "rssUrl", 10.0f, "website"))
-        onboardingdata.add(Publication("We are Creme de Cornell", 6, "url", "Creme de Cornell", "rssName", "rssUrl", 10.0f, "website"))
+        onboardingdata.add(Publication("We are Creme de Cornell", "1", "url", "Creme de Cornell", "rssName", "rssUrl", 10.0, "website"))
+        onboardingdata.add(Publication("We are Creme de Cornell", "2", "url", "Creme de Cornell", "rssName", "rssUrl", 10.0, "website"))
+        onboardingdata.add(Publication("We are Creme de Cornell", "3", "url", "Creme de Cornell", "rssName", "rssUrl", 10.0, "website"))
+        onboardingdata.add(Publication("We are Creme de Cornell", "4", "url", "Creme de Cornell", "rssName", "rssUrl", 10.0, "website"))
+        onboardingdata.add(Publication("We are Creme de Cornell", "5", "url", "Creme de Cornell", "rssName", "rssUrl", 10.0, "website"))
+        onboardingdata.add(Publication("We are Creme de Cornell", "6", "url", "Creme de Cornell", "rssName", "rssUrl", 10.0, "website"))
 
 
         val fragmentAdapter = OnboardingPageAdapter(supportFragmentManager, onboardingdata)
