@@ -48,7 +48,19 @@ class TabbedActivity : AppCompatActivity() {
         tabbedLayout.setupWithViewPager(viewPager)
 
         for (i in 0 until tabbedLayout.tabCount) {
-            tabbedLayout.getTabAt(i)?.setIcon(com.example.volume_android.R.drawable.ic_volumesvg)
+            Log.d("Int", i.toString())
+            if (i == 0){
+                tabbedLayout.getTabAt(i)?.setIcon(com.example.volume_android.R.drawable.ic_volumesvg)
+            }
+
+            if (i == 1){
+                tabbedLayout.getTabAt(i)?.setIcon(com.example.volume_android.R.drawable.ic_book_svg)
+            }
+            if(i==2) {
+                tabbedLayout.getTabAt(i)?.setIcon(com.example.volume_android.R.drawable.ic_bookmarksss)
+            }
+
+
         }
     }
 }

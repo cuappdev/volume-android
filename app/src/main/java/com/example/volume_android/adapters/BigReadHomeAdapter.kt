@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.volume_android.MainActivity
 import com.example.volume_android.R
 import com.example.volume_android.models.Article
+import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.article_card.view.*
 import kotlinx.android.synthetic.main.article_card.view.article_img
 import kotlinx.android.synthetic.main.vertical_article_home_card.view.*
@@ -43,8 +44,12 @@ class BigReadHomeAdapter (private val articles: List<Article>) :
         val currentItem : Article = articles[position]
 
         holder.articleTitle.text = currentItem.title
-        //holder.articleImg.setImageResource()
-        holder.postTime.text = "6h ago"
+
+
+        if(currentItem.imageURL != null && currentItem.imageURL != ""){
+            Picasso.get().load(currentItem.imageURL).into(holder.articleImg)
+        }
+        holder.postTime.text = currentItem.date
         holder.shoutoutCount.text = currentItem.shoutouts.toString() + " shout-outs"
         holder.pubName.text = "Creme de Cornell"
 
