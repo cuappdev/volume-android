@@ -43,51 +43,14 @@ class GraphQlUtil {
 
     }
 
-    fun getAllArticles(): List<Article> {
-        var newArticleList = mutableListOf<Article>()
-
-        client.query(AllArticlesQuery()).enqueue(object: ApolloCall.Callback<AllArticlesQuery.Data?>() {
-            override fun onFailure(e: ApolloException) {
-                Log.e("Error", e.toString())
-            }
-
-            override fun onResponse(response: Response<AllArticlesQuery.Data?>) {
-
-                //Convert GraphQL articles to FrontEnd Model
-                response.data?.getAllArticles?.mapTo(newArticleList, { it -> Article(it.articleURL, it.date.toString(), it.id, it.imageURL, it.publicationID, it.shoutouts, it.title)
-                })
-            }
-
-        })
-
-        return newArticleList
-
-
+    fun getAllArticles(): Observable<Response<AllArticlesQuery.Data>> {
+        val query = AllArticlesQuery()
+        return client.rxQuery(query)
     }
 
     fun getTrendingArticles(limit: Double, date: String): Observable<Response<TrendingArticlesQuery.Data>> {
-        var newArticleList = mutableListOf<Article>()
-
         val query = (TrendingArticlesQuery(limit.toInput(), date))
-
-//        val query = client.query(TrendingArticlesQuery(limit.toInput(), date)).enqueue(object: ApolloCall.Callback<TrendingArticlesQuery.Data?>() {
-//            override fun onFailure(e: ApolloException) {
-//                Log.e("Error", e.toString())
-//            }
-//
-//            override fun onResponse(response: Response<TrendingArticlesQuery.Data?>) {
-//                //Convert GraphQL articles to FrontEnd Model
-//                response.data?.getTrendingArticles?.mapTo(newArticleList, {
-//                    it -> Article(it.articleURL, it.date.toString(), it.id, it.imageURL, it.publicationID, it.shoutouts, it.title)
-//                })
-//
-//            }
-//
-//
-//        })
-
         return client.rxQuery(query)
-
     }
 
     fun getAllPublications() : List<Publication>{

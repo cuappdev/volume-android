@@ -55,22 +55,26 @@ class HomeFragment(val articles: List<Article>) : Fragment() {
             bigRedRv.layoutManager = linearLayoutManager
         })
 
+        val followingObs = graphQlUtil.getAllArticles().subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+        disposables.add(followingObs.subscribe{
+            var followingArticles = mutableListOf<Article>()
 
+            it.data?.getAllArticles?.mapTo(followingArticles, { it -> Article(it.articleURL, it.date.toString(), it.id, it.imageURL, it.publicationID, it.shoutouts, it.title)
+            })
 
-        followingRv = view1.findViewById(R.id.follwing_rv)
-        val linearLayoutManager2: LinearLayoutManager = LinearLayoutManager(view1.context)
-        followingRv.layoutManager = linearLayoutManager2
-        followingRv.adapter = HomeFollowingArticleAdapters(articles)
-        otherArticles = view1.findViewById(R.id.other_articlesrv)
-        val linearLayoutManager3: LinearLayoutManager = LinearLayoutManager(view1.context)
-        otherArticles.layoutManager = linearLayoutManager3
-        otherArticles.adapter = HomeFollowingArticleAdapters(articles)
+            followingRv = view1.findViewById(R.id.follwing_rv)
+            val linearLayoutManager2: LinearLayoutManager = LinearLayoutManager(view1.context)
+            followingRv.layoutManager = linearLayoutManager2
+            followingRv.adapter = HomeFollowingArticleAdapters(followingArticles)
+            otherArticles = view1.findViewById(R.id.other_articlesrv)
+            val linearLayoutManager3: LinearLayoutManager = LinearLayoutManager(view1.context)
+            otherArticles.layoutManager = linearLayoutManager3
+            otherArticles.adapter = HomeFollowingArticleAdapters(followingArticles)
 
-
-        val networkUtil = GraphQlUtil()
-        networkUtil.getAllArticles()
+        })
 
 
         return view1
+        disposables.clear()
     }
 }
