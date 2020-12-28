@@ -53,27 +53,27 @@ class GraphQlUtil {
         return client.rxQuery(query)
     }
 
-    fun getAllPublications() : List<Publication>{
-
-        var newPubList = mutableListOf<Publication>()
-
-        client.query(AllPublicationsQuery()).enqueue(object: ApolloCall.Callback<AllPublicationsQuery.Data?>() {
-            override fun onFailure(e: ApolloException) {
-                Log.e("Error", e.toString())
-            }
-
-            override fun onResponse(response: Response<AllPublicationsQuery.Data?>) {
-
-                //Convert GraphQL articles to FrontEnd Model
-                response.data?.getAllPublications?.mapTo(newPubList, {
-                    it -> Publication(it.bio, it.id, it.imageURL, it.name, it.rssName, it.rssURL, it.shoutouts, it.websiteURL)
-                })
-            }
-
-        })
-
-        return newPubList
-    }
+//    fun getAllPublications() : List<Publication>{
+//
+//        var newPubList = mutableListOf<Publication>()
+//
+//        client.query(AllPublicationsQuery()).enqueue(object: ApolloCall.Callback<AllPublicationsQuery.Data?>() {
+//            override fun onFailure(e: ApolloException) {
+//                Log.e("Error", e.toString())
+//            }
+//
+//            override fun onResponse(response: Response<AllPublicationsQuery.Data?>) {
+//
+//                //Convert GraphQL articles to FrontEnd Model
+//                response.data?.getAllPublications?.mapTo(newPubList, {
+//                    it -> Publication(it.bio, it.id, it.imageURL, it.name, it.rssName, it.rssURL, it.shoutouts, it.websiteURL)
+//                })
+//            }
+//
+//        })
+//
+//        return newPubList
+//    }
 
 }
 

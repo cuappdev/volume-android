@@ -2,24 +2,38 @@ query AllArticles{
     getAllArticles{
         id
         title
-        publicationID
+        publication{
+            id
+            name
+        }
         articleURL
         imageURL
+        publicationSlug
         date
         shoutouts
+        trendiness
     }
 }
 
 query AllPublications{
     getAllPublications{
         id
+        backgroundImageURL
         bio
-        rssURL
-        imageURL
         name
-        websiteURL
+        profileImageURL
         rssName
+        rssURL
+        slug
         shoutouts
+        websiteURL
+        mostRecentArticle{
+            id
+            articleURL
+            imageURL
+            title
+            shoutouts
+        }
     }
 }
 
@@ -27,7 +41,10 @@ query TrendingArticles ($limit: Float, $date: String!){
     getTrendingArticles(limit:$limit, since:$date){
         id
         title
-        publicationID
+        publication{
+            id
+            name
+        }
         articleURL
         imageURL
         date
