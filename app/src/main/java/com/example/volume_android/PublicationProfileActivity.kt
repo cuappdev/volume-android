@@ -41,11 +41,11 @@ class PublicationProfileActivity : AppCompatActivity() {
 
         //TODO: Dummy Data
         val articledata : ArrayList<Article>  = ArrayList()
-        articledata.add(Article("https://www.cremedecornell.net/blog/2020/7/26/sangkhaya-thai-pandan-custard-dip/", "fakedate", "1", "url", "1A", 10.0, "Sangkhaya: Thai Pandan Custard Dip"))
-        articledata.add(Article("https://www.cremedecornell.net/blog/2020/7/26/sangkhaya-thai-pandan-custard-dip/", "fakedate", "2", "url", "1A", 10.0, "Sangkhaya: Thai Pandan Custard Dip"))
-        articledata.add(Article("https://www.cremedecornell.net/blog/2020/7/26/sangkhaya-thai-pandan-custard-dip/", "fakedate", "3", "url", "1A", 10.0, "Sangkhaya: Thai Pandan Custard Dip"))
-        articledata.add(Article("https://www.cremedecornell.net/blog/2020/7/26/sangkhaya-thai-pandan-custard-dip/", "fakedate", "4", "url", "1A", 10.0, "Sangkhaya: Thai Pandan Custard Dip"))
-        articledata.add(Article("https://www.cremedecornell.net/blog/2020/7/26/sangkhaya-thai-pandan-custard-dip/", "fakedate", "5", "url", "1A", 10.0, "Sangkhaya: Thai Pandan Custard Dip"))
+        articledata.add(Article("", "Sangkhaya: Thai Pandan Custard Dip", "https://www.cremedecornell.net/blog/2020/7/26/sangkhaya-thai-pandan-custard-dip/", "imageURL", "pubID", "pubName", "date", 10.0, 0.1))
+        articledata.add(Article("", "Sangkhaya: Thai Pandan Custard Dip", "https://www.cremedecornell.net/blog/2020/7/26/sangkhaya-thai-pandan-custard-dip/", "imageURL", "pubID", "pubName", "date", 10.0, 0.1))
+        articledata.add(Article("", "Sangkhaya: Thai Pandan Custard Dip", "https://www.cremedecornell.net/blog/2020/7/26/sangkhaya-thai-pandan-custard-dip/", "imageURL", "pubID", "pubName", "date", 10.0, 0.1))
+        articledata.add(Article("", "Sangkhaya: Thai Pandan Custard Dip", "https://www.cremedecornell.net/blog/2020/7/26/sangkhaya-thai-pandan-custard-dip/", "imageURL", "pubID", "pubName", "date", 10.0, 0.1))
+        articledata.add(Article("", "Sangkhaya: Thai Pandan Custard Dip", "https://www.cremedecornell.net/blog/2020/7/26/sangkhaya-thai-pandan-custard-dip/", "imageURL", "pubID", "pubName", "date", 10.0, 0.1))
 
         profile_articles_rv.adapter = ArticleAdapter(articledata)
         profile_articles_rv.layoutManager = LinearLayoutManager(this)
