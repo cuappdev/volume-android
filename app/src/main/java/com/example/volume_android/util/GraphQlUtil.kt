@@ -1,22 +1,12 @@
-package com.example.volume_android.networking
+package com.example.volume_android.util
 
-import android.util.Log
-import com.apollographql.apollo.ApolloCall
 import com.apollographql.apollo.ApolloClient
-import com.apollographql.apollo.api.Input
 import com.apollographql.apollo.api.Response
 import com.apollographql.apollo.api.toInput
-import com.apollographql.apollo.exception.ApolloException
-import com.apollographql.apollo.rx2.Rx2Apollo
 import com.apollographql.apollo.rx2.rxQuery
-import com.example.volume_android.models.Article
-import com.example.volume_android.models.Publication
 import com.kotlin.graphql.AllArticlesQuery
-import com.kotlin.graphql.AllPublicationsQuery
 import com.kotlin.graphql.TrendingArticlesQuery
-import io.reactivex.Completable
 import io.reactivex.Observable
-import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 
