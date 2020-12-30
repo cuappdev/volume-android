@@ -33,11 +33,11 @@ class TabbedActivity : AppCompatActivity() {
         onboardingdata.add(Publication("We are Creme de Cornell", "1", "bio", "Creme de Cornell", "image", "rssName", "rssURL", "website"))
 
         val articledata: ArrayList<Article> = ArrayList()
-        articledata.add(Article("", "Sangkhaya: Thai Pandan Custard Dip", "https://www.cremedecornell.net/blog/2020/7/26/sangkhaya-thai-pandan-custard-dip/", "imageURL", "pubID", "pubName", "date", 10.0, 0.1))
-        articledata.add(Article("", "Sangkhaya: Thai Pandan Custard Dip", "https://www.cremedecornell.net/blog/2020/7/26/sangkhaya-thai-pandan-custard-dip/", "imageURL", "pubID", "pubName", "date", 10.0, 0.1))
-        articledata.add(Article("", "Sangkhaya: Thai Pandan Custard Dip", "https://www.cremedecornell.net/blog/2020/7/26/sangkhaya-thai-pandan-custard-dip/", "imageURL", "pubID", "pubName", "date", 10.0, 0.1))
-        articledata.add(Article("", "Sangkhaya: Thai Pandan Custard Dip", "https://www.cremedecornell.net/blog/2020/7/26/sangkhaya-thai-pandan-custard-dip/", "imageURL", "pubID", "pubName", "date", 10.0, 0.1))
-        articledata.add(Article("", "Sangkhaya: Thai Pandan Custard Dip", "https://www.cremedecornell.net/blog/2020/7/26/sangkhaya-thai-pandan-custard-dip/", "imageURL", "pubID", "pubName", "date", 10.0, 0.1))
+//        articledata.add(Article("", "Sangkhaya: Thai Pandan Custard Dip", "https://www.cremedecornell.net/blog/2020/7/26/sangkhaya-thai-pandan-custard-dip/", "imageURL", "pubID", "pubName", "date", 10.0))
+//        articledata.add(Article("", "Sangkhaya: Thai Pandan Custard Dip", "https://www.cremedecornell.net/blog/2020/7/26/sangkhaya-thai-pandan-custard-dip/", "imageURL", "pubID", "pubName", "date", 10.0))
+//        articledata.add(Article("", "Sangkhaya: Thai Pandan Custard Dip", "https://www.cremedecornell.net/blog/2020/7/26/sangkhaya-thai-pandan-custard-dip/", "imageURL", "pubID", "pubName", "date", 10.0))
+//        articledata.add(Article("", "Sangkhaya: Thai Pandan Custard Dip", "https://www.cremedecornell.net/blog/2020/7/26/sangkhaya-thai-pandan-custard-dip/", "imageURL", "pubID", "pubName", "date", 10.0))
+//        articledata.add(Article("", "Sangkhaya: Thai Pandan Custard Dip", "https://www.cremedecornell.net/blog/2020/7/26/sangkhaya-thai-pandan-custard-dip/", "imageURL", "pubID", "pubName", "date", 10.0))
 
         val fragmentAdapter = PagerAdapter(supportFragmentManager, onboardingdata, articledata)
         viewPager.adapter = fragmentAdapter
