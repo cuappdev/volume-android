@@ -1,5 +1,6 @@
 package com.example.volume_android.adapters
 
+import PrefUtils
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
@@ -25,6 +26,8 @@ class FollowPublicationsAdapter(private val publicationList: List<Publication>,
         val pub_quote : TextView = itemView.publication_card_quote
         val pub_follow: ImageView = itemView.publication_card_follow
 
+
+
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FollowPublicationVH {
@@ -37,6 +40,8 @@ class FollowPublicationsAdapter(private val publicationList: List<Publication>,
     }
 
     override fun onBindViewHolder(holder: FollowPublicationVH, position: Int) {
+
+        val prefUtils: PrefUtils = PrefUtils(context)
         val currentItem : Publication = publicationList[position]
 
         //TODO: This resource should take in a link, but will pass it an id for now
@@ -49,10 +54,26 @@ class FollowPublicationsAdapter(private val publicationList: List<Publication>,
         holder.pub_quote.text = currentItem.slug
 
         holder.pub_follow.setOnClickListener {
+            //gets current set or returns empty mutablesetof
+            val currentFollowingSet = prefUtils.getStringSet("following", mutableSetOf())?.toMutableSet()
+
+
             if(holder.pub_follow.drawable.constantState == ContextCompat.getDrawable(context,
                             R.drawable.ic_followplussvg)!!.constantState){
                 holder.pub_follow.setImageResource(R.drawable.ic_followchecksvg)
-            }else  holder.pub_follow.setImageResource(R.drawable.ic_followplussvg)
+                currentFollowingSet?.add(currentItem.id)
+                if (currentFollowingSet != null) {
+                    prefUtils.save("following", currentFollowingSet)
+                }
+
+            }else  {
+                holder.pub_follow.setImageResource(R.drawable.ic_followplussvg)
+                currentFollowingSet?.remove(currentItem.id)
+                if (currentFollowingSet != null) {
+                    prefUtils.save("following", currentFollowingSet)
+                }
+
+            }
         }
 
     }

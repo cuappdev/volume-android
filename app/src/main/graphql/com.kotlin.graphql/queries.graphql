@@ -50,3 +50,20 @@ query TrendingArticles ($limit: Float, $date: String!){
         shoutouts
     }
 }
+
+query FollowingArticles($publicationID:String!){
+
+    getArticlesByPublication(publicationID:$publicationID){
+        id
+        articleURL
+        date
+        imageURL
+        publication{
+            id
+            name
+        }
+        shoutouts
+        title
+    }
+
+}

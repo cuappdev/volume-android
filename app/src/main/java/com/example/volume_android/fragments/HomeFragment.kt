@@ -1,6 +1,8 @@
 package com.example.volume_android.fragments
 
+import PrefUtils
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -32,7 +34,11 @@ class HomeFragment(val articles: List<Article>) : Fragment() {
                               savedInstanceState: Bundle?): View? {
         val view1 = inflater.inflate(R.layout.home_fragment, container, false)
 
+        val prefUtils: PrefUtils = PrefUtils()
+        val followingPublications = prefUtils.getStringSet("following", mutableSetOf())
+
         disposables = CompositeDisposable()
+
 
 
         val graphQlUtil = GraphQlUtil()
@@ -52,23 +58,41 @@ class HomeFragment(val articles: List<Article>) : Fragment() {
             bigRedRv.layoutManager = linearLayoutManager
         })
 
-        val followingObs = graphQlUtil.getAllArticles().subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+        var followingArticles = mutableListOf<Article>()
+        for ( pub in followingPublications!!){
+            var tempArticles = mutableListOf<Article>()
+            val followingObs = graphQlUtil.getArticleByPublication(pub).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
         disposables.add(followingObs.subscribe{
-            var followingArticles = mutableListOf<Article>()
 
-            it.data?.getAllArticles?.mapTo(followingArticles, { it -> Article(title = it.title, articleURL =  it.articleURL, date =  it.date.toString(), id= it.id, imageURL = it.imageURL, publication = Publication(id = it.publication.id, name = it.publication.name), shoutouts = it.shoutouts)
+            it.data?.getArticlesByPublication?.mapTo(tempArticles, { it -> Article(title = it.title, articleURL =  it.articleURL, date =  it.date.toString(), id= it.id, imageURL = it.imageURL, publication = Publication(id = it.publication.id, name = it.publication.name), shoutouts = it.shoutouts)
             })
+            followingArticles.addAll(tempArticles)
 
-            followingRv = view1.findViewById(R.id.follwing_rv)
-            val linearLayoutManager2: LinearLayoutManager = LinearLayoutManager(view1.context)
-            followingRv.layoutManager = linearLayoutManager2
-            followingRv.adapter = HomeFollowingArticleAdapters(followingArticles)
+            if(pub == followingPublications.last()){
+                followingRv = view1.findViewById(R.id.follwing_rv)
+                val linearLayoutManager2: LinearLayoutManager = LinearLayoutManager(view1.context)
+                followingRv.layoutManager = linearLayoutManager2
+                followingRv.adapter = HomeFollowingArticleAdapters(followingArticles)
+
+            }
+        })
+        }
+
+
+        val otherObs = graphQlUtil.getAllArticles().subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+        disposables.add(otherObs.subscribe{
+            var others = mutableListOf<Article>()
+
+            it.data?.getAllArticles?.mapTo(others, { it -> Article(title = it.title, articleURL =  it.articleURL, date =  it.date.toString(), id= it.id, imageURL = it.imageURL, publication = Publication(id = it.publication.id, name = it.publication.name), shoutouts = it.shoutouts)
+            })
             otherArticles = view1.findViewById(R.id.other_articlesrv)
             val linearLayoutManager3: LinearLayoutManager = LinearLayoutManager(view1.context)
             otherArticles.layoutManager = linearLayoutManager3
-            otherArticles.adapter = HomeFollowingArticleAdapters(followingArticles)
+            otherArticles.adapter = HomeFollowingArticleAdapters(others)
 
         })
+
+
 
 
         return view1
