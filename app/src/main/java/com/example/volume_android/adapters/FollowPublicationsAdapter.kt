@@ -10,6 +10,7 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.example.volume_android.R
 import com.example.volume_android.models.Publication
+import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.publication_card.view.*
 
 class FollowPublicationsAdapter(private val publicationList: List<Publication>,
@@ -39,10 +40,13 @@ class FollowPublicationsAdapter(private val publicationList: List<Publication>,
         val currentItem : Publication = publicationList[position]
 
         //TODO: This resource should take in a link, but will pass it an id for now
-        holder.pub_logo.setImageResource(R.drawable.cremelogotrans)
+        if(currentItem.profileImageURL != null && currentItem.profileImageURL != ""){
+            Picasso.get().load(currentItem.profileImageURL).into(holder.pub_logo)
+        }
+
         holder.pub_name.text = currentItem.name
         holder.pub_desc.text = currentItem.bio
-        holder.pub_quote.text = "We Creme for Cornell" //TODO: What is this?
+        holder.pub_quote.text = currentItem.slug
 
         holder.pub_follow.setOnClickListener {
             if(holder.pub_follow.drawable.constantState == ContextCompat.getDrawable(context,

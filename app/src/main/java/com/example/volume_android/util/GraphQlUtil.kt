@@ -5,6 +5,7 @@ import com.apollographql.apollo.api.Response
 import com.apollographql.apollo.api.toInput
 import com.apollographql.apollo.rx2.rxQuery
 import com.kotlin.graphql.AllArticlesQuery
+import com.kotlin.graphql.AllPublicationsQuery
 import com.kotlin.graphql.TrendingArticlesQuery
 import io.reactivex.Observable
 import okhttp3.OkHttpClient
@@ -42,6 +43,13 @@ class GraphQlUtil {
         val query = (TrendingArticlesQuery(limit.toInput(), date))
         return client.rxQuery(query)
     }
+
+    fun getAllPublications(): Observable<Response<AllPublicationsQuery.Data>> {
+        val query = AllPublicationsQuery()
+        return client.rxQuery(query)
+    }
+
+
 
 //    fun getAllPublications() : List<Publication>{
 //

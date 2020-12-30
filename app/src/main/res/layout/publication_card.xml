@@ -22,7 +22,7 @@
 
         <TextView
             android:id="@+id/publication_card_name"
-            android:layout_width="wrap_content"
+            android:layout_width="300dp"
             android:layout_height="wrap_content"
             style="@style/begum_black_bold"
             android:textSize="18dp"
@@ -34,7 +34,7 @@
         <TextView
             android:id="@+id/publication_card_description"
             style="@style/roboto_gray"
-            android:layout_width="wrap_content"
+            android:layout_width="300dp"
             android:textSize="12dp"
             android:layout_marginTop="5dp"
             android:layout_height="wrap_content"
@@ -53,7 +53,7 @@
 
         <TextView
             android:id="@+id/publication_card_quote"
-            android:layout_width="wrap_content"
+            android:layout_width="300dp"
             android:layout_height="wrap_content"
             style="@style/roboto_black"
             android:textSize="12dp"
