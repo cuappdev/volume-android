@@ -72,6 +72,10 @@ class HomeFragment(val articles: List<Article>) : Fragment() {
 
 
         return view1
+    }
+
+    override fun onDestroy() {
         disposables.clear()
+        super.onDestroy()
     }
 }
