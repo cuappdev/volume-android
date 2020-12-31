@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Gradle: com.apollographql.apollo:apollo-rx2-support:2.4.5@jar">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.apollographql.apollo/apollo-rx2-support/2.4.5/ec54ad4e6970b2d3d75106fd5bae73853cb59e0b/apollo-rx2-support-2.4.5.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.apollographql.apollo/apollo-rx2-support/2.4.5/bd5cc0b73447657d45f0cb510c4156530b3192b1/apollo-rx2-support-2.4.5-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.apollographql.apollo/apollo-rx2-support/2.4.5/9e58e693903db958f70a9829dfbd173e13589246/apollo-rx2-support-2.4.5-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
