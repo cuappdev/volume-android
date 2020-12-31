@@ -43,7 +43,7 @@ class HomeFollowingArticleAdapters(private val articles: List<Article>) :
         }
         holder.postTime.text = currentItem.date
         holder.shoutoutCount.text = currentItem.shoutouts.toString() + " shout-outs"
-        holder.pubName.text = "Creme de Cornell"
+        holder.pubName.text = currentItem.publication!!.name
 
         holder.layout.setOnClickListener{
             val intent = Intent(holder.layout.context, MainActivity::class.java)
