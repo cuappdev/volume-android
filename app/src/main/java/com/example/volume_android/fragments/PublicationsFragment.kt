@@ -49,10 +49,6 @@ class PublicationsFragment(val publications: List<Publication>) : Fragment() {
             var others = mutableListOf<Publication>()
 
             it.data?.getAllPublications?.mapTo(others, { it -> Publication(id = it.id, backgroundImageURL = it.backgroundImageURL, bio = it.bio, name = it.name, profileImageURL = it.profileImageURL, rssName = it.rssName, rssURL = it.rssURL, slug = it.slug, shoutouts = it.shoutouts, websiteURL = it.websiteURL) })
-            //otherArticles = view1.findViewById(R.id.other_articlesrv)
-            //val linearLayoutManager3: LinearLayoutManager = LinearLayoutManager(view1.context)
-            //otherArticles.layoutManager = linearLayoutManager3
-            //otherArticles.adapter = HomeFollowingArticleAdapters(others)
 
             morepublicationRV = view.findViewById(R.id.follwing_more_publications_rv)
             morepublicationRV.adapter = FollowPublicationsAdapter(others, view.context)
