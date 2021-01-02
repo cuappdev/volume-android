@@ -7,7 +7,6 @@ import androidx.viewpager.widget.ViewPager
 import com.example.volume_android.adapters.PagerAdapter
 import com.example.volume_android.models.Article
 import com.example.volume_android.models.Publication
-import com.google.android.material.tabs.TabItem
 import com.google.android.material.tabs.TabLayout
 
 class TabbedActivity : AppCompatActivity() {
@@ -46,17 +45,45 @@ class TabbedActivity : AppCompatActivity() {
         for (i in 0 until tabbedLayout.tabCount) {
             Log.d("Int", i.toString())
             if (i == 0){
-                tabbedLayout.getTabAt(i)?.setIcon(com.example.volume_android.R.drawable.ic_volumesvg)
+                tabbedLayout.getTabAt(i)?.setIcon(com.example.volume_android.R.drawable.ic_volumesvg_orange)
             }
 
             if (i == 1){
-                tabbedLayout.getTabAt(i)?.setIcon(com.example.volume_android.R.drawable.ic_book_svg)
+                tabbedLayout.getTabAt(i)?.setIcon(com.example.volume_android.R.drawable.ic_book_gray)
             }
             if(i==2) {
-                tabbedLayout.getTabAt(i)?.setIcon(com.example.volume_android.R.drawable.ic_bookmarksss)
+                tabbedLayout.getTabAt(i)?.setIcon(com.example.volume_android.R.drawable.ic_bookmark_gray)
             }
 
 
         }
+
+        viewPager?.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
+
+            override fun onPageScrollStateChanged(state: Int) {
+            }
+
+            override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
+            }
+            override fun onPageSelected(position: Int) {
+                when (position) {
+                    0 -> {
+                        tabbedLayout.getTabAt(0)?.setIcon(com.example.volume_android.R.drawable.ic_volumesvg_orange)
+                        tabbedLayout.getTabAt(1)?.setIcon(com.example.volume_android.R.drawable.ic_book_gray)
+                        tabbedLayout.getTabAt(2)?.setIcon(com.example.volume_android.R.drawable.ic_bookmark_gray)
+                                            }
+                    1 -> {
+                        tabbedLayout.getTabAt(0)?.setIcon(com.example.volume_android.R.drawable.ic_volumesvg_gray)
+                        tabbedLayout.getTabAt(1)?.setIcon(com.example.volume_android.R.drawable.ic_book_orange)
+                        tabbedLayout.getTabAt(2)?.setIcon(com.example.volume_android.R.drawable.ic_bookmark_gray)
+                    }
+                    2 ->{
+                        tabbedLayout.getTabAt(0)?.setIcon(com.example.volume_android.R.drawable.ic_volumesvg_gray)
+                        tabbedLayout.getTabAt(1)?.setIcon(com.example.volume_android.R.drawable.ic_book_gray)
+                        tabbedLayout.getTabAt(2)?.setIcon(com.example.volume_android.R.drawable.ic_bookmark_orange)}
+                }
+            }
+
+        })
     }
 }

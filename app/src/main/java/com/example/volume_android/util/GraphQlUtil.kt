@@ -4,10 +4,7 @@ import com.apollographql.apollo.ApolloClient
 import com.apollographql.apollo.api.Response
 import com.apollographql.apollo.api.toInput
 import com.apollographql.apollo.rx2.rxQuery
-import com.kotlin.graphql.AllArticlesQuery
-import com.kotlin.graphql.AllPublicationsQuery
-import com.kotlin.graphql.FollowingArticlesQuery
-import com.kotlin.graphql.TrendingArticlesQuery
+import com.kotlin.graphql.*
 import io.reactivex.Observable
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -52,6 +49,11 @@ class GraphQlUtil {
 
     fun getArticleByPublication(pubID: String): Observable<Response<FollowingArticlesQuery.Data>> {
         val query = (FollowingArticlesQuery(pubID))
+        return client.rxQuery(query)
+    }
+
+    fun getPublicationById(pubID: String): Observable<Response<PublicationByIdQuery.Data>> {
+        val query = (PublicationByIdQuery(pubID))
         return client.rxQuery(query)
     }
 

@@ -1,5 +1,6 @@
 package com.example.volume_android
 
+import PrefUtils
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
@@ -38,9 +39,13 @@ class PublicationProfileActivity : AppCompatActivity() {
 
     val graphQlUtil = GraphQlUtil()
 
+    val prefUtils = PrefUtils()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.publication_profile_activity)
+
+        val currentFollowingSet = prefUtils.getStringSet("following", mutableSetOf())?.toMutableSet()
 
         profile_banner = findViewById(R.id.publication_banner)
         profile_logo = findViewById(R.id.publication_logo)
@@ -59,11 +64,28 @@ class PublicationProfileActivity : AppCompatActivity() {
         Picasso.get().load(publication.profileImageURL).into(profile_logo)
 
 
+        if(currentFollowingSet!!.contains(publication.id)){
+            follow_button.apply {
+                text = "Following"
+                setBackgroundColor(ContextCompat.getColor(this.context, R.color.volumeOrange))}
+        }
+        else{
+            follow_button.apply {
+                text = " +  Follow"
+                setBackgroundColor(ContextCompat.getColor(this.context, R.color.ligthgray))}
+        }
+
+
+
         follow_button.setOnClickListener {
             if(follow_button.text.equals("Following")){
                 follow_button.apply{
                     text = " +  Follow"
                     setBackgroundColor(ContextCompat.getColor(this.context, R.color.ligthgray))
+                    currentFollowingSet?.remove(publication.id)
+                    if (currentFollowingSet != null) {
+                        prefUtils.save("following", currentFollowingSet)
+                    }
                 }
 
             }
@@ -71,6 +93,10 @@ class PublicationProfileActivity : AppCompatActivity() {
                 follow_button.apply {
                     text = "Following"
                     setBackgroundColor(ContextCompat.getColor(this.context, R.color.volumeOrange))
+                    currentFollowingSet?.add(publication.id)
+                    if (currentFollowingSet != null) {
+                        prefUtils.save("following", currentFollowingSet)
+                    }
                 }
             }
         }
