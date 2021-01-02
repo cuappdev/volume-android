@@ -39,6 +39,7 @@ class HomeFragment(val articles: List<Article>) : Fragment() {
 
         disposables = CompositeDisposable()
 
+        Log.d("FOLLOWING", followingPublications.toString())
 
 
         val graphQlUtil = GraphQlUtil()
@@ -91,9 +92,6 @@ class HomeFragment(val articles: List<Article>) : Fragment() {
             otherArticles.adapter = HomeFollowingArticleAdapters(others)
 
         })
-
-
-
 
         return view1
     }
