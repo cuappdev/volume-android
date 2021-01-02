@@ -21,6 +21,7 @@ class OnboardingFrag2 (val publications: List<Publication>) : Fragment() {
 
     private lateinit var publicationRV : RecyclerView
     private lateinit var disposables: CompositeDisposable
+    private val graphQlUtil = GraphQlUtil()
 
 
     override fun onCreateView(inflater: LayoutInflater,
@@ -30,24 +31,22 @@ class OnboardingFrag2 (val publications: List<Publication>) : Fragment() {
 
         disposables = CompositeDisposable()
 
-        val graphQlUtil = GraphQlUtil()
+        loadArticlesLoadRV(view)
 
+        return view
+    }
 
+    private fun loadArticlesLoadRV(view: View) {
         val pubsObs = graphQlUtil.getAllPublications().subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
         disposables.add(pubsObs.subscribe{
             var allPubs = mutableListOf<Publication>()
             it.data?.getAllPublications?.mapTo(allPubs, { it -> Publication(it.id, it.backgroundImageURL,
                     it.bio, it.name, it.profileImageURL, it.rssName, it.rssURL, it.slug, it.shoutouts, it.websiteURL, Article())
             })
-
             publicationRV = view.findViewById(R.id.onboarding2_rv)
             publicationRV.adapter = FollowPublicationsAdapter(allPubs, view.context)
             publicationRV.layoutManager = LinearLayoutManager(view.context)
             publicationRV.setHasFixedSize(true)
-
         })
-
-
-        return view
     }
 }
