@@ -36,6 +36,30 @@ query AllPublications{
     }
 }
 
+query PublicationById ($id: String!){
+
+    getPublicationByID(id:$id){
+        id
+        backgroundImageURL
+        bio
+        name
+        profileImageURL
+        rssName
+        rssURL
+        slug
+        shoutouts
+        websiteURL
+        mostRecentArticle{
+            id
+            articleURL
+            imageURL
+            title
+            shoutouts
+        }
+    }
+
+}
+
 query TrendingArticles ($limit: Float, $date: String!){
     getTrendingArticles(limit:$limit, since:$date){
         id
@@ -67,3 +91,5 @@ query FollowingArticles($publicationID:String!){
     }
 
 }
+
+

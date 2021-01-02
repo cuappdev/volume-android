@@ -32,13 +32,13 @@
             android:id="@+id/publications_tab"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:icon="@drawable/ic_book_svg" />
+            android:icon="@drawable/ic_book_gray" />
 
         <com.google.android.material.tabs.TabItem
             android:id="@+id/saved_tab"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:icon="@drawable/ic_bookmarksss" />
+            android:icon="@drawable/ic_bookmark_gray" />
     </com.google.android.material.tabs.TabLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

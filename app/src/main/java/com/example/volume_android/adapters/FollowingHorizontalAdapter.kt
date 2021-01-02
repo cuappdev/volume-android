@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.volume_android.PublicationProfileActivity
 import com.example.volume_android.R
 import com.example.volume_android.models.Publication
+import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.vertical_circular_publication_card.view.*
 
 class FollowingHorizontalAdapter(private val followedPublications: List<Publication>) :
@@ -36,8 +37,11 @@ class FollowingHorizontalAdapter(private val followedPublications: List<Publicat
 
     override fun onBindViewHolder(holder: FollowHorizontalVH, position: Int) {
         val currentItem : Publication = followedPublications[position]
-        
-        holder.pub_logo.setImageResource(R.drawable.cremelogotrans)
+
+        if(currentItem.profileImageURL != null && currentItem.profileImageURL != ""){
+            Picasso.get().load(currentItem.profileImageURL).into(holder.pub_logo)
+        }
+
         holder.pub_name.text = currentItem.name
 
         holder.layout.setOnClickListener {

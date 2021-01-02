@@ -16,6 +16,7 @@ import com.example.volume_android.R
 import com.example.volume_android.models.Publication
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.publication_card.view.*
+import kotlinx.android.synthetic.main.publication_profile_activity.*
 
 class FollowPublicationsAdapter(private val publicationList: List<Publication>,
                                 private val context: Context) :
@@ -45,6 +46,7 @@ class FollowPublicationsAdapter(private val publicationList: List<Publication>,
 
         val prefUtils: PrefUtils = PrefUtils(context)
         val currentItem : Publication = publicationList[position]
+        val currentFollowingSet = prefUtils.getStringSet("following", mutableSetOf())?.toMutableSet()
 
         if(currentItem.profileImageURL != null && currentItem.profileImageURL != ""){
             Picasso.get().load(currentItem.profileImageURL).into(holder.pub_logo)
@@ -54,11 +56,14 @@ class FollowPublicationsAdapter(private val publicationList: List<Publication>,
         holder.pub_desc.text = currentItem.bio
         holder.pub_quote.text = currentItem.slug
 
+        if(currentFollowingSet!!.contains(currentItem.id)){
+            holder.pub_follow.setImageResource(R.drawable.ic_followchecksvg)
+        }
+        else{
+            holder.pub_follow.setImageResource(R.drawable.ic_followplussvg)
+        }
+
         holder.pub_follow.setOnClickListener {
-            //gets current set or returns empty mutablesetof
-            val currentFollowingSet = prefUtils.getStringSet("following", mutableSetOf())?.toMutableSet()
-
-
             if(holder.pub_follow.drawable.constantState == ContextCompat.getDrawable(context,
                             R.drawable.ic_followplussvg)!!.constantState){
                 holder.pub_follow.setImageResource(R.drawable.ic_followchecksvg)
