@@ -2,13 +2,16 @@ package com.example.volume_android.adapters
 
 import PrefUtils
 import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
+import com.example.volume_android.PublicationProfileActivity
 import com.example.volume_android.R
 import com.example.volume_android.models.Publication
 import com.squareup.picasso.Picasso
@@ -25,6 +28,7 @@ class FollowPublicationsAdapter(private val publicationList: List<Publication>,
         val pub_desc : TextView = itemView.publication_card_description
         val pub_quote : TextView = itemView.publication_card_quote
         val pub_follow: ImageView = itemView.publication_card_follow
+        val pub_layout:ConstraintLayout = itemView.other_pub_layout
 
     }
 
@@ -73,5 +77,10 @@ class FollowPublicationsAdapter(private val publicationList: List<Publication>,
             }
         }
 
+        holder.pub_layout.setOnClickListener{
+            val intent = Intent(holder.pub_layout.context, PublicationProfileActivity::class.java)
+            intent.putExtra("publication", currentItem)
+            holder.pub_layout.context?.startActivity(intent)
+        }
     }
 }
