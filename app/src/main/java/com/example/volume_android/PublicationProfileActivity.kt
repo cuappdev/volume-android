@@ -1,6 +1,7 @@
 package com.example.volume_android
 
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
@@ -10,8 +11,14 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.volume_android.adapters.ArticleAdapter
+import com.example.volume_android.adapters.HomeFollowingArticleAdapters
 import com.example.volume_android.models.Article
 import com.example.volume_android.models.Publication
+import com.example.volume_android.util.GraphQlUtil
+import com.squareup.picasso.Picasso
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.publication_profile_activity.*
 
 
@@ -25,6 +32,11 @@ class PublicationProfileActivity : AppCompatActivity() {
     private lateinit var profile_shoutouts: TextView
     private lateinit var profile_desc: TextView
     private lateinit var profile_articles_rv: RecyclerView
+    private lateinit var publication:Publication
+
+    val disposables = CompositeDisposable()
+
+    val graphQlUtil = GraphQlUtil()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,18 +50,14 @@ class PublicationProfileActivity : AppCompatActivity() {
         profile_shoutouts = findViewById(R.id.shout_count)
         profile_desc = findViewById(R.id.publication_description)
         profile_articles_rv = findViewById(R.id.article_rv)
+        publication = intent.getParcelableExtra("publication")
 
-        //TODO: Dummy Data
-        val articledata : ArrayList<Article>  = ArrayList()
-//        articledata.add(Article("", "Sangkhaya: Thai Pandan Custard Dip", "https://www.cremedecornell.net/blog/2020/7/26/sangkhaya-thai-pandan-custard-dip/", "imageURL", "pubID", "pubName", "date", 10.0))
-//        articledata.add(Article("", "Sangkhaya: Thai Pandan Custard Dip", "https://www.cremedecornell.net/blog/2020/7/26/sangkhaya-thai-pandan-custard-dip/", "imageURL", "pubID", "pubName", "date", 10.0))
-//        articledata.add(Article("", "Sangkhaya: Thai Pandan Custard Dip", "https://www.cremedecornell.net/blog/2020/7/26/sangkhaya-thai-pandan-custard-dip/", "imageURL", "pubID", "pubName", "date", 10.0))
-//        articledata.add(Article("", "Sangkhaya: Thai Pandan Custard Dip", "https://www.cremedecornell.net/blog/2020/7/26/sangkhaya-thai-pandan-custard-dip/", "imageURL", "pubID", "pubName", "date", 10.0))
-//        articledata.add(Article("", "Sangkhaya: Thai Pandan Custard Dip", "https://www.cremedecornell.net/blog/2020/7/26/sangkhaya-thai-pandan-custard-dip/", "imageURL", "pubID", "pubName", "date", 10.0))
+        profile_name.text = publication.name
+        profile_shoutouts.text = publication.shoutouts.toString()
+        profile_desc.text = publication.bio
+        Picasso.get().load(publication.backgroundImageURL).into(profile_banner)
+        Picasso.get().load(publication.profileImageURL).into(profile_logo)
 
-        profile_articles_rv.adapter = ArticleAdapter(articledata)
-        profile_articles_rv.layoutManager = LinearLayoutManager(this)
-        profile_articles_rv.setHasFixedSize(true)
 
         follow_button.setOnClickListener {
             if(follow_button.text.equals("Following")){
@@ -66,6 +74,28 @@ class PublicationProfileActivity : AppCompatActivity() {
                 }
             }
         }
+
+        setUpArticleRV()
+
+    }
+
+    private fun setUpArticleRV(){
+        var articles = mutableListOf<Article>()
+        var tempArticles = mutableListOf<Article>()
+        val followingObs = graphQlUtil.getArticleByPublication(publication.id).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+        disposables.add(followingObs.subscribe{
+
+            it.data?.getArticlesByPublication?.mapTo(tempArticles, { it -> Article(title = it.title, articleURL =  it.articleURL, date =  it.date.toString(), id= it.id, imageURL = it.imageURL, publication = Publication(id = it.publication.id, name = it.publication.name), shoutouts = it.shoutouts)
+            })
+            articles.addAll(tempArticles)
+
+            profile_articles_rv.adapter = ArticleAdapter(articles)
+            profile_articles_rv.layoutManager = LinearLayoutManager(this)
+            profile_articles_rv.setHasFixedSize(true)
+
+
+        })
+
 
     }
 }

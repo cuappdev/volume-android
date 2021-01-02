@@ -27,7 +27,7 @@ class HomeFragment(val articles: List<Article>) : Fragment() {
     private lateinit var followingRv: RecyclerView
     private lateinit var otherArticles: RecyclerView
     private lateinit var disposables: CompositeDisposable
-
+    private val prefUtils: PrefUtils = PrefUtils()
 
 
     override fun onCreateView(inflater: LayoutInflater,
@@ -35,7 +35,7 @@ class HomeFragment(val articles: List<Article>) : Fragment() {
                               savedInstanceState: Bundle?): View? {
         val view1 = inflater.inflate(R.layout.home_fragment, container, false)
 
-        val prefUtils: PrefUtils = PrefUtils()
+
         val followingPublications = prefUtils.getStringSet("following", mutableSetOf())
 
         disposables = CompositeDisposable()
@@ -97,6 +97,10 @@ class HomeFragment(val articles: List<Article>) : Fragment() {
             otherArticles.adapter = HomeOtherArticleAdapter(others)
 
         })
+
+
+
+
         return view1
     }
 

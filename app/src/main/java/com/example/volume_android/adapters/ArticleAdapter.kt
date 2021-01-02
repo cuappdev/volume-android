@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.volume_android.MainActivity
 import com.example.volume_android.R
 import com.example.volume_android.models.Article
+import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.article_card.view.*
 
 class ArticleAdapter(private val articles: List<Article>) :
@@ -45,7 +46,9 @@ class ArticleAdapter(private val articles: List<Article>) :
         //holder.articleImg.setImageResource()
         holder.postTime.text = "6h ago"
         holder.shoutoutCount.text = currentItem.shoutouts.toString() + " shout-outs"
-
+        if(currentItem.imageURL != null && currentItem.imageURL != ""){
+            Picasso.get().load(currentItem.imageURL).into(holder.articleImg)
+        }
         holder.layout.setOnClickListener{
             val intent = Intent(holder.layout.context, MainActivity::class.java)
             intent.putExtra("articleURL",currentItem.articleURL)
