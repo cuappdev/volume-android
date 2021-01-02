@@ -55,7 +55,8 @@ class BigReadHomeAdapter (private val articles: List<Article>) :
 
         holder.layout.setOnClickListener{
             val intent = Intent(holder.layout.context, MainActivity::class.java)
-            intent.putExtra("articleURL",currentItem.articleURL)
+            //intent.putExtra("articleURL",currentItem.articleURL)
+            intent.putExtra("article", currentItem)
             holder.layout.context?.startActivity(intent)
         }
     }
