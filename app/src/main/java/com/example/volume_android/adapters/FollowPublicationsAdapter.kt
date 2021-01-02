@@ -26,8 +26,6 @@ class FollowPublicationsAdapter(private val publicationList: List<Publication>,
         val pub_quote : TextView = itemView.publication_card_quote
         val pub_follow: ImageView = itemView.publication_card_follow
 
-
-
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FollowPublicationVH {
@@ -44,7 +42,6 @@ class FollowPublicationsAdapter(private val publicationList: List<Publication>,
         val prefUtils: PrefUtils = PrefUtils(context)
         val currentItem : Publication = publicationList[position]
 
-        //TODO: This resource should take in a link, but will pass it an id for now
         if(currentItem.profileImageURL != null && currentItem.profileImageURL != ""){
             Picasso.get().load(currentItem.profileImageURL).into(holder.pub_logo)
         }
