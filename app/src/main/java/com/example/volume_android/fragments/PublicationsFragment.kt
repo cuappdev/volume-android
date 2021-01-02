@@ -1,5 +1,6 @@
 package com.example.volume_android.fragments
 
+import PrefUtils
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -23,6 +24,10 @@ class PublicationsFragment(val publications: List<Publication>) : Fragment() {
     private lateinit var morepublicationRV: RecyclerView
     val graphQlUtil = GraphQlUtil()
     val disposables = CompositeDisposable()
+    val prefUtils: PrefUtils = PrefUtils()
+
+    //val followingPublications = prefUtils.getStringSet("following", mutableSetOf())
+
 
     override fun onCreateView(inflater: LayoutInflater,
                               container: ViewGroup?,

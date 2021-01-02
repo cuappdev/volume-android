@@ -42,6 +42,7 @@ class FollowingHorizontalAdapter(private val followedPublications: List<Publicat
 
         holder.layout.setOnClickListener {
             val intent = Intent(holder.layout.context, PublicationProfileActivity::class.java)
+            intent.putExtra("publication", currentItem)
             holder.layout.context?.startActivity(intent)
         }
 
