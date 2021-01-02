@@ -97,10 +97,6 @@ class HomeFragment(val articles: List<Article>) : Fragment() {
             otherArticles.adapter = HomeOtherArticleAdapter(others)
 
         })
-
-
-
-
         return view1
     }
 

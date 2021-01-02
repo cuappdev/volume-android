@@ -12,16 +12,18 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.marginBottom
 import androidx.core.view.marginTop
 import com.example.volume_android.R
+import com.example.volume_android.models.Article
 
 class WebviewTop @JvmOverloads constructor(
         context: Context,
         attrs: AttributeSet,
-        defStyleAttr: Int = 0
+        defStyleAttr: Int = 0,
 ) : ConstraintLayout(context, attrs, defStyleAttr) {
     private lateinit var name: TextView
     private lateinit var readingText: TextView
     private lateinit var compass: ImageView
     private lateinit var book: ImageView
+    private lateinit var article: Article
 
     init {
         LayoutInflater.from(context).inflate(R.layout.webview_top_fragment, this, true)
@@ -29,6 +31,10 @@ class WebviewTop @JvmOverloads constructor(
         readingText = findViewById(R.id.webview_readingtext)
         compass = findViewById(R.id.webview_compass)
 
+    }
+
+    fun setName(article: Article) {
+        name.text = article.title
     }
 
     fun minimize(b: Boolean) {

@@ -6,6 +6,7 @@ import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.appcompat.app.AppCompatActivity
+import com.example.volume_android.models.Article
 import com.example.volume_android.views.ObservableWebView
 import com.example.volume_android.views.WebviewBottom
 import com.example.volume_android.views.WebviewTop
@@ -24,11 +25,13 @@ class MainActivity : AppCompatActivity() {
         topWebView = findViewById(R.id.webview_top)
         bottomWebView = findViewById(R.id.webview_bot)
 
-        //GrabURL
-        val link = intent.getStringExtra("articleURL")
+        //Grab Article
+        val article = intent.getParcelableExtra<Article>("article")
 
         webView = findViewById(R.id.webview)
-        webView.loadUrl(link)
+        webView.loadUrl(article.articleURL)
+        topWebView.setName(article)
+        bottomWebView.setUpView(article)
         webview.setTopBot(topWebView, bottomWebView)
 
         //Code to prevent from launching in external browser
