@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.volume_android.R
 import com.example.volume_android.adapters.BigReadHomeAdapter
 import com.example.volume_android.adapters.HomeFollowingArticleAdapters
+import com.example.volume_android.adapters.HomeOtherArticleAdapter
 import com.example.volume_android.models.Article
 import com.example.volume_android.models.Publication
 import com.example.volume_android.util.GraphQlUtil
@@ -44,7 +45,7 @@ class HomeFragment(val articles: List<Article>) : Fragment() {
 
         val graphQlUtil = GraphQlUtil()
 
-        //Get Trending Articles
+        //Get the trending articles for Big Read section
         val trendingObs = graphQlUtil.getTrendingArticles(10.0, "2020-12-10T12:34:20.000Z").subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
         disposables.add(trendingObs.subscribe{
             var trendingArticles = mutableListOf<Article>()
@@ -59,6 +60,8 @@ class HomeFragment(val articles: List<Article>) : Fragment() {
             bigRedRv.layoutManager = linearLayoutManager
         })
 
+        //get all articles for the publications the user follows
+        //the followed articles are pulled from shared preferences
         var followingArticles = mutableListOf<Article>()
         for ( pub in followingPublications!!){
             var tempArticles = mutableListOf<Article>()
@@ -80,6 +83,8 @@ class HomeFragment(val articles: List<Article>) : Fragment() {
         }
 
 
+        //these is for the other section, i.e. the articles from the publications that the person does not follow
+        //ideally we should filter filter out the articles from the publications that the person already follows
         val otherObs = graphQlUtil.getAllArticles().subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
         disposables.add(otherObs.subscribe{
             var others = mutableListOf<Article>()
@@ -89,10 +94,9 @@ class HomeFragment(val articles: List<Article>) : Fragment() {
             otherArticles = view1.findViewById(R.id.other_articlesrv)
             val linearLayoutManager3: LinearLayoutManager = LinearLayoutManager(view1.context)
             otherArticles.layoutManager = linearLayoutManager3
-            otherArticles.adapter = HomeFollowingArticleAdapters(others)
+            otherArticles.adapter = HomeOtherArticleAdapter(others)
 
         })
-
         return view1
     }
 
