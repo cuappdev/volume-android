@@ -38,9 +38,9 @@ class SavedArticlesAdapter(private val articles: List<Article>) :
 
         holder.articleTitle.text = currentItem.title
         //holder.articleImg.setImageResource()
-        holder.postTime.text = "6h ago"
+        holder.postTime.text =  currentItem.date.toString()
         holder.shoutoutCount.text = currentItem.shoutouts.toString() + " shout-outs"
-        holder.pubName.text = "Creme de Cornell"
+        holder.pubName.text = currentItem.title
 
         holder.layout.setOnClickListener{
             val intent = Intent(holder.layout.context, MainActivity::class.java)

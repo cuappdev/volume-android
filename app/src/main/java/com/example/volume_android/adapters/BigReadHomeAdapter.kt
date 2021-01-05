@@ -42,9 +42,12 @@ class BigReadHomeAdapter (private val articles: List<Article>) :
 
     override fun onBindViewHolder(holder: BigReadArticleVH, position: Int) {
         val currentItem : Article = articles[position]
-
-        holder.articleTitle.text = currentItem.title
-
+        if (currentItem.title?.length!! > 62){
+            holder.articleTitle.text = currentItem.title?.subSequence(0,61).toString() + " ..."
+        }
+        else {
+            holder.articleTitle.text = currentItem.title
+        }
 
         if(currentItem.imageURL != null && currentItem.imageURL != ""){
             Picasso.get().load(currentItem.imageURL).into(holder.articleImg)

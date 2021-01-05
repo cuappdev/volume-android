@@ -57,6 +57,11 @@ class GraphQlUtil {
         return client.rxQuery(query)
     }
 
+    fun getArticlesByIds(ids:MutableSet<String>):Observable<Response<ArticlesByIDsQuery.Data>>{
+        val query = (ArticlesByIDsQuery(ids.toList()))
+        return client.rxQuery(query)
+    }
+
 
 
 

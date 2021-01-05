@@ -37,7 +37,12 @@ class HomeFollowingArticleAdapters(private val articles: List<Article>) :
     override fun onBindViewHolder(holder: FollowingArticleVH, position: Int) {
         val currentItem : Article = articles[position]
 
-        holder.articleTitle.text = currentItem.title
+        if (currentItem.title?.length!! > 55){
+            holder.articleTitle.text = currentItem.title?.subSequence(0,54).toString() + " ..."
+        }
+        else {
+            holder.articleTitle.text = currentItem.title
+        }
         if(currentItem.imageURL != null && currentItem.imageURL != ""){
             Picasso.get().load(currentItem.imageURL).into(holder.articleImg)
         }

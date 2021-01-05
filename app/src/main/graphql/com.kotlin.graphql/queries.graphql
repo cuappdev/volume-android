@@ -92,4 +92,19 @@ query FollowingArticles($publicationID:String!){
 
 }
 
+query ArticlesByIDsQuery($ids:[String!]!){
+    getArticlesByIDs(ids:$ids){
+        id
+        title
+        publication{
+            id
+            name
+        }
+        articleURL
+        imageURL
+        date
+        shoutouts
+    }
+}
+
 

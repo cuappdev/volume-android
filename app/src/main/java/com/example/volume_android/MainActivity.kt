@@ -31,7 +31,8 @@ class MainActivity : AppCompatActivity() {
         webView = findViewById(R.id.webview)
         webView.loadUrl(article.articleURL)
         topWebView.setName(article)
-        bottomWebView.setUpView(article)
+        bottomWebView.setArticle(article)
+        bottomWebView.setUpView()
         webview.setTopBot(topWebView, bottomWebView)
 
         //Code to prevent from launching in external browser
