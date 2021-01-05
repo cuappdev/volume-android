@@ -1,7 +1,9 @@
 package com.example.volume_android.views
 
+import PrefUtils
 import android.content.Context
 import android.util.AttributeSet
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.Button
@@ -24,6 +26,9 @@ class WebviewBottom @JvmOverloads constructor(
     private var shareContent:ImageView
     private var shoutOuts:ImageView
     private var shoutOutsNum: TextView
+    private var prefUtils = PrefUtils()
+    private lateinit var article: Article
+    val currentFollowingSet = prefUtils.getStringSet("savedArticles", mutableSetOf())?.toMutableSet()
 
     init {
         LayoutInflater.from(context).inflate(R.layout.bottom_webview_actions, this, true)
@@ -33,13 +38,15 @@ class WebviewBottom @JvmOverloads constructor(
         shareContent = findViewById(R.id.share_content)
         shoutOuts = findViewById(R.id.heart)
         shoutOutsNum = findViewById(R.id.like_count)
+        prefUtils = PrefUtils(context)
     }
 
-    fun setUpView(article: Article){
+    fun setUpView(){
         if(article.imageURL != null && article.imageURL != ""){
             Picasso.get().load(article.imageURL).into(profileImageView)
         }
         shoutOutsNum.text = article.shoutouts.toString()
+        bookMark.setOnClickListener{bookmarkArticle()}
     }
 
     fun minimize(b: Boolean) {
@@ -49,5 +56,19 @@ class WebviewBottom @JvmOverloads constructor(
         } else {
             this.visibility = View.VISIBLE
         }
+    }
+
+    fun bookmarkArticle(){
+        if (currentFollowingSet != null) {
+            article.id?.let { currentFollowingSet.add(it) }
+        }
+        if (currentFollowingSet != null) {
+            prefUtils.save("savedArticles", currentFollowingSet)
+        }
+        Log.d("WebviewBottom", "Article Pressed")
+    }
+
+    fun setArticle(a: Article){
+        this.article = a
     }
 }
