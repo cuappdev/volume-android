@@ -48,7 +48,7 @@ class SavedPublicationsFragment(val articles: List<Article>) : Fragment() {
         var savedArticles = mutableListOf<Article>()
         if (obs != null) {
             disposables.add(obs.subscribe{
-                it.data?.getArticlesByIDs?.mapTo(savedArticles, { it -> Article(it.id, it.title, it.articleURL, it.imageURL, Publication(id = it.publication.id, name = it.publication.name),  it.date.toString(), shoutouts =  it.shoutouts)
+                it.data?.getArticlesByIDs?.mapTo(savedArticles, { it -> Article(it.id, it.title, it.articleURL, it.imageURL, Publication(id = it.publication.id, name = it.publication.name, profileImageURL = it.publication.profileImageURL),  it.date.toString(), shoutouts =  it.shoutouts)
                 })
                 Log.d("SavedPublicationsFragment", it.data?.getArticlesByIDs?.size.toString())
                 Log.d("SavedPublicationsFragment", "savedArticles" + savedArticles.size)

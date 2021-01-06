@@ -8,12 +8,13 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+
     <ImageView
         android:id="@+id/volume_title_logo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="6dp"
-        android:layout_marginTop="36dp"
+        android:layout_marginTop="45dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/volume_title"
@@ -34,15 +35,16 @@
         android:id="@+id/big_red_rv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginStart="6dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/big_red_tv"/>
+        app:layout_constraintTop_toBottomOf="@id/big_red_tv" />
 
     <ImageView
         android:id="@+id/follwing_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="12dp"
-        android:layout_marginTop="43dp"
+        android:layout_marginTop="45dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/big_red_rv"
         app:srcCompat="@drawable/ic_following_text"
@@ -53,8 +55,9 @@
         android:id="@+id/follwing_rv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginStart="6dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/follwing_tv"/>
+        app:layout_constraintTop_toBottomOf="@id/follwing_tv" />
 
 
     <ImageView
@@ -68,20 +71,24 @@
 
     <TextView
         android:id="@+id/more_articles_message"
+        style="@style/helvetica_black"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="You're up to date!"
+        android:textSize="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/volume_logo_more_articles"/>
+        app:layout_constraintTop_toBottomOf="@id/volume_logo_more_articles" />
 
 
     <TextView
         android:id="@+id/more_articles_message_long"
+        style="@style/helvetica_black"
         android:layout_width="291dp"
-        android:layout_height="44dp"
+        android:layout_height="wrap_content"
         android:text="You've seen all the new articles from the publications you have been following"
         android:textAlignment="center"
+        android:textSize="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/more_articles_message" />
@@ -91,7 +98,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="12dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="45dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/more_articles_message_long"
         app:srcCompat="@drawable/ic_other_articles_text"
@@ -101,7 +108,8 @@
         android:id="@+id/other_articlesrv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginStart="6dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/other_articles"/>
+        app:layout_constraintTop_toBottomOf="@id/other_articles" />
 </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.core.widget.NestedScrollView>
