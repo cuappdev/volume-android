@@ -31,7 +31,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="17dp"
             android:text="TextView"
-            android:textSize="10dp"
+            android:textSize="12dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/vert_img_view" />
 

@@ -1,25 +1,32 @@
 package com.example.volume_android.adapters
 
 import android.content.Intent
+import android.os.Build
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.annotation.RequiresApi
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.example.volume_android.MainActivity
 import com.example.volume_android.R
 import com.example.volume_android.models.Article
 import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.article_card.view.*
-import kotlinx.android.synthetic.main.article_card.view.article_img
 import kotlinx.android.synthetic.main.vertical_article_home_card.view.*
+import java.time.Duration
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
+import java.time.temporal.ChronoUnit
+import java.util.concurrent.TimeUnit
 
-class BigReadHomeAdapter (private val articles: List<Article>) :
+class BigReadHomeAdapter(private val articles: List<Article>) :
         RecyclerView.Adapter<BigReadHomeAdapter.BigReadArticleVH>() {
 
-    class BigReadArticleVH(itemView : View) : RecyclerView.ViewHolder(itemView){
+    class BigReadArticleVH(itemView: View) : RecyclerView.ViewHolder(itemView){
         val pubName: TextView = itemView.vert_card_pub_name
         val articleTitle : TextView = itemView.article_title_big_read
         val articleImg : ImageView = itemView.vert_img_view
@@ -32,7 +39,7 @@ class BigReadHomeAdapter (private val articles: List<Article>) :
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BigReadArticleVH {
         val itemView = LayoutInflater.from(parent.context).inflate(R.layout.vertical_article_home_card, parent, false)
-        return BigReadArticleVH (itemView)
+        return BigReadArticleVH(itemView)
 
     }
 
@@ -40,10 +47,11 @@ class BigReadHomeAdapter (private val articles: List<Article>) :
         return articles.size
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onBindViewHolder(holder: BigReadArticleVH, position: Int) {
         val currentItem : Article = articles[position]
         if (currentItem.title?.length!! > 62){
-            holder.articleTitle.text = currentItem.title?.subSequence(0,61).toString() + " ..."
+            holder.articleTitle.text = currentItem.title?.subSequence(0, 61).toString() + " ..."
         }
         else {
             holder.articleTitle.text = currentItem.title
@@ -53,7 +61,31 @@ class BigReadHomeAdapter (private val articles: List<Article>) :
             Picasso.get().load(currentItem.imageURL).into(holder.articleImg)
         }
         holder.postTime.text = currentItem.date
-        holder.shoutoutCount.text = currentItem.shoutouts.toString() + " shout-outs"
+        //getting article posting time and date in phones timeZone
+        val format = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
+        val datePublished = LocalDateTime.parse(currentItem.date, format)
+        var dur = Duration.between(datePublished, LocalDateTime.now())
+        Log.d("TimeStuff", dur.toDays().toString())
+        if(dur.toDays() < 1){
+            val hours = dur.toHours()
+            holder.postTime.text = hours.toInt().toString() + "h" + " ago"
+        }
+        if(dur.toDays() in 2..6) {
+            holder.postTime.text = dur.toDays().toInt().toString() + " days" + " ago"
+        }
+        if(dur.toDays() in 7..29) {
+            val weeks = dur.toDays()/7
+            holder.postTime.text = weeks.toString() + " days" + " ago"
+        }
+        if(dur.toDays() >= 30 && dur.toDays()> 365){
+            val months = dur.toDays()/30
+            holder.postTime.text = months.toInt().toString() + " months" + " ago"
+        }
+        if (dur.toDays()>=365){
+            val years = dur.toDays()/365
+            holder.postTime.text = years.toInt().toString() + " years" + " ago"
+        }
+        holder.shoutoutCount.text = currentItem.shoutouts?.toInt().toString() + " shout-outs"
         holder.pubName.text = currentItem.publication!!.name
 
         holder.layout.setOnClickListener{

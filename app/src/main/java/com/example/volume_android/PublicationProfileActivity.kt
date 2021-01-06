@@ -58,7 +58,7 @@ class PublicationProfileActivity : AppCompatActivity() {
         publication = intent.getParcelableExtra("publication")
 
         profile_name.text = publication.name
-        profile_shoutouts.text = publication.shoutouts.toString()
+        profile_shoutouts.text = publication.shoutouts?.toInt().toString()
         profile_desc.text = publication.bio
         Picasso.get().load(publication.backgroundImageURL).into(profile_banner)
         Picasso.get().load(publication.profileImageURL).into(profile_logo)
@@ -67,12 +67,14 @@ class PublicationProfileActivity : AppCompatActivity() {
         if(currentFollowingSet!!.contains(publication.id)){
             follow_button.apply {
                 text = "Following"
-                setBackgroundColor(ContextCompat.getColor(this.context, R.color.volumeOrange))}
+                setTextColor(ContextCompat.getColor(this.context, R.color.ligthgray))
+                setBackgroundResource(R.drawable.rounded_rectange_button_orange)
+            }
         }
         else{
             follow_button.apply {
                 text = " +  Follow"
-                setBackgroundColor(ContextCompat.getColor(this.context, R.color.ligthgray))}
+                setBackgroundResource(R.drawable.rounded_rectangle_button)}
         }
 
 
@@ -81,7 +83,8 @@ class PublicationProfileActivity : AppCompatActivity() {
             if(follow_button.text.equals("Following")){
                 follow_button.apply{
                     text = " +  Follow"
-                    setBackgroundColor(ContextCompat.getColor(this.context, R.color.ligthgray))
+                    setBackgroundResource(R.drawable.rounded_rectangle_button)
+                    setTextColor(ContextCompat.getColor(this.context, R.color.volumeOrange))
                     currentFollowingSet?.remove(publication.id)
                     if (currentFollowingSet != null) {
                         prefUtils.save("following", currentFollowingSet)
@@ -92,7 +95,8 @@ class PublicationProfileActivity : AppCompatActivity() {
             else {
                 follow_button.apply {
                     text = "Following"
-                    setBackgroundColor(ContextCompat.getColor(this.context, R.color.volumeOrange))
+                    setTextColor(ContextCompat.getColor(this.context, R.color.ligthgray))
+                    setBackgroundResource(R.drawable.rounded_rectange_button_orange)
                     currentFollowingSet?.add(publication.id)
                     if (currentFollowingSet != null) {
                         prefUtils.save("following", currentFollowingSet)
@@ -111,7 +115,7 @@ class PublicationProfileActivity : AppCompatActivity() {
         val followingObs = graphQlUtil.getArticleByPublication(publication.id).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
         disposables.add(followingObs.subscribe{
 
-            it.data?.getArticlesByPublication?.mapTo(tempArticles, { it -> Article(title = it.title, articleURL =  it.articleURL, date =  it.date.toString(), id= it.id, imageURL = it.imageURL, publication = Publication(id = it.publication.id, name = it.publication.name), shoutouts = it.shoutouts)
+            it.data?.getArticlesByPublication?.mapTo(tempArticles, { it -> Article(title = it.title, articleURL =  it.articleURL, date =  it.date.toString(), id= it.id, imageURL = it.imageURL, publication = Publication(id = it.publication.id, name = it.publication.name, profileImageURL=publication.profileImageURL), shoutouts = it.shoutouts)
             })
             articles.addAll(tempArticles)
 

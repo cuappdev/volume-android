@@ -54,7 +54,7 @@ class FollowPublicationsAdapter(private val publicationList: List<Publication>,
 
         holder.pub_name.text = currentItem.name
         holder.pub_desc.text = currentItem.bio
-        holder.pub_quote.text = currentItem.slug
+        holder.pub_quote.text = currentItem.mostRecentArticle?.title
 
         if(currentFollowingSet!!.contains(currentItem.id)){
             holder.pub_follow.setImageResource(R.drawable.ic_followchecksvg)

@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     app:cardBackgroundColor="#00FFFFFF"
-    android:layout_marginTop="5dp"
+    android:layout_margin="10dp"
     app:cardCornerRadius="0dp"
     app:cardElevation="0dp"
     app:cardMaxElevation="0dp">
@@ -22,10 +22,9 @@
             style="@style/begum_black"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:text="Creme de Cornell"
-            android:textSize="12dp"
             android:layout_marginLeft="10dp"
+            android:text="Creme de Cornell"
+            android:textSize="14dp"
             app:layout_constraintStart_toEndOf="@+id/article_img_home_o"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -44,45 +43,43 @@
             android:id="@+id/article_img_home_o"
             android:layout_width="100dp"
             android:layout_height="100dp"
+            android:layout_margin="0dp"
             android:background="#003F51B5"
-            android:layout_margin="5dp"
             android:scaleType="fitXY"
-            android:src="@drawable/articleimg"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:srcCompat="@color/grey"
+            tools:srcCompat="@color/grey" />
 
         <TextView
             android:id="@+id/following_home_dot_o"
-            style="@style/begum_grey"
+            style="@style/helvetica_gray"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="6dp"
             android:text=" • "
             android:textSize="10dp"
-            app:layout_constraintStart_toEndOf="@+id/following_home_time_o"
-            app:layout_constraintTop_toBottomOf="@+id/article_title_home_o" />
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/following_home_time_o" />
 
         <TextView
             android:id="@+id/following_home_shout_out_o"
-            style="@style/begum_grey"
+            style="@style/helvetica_gray"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="6dp"
             android:text="123 shout-outs"
             android:textSize="10dp"
-            app:layout_constraintStart_toEndOf="@+id/following_home_dot_o"
-            app:layout_constraintTop_toBottomOf="@+id/article_title_home_o" />
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/following_home_dot_o" />
 
         <TextView
             android:id="@+id/following_home_time_o"
-            style="@style/begum_grey"
+            style="@style/helvetica_gray"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="6dp"
             android:text="6h ago"
             android:textSize="10dp"
-            app:layout_constraintStart_toStartOf="@+id/article_title_home_o"
-            app:layout_constraintTop_toBottomOf="@+id/article_title_home_o" />
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/article_title_home_o" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

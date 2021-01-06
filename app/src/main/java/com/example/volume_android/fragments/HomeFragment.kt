@@ -49,7 +49,7 @@ class HomeFragment(val articles: List<Article>) : Fragment() {
         val trendingObs = graphQlUtil.getTrendingArticles(10.0, "2020-12-10T12:34:20.000Z").subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
         disposables.add(trendingObs.subscribe{
             var trendingArticles = mutableListOf<Article>()
-            it.data?.getTrendingArticles?.mapTo(trendingArticles, { it -> Article(it.id, it.title, it.articleURL, it.imageURL, Publication(id = it.publication.id, name = it.publication.name),  it.date.toString(), shoutouts =  it.shoutouts)
+            it.data?.getTrendingArticles?.mapTo(trendingArticles, { it -> Article(it.id, it.title, it.articleURL, it.imageURL, Publication(id = it.publication.id, name = it.publication.name, profileImageURL = it.publication.profileImageURL),  it.date.toString(), shoutouts =  it.shoutouts)
             })
 
             bigRedRv = view1.findViewById(R.id.big_red_rv)!!
@@ -68,7 +68,7 @@ class HomeFragment(val articles: List<Article>) : Fragment() {
             val followingObs = graphQlUtil.getArticleByPublication(pub).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
         disposables.add(followingObs.subscribe{
 
-            it.data?.getArticlesByPublication?.mapTo(tempArticles, { it -> Article(title = it.title, articleURL =  it.articleURL, date =  it.date.toString(), id= it.id, imageURL = it.imageURL, publication = Publication(id = it.publication.id, name = it.publication.name), shoutouts = it.shoutouts)
+            it.data?.getArticlesByPublication?.mapTo(tempArticles, { it -> Article(title = it.title, articleURL =  it.articleURL, date =  it.date.toString(), id= it.id, imageURL = it.imageURL, publication = Publication(id = it.publication.id, name = it.publication.name, profileImageURL = it.publication.profileImageURL), shoutouts = it.shoutouts)
             })
             followingArticles.addAll(tempArticles)
 
@@ -89,7 +89,7 @@ class HomeFragment(val articles: List<Article>) : Fragment() {
         disposables.add(otherObs.subscribe{
             var others = mutableListOf<Article>()
 
-            it.data?.getAllArticles?.mapTo(others, { it -> Article(title = it.title, articleURL =  it.articleURL, date =  it.date.toString(), id= it.id, imageURL = it.imageURL, publication = Publication(id = it.publication.id, name = it.publication.name), shoutouts = it.shoutouts)
+            it.data?.getAllArticles?.mapTo(others, { it -> Article(title = it.title, articleURL =  it.articleURL, date =  it.date.toString(), id= it.id, imageURL = it.imageURL, publication = Publication(id = it.publication.id, name = it.publication.name, profileImageURL = it.publication.profileImageURL), shoutouts = it.shoutouts)
             })
             otherArticles = view1.findViewById(R.id.other_articlesrv)
             val linearLayoutManager3: LinearLayoutManager = LinearLayoutManager(view1.context)

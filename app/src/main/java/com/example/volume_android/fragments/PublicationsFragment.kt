@@ -44,7 +44,8 @@ class PublicationsFragment(val publications: List<Publication>) : Fragment() {
         disposables.add(otherObs.subscribe{
             var others = mutableListOf<Publication>()
 
-            it.data?.getAllPublications?.mapTo(others, { it -> Publication(id = it.id, backgroundImageURL = it.backgroundImageURL, bio = it.bio, name = it.name, profileImageURL = it.profileImageURL, rssName = it.rssName, rssURL = it.rssURL, slug = it.slug, shoutouts = it.shoutouts, websiteURL = it.websiteURL) })
+            it.data?.getAllPublications?.mapTo(others, { it -> Publication(id = it.id, backgroundImageURL = it.backgroundImageURL, bio = it.bio, name = it.name, profileImageURL = it.profileImageURL, rssName = it.rssName, rssURL = it.rssURL, slug = it.slug, shoutouts = it.shoutouts, websiteURL = it.websiteURL,
+            Article(it.mostRecentArticle?.id, it.mostRecentArticle?.title, it.mostRecentArticle?.articleURL, it.mostRecentArticle?.imageURL)) })
 
             morepublicationRV = view.findViewById(R.id.follwing_more_publications_rv)
             morepublicationRV.adapter = FollowPublicationsAdapter(others, view.context)
@@ -65,7 +66,7 @@ class PublicationsFragment(val publications: List<Publication>) : Fragment() {
 
                 val res = it.data?.getPublicationByID
                 val publication = Publication(res!!.id, res.backgroundImageURL,
-                        res.bio, res.name, res.profileImageURL, res.rssName, res.rssURL, res.slug, res.shoutouts, res.websiteURL, Article())
+                        res.bio, res.name, res.profileImageURL, res.rssName, res.rssURL, res.slug, res.shoutouts, res.websiteURL, Article(res.mostRecentArticle?.id, res.mostRecentArticle?.title, res.mostRecentArticle?.articleURL, res.mostRecentArticle?.imageURL))
 
                 followingPublications.add(publication)
 

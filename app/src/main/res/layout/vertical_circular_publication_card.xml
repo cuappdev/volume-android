@@ -3,6 +3,7 @@
     android:id="@+id/vert_cert_layout"
     android:layout_width="90dp"
     android:layout_height="110dp"
+    android:layout_marginEnd="20dp"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <ImageView
@@ -16,16 +17,16 @@
 
     <TextView
         android:id="@+id/vertical_publication_name"
+        style="@style/begum_black"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
-        android:textSize="12dp"
-        style="@style/begum_black_bold"
         android:gravity="center"
-        app:layout_constraintTop_toBottomOf="@+id/vertical_publication_logo"
+        android:text="Creme de Cronell"
+        android:textSize="12dp"
         app:layout_constraintLeft_toLeftOf="@+id/vertical_publication_logo"
         app:layout_constraintRight_toRightOf="@id/vertical_publication_logo"
-        android:text="Creme de Cronell"/>
+        app:layout_constraintTop_toBottomOf="@+id/vertical_publication_logo" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
