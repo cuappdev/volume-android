@@ -24,7 +24,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:text="Creme de Cornell"
-            android:textSize="14dp"
+            android:textSize="12dp"
             app:layout_constraintStart_toEndOf="@+id/article_img_home_o"
             app:layout_constraintTop_toTopOf="parent" />
 

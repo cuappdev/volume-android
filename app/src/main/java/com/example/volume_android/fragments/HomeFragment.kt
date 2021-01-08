@@ -20,6 +20,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 
+
 class HomeFragment(val articles: List<Article>) : Fragment() {
 
 
@@ -41,21 +42,24 @@ class HomeFragment(val articles: List<Article>) : Fragment() {
         disposables = CompositeDisposable()
 
         Log.d("FOLLOWING", followingPublications.toString())
+        Log.d("HomeFragment", "reloaded")
+        Log.d("HomeFragment", followingPublications.toString())
 
 
         val graphQlUtil = GraphQlUtil()
 
         //Get the trending articles for Big Read section
         val trendingObs = graphQlUtil.getTrendingArticles(10.0, "2020-12-10T12:34:20.000Z").subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
-        disposables.add(trendingObs.subscribe{
+        disposables.add(trendingObs.subscribe {
             var trendingArticles = mutableListOf<Article>()
-            it.data?.getTrendingArticles?.mapTo(trendingArticles, { it -> Article(it.id, it.title, it.articleURL, it.imageURL, Publication(id = it.publication.id, name = it.publication.name, profileImageURL = it.publication.profileImageURL),  it.date.toString(), shoutouts =  it.shoutouts)
+            it.data?.getTrendingArticles?.mapTo(trendingArticles, { it ->
+                Article(it.id, it.title, it.articleURL, it.imageURL, Publication(id = it.publication.id, name = it.publication.name, profileImageURL = it.publication.profileImageURL), it.date.toString(), shoutouts = it.shoutouts)
             })
 
             bigRedRv = view1.findViewById(R.id.big_red_rv)!!
 
             bigRedRv.adapter = BigReadHomeAdapter(trendingArticles)
-            val linearLayoutManager : LinearLayoutManager = LinearLayoutManager(view1.context)
+            val linearLayoutManager: LinearLayoutManager = LinearLayoutManager(view1.context)
             linearLayoutManager.orientation = LinearLayoutManager.HORIZONTAL
             bigRedRv.layoutManager = linearLayoutManager
         })
@@ -66,13 +70,14 @@ class HomeFragment(val articles: List<Article>) : Fragment() {
         for ( pub in followingPublications!!){
             var tempArticles = mutableListOf<Article>()
             val followingObs = graphQlUtil.getArticleByPublication(pub).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
-        disposables.add(followingObs.subscribe{
+        disposables.add(followingObs.subscribe {
 
-            it.data?.getArticlesByPublication?.mapTo(tempArticles, { it -> Article(title = it.title, articleURL =  it.articleURL, date =  it.date.toString(), id= it.id, imageURL = it.imageURL, publication = Publication(id = it.publication.id, name = it.publication.name, profileImageURL = it.publication.profileImageURL), shoutouts = it.shoutouts)
+            it.data?.getArticlesByPublication?.mapTo(tempArticles, { it ->
+                Article(title = it.title, articleURL = it.articleURL, date = it.date.toString(), id = it.id, imageURL = it.imageURL, publication = Publication(id = it.publication.id, name = it.publication.name, profileImageURL = it.publication.profileImageURL), shoutouts = it.shoutouts)
             })
             followingArticles.addAll(tempArticles)
 
-            if(pub == followingPublications.last()){
+            if (pub == followingPublications.last()) {
                 followingRv = view1.findViewById(R.id.follwing_rv)
                 val linearLayoutManager2: LinearLayoutManager = LinearLayoutManager(view1.context)
                 followingRv.layoutManager = linearLayoutManager2
@@ -86,10 +91,11 @@ class HomeFragment(val articles: List<Article>) : Fragment() {
         //these is for the other section, i.e. the articles from the publications that the person does not follow
         //ideally we should filter filter out the articles from the publications that the person already follows
         val otherObs = graphQlUtil.getAllArticles().subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
-        disposables.add(otherObs.subscribe{
+        disposables.add(otherObs.subscribe {
             var others = mutableListOf<Article>()
 
-            it.data?.getAllArticles?.mapTo(others, { it -> Article(title = it.title, articleURL =  it.articleURL, date =  it.date.toString(), id= it.id, imageURL = it.imageURL, publication = Publication(id = it.publication.id, name = it.publication.name, profileImageURL = it.publication.profileImageURL), shoutouts = it.shoutouts)
+            it.data?.getAllArticles?.mapTo(others, { it ->
+                Article(title = it.title, articleURL = it.articleURL, date = it.date.toString(), id = it.id, imageURL = it.imageURL, publication = Publication(id = it.publication.id, name = it.publication.name, profileImageURL = it.publication.profileImageURL), shoutouts = it.shoutouts)
             })
             otherArticles = view1.findViewById(R.id.other_articlesrv)
             val linearLayoutManager3: LinearLayoutManager = LinearLayoutManager(view1.context)
@@ -103,5 +109,12 @@ class HomeFragment(val articles: List<Article>) : Fragment() {
     override fun onDestroy() {
         disposables.clear()
         super.onDestroy()
+    }
+
+    override fun setUserVisibleHint(isVisibleToUser: Boolean) {
+        super.setUserVisibleHint(isVisibleToUser)
+        if (isVisibleToUser) {
+            fragmentManager!!.beginTransaction().detach(this).attach(this).commit()
+        }
     }
 }

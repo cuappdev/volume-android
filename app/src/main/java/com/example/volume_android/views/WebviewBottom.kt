@@ -45,7 +45,7 @@ class WebviewBottom @JvmOverloads constructor(
         if(article.publication?.profileImageURL != null && article.publication?.profileImageURL != ""){
             Picasso.get().load(article.publication?.profileImageURL).into(profileImageView)
         }
-        shoutOutsNum.text = article.shoutouts.toString()
+        shoutOutsNum.text = article.shoutouts?.toInt().toString()
         bookMark.setOnClickListener{bookmarkArticle()}
     }
 

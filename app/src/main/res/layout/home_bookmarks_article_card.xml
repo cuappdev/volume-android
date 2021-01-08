@@ -10,6 +10,7 @@
     app:cardMaxElevation="0dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/saved_article_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -53,11 +54,12 @@
 
             <TextView
                 android:id="@+id/post_time_b"
-                style="@style/begum_grey"
+                style="@style/helvetica_gray"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="6h ago"
                 android:textSize="10dp"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent" />
 
             <ImageView
@@ -73,14 +75,14 @@
 
             <TextView
                 android:id="@+id/article_shout_count_b"
-                style="@style/begum_grey"
+                style="@style/helvetica_gray"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="5dp"
                 android:text="15 shout-outs"
                 android:textSize="10dp"
-                app:layout_constraintLeft_toRightOf="@+id/dot_b"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toRightOf="@+id/dot_b" />
 
             <ImageView
                 android:id="@+id/article_bookmark_icon"

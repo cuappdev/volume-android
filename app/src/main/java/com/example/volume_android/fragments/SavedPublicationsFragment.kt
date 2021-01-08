@@ -27,7 +27,7 @@ class SavedPublicationsFragment(val articles: List<Article>) : Fragment() {
 
     private lateinit var savedArticlesRV: RecyclerView
     private val prefUtils = PrefUtils()
-    private var articleIds = prefUtils.getStringSet("savedArticles", mutableSetOf())?.toMutableSet()
+
 
     private var disposables = CompositeDisposable()
     private val graphQlUtil = GraphQlUtil()
@@ -43,6 +43,7 @@ class SavedPublicationsFragment(val articles: List<Article>) : Fragment() {
 
     @SuppressLint("LongLogTag")
     private fun loadArticles(view: View){
+        val articleIds = prefUtils.getStringSet("savedArticles", mutableSetOf())?.toMutableSet()
         Log.d("SavedPublicationsFragment", articleIds?.size.toString())
         val obs = articleIds?.let { graphQlUtil.getArticlesByIds(it).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()) }
         var savedArticles = mutableListOf<Article>()
@@ -60,5 +61,12 @@ class SavedPublicationsFragment(val articles: List<Article>) : Fragment() {
             })
         }
 
+    }
+
+    override fun setUserVisibleHint(isVisibleToUser: Boolean) {
+        super.setUserVisibleHint(isVisibleToUser)
+        if (isVisibleToUser) {
+            fragmentManager!!.beginTransaction().detach(this).attach(this).commit()
+        }
     }
 }

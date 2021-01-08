@@ -32,6 +32,7 @@ class SavedArticlesAdapter(private val articles: List<Article>) :
         val dot: ImageView = itemView.dot_b
         val bookmarkImage = itemView.article_bookmark_icon
         val layout: ConstraintLayout = itemView.desc_holder_b
+        val layoutMain:ConstraintLayout = itemView.saved_article_layout
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int):  SavedArticleVH {
@@ -81,7 +82,8 @@ class SavedArticlesAdapter(private val articles: List<Article>) :
         holder.shoutoutCount.text = currentItem.shoutouts?.toInt().toString() + " shout-outs"
         holder.pubName.text = currentItem.publication?.name
 
-        holder.layout.setOnClickListener{
+        holder.layoutMain.setOnClickListener{
+            Log.d("SavedArticle", "layout clicked")
             val intent = Intent(holder.layout.context, MainActivity::class.java)
             intent.putExtra("article",currentItem)
             holder.layout.context?.startActivity(intent)
