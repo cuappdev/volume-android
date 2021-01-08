@@ -11,13 +11,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.volume_android.R
 import com.example.volume_android.adapters.FollowPublicationsAdapter
 import com.example.volume_android.adapters.FollowingHorizontalAdapter
-import com.example.volume_android.adapters.HomeFollowingArticleAdapters
 import com.example.volume_android.models.Article
 import com.example.volume_android.models.Publication
 import com.example.volume_android.util.GraphQlUtil
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
+
 
 class PublicationsFragment(val publications: List<Publication>) : Fragment() {
 
@@ -26,6 +26,8 @@ class PublicationsFragment(val publications: List<Publication>) : Fragment() {
     val graphQlUtil = GraphQlUtil()
     val disposables = CompositeDisposable()
     val prefUtils: PrefUtils = PrefUtils()
+    private lateinit var view1: View
+    private var shouldRefreshOnResume = false
 
 
     override fun onCreateView(inflater: LayoutInflater,
@@ -35,17 +37,19 @@ class PublicationsFragment(val publications: List<Publication>) : Fragment() {
 
         getFollowingPublications(view)
         getMorePublications(view)
-
+        view1 = view
         return view
     }
 
     fun getMorePublications(view: View){
         val otherObs = graphQlUtil.getAllPublications().subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
-        disposables.add(otherObs.subscribe{
+        disposables.add(otherObs.subscribe {
             var others = mutableListOf<Publication>()
 
-            it.data?.getAllPublications?.mapTo(others, { it -> Publication(id = it.id, backgroundImageURL = it.backgroundImageURL, bio = it.bio, name = it.name, profileImageURL = it.profileImageURL, rssName = it.rssName, rssURL = it.rssURL, slug = it.slug, shoutouts = it.shoutouts, websiteURL = it.websiteURL,
-            Article(it.mostRecentArticle?.id, it.mostRecentArticle?.title, it.mostRecentArticle?.articleURL, it.mostRecentArticle?.imageURL)) })
+            it.data?.getAllPublications?.mapTo(others, { it ->
+                Publication(id = it.id, backgroundImageURL = it.backgroundImageURL, bio = it.bio, name = it.name, profileImageURL = it.profileImageURL, rssName = it.rssName, rssURL = it.rssURL, slug = it.slug, shoutouts = it.shoutouts, websiteURL = it.websiteURL,
+                        Article(it.mostRecentArticle?.id, it.mostRecentArticle?.title, it.mostRecentArticle?.articleURL, it.mostRecentArticle?.imageURL))
+            })
 
             morepublicationRV = view.findViewById(R.id.follwing_more_publications_rv)
             morepublicationRV.adapter = FollowPublicationsAdapter(others, view.context)
@@ -62,7 +66,7 @@ class PublicationsFragment(val publications: List<Publication>) : Fragment() {
 
         for ( pub in followingPublicationsIds!!){
             val followingObs = graphQlUtil.getPublicationById(pub).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
-            disposables.add(followingObs.subscribe{
+            disposables.add(followingObs.subscribe {
 
                 val res = it.data?.getPublicationByID
                 val publication = Publication(res!!.id, res.backgroundImageURL,
@@ -70,10 +74,10 @@ class PublicationsFragment(val publications: List<Publication>) : Fragment() {
 
                 followingPublications.add(publication)
 
-                if(pub == followingPublicationsIds.last()){
+                if (pub == followingPublicationsIds.last()) {
                     followpublicationRV = view.findViewById(R.id.following_all_publications_rv)
                     followpublicationRV.adapter = FollowingHorizontalAdapter(followingPublications)
-                    val linearLayoutManager : LinearLayoutManager = LinearLayoutManager(view.context)
+                    val linearLayoutManager: LinearLayoutManager = LinearLayoutManager(view.context)
                     linearLayoutManager.orientation = LinearLayoutManager.HORIZONTAL
                     followpublicationRV.layoutManager = linearLayoutManager
                     followpublicationRV.setHasFixedSize(true)
@@ -81,5 +85,19 @@ class PublicationsFragment(val publications: List<Publication>) : Fragment() {
                 }
             })
         }
-            }
+    }
+
+    override fun setUserVisibleHint(isVisibleToUser: Boolean) {
+        super.setUserVisibleHint(isVisibleToUser)
+        if (isVisibleToUser) {
+            fragmentManager!!.beginTransaction().detach(this).attach(this).commit()
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        getMorePublications(view1)
+        getFollowingPublications(view1)
+    }
+
 }

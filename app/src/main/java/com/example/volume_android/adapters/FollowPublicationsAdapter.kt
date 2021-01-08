@@ -3,6 +3,7 @@ package com.example.volume_android.adapters
 import PrefUtils
 import android.content.Context
 import android.content.Intent
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -47,6 +48,7 @@ class FollowPublicationsAdapter(private val publicationList: List<Publication>,
         val prefUtils: PrefUtils = PrefUtils(context)
         val currentItem : Publication = publicationList[position]
         val currentFollowingSet = prefUtils.getStringSet("following", mutableSetOf())?.toMutableSet()
+        Log.d("Following Pubs", currentFollowingSet?.size.toString())
 
         if(currentItem.profileImageURL != null && currentItem.profileImageURL != ""){
             Picasso.get().load(currentItem.profileImageURL).into(holder.pub_logo)
