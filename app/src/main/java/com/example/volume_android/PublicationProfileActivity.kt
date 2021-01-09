@@ -12,6 +12,7 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.volume_android.adapters.ArticleAdapter
+import com.example.volume_android.adapters.FollowingHorizontalAdapter
 import com.example.volume_android.adapters.HomeFollowingArticleAdapters
 import com.example.volume_android.models.Article
 import com.example.volume_android.models.Publication
@@ -34,6 +35,7 @@ class PublicationProfileActivity : AppCompatActivity() {
     private lateinit var profile_desc: TextView
     private lateinit var profile_articles_rv: RecyclerView
     private lateinit var publication:Publication
+    private lateinit var graphQPublication: Publication
 
     val disposables = CompositeDisposable()
 
@@ -57,11 +59,10 @@ class PublicationProfileActivity : AppCompatActivity() {
         profile_articles_rv = findViewById(R.id.article_rv)
         publication = intent.getParcelableExtra("publication")
 
-        profile_name.text = publication.name
-        profile_shoutouts.text = publication.shoutouts?.toInt().toString()
-        profile_desc.text = publication.bio
-        Picasso.get().load(publication.backgroundImageURL).into(profile_banner)
-        Picasso.get().load(publication.profileImageURL).into(profile_logo)
+        getPublication(publication.id)
+
+
+        Log.d("PUBLICATION", publication.id + " "  + publication.name + " " + publication.shoutouts?.toInt().toString() + " " +   publication.bio + " " + publication.backgroundImageURL + " " + publication.profileImageURL)
 
 
         if(currentFollowingSet!!.contains(publication.id)){
@@ -127,5 +128,23 @@ class PublicationProfileActivity : AppCompatActivity() {
         })
 
 
+    }
+
+    private fun getPublication(pub : String){
+
+        val followingObs = graphQlUtil.getPublicationById(pub).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+        disposables.add(followingObs.subscribe {
+
+            val res = it.data?.getPublicationByID
+            graphQPublication = Publication(res!!.id, res.backgroundImageURL,
+                    res.bio, res.name, res.profileImageURL, res.rssName, res.rssURL, res.slug, res.shoutouts, res.websiteURL, Article(res.mostRecentArticle?.id, res.mostRecentArticle?.title, res.mostRecentArticle?.articleURL, res.mostRecentArticle?.imageURL))
+
+            profile_name.text = graphQPublication.name
+            profile_shoutouts.text = graphQPublication.shoutouts?.toInt().toString() + " shoutouts"
+            profile_desc.text = graphQPublication.bio
+            Picasso.get().load(graphQPublication.backgroundImageURL).into(profile_banner)
+            Picasso.get().load(graphQPublication.profileImageURL).into(profile_logo)
+
+        })
     }
 }
