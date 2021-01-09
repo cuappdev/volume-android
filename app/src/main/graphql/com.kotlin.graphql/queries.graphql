@@ -111,4 +111,12 @@ query ArticlesByIDsQuery($ids:[String!]!){
     }
 }
 
+mutation IncrementShoutout($id:String!){
+
+    incrementShoutouts(id:$id){
+        id
+        shoutouts
+    }
+}
+
 

@@ -3,9 +3,11 @@ package com.example.volume_android.util
 import com.apollographql.apollo.ApolloClient
 import com.apollographql.apollo.api.Response
 import com.apollographql.apollo.api.toInput
+import com.apollographql.apollo.rx2.rxMutate
 import com.apollographql.apollo.rx2.rxQuery
 import com.kotlin.graphql.*
 import io.reactivex.Observable
+import io.reactivex.Single
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 
@@ -62,7 +64,10 @@ class GraphQlUtil {
         return client.rxQuery(query)
     }
 
-
+    fun likeArticle(id: String): Single<Response<IncrementShoutoutMutation.Data>> {
+        val mutation = (IncrementShoutoutMutation(id))
+        return client.rxMutate(mutation)
+    }
 
 
 }

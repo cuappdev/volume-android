@@ -12,10 +12,17 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.volume_android.PublicationProfileActivity
 import com.example.volume_android.R
+import com.example.volume_android.adapters.FollowPublicationsAdapter
 import com.example.volume_android.models.Article
+import com.example.volume_android.models.Publication
+import com.example.volume_android.util.GraphQlUtil
 import com.squareup.picasso.Picasso
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.schedulers.Schedulers
 
 class WebviewBottom @JvmOverloads constructor(
         context: Context,
@@ -30,6 +37,9 @@ class WebviewBottom @JvmOverloads constructor(
     private var shoutOuts:ImageView
     private var shoutOutsNum: TextView
     private var prefUtils = PrefUtils()
+    private var graphQlUtil = GraphQlUtil()
+    private var disposables = CompositeDisposable()
+
     private lateinit var article: Article
     val currentBookmarks = prefUtils.getStringSet("savedArticles", mutableSetOf())?.toMutableSet()
 
@@ -52,7 +62,7 @@ class WebviewBottom @JvmOverloads constructor(
 
         if (currentBookmarks != null) {
             if(currentBookmarks.contains(article.id)){
-                bookMark.setImageResource(R.drawable.ic_orange_bookmarksvg)
+                bookMark.setImageResource(R.drawable.orange_shoutout_svg)
             }
             else{
                 bookMark.setImageResource(R.drawable.ic_black_bookmarksvg)
@@ -61,6 +71,9 @@ class WebviewBottom @JvmOverloads constructor(
         }
         bookMark.setOnClickListener{bookmarkArticle()}
         seeMoreButton.setOnClickListener {publicationIntent()}
+        shareContent.setOnClickListener {shareArticle()}
+        shoutOuts.setOnClickListener { likeArticle() }
+
     }
 
     fun minimize(b: Boolean) {
@@ -83,7 +96,7 @@ class WebviewBottom @JvmOverloads constructor(
             if(!currentBookmarks.contains(article.id)){
                 article.id?.let { currentBookmarks.add(it) }
                 bookMark.startAnimation(AnimationUtils.loadAnimation(context ,R.anim.shake));
-                bookMark.setImageResource(R.drawable.ic_orange_bookmarksvg)
+                bookMark.setImageResource(R.drawable.orange_shoutout_svg)
             }
             else{
                 currentBookmarks.remove(article.id)
@@ -95,7 +108,25 @@ class WebviewBottom @JvmOverloads constructor(
         Log.d("WebviewBottom", "Article Pressed")
     }
 
+    fun shareArticle(){
+        shareContent.startAnimation(AnimationUtils.loadAnimation(context ,R.anim.shake));
+        val intent= Intent()
+        intent.action=Intent.ACTION_SEND
+        intent.putExtra(Intent.EXTRA_TEXT,article.articleURL)
+        intent.type="text/plain"
+        context.startActivity(Intent.createChooser(intent,"Share To:"))
+    }
+
     fun setArticle(a: Article){
         this.article = a
+    }
+
+    fun likeArticle(){
+        shoutOuts.startAnimation(AnimationUtils.loadAnimation(context ,R.anim.shake));
+        val likeObs = this.article.id?.let { graphQlUtil.likeArticle(it).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()) }
+        disposables.add(likeObs!!.subscribe() {
+            it ->
+            shoutOutsNum.text = it.data!!.incrementShoutouts.shoutouts.toInt().toString()
+        })
     }
 }
