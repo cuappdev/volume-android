@@ -2,14 +2,17 @@ package com.example.volume_android.views
 
 import PrefUtils
 import android.content.Context
+import android.content.Intent
 import android.util.AttributeSet
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
+import android.view.animation.AnimationUtils
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
+import com.example.volume_android.PublicationProfileActivity
 import com.example.volume_android.R
 import com.example.volume_android.models.Article
 import com.squareup.picasso.Picasso
@@ -28,7 +31,7 @@ class WebviewBottom @JvmOverloads constructor(
     private var shoutOutsNum: TextView
     private var prefUtils = PrefUtils()
     private lateinit var article: Article
-    val currentFollowingSet = prefUtils.getStringSet("savedArticles", mutableSetOf())?.toMutableSet()
+    val currentBookmarks = prefUtils.getStringSet("savedArticles", mutableSetOf())?.toMutableSet()
 
     init {
         LayoutInflater.from(context).inflate(R.layout.bottom_webview_actions, this, true)
@@ -46,7 +49,18 @@ class WebviewBottom @JvmOverloads constructor(
             Picasso.get().load(article.publication?.profileImageURL).into(profileImageView)
         }
         shoutOutsNum.text = article.shoutouts?.toInt().toString()
+
+        if (currentBookmarks != null) {
+            if(currentBookmarks.contains(article.id)){
+                bookMark.setImageResource(R.drawable.ic_orange_bookmarksvg)
+            }
+            else{
+                bookMark.setImageResource(R.drawable.ic_black_bookmarksvg)
+            }
+            prefUtils.save("savedArticles", currentBookmarks)
+        }
         bookMark.setOnClickListener{bookmarkArticle()}
+        seeMoreButton.setOnClickListener {publicationIntent()}
     }
 
     fun minimize(b: Boolean) {
@@ -58,12 +72,25 @@ class WebviewBottom @JvmOverloads constructor(
         }
     }
 
+    fun publicationIntent(){
+        val intent = Intent(context, PublicationProfileActivity::class.java)
+        intent.putExtra("publication", article.publication)
+        context?.startActivity(intent)
+    }
+
     fun bookmarkArticle(){
-        if (currentFollowingSet != null) {
-            article.id?.let { currentFollowingSet.add(it) }
-        }
-        if (currentFollowingSet != null) {
-            prefUtils.save("savedArticles", currentFollowingSet)
+        if (currentBookmarks != null) {
+            if(!currentBookmarks.contains(article.id)){
+                article.id?.let { currentBookmarks.add(it) }
+                bookMark.startAnimation(AnimationUtils.loadAnimation(context ,R.anim.shake));
+                bookMark.setImageResource(R.drawable.ic_orange_bookmarksvg)
+            }
+            else{
+                currentBookmarks.remove(article.id)
+                bookMark.startAnimation(AnimationUtils.loadAnimation(context ,R.anim.shake));
+                bookMark.setImageResource(R.drawable.ic_black_bookmarksvg)
+            }
+            prefUtils.save("savedArticles", currentBookmarks)
         }
         Log.d("WebviewBottom", "Article Pressed")
     }

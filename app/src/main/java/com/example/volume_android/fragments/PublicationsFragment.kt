@@ -48,7 +48,7 @@ class PublicationsFragment(val publications: List<Publication>) : Fragment() {
 
             it.data?.getAllPublications?.mapTo(others, { it ->
                 Publication(id = it.id, backgroundImageURL = it.backgroundImageURL, bio = it.bio, name = it.name, profileImageURL = it.profileImageURL, rssName = it.rssName, rssURL = it.rssURL, slug = it.slug, shoutouts = it.shoutouts, websiteURL = it.websiteURL,
-                        Article(it.mostRecentArticle?.id, it.mostRecentArticle?.title, it.mostRecentArticle?.articleURL, it.mostRecentArticle?.imageURL))
+                        mostRecentArticle = Article(it.mostRecentArticle?.id, it.mostRecentArticle?.title, it.mostRecentArticle?.articleURL, it.mostRecentArticle?.imageURL))
             })
 
             morepublicationRV = view.findViewById(R.id.follwing_more_publications_rv)
