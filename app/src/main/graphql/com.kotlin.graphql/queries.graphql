@@ -119,4 +119,22 @@ mutation IncrementShoutout($id:String!){
     }
 }
 
+query ArticlesAfterDate($since: String!){
+    getArticlesAfterDate(since:$since){
+        id
+        articleURL
+        date
+        imageURL
+        publicationSlug
+        shoutouts
+        title
+        publication{
+            id
+            name
+            profileImageURL
+        }
+        trendiness
+    }
+}
+
 

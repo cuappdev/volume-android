@@ -19,6 +19,9 @@ import com.example.volume_android.util.GraphQlUtil
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
+import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.util.*
 
 
 class HomeFragment(val articles: List<Article>) : Fragment() {
@@ -90,11 +93,16 @@ class HomeFragment(val articles: List<Article>) : Fragment() {
 
         //these is for the other section, i.e. the articles from the publications that the person does not follow
         //ideally we should filter filter out the articles from the publications that the person already follows
-        val otherObs = graphQlUtil.getAllArticles().subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+        val calendar: Calendar = Calendar.getInstance()
+        calendar.add(Calendar.DAY_OF_YEAR, -14)
+        val newDate: Date = calendar.time
+        val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+        val dateTwoWeeksAgo = dateFormat.format(newDate)
+        val otherObs = graphQlUtil.getArticlesAfterDate(dateTwoWeeksAgo).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
         disposables.add(otherObs.subscribe {
             var others = mutableListOf<Article>()
 
-            it.data?.getAllArticles?.mapTo(others, { it ->
+            it.data?.getArticlesAfterDate?.mapTo(others, { it ->
                 Article(title = it.title, articleURL = it.articleURL, date = it.date.toString(), id = it.id, imageURL = it.imageURL, publication = Publication(id = it.publication.id, name = it.publication.name, profileImageURL = it.publication.profileImageURL), shoutouts = it.shoutouts)
             })
             otherArticles = view1.findViewById(R.id.other_articlesrv)
