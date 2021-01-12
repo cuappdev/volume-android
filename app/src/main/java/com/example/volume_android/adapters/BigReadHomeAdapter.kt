@@ -61,6 +61,7 @@ class BigReadHomeAdapter(private val articles: List<Article>) :
             Picasso.get().load(currentItem.imageURL).into(holder.articleImg)
         }
         holder.postTime.text = currentItem.date
+        Log.d("Time", currentItem.date)
         //getting article posting time and date in phones timeZone
         val format = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
         val datePublished = LocalDateTime.parse(currentItem.date, format)
@@ -70,19 +71,31 @@ class BigReadHomeAdapter(private val articles: List<Article>) :
             val hours = dur.toHours()
             holder.postTime.text = hours.toInt().toString() + "h" + " ago"
         }
-        if(dur.toDays() in 2..6) {
+        if(dur.toDays() in 1..6) {
+            if (dur.toDays() <= 1) {
+                holder.postTime.text = dur.toDays().toInt().toString() + " day" + " ago"
+            }
             holder.postTime.text = dur.toDays().toInt().toString() + " days" + " ago"
         }
         if(dur.toDays() in 7..29) {
             val weeks = dur.toDays()/7
-            holder.postTime.text = weeks.toString() + " days" + " ago"
+            if(weeks <= 1){
+                holder.postTime.text = weeks.toString() + " week" + "ago"
+            }
+            holder.postTime.text = weeks.toString() + " weeks" + " ago"
         }
         if(dur.toDays() >= 30 && dur.toDays()> 365){
             val months = dur.toDays()/30
+            if (months <= 1) {
+                holder.postTime.text = months.toInt().toString() + " month" + " ago"
+            }
             holder.postTime.text = months.toInt().toString() + " months" + " ago"
         }
         if (dur.toDays()>=365){
             val years = dur.toDays()/365
+            if(years <= 1){
+                holder.postTime.text = years.toInt().toString() + " year" + " ago"
+            }
             holder.postTime.text = years.toInt().toString() + " years" + " ago"
         }
         holder.shoutoutCount.text = currentItem.shoutouts?.toInt().toString() + " shout-outs"

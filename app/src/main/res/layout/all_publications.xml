@@ -9,6 +9,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+
         <ImageView
             android:id="@+id/all_publications_title_logo"
             android:layout_width="wrap_content"
@@ -33,11 +34,11 @@
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/following_all_publications_rv"
-            android:layout_marginTop="15dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/following_all_publications"/>
+            app:layout_constraintTop_toBottomOf="@id/following_all_publications" />
 
         <ImageView
             android:id="@+id/more_publications_text"
@@ -56,7 +57,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/more_publications_text"/>
+            app:layout_constraintTop_toBottomOf="@id/more_publications_text" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
