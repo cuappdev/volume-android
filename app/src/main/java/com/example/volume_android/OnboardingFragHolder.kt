@@ -1,5 +1,6 @@
 package com.example.volume_android
 
+import PrefUtils
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
@@ -29,19 +30,22 @@ class OnboardingFragHolder : AppCompatActivity() {
     private lateinit var vPager: ViewPager
     private lateinit var nextButton: Button
     private lateinit var holderLayout: ConstraintLayout
+    private lateinit var prefUtils: PrefUtils
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.onboarding_holder)
 
-        val sharedPreferences : SharedPreferences = getSharedPreferences("prefs", Context.MODE_PRIVATE)
-        val firstStart = sharedPreferences.getBoolean("firstStart", true)
+        prefUtils = PrefUtils(this)
+        val firstStart = prefUtils.getBoolean("firstStart", true)
 
-//        if(!firstStart){
-//            val intent = Intent(this, TabbedActivity::class.java)
-//            this?.startActivity(intent)
-//        }
+        if(!firstStart){
+            val intent = Intent(this, TabbedActivity::class.java)
+            this?.startActivity(intent)
+        }
+
 
         var initialClick = true
         Log.d("Test",initialClick.toString())
@@ -151,9 +155,9 @@ class OnboardingFragHolder : AppCompatActivity() {
                 }
 
             }
-        val sharedPrefEditor : SharedPreferences.Editor = sharedPreferences.edit()
-        sharedPrefEditor.putBoolean("firstStart", false)
-        sharedPrefEditor.apply()
+
+        prefUtils.save("firstStart", false)
+
 
     }
 }
