@@ -11,6 +11,7 @@ class PrefUtils {
         private lateinit var editor: SharedPreferences.Editor
 
         fun with(context: Context) : PrefUtils {
+
             if (null == singleton)
                 singleton = Builder(context, null, -1).build()
             return singleton as PrefUtils
