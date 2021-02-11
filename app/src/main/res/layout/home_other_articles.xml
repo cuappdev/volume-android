@@ -19,7 +19,7 @@
             style="@style/begum_black"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="The Undergraduate Law and Society Review"
+            android:text="Creme de Cornell"
             android:textSize="12dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
