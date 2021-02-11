@@ -22,8 +22,10 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
         android:gravity="center"
-        android:text="Creme de Cronell"
+        android:text="The Undergraduate Law and Society Review at Cornell"
         android:textSize="12dp"
+        android:maxLines="2"
+        android:ellipsize="end"
         app:layout_constraintLeft_toLeftOf="@+id/vertical_publication_logo"
         app:layout_constraintRight_toRightOf="@id/vertical_publication_logo"
         app:layout_constraintTop_toBottomOf="@+id/vertical_publication_logo" />
