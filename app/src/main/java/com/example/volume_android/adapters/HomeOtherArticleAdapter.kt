@@ -71,7 +71,7 @@ class HomeOtherArticleAdapter(private val articles: List<Article>) :
                 "$weeks weeks ago"
             }
         }
-        if(dur.toDays() in 30..364){
+        if(dur.toDays() in 30..364) {
             val months = dur.toDays()/30
             holder.postTime.text = if (months <= 1) {
                 "$months month ago"
@@ -79,7 +79,7 @@ class HomeOtherArticleAdapter(private val articles: List<Article>) :
                 "$months months ago"
             }
         }
-        if (dur.toDays() >= 365){
+        if (dur.toDays() >= 365) {
             val years = dur.toDays()/365
             holder.postTime.text = if(years <= 1) {
                 "$years year ago"
