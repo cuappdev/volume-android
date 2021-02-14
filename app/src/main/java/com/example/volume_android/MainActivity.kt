@@ -28,12 +28,14 @@ class MainActivity : AppCompatActivity() {
         //Grab Article
         val article = intent.getParcelableExtra<Article>("article")
 
-        webView = findViewById(R.id.webview)
-        webView.loadUrl(article.articleURL)
-        topWebView.setName(article)
-        bottomWebView.setArticle(article)
-        bottomWebView.setUpView()
-        webview.setTopBot(topWebView, bottomWebView)
+        if(article?.articleURL != null) {
+            webView = findViewById(R.id.webview)
+            webView.loadUrl(article.articleURL)
+            topWebView.setName(article)
+            bottomWebView.setArticle(article)
+            bottomWebView.setUpView()
+            webview.setTopBot(topWebView, bottomWebView)
+        }
 
         //Code to prevent from launching in external browser
         webView.webViewClient = object : WebViewClient() {
