@@ -55,7 +55,6 @@ class BigReadHomeAdapter(private val articles: List<Article>) :
             Picasso.get().load(currentItem.imageURL).into(holder.articleImg)
         }
         holder.postTime.text = currentItem.date
-        Log.d("Time", currentItem.date)
         //getting article posting time and date in phones timeZone
         val format = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
         val datePublished = LocalDateTime.parse(currentItem.date, format)
