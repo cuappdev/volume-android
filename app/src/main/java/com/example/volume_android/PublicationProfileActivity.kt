@@ -57,7 +57,7 @@ class PublicationProfileActivity : AppCompatActivity() {
         profile_shoutouts = findViewById(R.id.shout_count)
         profile_desc = findViewById(R.id.publication_description)
         profile_articles_rv = findViewById(R.id.article_rv)
-        publication = intent.getParcelableExtra("publication")
+        publication = intent.getParcelableExtra("publication")!!
 
         getPublication(publication.id)
 
