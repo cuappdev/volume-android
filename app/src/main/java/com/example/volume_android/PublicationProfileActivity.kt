@@ -57,7 +57,7 @@ class PublicationProfileActivity : AppCompatActivity() {
         profile_shoutouts = findViewById(R.id.shout_count)
         profile_desc = findViewById(R.id.publication_description)
         profile_articles_rv = findViewById(R.id.article_rv)
-        publication = intent.getParcelableExtra("publication")
+        publication = intent.getParcelableExtra("publication")!!
 
         getPublication(publication.id)
 
@@ -87,9 +87,7 @@ class PublicationProfileActivity : AppCompatActivity() {
                     setBackgroundResource(R.drawable.rounded_rectangle_button)
                     setTextColor(ContextCompat.getColor(this.context, R.color.volumeOrange))
                     currentFollowingSet?.remove(publication.id)
-                    if (currentFollowingSet != null) {
-                        prefUtils.save("following", currentFollowingSet)
-                    }
+                    prefUtils.save("following", currentFollowingSet)
                 }
 
             }
@@ -99,9 +97,7 @@ class PublicationProfileActivity : AppCompatActivity() {
                     setTextColor(ContextCompat.getColor(this.context, R.color.ligthgray))
                     setBackgroundResource(R.drawable.rounded_rectange_button_orange)
                     currentFollowingSet?.add(publication.id)
-                    if (currentFollowingSet != null) {
-                        prefUtils.save("following", currentFollowingSet)
-                    }
+                    prefUtils.save("following", currentFollowingSet)
                 }
             }
         }
