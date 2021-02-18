@@ -5,111 +5,116 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-<androidx.constraintlayout.widget.ConstraintLayout
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-    <ImageView
-        android:id="@+id/volume_title_logo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="6dp"
-        android:layout_marginTop="80dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/volume_title"
-        tools:srcCompat="@drawable/volume_title" />
-
-    <ImageView
-        android:id="@+id/big_red_tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="12dp"
-        android:layout_marginTop="15dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/volume_title_logo"
-        app:srcCompat="@drawable/ic_big_read_text"
-        tools:srcCompat="@drawable/ic_big_read_text" />
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/big_red_rv"
+    
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="6dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/big_red_tv" />
+        android:layout_height="match_parent">
 
-    <ImageView
-        android:id="@+id/follwing_tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="12dp"
-        android:layout_marginTop="45dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/big_red_rv"
-        app:srcCompat="@drawable/ic_following_text"
-        tools:srcCompat="@drawable/ic_following_text" />
+        <ImageView
+            android:id="@+id/volume_title_logo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="6dp"
+            android:layout_marginTop="80dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/volume_title"
+            tools:srcCompat="@drawable/volume_title" />
+    
+        <ImageView
+            android:id="@+id/big_red_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="15dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/volume_title_logo"
+            app:srcCompat="@drawable/ic_big_read_text"
+            tools:srcCompat="@drawable/ic_big_read_text" />
+    
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/big_red_rv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="6dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/big_red_tv" />
+    
+        <androidx.constraintlayout.widget.Group
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/following_group"
+            android:visibility="gone"
+            app:constraint_referenced_ids="follwing_tv, follwing_rv, volume_logo_more_articles, more_articles_message, more_articles_message_long"/>
 
+        <ImageView
+            android:id="@+id/follwing_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="45dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/big_red_rv"
+            app:srcCompat="@drawable/ic_following_text"
+            tools:srcCompat="@drawable/ic_following_text" />
+    
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/follwing_rv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="6dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/follwing_tv" />
+    
+        <ImageView
+            android:id="@+id/volume_logo_more_articles"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/volume_logo"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/follwing_rv"/>
+    
+        <TextView
+            android:id="@+id/more_articles_message"
+            style="@style/helvetica_black"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="You're up to date!"
+            android:textSize="10dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/volume_logo_more_articles" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/follwing_rv"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="6dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/follwing_tv" />
-
-
-    <ImageView
-        android:id="@+id/volume_logo_more_articles"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:srcCompat="@drawable/volume_logo"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/follwing_rv"/>
-
-    <TextView
-        android:id="@+id/more_articles_message"
-        style="@style/helvetica_black"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="You're up to date!"
-        android:textSize="10dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/volume_logo_more_articles" />
-
-
-    <TextView
-        android:id="@+id/more_articles_message_long"
-        style="@style/helvetica_black"
-        android:layout_width="291dp"
-        android:layout_height="wrap_content"
-        android:text="You've seen all the new articles from the publications you have been following"
-        android:textAlignment="center"
-        android:textSize="10dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/more_articles_message" />
-
-    <ImageView
-        android:id="@+id/other_articles"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="12dp"
-        android:layout_marginTop="45dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/more_articles_message_long"
-        app:srcCompat="@drawable/ic_other_articles_text"
-        tools:srcCompat="@drawable/ic_other_articles_text" />
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/other_articlesrv"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="6dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/other_articles" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <TextView
+            android:id="@+id/more_articles_message_long"
+            style="@style/helvetica_black"
+            android:layout_width="291dp"
+            android:layout_height="wrap_content"
+            android:text="You've seen all the new articles from the publications you have been following"
+            android:textAlignment="center"
+            android:textSize="10dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/more_articles_message" />
+    
+        <ImageView
+            android:id="@+id/other_articles"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="45dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/more_articles_message_long"
+            app:srcCompat="@drawable/ic_other_articles_text"
+            tools:srcCompat="@drawable/ic_other_articles_text" />
+    
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/other_articlesrv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="6dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/other_articles" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.core.widget.NestedScrollView>
