@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.constraintlayout.widget.Group
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -67,6 +68,11 @@ class HomeFragment(val articles: List<Article>) : Fragment() {
             bigRedRv.layoutManager = linearLayoutManager
         })
 
+        if(followingPublications?.isEmpty() == true) {
+            view1.findViewById<Group>(R.id.following_group).visibility = View.GONE
+        } else {
+            view1.findViewById<Group>(R.id.following_group).visibility = View.VISIBLE
+        }
         //get all articles for the publications the user follows
         //the followed articles are pulled from shared preferences
         var followingArticles = mutableListOf<Article>()

@@ -50,13 +50,7 @@ class BigReadHomeAdapter(private val articles: List<Article>) :
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onBindViewHolder(holder: BigReadArticleVH, position: Int) {
         val currentItem : Article = articles[position]
-        if (currentItem.title?.length!! > 62){
-            holder.articleTitle.text = currentItem.title?.subSequence(0, 61).toString() + " ..."
-        }
-        else {
-            holder.articleTitle.text = currentItem.title
-        }
-
+        holder.articleTitle.text = currentItem.title
         if(currentItem.imageURL != null && currentItem.imageURL != ""){
             Picasso.get().load(currentItem.imageURL).into(holder.articleImg)
         }
@@ -64,38 +58,42 @@ class BigReadHomeAdapter(private val articles: List<Article>) :
         //getting article posting time and date in phones timeZone
         val format = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
         val datePublished = LocalDateTime.parse(currentItem.date, format)
-        var dur = Duration.between(datePublished, LocalDateTime.now())
+        val dur = Duration.between(datePublished, LocalDateTime.now())
         Log.d("TimeStuff", dur.toDays().toString())
-        if(dur.toDays() < 1){
+        if(dur.toDays() < 1) {
             val hours = dur.toHours()
-            holder.postTime.text = hours.toInt().toString() + "h" + " ago"
+            holder.postTime.text = "${hours} h ago"
         }
         if(dur.toDays() in 1..6) {
-            if (dur.toDays() <= 1) {
-                holder.postTime.text = dur.toDays().toInt().toString() + " day" + " ago"
+            holder.postTime.text = if (dur.toDays() <= 1) {
+                "${dur.toDays()} day ago"
+            } else {
+                "${dur.toDays()} days ago"
             }
-            holder.postTime.text = dur.toDays().toInt().toString() + " days" + " ago"
         }
         if(dur.toDays() in 7..29) {
-            val weeks = dur.toDays()/7
-            if(weeks <= 1){
-                holder.postTime.text = weeks.toString() + " week" + "ago"
+            val weeks = dur.toDays().toInt()/7
+            holder.postTime.text = if(weeks <= 1) {
+                "$weeks week ago"
+            } else {
+                "$weeks weeks ago"
             }
-            holder.postTime.text = weeks.toString() + " weeks" + " ago"
         }
-        if(dur.toDays() >= 30 && dur.toDays()> 365){
+        if(dur.toDays() in 30..364) {
             val months = dur.toDays()/30
-            if (months <= 1) {
-                holder.postTime.text = months.toInt().toString() + " month" + " ago"
+            holder.postTime.text = if (months <= 1) {
+                "$months month ago"
+            } else {
+                "$months months ago"
             }
-            holder.postTime.text = months.toInt().toString() + " months" + " ago"
         }
-        if (dur.toDays()>=365){
+        if (dur.toDays() >= 365) {
             val years = dur.toDays()/365
-            if(years <= 1){
-                holder.postTime.text = years.toInt().toString() + " year" + " ago"
+            holder.postTime.text = if(years <= 1) {
+                "$years year ago"
+            } else {
+                "$years years ago"
             }
-            holder.postTime.text = years.toInt().toString() + " years" + " ago"
         }
         holder.shoutoutCount.text = currentItem.shoutouts?.toInt().toString() + " shout-outs"
         holder.pubName.text = currentItem.publication!!.name

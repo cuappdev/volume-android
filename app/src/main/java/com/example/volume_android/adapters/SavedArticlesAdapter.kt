@@ -71,11 +71,11 @@ class SavedArticlesAdapter(private val articles: List<Article>) :
             val weeks = dur.toDays()/7
             holder.postTime.text = weeks.toString() + " days" + " ago"
         }
-        if(dur.toDays() >= 30 && dur.toDays()> 365){
+        if(dur.toDays() >= 30 && dur.toDays()> 365) {
             val months = dur.toDays()/30
             holder.postTime.text = months.toInt().toString() + " months" + " ago"
         }
-        if (dur.toDays()>=365){
+        if (dur.toDays()>=365) {
             val years = dur.toDays()/365
             holder.postTime.text = years.toInt().toString() + " years" + " ago"
         }
