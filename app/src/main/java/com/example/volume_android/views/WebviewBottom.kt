@@ -122,11 +122,17 @@ class WebviewBottom @JvmOverloads constructor(
     }
 
     fun likeArticle(){
-        shoutOuts.startAnimation(AnimationUtils.loadAnimation(context ,R.anim.shake));
-        val likeObs = this.article.id?.let { graphQlUtil.likeArticle(it).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()) }
-        disposables.add(likeObs!!.subscribe() {
-            it ->
-            shoutOutsNum.text = it.data!!.incrementShoutouts.shoutouts.toInt().toString()
-        })
+        this.article.id?.let {
+            var numOfShoutouts = prefUtils.getInt(it, 0)
+            if(numOfShoutouts < 5) {
+                shoutOuts.startAnimation(AnimationUtils.loadAnimation(context ,R.anim.shake))
+                val likeObs = graphQlUtil.likeArticle(it).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+                disposables.add(likeObs.subscribe { it ->
+                    shoutOutsNum.text = it.data!!.incrementShoutouts.shoutouts.toInt().toString()
+                })
+                numOfShoutouts++
+                prefUtils.save(it, numOfShoutouts)
+            }
+        }
     }
 }
