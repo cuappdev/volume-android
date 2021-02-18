@@ -2,7 +2,7 @@
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="wrap_content"
+    android:layout_width="180dp"
     android:layout_height="wrap_content"
     android:layout_margin="10dp"
     app:cardBackgroundColor="#00FFFFFF"
@@ -31,18 +31,20 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="17dp"
             android:text="TextView"
-            android:textSize="12dp"
+            android:textSize="12sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/vert_img_view" />
 
         <TextView
             android:id="@+id/article_title_big_read"
             style="@style/helvetica_bold"
-            android:layout_width="180dp"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:text="Top 6 Ice Cream Places in Ithaca: Ranked"
-            android:textSize="16dp"
+            android:maxLines="3"
+            android:textSize="16sp"
+            android:ellipsize="end"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toBottomOf="@id/vert_card_pub_name" />
 
@@ -53,7 +55,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="110dp"
             android:text="2h ago"
-            android:textSize="10dp"
+            android:textSize="10sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/vert_img_view" />
 

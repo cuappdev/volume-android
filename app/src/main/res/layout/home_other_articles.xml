@@ -3,53 +3,53 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="100dp"
     app:cardBackgroundColor="#00FFFFFF"
     android:layout_margin="10dp"
-    app:cardCornerRadius="0dp"
     app:cardElevation="0dp"
     app:cardMaxElevation="0dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/following_home_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="#00FFFFFF">
-
+        android:layout_height="match_parent">
 
         <TextView
             android:id="@+id/article_pub_name_following_o"
             style="@style/begum_black"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
             android:text="Creme de Cornell"
             android:textSize="12dp"
-            app:layout_constraintStart_toEndOf="@+id/article_img_home_o"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/article_title_home_o"
             style="@style/helvetica_bold"
-            android:layout_width="250dp"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="6dp"
+            android:layout_marginEnd="10dp"
             android:text="Sangkhaya: Thai Pandan Custard Dip"
-            android:textSize="16dp"
-            app:layout_constraintLeft_toLeftOf="@+id/article_pub_name_following_o"
+            android:maxLines="3"
+            android:textSize="16sp"
+            android:ellipsize="end"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/article_img_home_o"
             app:layout_constraintTop_toBottomOf="@id/article_pub_name_following_o" />
 
         <ImageView
             android:id="@+id/article_img_home_o"
             android:layout_width="100dp"
             android:layout_height="100dp"
-            android:layout_margin="0dp"
-            android:background="#003F51B5"
+            android:background="@color/creamy_white"
             android:scaleType="fitXY"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:srcCompat="@color/grey"
-            tools:srcCompat="@color/grey" />
+            android:visibility="gone"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@color/creamy_white"
+            tools:srcCompat="@color/creamy_white" />
 
         <TextView
             android:id="@+id/following_home_dot_o"

@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.constraintlayout.widget.Group
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -47,98 +48,73 @@ class HomeFragment(val articles: List<Article>) : Fragment() {
         Log.d("FOLLOWING", followingPublications.toString())
         Log.d("HomeFragment", "reloaded")
         Log.d("HomeFragment", followingPublications.toString())
+
+
         val graphQlUtil = GraphQlUtil()
 
-        val calendar: Calendar = Calendar.getInstance()
-        calendar.add(Calendar.DAY_OF_YEAR, -14)
-        val newDate: Date = calendar.time
-        val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
-        val dateTwoWeeksAgo = dateFormat.format(newDate)
-
-
-        val trendingArticles = mutableListOf<Article>()
-        val trendingArticlesId = mutableListOf<String>()
         //Get the trending articles for Big Read section
-        val trendingObs = graphQlUtil.getTrendingArticles(10.0, dateTwoWeeksAgo).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+        val trendingObs = graphQlUtil.getTrendingArticles(10.0, "2020-12-10T12:34:20.000Z").subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
         disposables.add(trendingObs.subscribe {
-            if (it.data?.getTrendingArticles != null) {
-                for (rawArticle in it.data?.getTrendingArticles!!) {
-                    trendingArticles.add(Article(
-                            title = rawArticle.title,
-                            articleURL = rawArticle.articleURL,
-                            date = rawArticle.date.toString(),
-                            id = rawArticle.id,
-                            imageURL = rawArticle.imageURL,
-                            publication = Publication(
-                                    id = rawArticle.publication.id,
-                                    name = rawArticle.publication.name,
-                                    profileImageURL = rawArticle.publication.profileImageURL),
-                            shoutouts = rawArticle.shoutouts)
-                    )
-                    trendingArticlesId.add(rawArticle.id)
-                }
-            }
+            var trendingArticles = mutableListOf<Article>()
+            it.data?.getTrendingArticles?.mapTo(trendingArticles, { it ->
+                Article(it.id, it.title, it.articleURL, it.imageURL, Publication(id = it.publication.id, name = it.publication.name, profileImageURL = it.publication.profileImageURL), it.date.toString(), shoutouts = it.shoutouts)
+            })
+
             bigRedRv = view1.findViewById(R.id.big_red_rv)!!
+
             bigRedRv.adapter = BigReadHomeAdapter(trendingArticles)
-            val linearLayoutManager = LinearLayoutManager(view1.context)
+            val linearLayoutManager: LinearLayoutManager = LinearLayoutManager(view1.context)
             linearLayoutManager.orientation = LinearLayoutManager.HORIZONTAL
             bigRedRv.layoutManager = linearLayoutManager
         })
 
-        // Get all articles for the publications the user follows
-        // the followed articles are pulled from shared preferences
-        val followingArticles = mutableListOf<Article>()
-        val followingArticlesId = mutableListOf<String>()
-        for (pub in followingPublications!!) {
+        if(followingPublications?.isEmpty() == true) {
+            view1.findViewById<Group>(R.id.following_group).visibility = View.GONE
+        } else {
+            view1.findViewById<Group>(R.id.following_group).visibility = View.VISIBLE
+        }
+        //get all articles for the publications the user follows
+        //the followed articles are pulled from shared preferences
+        var followingArticles = mutableListOf<Article>()
+        for ( pub in followingPublications!!){
+            var tempArticles = mutableListOf<Article>()
             val followingObs = graphQlUtil.getArticleByPublication(pub).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
-            disposables.add(followingObs.subscribe {
-                if (it.data?.getArticlesByPublication != null) {
-                    for (rawArticle in it.data?.getArticlesByPublication!!) {
-                        followingArticles.add(Article(
-                                title = rawArticle.title,
-                                articleURL = rawArticle.articleURL,
-                                date = rawArticle.date.toString(),
-                                id = rawArticle.id,
-                                imageURL = rawArticle.imageURL,
-                                publication = Publication(
-                                        id = rawArticle.publication.id,
-                                        name = rawArticle.publication.name,
-                                        profileImageURL = rawArticle.publication.profileImageURL),
-                                shoutouts = rawArticle.shoutouts)
-                        )
-                        followingArticlesId.add(rawArticle.id)
-                    }
-                }
+        disposables.add(followingObs.subscribe {
+
+            it.data?.getArticlesByPublication?.mapTo(tempArticles, { it ->
+                Article(title = it.title, articleURL = it.articleURL, date = it.date.toString(), id = it.id, imageURL = it.imageURL, publication = Publication(id = it.publication.id, name = it.publication.name, profileImageURL = it.publication.profileImageURL), shoutouts = it.shoutouts)
             })
+            followingArticles.addAll(tempArticles)
+
+            if (pub == followingPublications.last()) {
+                followingRv = view1.findViewById(R.id.follwing_rv)
+                val linearLayoutManager2: LinearLayoutManager = LinearLayoutManager(view1.context)
+                followingRv.layoutManager = linearLayoutManager2
+                followingRv.adapter = HomeFollowingArticleAdapters(followingArticles)
+
+            }
+        })
         }
-        followingArticles.filter { otherArticle ->
-            followingArticlesId.contains(otherArticle.id)
-        }
-        followingRv = view1.findViewById(R.id.follwing_rv)
-        val linearLayoutManager2 = LinearLayoutManager(view1.context)
-        followingRv.layoutManager = linearLayoutManager2
-        followingRv.adapter = HomeFollowingArticleAdapters(
-                followingArticles.sortedWith(compareBy { it.date }).take(20)
-        )
 
 
-        // These are for the other section, i.e. the articles from the publications that the person does not follow
-        // ideally we should filter out the articles from the publications that the person already follows (that filter out the Big Read)
+        //these is for the other section, i.e. the articles from the publications that the person does not follow
+        //ideally we should filter filter out the articles from the publications that the person already follows
+        val calendar: Calendar = Calendar.getInstance()
+        calendar.add(Calendar.DAY_OF_YEAR, -14)
+        val newDate: Date = calendar.time
+        val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+        val dateTwoWeeksAgo = dateFormat.format(newDate)
         val otherObs = graphQlUtil.getArticlesAfterDate(dateTwoWeeksAgo).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
-        disposables.add(otherObs.subscribe { it ->
-            val others = mutableListOf<Article>()
+        disposables.add(otherObs.subscribe {
+            var others = mutableListOf<Article>()
+
             it.data?.getArticlesAfterDate?.mapTo(others, { it ->
                 Article(title = it.title, articleURL = it.articleURL, date = it.date.toString(), id = it.id, imageURL = it.imageURL, publication = Publication(id = it.publication.id, name = it.publication.name, profileImageURL = it.publication.profileImageURL), shoutouts = it.shoutouts)
             })
-            others.filter { otherArticle ->
-                followingArticlesId.contains(otherArticle.id)
-            }
             otherArticles = view1.findViewById(R.id.other_articlesrv)
             val linearLayoutManager3: LinearLayoutManager = LinearLayoutManager(view1.context)
             otherArticles.layoutManager = linearLayoutManager3
-            otherArticles.adapter = HomeOtherArticleAdapter(
-                    others.sortedWith(compareBy { it.date })
-            )
+            otherArticles.adapter = HomeOtherArticleAdapter(others)
 
         })
         return view1

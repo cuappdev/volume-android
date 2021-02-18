@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import androidx.constraintlayout.widget.Group
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -57,8 +58,10 @@ class SavedPublicationsFragment(val articles: List<Article>) : Fragment() {
                 savedArticlesRV.adapter = SavedArticlesAdapter(savedArticles)
                 val layoutManager: LinearLayoutManager = LinearLayoutManager(view.context)
                 savedArticlesRV.layoutManager = layoutManager
-
             })
+        }
+        if(savedArticles.isEmpty()) {
+            view.findViewById<Group>(R.id.no_saved_articles_group).visibility = View.VISIBLE
         }
 
     }
