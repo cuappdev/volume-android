@@ -67,7 +67,7 @@ class TabbedActivity : AppCompatActivity() {
                     2 ->{
                         tabbedLayout.getTabAt(0)?.setIcon(com.example.volume_android.R.drawable.ic_volumesvg_gray)
                         tabbedLayout.getTabAt(1)?.setIcon(com.example.volume_android.R.drawable.ic_book_gray)
-                        tabbedLayout.getTabAt(2)?.setIcon(com.example.volume_android.R.drawable.ic_bookmark_orange)}
+                        tabbedLayout.getTabAt(2)?.setIcon(com.example.volume_android.R.drawable.ic_bookmark_tab_filled)}
                 }
             }
 

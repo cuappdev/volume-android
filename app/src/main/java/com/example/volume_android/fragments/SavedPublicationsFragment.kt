@@ -30,6 +30,7 @@ class SavedPublicationsFragment(val articles: List<Article>) : Fragment() {
     private val prefUtils = PrefUtils()
 
 
+    private val savedArticles = mutableListOf<Article>()
     private var disposables = CompositeDisposable()
     private val graphQlUtil = GraphQlUtil()
 
@@ -39,31 +40,47 @@ class SavedPublicationsFragment(val articles: List<Article>) : Fragment() {
                               savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.bookmarks_page, container, false)
         loadArticles(view)
+        if(savedArticles.isEmpty()) {
+            view.findViewById<Group>(R.id.no_saved_articles_group).visibility = View.VISIBLE
+        } else {
+            view.findViewById<Group>(R.id.no_saved_articles_group).visibility = View.GONE
+        }
         return view
     }
 
+//    override fun onResume() {
+//        super.onResume()
+//        if(view != null) {
+//            if (savedArticles.isEmpty()) {
+//                view!!.findViewById<Group>(R.id.no_saved_articles_group).visibility = View.VISIBLE
+//            } else {
+//                view!!.findViewById<Group>(R.id.no_saved_articles_group).visibility = View.GONE
+//            }
+//        }
+//    }
+
     @SuppressLint("LongLogTag")
     private fun loadArticles(view: View){
+        Log.d("saved", savedArticles.size.toString())
         val articleIds = prefUtils.getStringSet("savedArticles", mutableSetOf())?.toMutableSet()
-        Log.d("SavedPublicationsFragment", articleIds?.size.toString())
         val obs = articleIds?.let { graphQlUtil.getArticlesByIds(it).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()) }
-        var savedArticles = mutableListOf<Article>()
         if (obs != null) {
             disposables.add(obs.subscribe{
-                it.data?.getArticlesByIDs?.mapTo(savedArticles, { it -> Article(it.id, it.title, it.articleURL, it.imageURL, Publication(id = it.publication.id, name = it.publication.name, profileImageURL = it.publication.profileImageURL),  it.date.toString(), shoutouts =  it.shoutouts)
+                it.data?.getArticlesByIDs?.mapTo(savedArticles, { it ->
+                    Article(it.id, it.title, it.articleURL, it.imageURL, Publication(id = it.publication.id, name = it.publication.name, profileImageURL = it.publication.profileImageURL),  it.date.toString(), shoutouts =  it.shoutouts)
                 })
-                Log.d("SavedPublicationsFragment", it.data?.getArticlesByIDs?.size.toString())
-                Log.d("SavedPublicationsFragment", "savedArticles" + savedArticles.size)
                 savedArticlesRV = view.findViewById(R.id.saved_articles_rv)
                 savedArticlesRV.adapter = SavedArticlesAdapter(savedArticles)
                 val layoutManager: LinearLayoutManager = LinearLayoutManager(view.context)
                 savedArticlesRV.layoutManager = layoutManager
+                view.findViewById<Group>(R.id.no_saved_articles_group).visibility = View.GONE
             })
         }
         if(savedArticles.isEmpty()) {
             view.findViewById<Group>(R.id.no_saved_articles_group).visibility = View.VISIBLE
+        } else {
+            view.findViewById<Group>(R.id.no_saved_articles_group).visibility = View.GONE
         }
-
     }
 
     override fun setUserVisibleHint(isVisibleToUser: Boolean) {
