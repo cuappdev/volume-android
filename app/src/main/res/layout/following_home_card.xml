@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="100dp"
     android:layout_margin="10dp"
+    android:layout_marginTop="20dp"
     app:cardBackgroundColor="#00FFFFFF"
     app:cardElevation="0dp"
     app:cardMaxElevation="0dp">
@@ -29,7 +30,7 @@
             style="@style/helvetica_bold"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="6dp"
+            android:layout_marginTop="2dp"
             android:layout_marginEnd="10dp"
             android:text="Sangkhaya: Thai Pandan Custard Dip"
             android:maxLines="3"
