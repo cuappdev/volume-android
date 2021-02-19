@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.constraintlayout.widget.Group
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -69,9 +70,11 @@ class HomeFragment(val articles: List<Article>) : Fragment() {
         })
 
         if(followingPublications?.isEmpty() == true) {
-            view1.findViewById<Group>(R.id.following_group).visibility = View.GONE
+            view1.findViewById<Group>(R.id.following_group).visibility = View.INVISIBLE
+            view1.findViewById<Group>(R.id.not_following_group).visibility = View.VISIBLE
         } else {
             view1.findViewById<Group>(R.id.following_group).visibility = View.VISIBLE
+            view1.findViewById<Group>(R.id.not_following_group).visibility = View.GONE
         }
         //get all articles for the publications the user follows
         //the followed articles are pulled from shared preferences
