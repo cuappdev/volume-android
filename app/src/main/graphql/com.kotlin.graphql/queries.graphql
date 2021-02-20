@@ -61,8 +61,30 @@ query PublicationById ($id: String!){
 
 }
 
-query TrendingArticles ($limit: Float, $date: String!){
-    getTrendingArticles(limit:$limit, since:$date){
+query PublicationsByIds ($ids: [String!]!){
+    getPublicationsByIDs(ids:$ids){
+        id
+        backgroundImageURL
+        bio
+        name
+        profileImageURL
+        rssName
+        rssURL
+        slug
+        shoutouts
+        websiteURL
+        mostRecentArticle{
+            id
+            articleURL
+            imageURL
+            title
+            shoutouts
+        }
+    }
+}
+
+query TrendingArticles ($limit: Float){
+    getTrendingArticles(limit:$limit){
         id
         title
         publication{
