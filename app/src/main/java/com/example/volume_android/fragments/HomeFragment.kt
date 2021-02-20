@@ -23,7 +23,7 @@ import io.reactivex.schedulers.Schedulers
 import java.util.*
 
 
-class HomeFragment(val articles: List<Article>) : Fragment() {
+class HomeFragment : Fragment() {
 
     companion object {
         const val NUMBER_OF_TRENDING_ARTICLES = 7.0

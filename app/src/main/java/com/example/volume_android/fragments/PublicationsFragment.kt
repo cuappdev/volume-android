@@ -19,7 +19,7 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 
 
-class PublicationsFragment(val publications: List<Publication>) : Fragment() {
+class PublicationsFragment : Fragment() {
 
     private lateinit var followpublicationRV : RecyclerView
     private lateinit var morepublicationRV: RecyclerView

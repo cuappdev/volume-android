@@ -11,7 +11,7 @@ import com.example.volume_android.models.Publication
 
 private const val COUNT = 3
 
-class PagerAdapter(fragmentManager: FragmentManager, val publications: List<Publication>, val articles: List<Article>) : FragmentPagerAdapter(fragmentManager) {
+class PagerAdapter(fragmentManager: FragmentManager) : FragmentPagerAdapter(fragmentManager, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
 
     override fun getCount(): Int {
         return COUNT
@@ -19,9 +19,9 @@ class PagerAdapter(fragmentManager: FragmentManager, val publications: List<Publ
 
     override fun getItem(position: Int): Fragment {
         return when (position) {
-            0 -> HomeFragment(articles)
-            1 -> PublicationsFragment(publications)
-            else -> SavedPublicationsFragment(articles)
+            0 -> HomeFragment()
+            1 -> PublicationsFragment()
+            else -> SavedPublicationsFragment()
         }
     }
 
