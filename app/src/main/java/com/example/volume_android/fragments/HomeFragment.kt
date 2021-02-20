@@ -23,15 +23,11 @@ import io.reactivex.schedulers.Schedulers
 import java.util.*
 
 
+const val NUMBER_OF_TRENDING_ARTICLES = 7.0
+const val NUMBER_OF_FOLLOWING_ARTICLES = 20
+const val NUMBER_OF_OTHER_ARTICLES = 45
+
 class HomeFragment : Fragment() {
-
-    companion object {
-        const val NUMBER_OF_TRENDING_ARTICLES = 7.0
-        const val NUMBER_OF_FOLLOWING_ARTICLES = 20
-        const val NUMBER_OF_OTHER_ARTICLES = 45
-    }
-
-
     private lateinit var bigRedRv: RecyclerView
     private lateinit var followingRv: RecyclerView
     private lateinit var otherArticles: RecyclerView
@@ -52,57 +48,14 @@ class HomeFragment : Fragment() {
         Log.d("HomeFragment", followingPublications.toString())
         graphQlUtil = GraphQlUtil()
 
-        val allPublicationIdsExcludingFollowing: List<String> = getAllPublicationIds(followingPublications)
-        val trendingArticlesId = setUpBigRedArticles(view1)
-
-        // Get all articles for the publications the user follows
-        // the followed articles are pulled from shared preferences
-        var followingArticles: List<Article> = setUpFollowingArticles(followingPublications,
-                trendingArticlesId)
-
-        followingRv = view1.findViewById(R.id.follwing_rv)
-        val linearLayoutManager2 = LinearLayoutManager(view1.context)
-        followingRv.layoutManager = linearLayoutManager2
-        followingRv.adapter = HomeFollowingArticleAdapters(
-                followingArticles.take(NUMBER_OF_FOLLOWING_ARTICLES)
-        )
-        followingArticles = followingArticles.drop(NUMBER_OF_FOLLOWING_ARTICLES)
-        setUpOtherArticles(view1,
-                trendingArticlesId,
-                allPublicationIdsExcludingFollowing,
-                followingArticles)
-        if(followingPublications?.isEmpty() == true) {
-            view1.findViewById<Group>(R.id.following_group).visibility = View.GONE
-        } else {
-            view1.findViewById<Group>(R.id.following_group).visibility = View.VISIBLE
-        }
-        return view1
-    }
-
-    private fun getAllPublicationIds(followingPublications: MutableSet<String>?): List<String> {
-        val pubIds = mutableListOf<String>()
-        val allPublicationsObs =
-                graphQlUtil.getAllPublications().subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
-        disposables.add(allPublicationsObs.subscribe {
-            val rawPublications = it.data?.getAllPublications
-            rawPublications?.mapTo(pubIds, { rawPublication -> rawPublication.id })
-        })
-        if(!followingPublications.isNullOrEmpty()) {
-            return pubIds.filter {
-                followingPublications.contains(it)
-            }
-        }
-        return pubIds
-    }
-
-    private fun setUpBigRedArticles(view1: View?): MutableList<String> {
         val trendingArticles = mutableListOf<Article>()
         val trendingArticlesId = mutableListOf<String>()
         // Get the trending articles for Big Read section
         val trendingObs = graphQlUtil.getTrendingArticles(NUMBER_OF_TRENDING_ARTICLES).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
-        disposables.add(trendingObs.subscribe {
-            if (it.data?.getTrendingArticles != null) {
-                for (rawArticle in it.data?.getTrendingArticles!!) {
+        disposables.add(trendingObs.subscribe({
+            val rawTrendingArticles = it.data?.getTrendingArticles
+            if (rawTrendingArticles != null) {
+                for (rawArticle in rawTrendingArticles) {
                     trendingArticles.add(Article(
                             title = rawArticle.title,
                             articleURL = rawArticle.articleURL,
@@ -123,7 +76,154 @@ class HomeFragment : Fragment() {
             val linearLayoutManager = LinearLayoutManager(view1.context)
             linearLayoutManager.orientation = LinearLayoutManager.HORIZONTAL
             bigRedRv.layoutManager = linearLayoutManager
+        }, { error -> Log.d("BigRedError", error.toString()) }))
+
+        // Get all articles for the publications the user follows
+        // the followed articles are pulled from shared preferences
+        var followingArticles: MutableList<Article> = mutableListOf()
+        for (pub in followingPublications!!) {
+            val followingObs = graphQlUtil.getArticleByPublication(pub).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+            disposables.add(followingObs.subscribe { response ->
+                if (response.data?.getArticlesByPublication != null) {
+                    for (rawArticle in response.data?.getArticlesByPublication!!) {
+                        if (!trendingArticlesId.contains(rawArticle.id)) {
+                            followingArticles.add(Article(
+                                    title = rawArticle.title,
+                                    articleURL = rawArticle.articleURL,
+                                    date = rawArticle.date.toString(),
+                                    id = rawArticle.id,
+                                    imageURL = rawArticle.imageURL,
+                                    publication = Publication(
+                                            id = rawArticle.publication.id,
+                                            name = rawArticle.publication.name,
+                                            profileImageURL = rawArticle.publication.profileImageURL),
+                                    shoutouts = rawArticle.shoutouts)
+                            )
+                        }
+                    }
+                }
+                if(pub == followingPublications.last()) {
+                    followingArticles = followingArticles.sortedWith(compareByDescending { it.date }) as MutableList<Article>
+                    followingRv = view1.findViewById(R.id.follwing_rv)
+                    followingRv.layoutManager = LinearLayoutManager(view1.context)
+                    followingRv.adapter = HomeFollowingArticleAdapters(
+                            followingArticles.take(NUMBER_OF_FOLLOWING_ARTICLES)
+                    )
+                    followingArticles = followingArticles.drop(NUMBER_OF_FOLLOWING_ARTICLES) as MutableList<Article>
+                }
+            })
+        }
+
+        var allPublicationIdsExcludingFollowing = mutableListOf<String>()
+        var others = mutableListOf<Article>()
+        val allPublicationsObs =
+                graphQlUtil.getAllPublications().subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+        disposables.add(allPublicationsObs.subscribe { response ->
+            val rawPublications = response.data?.getAllPublications
+            if (rawPublications != null) {
+                for (publication in rawPublications) {
+                    allPublicationIdsExcludingFollowing.add(publication.id)
+                }
+            }
+            if(!followingPublications.isNullOrEmpty()) {
+                allPublicationIdsExcludingFollowing = allPublicationIdsExcludingFollowing.filter {
+                    !followingPublications.contains(it)
+                } as MutableList<String>
+            }
+            for (pub in allPublicationIdsExcludingFollowing) {
+                val othersObs = graphQlUtil.getArticleByPublication(pub).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+                disposables.add(othersObs.subscribe {
+                    if (it.data?.getArticlesByPublication != null) {
+                        for (rawArticle in it.data?.getArticlesByPublication!!) {
+                            if (!trendingArticlesId.contains(rawArticle.id)) {
+                                others.add(Article(
+                                        title = rawArticle.title,
+                                        articleURL = rawArticle.articleURL,
+                                        date = rawArticle.date.toString(),
+                                        id = rawArticle.id,
+                                        imageURL = rawArticle.imageURL,
+                                        publication = Publication(
+                                                id = rawArticle.publication.id,
+                                                name = rawArticle.publication.name,
+                                                profileImageURL = rawArticle.publication.profileImageURL),
+                                        shoutouts = rawArticle.shoutouts)
+                                )
+                            }
+                        }
+                    }
+                    if(pub == allPublicationIdsExcludingFollowing.last()) {
+                        if(others.size < NUMBER_OF_OTHER_ARTICLES) {
+                            others.addAll(followingArticles.take(NUMBER_OF_OTHER_ARTICLES - others.size))
+                        } else {
+                            others = others.drop(others.size - NUMBER_OF_OTHER_ARTICLES) as MutableList<Article>
+                        }
+                        otherArticles = view1.findViewById(R.id.other_articlesrv)
+                        otherArticles.layoutManager = LinearLayoutManager(view1.context)
+                        otherArticles.adapter = HomeOtherArticleAdapter(others)
+                    }
+                })
+            }
         })
+        if(followingPublications.isEmpty()) {
+            view1.findViewById<Group>(R.id.following_group).visibility = View.GONE
+        } else {
+            view1.findViewById<Group>(R.id.following_group).visibility = View.VISIBLE
+        }
+        return view1
+    }
+
+    private fun getAllPublicationIds(followingPublications: MutableSet<String>?): List<String> {
+        val pubIds = mutableListOf<String>()
+        val allPublicationsObs =
+                graphQlUtil.getAllPublications().subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+        disposables.add(allPublicationsObs.subscribe {
+            val rawPublications = it.data?.getAllPublications
+            if (rawPublications != null) {
+                for (publication in rawPublications) {
+                    pubIds.add(publication.id)
+                }
+            }
+        })
+
+
+        if(!followingPublications.isNullOrEmpty()) {
+            return pubIds.filter {
+                followingPublications.contains(it)
+            }
+        }
+        return pubIds
+    }
+
+    private fun setUpBigRedArticles(view1: View?): MutableList<String> {
+        val trendingArticles = mutableListOf<Article>()
+        val trendingArticlesId = mutableListOf<String>()
+        // Get the trending articles for Big Read section
+        val trendingObs = graphQlUtil.getTrendingArticles(NUMBER_OF_TRENDING_ARTICLES).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+        disposables.add(trendingObs.subscribe({
+            val rawTrendingArticles = it.data?.getTrendingArticles
+            if (rawTrendingArticles != null) {
+                for (rawArticle in rawTrendingArticles) {
+                    trendingArticles.add(Article(
+                            title = rawArticle.title,
+                            articleURL = rawArticle.articleURL,
+                            date = rawArticle.date.toString(),
+                            id = rawArticle.id,
+                            imageURL = rawArticle.imageURL,
+                            publication = Publication(
+                                    id = rawArticle.publication.id,
+                                    name = rawArticle.publication.name,
+                                    profileImageURL = rawArticle.publication.profileImageURL),
+                            shoutouts = rawArticle.shoutouts)
+                    )
+                    trendingArticlesId.add(rawArticle.id)
+                }
+            }
+            bigRedRv = view1?.findViewById(R.id.big_red_rv)!!
+            bigRedRv.adapter = BigReadHomeAdapter(trendingArticles)
+            val linearLayoutManager = LinearLayoutManager(view1.context)
+            linearLayoutManager.orientation = LinearLayoutManager.HORIZONTAL
+            bigRedRv.layoutManager = linearLayoutManager
+        }, { error -> Log.d("BigRedError", error.toString()) }))
         return trendingArticlesId
     }
 
@@ -161,12 +261,14 @@ class HomeFragment : Fragment() {
                                    allPublicationIdsExcludingFollowing: List<String>,
                                    followingArticles: List<Article>) {
         val others = mutableListOf<Article>()
+        Log.d("others-pub", allPublicationIdsExcludingFollowing.size.toString())
+
         for (pub in allPublicationIdsExcludingFollowing) {
             val othersObs = graphQlUtil.getArticleByPublication(pub).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
             disposables.add(othersObs.subscribe {
                 if (it.data?.getArticlesByPublication != null) {
                     for (rawArticle in it.data?.getArticlesByPublication!!) {
-                        if (!trendingArticlesId.contains(rawArticle.id)) {
+                        //if (!trendingArticlesId.contains(rawArticle.id)) {
                             others.add(Article(
                                     title = rawArticle.title,
                                     articleURL = rawArticle.articleURL,
@@ -179,7 +281,7 @@ class HomeFragment : Fragment() {
                                             profileImageURL = rawArticle.publication.profileImageURL),
                                     shoutouts = rawArticle.shoutouts)
                             )
-                        }
+                      //  }
                     }
                 }
             })
@@ -187,6 +289,7 @@ class HomeFragment : Fragment() {
         if(others.size < NUMBER_OF_OTHER_ARTICLES) {
             others.addAll(followingArticles.take(NUMBER_OF_OTHER_ARTICLES - others.size))
         }
+        Log.d("others", others.size.toString())
         if(view1 != null) {
             otherArticles = view1.findViewById(R.id.other_articlesrv)
             val linearLayoutManager3 = LinearLayoutManager(view1.context)
