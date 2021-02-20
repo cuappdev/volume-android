@@ -18,12 +18,15 @@
         <TextView
             android:id="@+id/article_pub_name_following"
             style="@style/begum_black"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="Creme de Cornell"
             android:textSize="12dp"
+            android:maxLines="1"
+            android:ellipsize="end"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintEnd_toStartOf="@id/article_img_home"
+            app:layout_constraintTop_toTopOf="parent"  />
 
         <TextView
             android:id="@+id/article_title_home"
