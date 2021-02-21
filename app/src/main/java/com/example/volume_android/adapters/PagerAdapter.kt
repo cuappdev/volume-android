@@ -6,12 +6,12 @@ import androidx.fragment.app.FragmentPagerAdapter
 import com.example.volume_android.fragments.HomeFragment
 import com.example.volume_android.fragments.PublicationsFragment
 import com.example.volume_android.fragments.SavedPublicationsFragment
-import com.example.volume_android.models.Article
-import com.example.volume_android.models.Publication
-
-private const val COUNT = 3
 
 class PagerAdapter(fragmentManager: FragmentManager) : FragmentPagerAdapter(fragmentManager, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
+
+    companion object {
+        private const val COUNT = 3
+    }
 
     override fun getCount(): Int {
         return COUNT
@@ -24,6 +24,4 @@ class PagerAdapter(fragmentManager: FragmentManager) : FragmentPagerAdapter(frag
             else -> SavedPublicationsFragment()
         }
     }
-
-
 }
