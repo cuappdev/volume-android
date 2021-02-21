@@ -48,7 +48,7 @@ class HomeFragment : Fragment() {
         val trendingArticles = mutableListOf<Article>()
         val trendingArticlesId = mutableListOf<String>()
         val trendingObs = graphQlUtil.getTrendingArticles(NUMBER_OF_TRENDING_ARTICLES).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
-        disposables.add(trendingObs.subscribe {
+        disposables.add(trendingObs.subscribe({
             val rawTrendingArticles = it.data?.getTrendingArticles
             if (rawTrendingArticles != null) {
                 for (rawArticle in rawTrendingArticles) {
@@ -72,11 +72,11 @@ class HomeFragment : Fragment() {
             val linearLayoutManager = LinearLayoutManager(view1.context)
             linearLayoutManager.orientation = LinearLayoutManager.HORIZONTAL
             bigRedRv.layoutManager = linearLayoutManager
-        })
+        }, { error -> Log.d("homerror_trending", error.toString()) }))
         var followingArticles: MutableList<Article> = mutableListOf()
         for (pub in followingPublications!!) {
             val followingObs = graphQlUtil.getArticleByPublication(pub).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
-            disposables.add(followingObs.subscribe { response ->
+            disposables.add(followingObs.subscribe ({ response ->
                 if (response.data?.getArticlesByPublication != null) {
                     for (rawArticle in response.data?.getArticlesByPublication!!) {
                         if (!trendingArticlesId.contains(rawArticle.id)) {
@@ -102,28 +102,28 @@ class HomeFragment : Fragment() {
                     followingRv.adapter = HomeFollowingArticleAdapters(
                             followingArticles.take(NUMBER_OF_FOLLOWING_ARTICLES)
                     )
-                    followingArticles = if(followingArticles.size < NUMBER_OF_FOLLOWING_ARTICLES) {
-                        mutableListOf()
-                    } else {
-                        followingArticles.drop(NUMBER_OF_FOLLOWING_ARTICLES) as MutableList<Article>
+                    if(followingArticles.size < NUMBER_OF_FOLLOWING_ARTICLES) {
+                        followingArticles = mutableListOf()
+                    } else if(followingArticles.isNotEmpty()){
+                        followingArticles = followingArticles.drop(NUMBER_OF_FOLLOWING_ARTICLES) as MutableList<Article>
                     }
                 }
-            })
+            }, { error -> Log.d("homerror_following", error.toString())}))
         }
         // Get the articles for the other section, first taken from publications the user doesn't follow
         // then so to make up the difference of the amount needed.
         var allPublicationIdsExcludingFollowing = mutableListOf<String>()
-        var others = mutableListOf<Article>()
+        val others = mutableListOf<Article>()
         val allPublicationsObs =
                 graphQlUtil.getAllPublications().subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
-        disposables.add(allPublicationsObs.subscribe { response ->
+        disposables.add(allPublicationsObs.subscribe({ response ->
             val rawPublications = response.data?.getAllPublications
             if (rawPublications != null) {
                 for (publication in rawPublications) {
                     allPublicationIdsExcludingFollowing.add(publication.id)
                 }
             }
-            if(!followingPublications.isNullOrEmpty()) {
+            if (!followingPublications.isNullOrEmpty()) {
                 allPublicationIdsExcludingFollowing = allPublicationIdsExcludingFollowing.filter {
                     !followingPublications.contains(it)
                 } as MutableList<String>
@@ -149,8 +149,8 @@ class HomeFragment : Fragment() {
                             }
                         }
                     }
-                    if(pub == allPublicationIdsExcludingFollowing.last()) {
-                        if(others.size < NUMBER_OF_OTHER_ARTICLES && !followingArticles.isNullOrEmpty()) {
+                    if (pub == allPublicationIdsExcludingFollowing.last() && others.isNotEmpty()) {
+                        if (others.size < NUMBER_OF_OTHER_ARTICLES && !followingArticles.isNullOrEmpty()) {
                             others.addAll(followingArticles.take(NUMBER_OF_OTHER_ARTICLES - others.size))
                         }
                         otherArticles = view1.findViewById(R.id.other_articlesrv)
@@ -159,7 +159,7 @@ class HomeFragment : Fragment() {
                     }
                 })
             }
-        })
+        }, { error -> Log.d("homerror_other", error.toString())}))
         if(followingPublications.isEmpty()) {
             view1.findViewById<Group>(R.id.following_group).visibility = View.GONE
         } else {
