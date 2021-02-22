@@ -13,8 +13,8 @@ import okhttp3.logging.HttpLoggingInterceptor
 
 class GraphQlUtil {
 
-    private val BASE_URL = "http://volume-backend.cornellappdev.com/graphql"
-    private lateinit var  client : ApolloClient
+    private val BASE_URL = "http://volume-dev.cornellappdev.com/graphql"
+    private var client : ApolloClient
 
     init {
         client = setUpApolloCllient()
@@ -28,10 +28,9 @@ class GraphQlUtil {
                 .Builder()
                 .addInterceptor(logging)
         return ApolloClient.builder()
-                .serverUrl("http://volume-backend.cornellappdev.com/graphql")
+                .serverUrl(BASE_URL)
                 .okHttpClient(okHttp.build())
                 .build()
-
     }
 
     fun getAllArticles(): Observable<Response<AllArticlesQuery.Data>> {
@@ -39,8 +38,8 @@ class GraphQlUtil {
         return client.rxQuery(query)
     }
 
-    fun getTrendingArticles(limit: Double, date: String): Observable<Response<TrendingArticlesQuery.Data>> {
-        val query = (TrendingArticlesQuery(limit.toInput(), date))
+    fun getTrendingArticles(limit: Double): Observable<Response<TrendingArticlesQuery.Data>> {
+        val query = (TrendingArticlesQuery(limit.toInput()))
         return client.rxQuery(query)
     }
 

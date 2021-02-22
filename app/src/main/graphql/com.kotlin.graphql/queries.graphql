@@ -61,8 +61,8 @@ query PublicationById ($id: String!){
 
 }
 
-query TrendingArticles ($limit: Float, $date: String!){
-    getTrendingArticles(limit:$limit, since:$date){
+query TrendingArticles ($limit: Float){
+    getTrendingArticles(limit:$limit){
         id
         title
         publication{
