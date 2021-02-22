@@ -26,7 +26,7 @@ import java.time.LocalDate
 import java.util.*
 
 
-class HomeFragment(val articles: List<Article>) : Fragment() {
+class HomeFragment : Fragment() {
 
 
     private lateinit var bigRedRv: RecyclerView
@@ -82,21 +82,21 @@ class HomeFragment(val articles: List<Article>) : Fragment() {
         for ( pub in followingPublications!!){
             var tempArticles = mutableListOf<Article>()
             val followingObs = graphQlUtil.getArticleByPublication(pub).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
-        disposables.add(followingObs.subscribe {
+            disposables.add(followingObs.subscribe {
 
-            it.data?.getArticlesByPublication?.mapTo(tempArticles, { it ->
-                Article(title = it.title, articleURL = it.articleURL, date = it.date.toString(), id = it.id, imageURL = it.imageURL, publication = Publication(id = it.publication.id, name = it.publication.name, profileImageURL = it.publication.profileImageURL), shoutouts = it.shoutouts)
+                it.data?.getArticlesByPublication?.mapTo(tempArticles, { it ->
+                    Article(title = it.title, articleURL = it.articleURL, date = it.date.toString(), id = it.id, imageURL = it.imageURL, publication = Publication(id = it.publication.id, name = it.publication.name, profileImageURL = it.publication.profileImageURL), shoutouts = it.shoutouts)
+                })
+                followingArticles.addAll(tempArticles)
+
+                if (pub == followingPublications.last()) {
+                    followingRv = view1.findViewById(R.id.follwing_rv)
+                    val linearLayoutManager2: LinearLayoutManager = LinearLayoutManager(view1.context)
+                    followingRv.layoutManager = linearLayoutManager2
+                    followingRv.adapter = HomeFollowingArticleAdapters(followingArticles)
+
+                }
             })
-            followingArticles.addAll(tempArticles)
-
-            if (pub == followingPublications.last()) {
-                followingRv = view1.findViewById(R.id.follwing_rv)
-                val linearLayoutManager2: LinearLayoutManager = LinearLayoutManager(view1.context)
-                followingRv.layoutManager = linearLayoutManager2
-                followingRv.adapter = HomeFollowingArticleAdapters(followingArticles)
-
-            }
-        })
         }
 
 
