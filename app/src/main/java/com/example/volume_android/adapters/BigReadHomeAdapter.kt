@@ -51,8 +51,14 @@ class BigReadHomeAdapter(private val articles: List<Article>) :
     override fun onBindViewHolder(holder: BigReadArticleVH, position: Int) {
         val currentItem : Article = articles[position]
         holder.articleTitle.text = currentItem.title
-        if(currentItem.imageURL != null && currentItem.imageURL != ""){
+        if(!currentItem.imageURL.isNullOrEmpty()){
             Picasso.get().load(currentItem.imageURL).into(holder.articleImg)
+        } else if (!currentItem.publication?.profileImageURL.isNullOrEmpty()) {
+            Picasso.get()
+                    .load(currentItem.publication?.profileImageURL)
+                    .resize(180, 180)
+                    .centerCrop()
+                    .into(holder.articleImg)
         }
         holder.postTime.text = currentItem.date
         //getting article posting time and date in phones timeZone
@@ -100,7 +106,6 @@ class BigReadHomeAdapter(private val articles: List<Article>) :
 
         holder.layout.setOnClickListener{
             val intent = Intent(holder.layout.context, MainActivity::class.java)
-            //intent.putExtra("articleURL",currentItem.articleURL)
             intent.putExtra("article", currentItem)
             holder.layout.context?.startActivity(intent)
         }
