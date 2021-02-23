@@ -61,8 +61,8 @@ query PublicationById ($id: String!){
 
 }
 
-query TrendingArticles ($limit: Float, $date: String!){
-    getTrendingArticles(limit:$limit, since:$date){
+query TrendingArticles ($limit: Float){
+    getTrendingArticles(limit:$limit){
         id
         title
         publication{
@@ -77,9 +77,8 @@ query TrendingArticles ($limit: Float, $date: String!){
     }
 }
 
-query FollowingArticles($publicationID:String!){
-
-    getArticlesByPublication(publicationID:$publicationID){
+query ArticlesByPublicationID($publicationID:String!){
+    getArticlesByPublicationID(publicationID: $publicationID){
         id
         articleURL
         date
@@ -95,7 +94,7 @@ query FollowingArticles($publicationID:String!){
 
 }
 
-query ArticlesByIDsQuery($ids:[String!]!){
+query ArticlesByIDs($ids:[String!]!){
     getArticlesByIDs(ids:$ids){
         id
         title
@@ -108,6 +107,22 @@ query ArticlesByIDsQuery($ids:[String!]!){
         imageURL
         date
         shoutouts
+    }
+}
+
+query ArticlesByPublicationIDs($publicationIDs:[String!]!){
+    getArticlesByPublicationIDs(publicationIDs:$publicationIDs){
+        id
+        articleURL
+        date
+        imageURL
+        publication{
+            id
+            name
+            profileImageURL
+        }
+        shoutouts
+        title
     }
 }
 

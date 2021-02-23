@@ -8,5 +8,6 @@
     <color name="card_background">#00FFFFFF</color>
     <color name="volumeOrange">#D07000</color>
     <color name="ligthgray">#EEEEEE</color>
+    <color name="white">#FFFFFF</color>
 
 </resources>

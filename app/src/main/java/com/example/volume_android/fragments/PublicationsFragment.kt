@@ -67,12 +67,12 @@ class PublicationsFragment : Fragment() {
             val followingObs = graphQlUtil.getPublicationById(pub).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
             disposables.add(followingObs.subscribe {
                 val res = it.data?.getPublicationByID
-//                if(res != null) {
-//                    val publication = Publication(res.id, res.backgroundImageURL,
-//                            res.bio, res.name, res.profileImageURL, res.rssName, res.rssURL, res.slug, res.shoutouts, res.websiteURL, Article(res.mostRecentArticle?.id, res.mostRecentArticle?.title, res.mostRecentArticle?.articleURL, res.mostRecentArticle?.imageURL))
-//
-//                    followingPublications.add(publication)
-//                }
+                if(res != null) {
+                    val publication = Publication(res.id, res.backgroundImageURL,
+                            res.bio, res.name, res.profileImageURL, res.rssName, res.rssURL, res.slug, res.shoutouts, res.websiteURL, Article(res.mostRecentArticle?.id, res.mostRecentArticle?.title, res.mostRecentArticle?.articleURL, res.mostRecentArticle?.imageURL))
+
+                    followingPublications.add(publication)
+                }
 
                 if (pub == followingPublicationsIds.last()) {
                     followpublicationRV = view.findViewById(R.id.following_all_publications_rv)
@@ -84,13 +84,6 @@ class PublicationsFragment : Fragment() {
 
                 }
             })
-        }
-    }
-
-    override fun setUserVisibleHint(isVisibleToUser: Boolean) {
-        super.setUserVisibleHint(isVisibleToUser)
-        if (isVisibleToUser) {
-            fragmentManager!!.beginTransaction().detach(this).attach(this).commit()
         }
     }
 
