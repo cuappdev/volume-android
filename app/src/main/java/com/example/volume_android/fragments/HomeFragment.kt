@@ -68,7 +68,7 @@ class HomeFragment : Fragment() {
                     trendingArticlesId.add(rawArticle.id)
                 }
             }
-            bigRedRv = view1?.findViewById(R.id.big_red_rv)!!
+            bigRedRv = view1.findViewById(R.id.big_red_rv)
             bigRedRv.adapter = BigReadHomeAdapter(trendingArticles)
             val linearLayoutManager = LinearLayoutManager(view1.context)
             linearLayoutManager.orientation = LinearLayoutManager.HORIZONTAL
