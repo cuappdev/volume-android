@@ -87,13 +87,6 @@ class PublicationsFragment : Fragment() {
         }
     }
 
-    override fun setUserVisibleHint(isVisibleToUser: Boolean) {
-        super.setUserVisibleHint(isVisibleToUser)
-        if (isVisibleToUser) {
-            fragmentManager!!.beginTransaction().detach(this).attach(this).commit()
-        }
-    }
-
     override fun onResume() {
         super.onResume()
         getMorePublications(view1)

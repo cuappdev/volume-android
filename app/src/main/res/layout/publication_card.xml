@@ -64,6 +64,8 @@
             android:layout_marginLeft="5dp"
             android:text=' "We cream for Cornell" '
             android:textSize="12dp"
+            android:maxLines="2"
+            android:ellipsize="end"
             app:layout_constraintBottom_toBottomOf="@id/publication_card_smallline"
             app:layout_constraintLeft_toRightOf="@id/publication_card_smallline"
             app:layout_constraintTop_toTopOf="@id/publication_card_smallline" />
