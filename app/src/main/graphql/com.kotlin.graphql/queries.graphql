@@ -77,9 +77,8 @@ query TrendingArticles ($limit: Float){
     }
 }
 
-query FollowingArticles($publicationID:String!){
-
-    getArticlesByPublication(publicationID:$publicationID){
+query ArticlesByPublication($publicationID:String!){
+    getArticlesByPublication(publicationID: $publicationID){
         id
         articleURL
         date
@@ -110,6 +109,22 @@ query ArticlesByIDsQuery($ids:[String!]!){
         shoutouts
     }
 }
+
+#query ArticlesByPublicationIDsQuery($publicationIDs:[String!]!){
+#    getArticlesByPublication(publicationIDs:$publicationIDs){
+#        id
+#        articleURL
+#        date
+#        imageURL
+#        publication{
+#            id
+#            name
+#            profileImageURL
+#        }
+#        shoutouts
+#        title
+#    }
+#}
 
 mutation IncrementShoutout($id:String!){
 
