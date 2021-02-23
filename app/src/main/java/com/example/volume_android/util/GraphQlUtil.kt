@@ -48,8 +48,8 @@ class GraphQlUtil {
         return client.rxQuery(query)
     }
 
-    fun getArticleByPublication(pubID: String): Observable<Response<FollowingArticlesQuery.Data>> {
-        val query = (FollowingArticlesQuery(pubID))
+    fun getArticleByPublication(pubID: String): Observable<Response<ArticlesByPublicationQuery.Data>> {
+        val query = (ArticlesByPublicationQuery(pubID))
         return client.rxQuery(query)
     }
 
