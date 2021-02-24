@@ -58,12 +58,17 @@ class GraphQlUtil {
         return client.rxQuery(query)
     }
 
-    fun getPublicationById(pubID: String): Observable<Response<PublicationByIdQuery.Data>> {
-        val query = (PublicationByIdQuery(pubID))
+    fun getPublicationByID(pubID: String): Observable<Response<PublicationByIDQuery.Data>> {
+        val query = (PublicationByIDQuery(pubID))
         return client.rxQuery(query)
     }
 
-    fun getArticlesByIds(ids:MutableSet<String>):Observable<Response<ArticlesByIDsQuery.Data>>{
+    fun getPublicationsByIDs(pubIDs: MutableList<String>): Observable<Response<PublicationsByIDsQuery.Data>> {
+        val query = (PublicationsByIDsQuery(pubIDs.toList()))
+        return client.rxQuery(query)
+    }
+
+    fun getArticlesByIDs(ids:MutableSet<String>):Observable<Response<ArticlesByIDsQuery.Data>>{
         val query = (ArticlesByIDsQuery(ids.toList()))
         return client.rxQuery(query)
     }
