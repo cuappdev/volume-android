@@ -45,7 +45,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/following_group"
             android:visibility="visible"
-            app:constraint_referenced_ids="follwing_rv, more_articles_message,
+            app:constraint_referenced_ids="more_articles_message,
             up_to_date_line, more_articles_message_long"/>
 
         <androidx.constraintlayout.widget.Group
@@ -53,7 +53,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/not_following_group"
             android:visibility="gone"
-            app:constraint_referenced_ids="follwing_rv, more_articles_message_nothing,
+            app:constraint_referenced_ids="more_articles_message_nothing,
             more_articles_message_long_nothing"/>
 
         <ImageView
