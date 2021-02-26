@@ -69,7 +69,6 @@ class SavedPublicationsFragment: Fragment() {
         if(savedArticles.isEmpty()) {
             view.findViewById<Group>(R.id.no_saved_articles_group).visibility = View.VISIBLE
         }
-
     }
 
     override fun onResume() {

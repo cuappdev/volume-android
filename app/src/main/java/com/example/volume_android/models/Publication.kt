@@ -24,7 +24,6 @@ class Publication (
     val shoutouts: Double? = 0.0,
     val websiteURL: String? = "",
     val mostRecentArticle: Article? = null,
-    val social: List<Social>? = emptyList<Social>()
 ) : Parcelable {
 
 
