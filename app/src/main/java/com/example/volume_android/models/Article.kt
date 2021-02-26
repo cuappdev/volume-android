@@ -19,5 +19,4 @@ class Article(
     val publication: Publication? = null,
     val date: String? = "",
     val shoutouts: Double? = 0.0,
-): Parcelable {
-}
+): Parcelable

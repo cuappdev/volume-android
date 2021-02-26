@@ -19,7 +19,7 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 
 
-class PublicationsFragment(val publications: List<Publication>) : Fragment() {
+class PublicationsFragment : Fragment() {
 
     private lateinit var followpublicationRV : RecyclerView
     private lateinit var morepublicationRV: RecyclerView
@@ -43,10 +43,9 @@ class PublicationsFragment(val publications: List<Publication>) : Fragment() {
 
     fun getMorePublications(view: View){
         val otherObs = graphQlUtil.getAllPublications().subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
-        disposables.add(otherObs.subscribe {
-            var others = mutableListOf<Publication>()
-
-            it.data?.getAllPublications?.mapTo(others, { it ->
+        disposables.add(otherObs.subscribe { response ->
+            val others = mutableListOf<Publication>()
+            response.data?.getAllPublications?.mapTo(others, { it ->
                 Publication(id = it.id, backgroundImageURL = it.backgroundImageURL, bio = it.bio, name = it.name, profileImageURL = it.profileImageURL, rssName = it.rssName, rssURL = it.rssURL, slug = it.slug, shoutouts = it.shoutouts, websiteURL = it.websiteURL,
                         mostRecentArticle = Article(it.mostRecentArticle?.id, it.mostRecentArticle?.title, it.mostRecentArticle?.articleURL, it.mostRecentArticle?.imageURL))
             })
@@ -67,30 +66,24 @@ class PublicationsFragment(val publications: List<Publication>) : Fragment() {
         for ( pub in followingPublicationsIds!!){
             val followingObs = graphQlUtil.getPublicationById(pub).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
             disposables.add(followingObs.subscribe {
-
                 val res = it.data?.getPublicationByID
-                val publication = Publication(res!!.id, res.backgroundImageURL,
-                        res.bio, res.name, res.profileImageURL, res.rssName, res.rssURL, res.slug, res.shoutouts, res.websiteURL, Article(res.mostRecentArticle?.id, res.mostRecentArticle?.title, res.mostRecentArticle?.articleURL, res.mostRecentArticle?.imageURL))
+                if(res != null) {
+                    val publication = Publication(res.id, res.backgroundImageURL,
+                            res.bio, res.name, res.profileImageURL, res.rssName, res.rssURL, res.slug, res.shoutouts, res.websiteURL, Article(res.mostRecentArticle?.id, res.mostRecentArticle?.title, res.mostRecentArticle?.articleURL, res.mostRecentArticle?.imageURL))
 
-                followingPublications.add(publication)
+                    followingPublications.add(publication)
+                }
 
                 if (pub == followingPublicationsIds.last()) {
                     followpublicationRV = view.findViewById(R.id.following_all_publications_rv)
                     followpublicationRV.adapter = FollowingHorizontalAdapter(followingPublications)
-                    val linearLayoutManager: LinearLayoutManager = LinearLayoutManager(view.context)
+                    val linearLayoutManager = LinearLayoutManager(view.context)
                     linearLayoutManager.orientation = LinearLayoutManager.HORIZONTAL
                     followpublicationRV.layoutManager = linearLayoutManager
                     followpublicationRV.setHasFixedSize(true)
 
                 }
             })
-        }
-    }
-
-    override fun setUserVisibleHint(isVisibleToUser: Boolean) {
-        super.setUserVisibleHint(isVisibleToUser)
-        if (isVisibleToUser) {
-            fragmentManager!!.beginTransaction().detach(this).attach(this).commit()
         }
     }
 
