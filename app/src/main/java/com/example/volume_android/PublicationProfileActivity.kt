@@ -113,10 +113,10 @@ class PublicationProfileActivity : AppCompatActivity() {
     private fun setUpArticleRV(){
         var articles = mutableListOf<Article>()
         var tempArticles = mutableListOf<Article>()
-        val followingObs = graphQlUtil.getArticleByPublication(publication.id).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+        val followingObs = graphQlUtil.getArticleByPublicationID(publication.id).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
         disposables.add(followingObs.subscribe{
 
-            it.data?.getArticlesByPublication?.mapTo(tempArticles, { it -> Article(title = it.title, articleURL =  it.articleURL, date =  it.date.toString(), id= it.id, imageURL = it.imageURL, publication = Publication(id = it.publication.id, name = it.publication.name, profileImageURL=publication.profileImageURL), shoutouts = it.shoutouts)
+            it.data?.getArticlesByPublicationID?.mapTo(tempArticles, { it -> Article(title = it.title, articleURL =  it.articleURL, date =  it.date.toString(), id= it.id, imageURL = it.imageURL, publication = Publication(id = it.publication.id, name = it.publication.name, profileImageURL=publication.profileImageURL), shoutouts = it.shoutouts)
             })
             articles.addAll(tempArticles)
 

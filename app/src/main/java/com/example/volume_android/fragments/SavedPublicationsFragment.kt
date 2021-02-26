@@ -24,7 +24,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 
-class SavedPublicationsFragment(val articles: List<Article>) : Fragment() {
+class SavedPublicationsFragment: Fragment() {
 
     private lateinit var savedArticlesRV: RecyclerView
     private val prefUtils = PrefUtils()
