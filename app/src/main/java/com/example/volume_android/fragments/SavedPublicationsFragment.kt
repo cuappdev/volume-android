@@ -64,10 +64,12 @@ class SavedPublicationsFragment: Fragment() {
                 savedArticlesRV.adapter = SavedArticlesAdapter(savedArticles)
                 val layoutManager = LinearLayoutManager(view.context)
                 savedArticlesRV.layoutManager = layoutManager
+                view.findViewById<Group>(R.id.no_saved_articles_group).visibility = if(savedArticles.isEmpty()) {
+                    View.VISIBLE
+                } else {
+                    View.GONE
+                }
             })
-        }
-        if(savedArticles.isEmpty()) {
-            view.findViewById<Group>(R.id.no_saved_articles_group).visibility = View.VISIBLE
         }
     }
 
