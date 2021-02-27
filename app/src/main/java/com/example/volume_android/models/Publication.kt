@@ -23,7 +23,7 @@ class Publication (
     val slug: String? = "",
     val shoutouts: Double? = 0.0,
     val websiteURL: String? = "",
-    val mostRecentArticle: Article? = null,
+    val mostRecentArticle: Article? = null
 ) : Parcelable {
 
 
