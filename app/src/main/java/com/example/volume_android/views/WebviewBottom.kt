@@ -77,7 +77,6 @@ class WebviewBottom @JvmOverloads constructor(
     }
 
     fun minimize(b: Boolean) {
-
         if (b) {
             this.visibility = View.GONE
         } else {
@@ -109,7 +108,7 @@ class WebviewBottom @JvmOverloads constructor(
     }
 
     fun shareArticle(){
-        shareContent.startAnimation(AnimationUtils.loadAnimation(context ,R.anim.shake));
+        shareContent.startAnimation(AnimationUtils.loadAnimation(context ,R.anim.shake))
         val intent= Intent()
         intent.action=Intent.ACTION_SEND
         intent.putExtra(Intent.EXTRA_TEXT,"Look at this article I found on Volume: ${article.articleURL}")
