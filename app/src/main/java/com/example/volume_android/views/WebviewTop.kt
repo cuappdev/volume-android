@@ -1,18 +1,19 @@
 package com.example.volume_android.views
 
 import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.view.marginBottom
-import androidx.core.view.marginTop
+import androidx.core.content.ContextCompat.startActivity
 import com.example.volume_android.R
 import com.example.volume_android.models.Article
+
 
 class WebviewTop @JvmOverloads constructor(
         context: Context,
@@ -30,7 +31,6 @@ class WebviewTop @JvmOverloads constructor(
         name = findViewById(R.id.webview_article_name)
         readingText = findViewById(R.id.webview_readingtext)
         compass = findViewById(R.id.webview_compass)
-
     }
 
     fun setName(article: Article) {
@@ -38,14 +38,12 @@ class WebviewTop @JvmOverloads constructor(
     }
 
     fun minimize(b: Boolean) {
-
         if (b) {
             val param = name.layoutParams as ViewGroup.MarginLayoutParams
             param.setMargins(0, 20, 0, 10)
             name.layoutParams = param
             readingText.visibility = View.GONE
             compass.visibility = View.INVISIBLE
-
         } else {
             val param = name.layoutParams as ViewGroup.MarginLayoutParams
             param.setMargins(0, 20, 0, 0)
@@ -53,7 +51,5 @@ class WebviewTop @JvmOverloads constructor(
             readingText.visibility = View.VISIBLE
             compass.visibility = View.VISIBLE
         }
-
-
     }
 }
