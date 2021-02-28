@@ -18,6 +18,8 @@
 
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/tab_layout"
+        app:tabMaxWidth="0dp"
+        app:tabGravity="fill"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/creamy_white"
