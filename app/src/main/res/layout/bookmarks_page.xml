@@ -47,7 +47,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/no_saved_articles_group"
-            android:visibility="gone"
+            android:visibility="visible"
             app:constraint_referenced_ids="volume_logo, nothing_to_see, no_saved_articles_text"/>
 
         <ImageView

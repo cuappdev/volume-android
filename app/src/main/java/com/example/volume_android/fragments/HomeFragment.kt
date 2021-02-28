@@ -2,6 +2,7 @@ package com.example.volume_android.fragments
 
 import PrefUtils
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -26,6 +27,8 @@ class HomeFragment : Fragment() {
     private lateinit var otherRV: RecyclerView
     private lateinit var disposables: CompositeDisposable
     private lateinit var graphQlUtil: GraphQlUtil
+    private lateinit var homeView: View
+
     private val prefUtils: PrefUtils = PrefUtils()
 
     companion object {
@@ -37,11 +40,11 @@ class HomeFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater,
                               container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        val view1 = inflater.inflate(R.layout.home_fragment, container, false)
-        val followingPublications = prefUtils.getStringSet("following", mutableSetOf())?.toMutableList()
+        homeView = inflater.inflate(R.layout.home_fragment, container, false)
         disposables = CompositeDisposable()
         graphQlUtil = GraphQlUtil()
 
+        val followingPublications = prefUtils.getStringSet("following", mutableSetOf())?.toMutableList()
         // Get the trending articles for Big Read section
         val trendingArticles = mutableListOf<Article>()
         val trendingArticlesId = mutableListOf<String>()
@@ -68,9 +71,9 @@ class HomeFragment : Fragment() {
                     trendingArticlesId.add(rawArticle.id)
                 }
             }
-            bigRedRv = view1.findViewById(R.id.big_red_rv)
+            bigRedRv = homeView.findViewById(R.id.big_red_rv)
             bigRedRv.adapter = BigReadHomeAdapter(trendingArticles)
-            val linearLayoutManager = LinearLayoutManager(view1.context)
+            val linearLayoutManager = LinearLayoutManager(homeView.context)
             linearLayoutManager.orientation = LinearLayoutManager.HORIZONTAL
             bigRedRv.layoutManager = linearLayoutManager
         })
@@ -106,10 +109,10 @@ class HomeFragment : Fragment() {
                                         compareByDescending {
                                     article -> article.date
                                 }) as MutableList<Article>
-                                followingRv = view1.findViewById(R.id.follwing_rv)
-                                followingRv.layoutManager = LinearLayoutManager(view1.context)
+                                followingRv = homeView.findViewById(R.id.follwing_rv)
+                                followingRv.layoutManager = LinearLayoutManager(homeView.context)
                                 followingRv.adapter = HomeFollowingArticleAdapters(
-                                        followingArticles.take(NUMBER_OF_FOLLOWING_ARTICLES)
+                                        followingArticles.take(NUMBER_OF_FOLLOWING_ARTICLES) as MutableList<Article>
                                 )
                                 followingArticles =
                                         if (followingArticles.size < NUMBER_OF_FOLLOWING_ARTICLES) {
@@ -123,7 +126,6 @@ class HomeFragment : Fragment() {
                 })
             }
         }
-        
         // Get the articles for the other section, first taken from
         // publications the user doesn't follow then so to make up the difference
         // of the amount needed.
@@ -174,20 +176,22 @@ class HomeFragment : Fragment() {
                                 otherArticles.addAll(followingArticles.take(
                                         NUMBER_OF_OTHER_ARTICLES - otherArticles.size))
                             }
-                            otherRV = view1.findViewById(R.id.other_articlesrv)
-                            otherRV.layoutManager = LinearLayoutManager(view1.context)
+                            otherRV = homeView.findViewById(R.id.other_articlesrv)
+                            otherRV.layoutManager = LinearLayoutManager(homeView.context)
                             otherRV.adapter = HomeOtherArticleAdapter(otherArticles.shuffled())
                         }
                     }
                 })
             }
         })
-        if (followingPublications?.isEmpty() == true) {
-            view1.findViewById<Group>(R.id.following_group).visibility = View.GONE
+        if(followingPublications?.isEmpty() == true) {
+            homeView.findViewById<Group>(R.id.following_group).visibility = View.INVISIBLE
+            homeView.findViewById<Group>(R.id.not_following_group).visibility = View.VISIBLE
         } else {
-            view1.findViewById<Group>(R.id.following_group).visibility = View.VISIBLE
+            homeView.findViewById<Group>(R.id.following_group).visibility = View.VISIBLE
+            homeView.findViewById<Group>(R.id.not_following_group).visibility = View.GONE
         }
-        return view1
+        return homeView
     }
 
     override fun onDestroy() {

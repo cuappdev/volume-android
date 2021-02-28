@@ -44,7 +44,7 @@ class WebviewTop @JvmOverloads constructor(
             param.setMargins(0, 20, 0, 10)
             name.layoutParams = param
             readingText.visibility = View.GONE
-            compass.visibility = View.GONE
+            compass.visibility = View.INVISIBLE
 
         } else {
             val param = name.layoutParams as ViewGroup.MarginLayoutParams

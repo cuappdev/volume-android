@@ -112,7 +112,7 @@ class WebviewBottom @JvmOverloads constructor(
         shareContent.startAnimation(AnimationUtils.loadAnimation(context ,R.anim.shake));
         val intent= Intent()
         intent.action=Intent.ACTION_SEND
-        intent.putExtra(Intent.EXTRA_TEXT,article.articleURL)
+        intent.putExtra(Intent.EXTRA_TEXT,"Look at this article I found on Volume: ${article.articleURL}")
         intent.type="text/plain"
         context.startActivity(Intent.createChooser(intent,"Share To:"))
     }

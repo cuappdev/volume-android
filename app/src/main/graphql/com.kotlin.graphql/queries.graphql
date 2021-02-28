@@ -27,6 +27,10 @@ query AllPublications{
         slug
         shoutouts
         websiteURL
+        socialURLs{
+            social
+            URL
+        }
         mostRecentArticle{
             id
             articleURL
@@ -37,8 +41,7 @@ query AllPublications{
     }
 }
 
-query PublicationById ($id: String!){
-
+query PublicationByID($id: String!){
     getPublicationByID(id:$id){
         id
         backgroundImageURL
@@ -50,6 +53,10 @@ query PublicationById ($id: String!){
         slug
         shoutouts
         websiteURL
+        socialURLs{
+            social
+            URL
+        }
         mostRecentArticle{
             id
             articleURL
@@ -58,7 +65,32 @@ query PublicationById ($id: String!){
             shoutouts
         }
     }
+}
 
+query PublicationsByIDs($ids: [String!]!){
+    getPublicationsByIDs(ids:$ids){
+        id
+        backgroundImageURL
+        bio
+        name
+        profileImageURL
+        rssName
+        rssURL
+        slug
+        shoutouts
+        websiteURL
+        socialURLs{
+            social
+            URL
+        }
+        mostRecentArticle{
+            id
+            articleURL
+            imageURL
+            title
+            shoutouts
+        }
+    }
 }
 
 query TrendingArticles ($limit: Float){
