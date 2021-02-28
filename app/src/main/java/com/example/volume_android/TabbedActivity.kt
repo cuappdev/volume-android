@@ -19,7 +19,7 @@ class TabbedActivity : AppCompatActivity() {
         setContentView(R.layout.tabbed_activity)
         viewPager = findViewById(R.id.view_pager_fragments)
         tabbedLayout = findViewById(R.id.tab_layout)
-        viewPager.adapter = CustomPagerAdapter(supportFragmentManager)
+        viewPager.adapter = CustomPagerAdapter(supportFragmentManager, tabbedLayout.tabCount)
         tabbedLayout.setupWithViewPager(viewPager)
 
         for (i in 0 until tabbedLayout.tabCount) {
@@ -32,8 +32,6 @@ class TabbedActivity : AppCompatActivity() {
             if(i==2) {
                 tabbedLayout.getTabAt(i)?.setIcon(R.drawable.ic_bookmark_gray)
             }
-
-
         }
 
         viewPager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {

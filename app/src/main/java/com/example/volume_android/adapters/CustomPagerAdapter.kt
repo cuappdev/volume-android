@@ -7,14 +7,11 @@ import com.example.volume_android.fragments.HomeFragment
 import com.example.volume_android.fragments.PublicationsFragment
 import com.example.volume_android.fragments.SavedPublicationsFragment
 
-class CustomPagerAdapter(fragmentManager: FragmentManager) : FragmentPagerAdapter(fragmentManager, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
-
-    companion object {
-        private const val COUNT = 3
-    }
+class CustomPagerAdapter(fragmentManager: FragmentManager, private val numOfTabs: Int)
+    : FragmentPagerAdapter(fragmentManager, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
 
     override fun getCount(): Int {
-        return COUNT
+        return numOfTabs
     }
 
     override fun getItem(position: Int): Fragment {
