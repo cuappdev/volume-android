@@ -2,7 +2,6 @@ package com.example.volume_android.adapters
 
 import android.content.Intent
 import android.os.Build
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,15 +15,11 @@ import com.example.volume_android.R
 import com.example.volume_android.models.Article
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.following_home_card.view.*
-import java.text.SimpleDateFormat
 import java.time.Duration
-import java.time.LocalDate
 import java.time.LocalDateTime
-import java.time.LocalDateTime.ofInstant
-import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 
-class HomeFollowingArticleAdapters(private val articles: List<Article>) :
+class HomeFollowingArticleAdapters(private val articles: MutableList<Article>) :
         RecyclerView.Adapter<HomeFollowingArticleAdapters.FollowingArticleVH>() {
 
     class FollowingArticleVH(itemView: View) : RecyclerView.ViewHolder(itemView) {

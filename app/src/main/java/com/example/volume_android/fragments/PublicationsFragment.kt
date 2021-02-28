@@ -27,61 +27,91 @@ class PublicationsFragment : Fragment() {
     val disposables = CompositeDisposable()
     val prefUtils: PrefUtils = PrefUtils()
     private lateinit var view1: View
-    private var shouldRefreshOnResume = false
 
 
     override fun onCreateView(inflater: LayoutInflater,
                               container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         val view =  inflater.inflate(R.layout.all_publications, container, false)
-
         getFollowingPublications(view)
         getMorePublications(view)
         view1 = view
         return view
     }
 
-    fun getMorePublications(view: View){
-        val otherObs = graphQlUtil.getAllPublications().subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
-        disposables.add(otherObs.subscribe { response ->
-            val others = mutableListOf<Publication>()
-            response.data?.getAllPublications?.mapTo(others, { it ->
-                Publication(id = it.id, backgroundImageURL = it.backgroundImageURL, bio = it.bio, name = it.name, profileImageURL = it.profileImageURL, rssName = it.rssName, rssURL = it.rssURL, slug = it.slug, shoutouts = it.shoutouts, websiteURL = it.websiteURL,
-                        mostRecentArticle = Article(it.mostRecentArticle?.id, it.mostRecentArticle?.title, it.mostRecentArticle?.articleURL, it.mostRecentArticle?.imageURL))
-            })
-
-            morepublicationRV = view.findViewById(R.id.follwing_more_publications_rv)
-            morepublicationRV.adapter = FollowPublicationsAdapter(others, view.context)
-            morepublicationRV.layoutManager = LinearLayoutManager(view.context)
-            morepublicationRV.setHasFixedSize(true)
-
+    fun getMorePublications(view: View) {
+        val moreObs = graphQlUtil
+                .getAllPublications()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+        disposables.add(moreObs.subscribe { response ->
+            val morePublications = mutableListOf<Publication>()
+            val publications = response.data?.getAllPublications
+            if(publications != null) {
+                publications.mapTo(morePublications, { publication ->
+                    Publication(
+                            publication.id,
+                            publication.backgroundImageURL,
+                            publication.bio,
+                            publication.name,
+                            publication.profileImageURL,
+                            publication.rssName,
+                            publication.rssURL,
+                            publication.slug,
+                            publication.shoutouts,
+                            publication.websiteURL,
+                            Article(
+                                    publication.mostRecentArticle?.id,
+                                    publication.mostRecentArticle?.title,
+                                    publication.mostRecentArticle?.articleURL,
+                                    publication.mostRecentArticle?.imageURL))
+                })
+                morepublicationRV = view.findViewById(R.id.follwing_more_publications_rv)
+                morepublicationRV.adapter = FollowPublicationsAdapter(morePublications, view.context)
+                morepublicationRV.layoutManager = LinearLayoutManager(view.context)
+                morepublicationRV.setHasFixedSize(true)
+            }
         })
     }
 
     fun getFollowingPublications(view: View){
-
-        val followingPublicationsIds = prefUtils.getStringSet("following", mutableSetOf())
-        val followingPublications = mutableListOf<Publication>()
-
-        for ( pub in followingPublicationsIds!!){
-            val followingObs = graphQlUtil.getPublicationById(pub).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
-            disposables.add(followingObs.subscribe {
-                val res = it.data?.getPublicationByID
-                if(res != null) {
-                    val publication = Publication(res.id, res.backgroundImageURL,
-                            res.bio, res.name, res.profileImageURL, res.rssName, res.rssURL, res.slug, res.shoutouts, res.websiteURL, Article(res.mostRecentArticle?.id, res.mostRecentArticle?.title, res.mostRecentArticle?.articleURL, res.mostRecentArticle?.imageURL))
-
-                    followingPublications.add(publication)
-                }
-
-                if (pub == followingPublicationsIds.last()) {
+        val followingPublicationsIDs =
+                prefUtils.getStringSet("following", mutableSetOf())?.toMutableList()
+        val followingObs = followingPublicationsIDs?.let {
+            graphQlUtil
+                .getPublicationsByIDs(it)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+        }
+        if (followingObs != null) {
+            disposables.add(followingObs.subscribe { response ->
+                val followingPublications = mutableListOf<Publication>()
+                val publications = response.data?.getPublicationsByIDs
+                if(publications != null) {
+                    publications.mapTo(followingPublications, { publication ->
+                        Publication(
+                                publication.id,
+                                publication.backgroundImageURL,
+                                publication.bio,
+                                publication.name,
+                                publication.profileImageURL,
+                                publication.rssName,
+                                publication.rssURL,
+                                publication.slug,
+                                publication.shoutouts,
+                                publication.websiteURL,
+                                Article(
+                                        publication.mostRecentArticle?.id,
+                                        publication.mostRecentArticle?.title,
+                                        publication.mostRecentArticle?.articleURL,
+                                        publication.mostRecentArticle?.imageURL))
+                    })
                     followpublicationRV = view.findViewById(R.id.following_all_publications_rv)
                     followpublicationRV.adapter = FollowingHorizontalAdapter(followingPublications)
                     val linearLayoutManager = LinearLayoutManager(view.context)
                     linearLayoutManager.orientation = LinearLayoutManager.HORIZONTAL
                     followpublicationRV.layoutManager = linearLayoutManager
                     followpublicationRV.setHasFixedSize(true)
-
                 }
             })
         }

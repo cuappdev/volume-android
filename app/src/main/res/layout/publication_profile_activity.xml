@@ -123,6 +123,7 @@
                 android:id="@+id/insta_holder"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:visibility="visible"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
@@ -132,6 +133,7 @@
                     android:layout_height="wrap_content"
                     android:src="@drawable/ic_insta"
                     app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
@@ -154,6 +156,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
+                android:visibility="visible"
                 app:layout_constraintLeft_toRightOf="@+id/insta_holder"
                 app:layout_constraintTop_toTopOf="parent">
 
@@ -162,8 +165,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@drawable/ic_fb"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent" />
 
                 <TextView
                     android:id="@+id/fb_text"
@@ -184,6 +188,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
+                android:visibility="visible"
                 app:layout_constraintLeft_toRightOf="@+id/fb_holder"
                 app:layout_constraintTop_toTopOf="parent">
 
@@ -193,16 +198,20 @@
                     android:layout_height="wrap_content"
                     android:src="@drawable/ic_link"
                     app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
                     android:id="@+id/link_text"
                     style="@style/helvetica_orange"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
                     android:text="cremedecornell.net"
                     android:textSize="12dp"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:maxEms="10"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintLeft_toRightOf="@+id/link_pic"
                     app:layout_constraintTop_toTopOf="parent" />
