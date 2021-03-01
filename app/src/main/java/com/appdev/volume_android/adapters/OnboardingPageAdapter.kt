@@ -1,11 +1,11 @@
-package com.cornellappdev.android.volume.adapters
+package com.appdev.volume_android.adapters
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
-import com.cornellappdev.android.volume.fragments.OnboardingFrag1
-import com.cornellappdev.android.volume.fragments.OnboardingFrag2
-import com.cornellappdev.android.volume.models.Publication
+import com.appdev.volume_android.fragments.OnboardingFrag1
+import com.appdev.volume_android.fragments.OnboardingFrag2
+import com.appdev.volume_android.models.Publication
 
 private const val COUNT = 3
 

@@ -1,4 +1,4 @@
-package com.cornellappdev.android.volume.models
+package com.appdev.volume_android.models
 
 import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize

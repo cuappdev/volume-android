@@ -1,4 +1,4 @@
-package com.cornellappdev.android.volume.views
+package com.appdev.volume_android.views
 
 import android.content.Context
 import android.content.Intent
@@ -11,8 +11,8 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat.startActivity
-import com.cornellappdev.android.volume.R
-import com.cornellappdev.android.volume.models.Article
+import com.appdev.volume_android.R
+import com.appdev.volume_android.models.Article
 
 
 class WebviewTop @JvmOverloads constructor(

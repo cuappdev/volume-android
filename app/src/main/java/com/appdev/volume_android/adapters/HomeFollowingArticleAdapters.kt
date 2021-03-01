@@ -1,8 +1,7 @@
-package com.cornellappdev.android.volume.adapters
+package com.appdev.volume_android.adapters
 
 import android.content.Intent
 import android.os.Build
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,43 +10,37 @@ import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
-import com.cornellappdev.android.volume.MainActivity
-import com.cornellappdev.android.volume.R
-import com.cornellappdev.android.volume.models.Article
+import com.appdev.volume_android.MainActivity
+import com.appdev.volume_android.R
+import com.appdev.volume_android.models.Article
 import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.saved_article.view.*
-import kotlinx.android.synthetic.main.saved_article.view.article_img_b
-import kotlinx.android.synthetic.main.saved_article.view.article_shout_count_b
-import kotlinx.android.synthetic.main.saved_article.view.article_title_b
-import kotlinx.android.synthetic.main.saved_article.view.desc_holder_b
-import kotlinx.android.synthetic.main.saved_article.view.post_time_b
-import kotlinx.android.synthetic.main.saved_article.view.pub_name_article_layout_b
-import kotlinx.android.synthetic.main.saved_article.view.saved_article_layout
-import kotlinx.android.synthetic.main.saved_article.view.*
+import kotlinx.android.synthetic.main.following_home_card.view.*
 import java.time.Duration
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
-class SavedArticlesAdapter(private val articles: List<Article>) :
-        RecyclerView.Adapter<SavedArticlesAdapter.SavedArticleVH>() {
+class HomeFollowingArticleAdapters(private val articles: MutableList<Article>) :
+        RecyclerView.Adapter<HomeFollowingArticleAdapters.FollowingArticleVH>() {
 
-    class SavedArticleVH(itemView : View) : RecyclerView.ViewHolder(itemView) {
-        val pubName: TextView = itemView.pub_name_article_layout_b
-        val articleTitle : TextView = itemView.article_title_b
-        val articleImg : ImageView = itemView.article_img_b
-        val postTime: TextView = itemView.post_time_b
-        val shoutoutCount: TextView = itemView.article_shout_count_b
-        val layout: ConstraintLayout = itemView.desc_holder_b
-        val layoutMain: ConstraintLayout = itemView.saved_article_layout
+    class FollowingArticleVH(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        val pubName: TextView = itemView.article_pub_name_following
+        val articleTitle : TextView = itemView.article_title_home
+        val articleImg : ImageView = itemView.article_img_home
+        val postTime: TextView = itemView.following_home_time
+        val shoutoutCount: TextView = itemView.following_home_shout_out
+        val dot: TextView = itemView.following_home_dot
+
+        val layout: ConstraintLayout = itemView.following_home_layout
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int):  SavedArticleVH {
-        val itemView = LayoutInflater.from(parent.context).inflate(R.layout.saved_article, parent, false)
-        return SavedArticleVH (itemView)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int):  FollowingArticleVH {
+        val itemView = LayoutInflater.from(parent.context).inflate(R.layout.following_home_card, parent, false)
+
+        return FollowingArticleVH(itemView)
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    override fun onBindViewHolder(holder: SavedArticleVH, position: Int) {
+    override fun onBindViewHolder(holder: FollowingArticleVH, position: Int) {
         val currentItem : Article = articles[position]
         holder.articleTitle.text = currentItem.title
         if(!currentItem.imageURL.isNullOrBlank()) {
@@ -93,11 +86,11 @@ class SavedArticlesAdapter(private val articles: List<Article>) :
             }
         }
         holder.shoutoutCount.text = currentItem.shoutouts?.toInt().toString() + " shout-outs"
-        holder.pubName.text = currentItem.publication?.name
+        holder.pubName.text = currentItem.publication!!.name
 
-        holder.layoutMain.setOnClickListener{
+        holder.layout.setOnClickListener{
             val intent = Intent(holder.layout.context, MainActivity::class.java)
-            intent.putExtra("article",currentItem)
+            intent.putExtra("article", currentItem)
             holder.layout.context?.startActivity(intent)
         }
     }

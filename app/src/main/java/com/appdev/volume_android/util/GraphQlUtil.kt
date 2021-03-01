@@ -1,4 +1,4 @@
-package com.cornellappdev.android.volume.util
+package com.appdev.volume_android.util
 
 import com.apollographql.apollo.ApolloClient
 import com.apollographql.apollo.api.Response

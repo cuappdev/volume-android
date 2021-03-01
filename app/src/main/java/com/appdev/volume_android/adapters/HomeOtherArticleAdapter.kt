@@ -1,4 +1,4 @@
-package com.cornellappdev.android.volume.adapters
+package com.appdev.volume_android.adapters
 
 import android.content.Intent
 import android.os.Build
@@ -11,9 +11,9 @@ import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
-import com.cornellappdev.android.volume.MainActivity
-import com.cornellappdev.android.volume.R
-import com.cornellappdev.android.volume.models.Article
+import com.appdev.volume_android.MainActivity
+import com.appdev.volume_android.R
+import com.appdev.volume_android.models.Article
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.following_home_card.view.following_home_layout
 import kotlinx.android.synthetic.main.home_other_articles.view.*
