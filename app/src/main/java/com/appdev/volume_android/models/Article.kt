@@ -19,4 +19,5 @@ class Article(
     val publication: Publication? = null,
     val date: String? = "",
     val shoutouts: Double? = 0.0,
+    val nsfw: Boolean? = false
 ): Parcelable

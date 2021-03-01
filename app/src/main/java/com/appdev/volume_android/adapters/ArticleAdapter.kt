@@ -1,6 +1,7 @@
 package com.appdev.volume_android.adapters
 
 import android.content.Intent
+import android.graphics.BlurMaskFilter
 import android.os.Build
 import android.util.Log
 import android.view.LayoutInflater
@@ -49,6 +50,12 @@ class ArticleAdapter(private val articles: List<Article>) :
     override fun onBindViewHolder(holder: ArticleVH, position: Int) {
         val currentItem : Article = articles[position]
         holder.articleTitle.text = currentItem.title
+        if(currentItem.nsfw == true) {
+            holder.articleTitle.setLayerType(View.LAYER_TYPE_SOFTWARE, null)
+            val radius: Float = holder.articleTitle.textSize / 3
+            val filter = BlurMaskFilter(radius, BlurMaskFilter.Blur.NORMAL)
+            holder.articleTitle.paint.maskFilter = filter
+        }
         if(currentItem.imageURL != null && currentItem.imageURL != ""){
             Picasso.get().load(currentItem.imageURL).into(holder.articleImg)
         }

@@ -1,6 +1,7 @@
 package com.appdev.volume_android.adapters
 
 import android.content.Intent
+import android.graphics.BlurMaskFilter
 import android.os.Build
 import android.view.LayoutInflater
 import android.view.View
@@ -18,6 +19,7 @@ import kotlinx.android.synthetic.main.following_home_card.view.*
 import java.time.Duration
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
+import kotlin.math.abs
 
 class HomeFollowingArticleAdapters(private val articles: MutableList<Article>) :
         RecyclerView.Adapter<HomeFollowingArticleAdapters.FollowingArticleVH>() {
@@ -43,6 +45,12 @@ class HomeFollowingArticleAdapters(private val articles: MutableList<Article>) :
     override fun onBindViewHolder(holder: FollowingArticleVH, position: Int) {
         val currentItem : Article = articles[position]
         holder.articleTitle.text = currentItem.title
+        if(currentItem.nsfw == true) {
+            holder.articleTitle.setLayerType(View.LAYER_TYPE_SOFTWARE, null)
+            val radius: Float = holder.articleTitle.textSize / 3
+            val filter = BlurMaskFilter(radius, BlurMaskFilter.Blur.NORMAL)
+            holder.articleTitle.paint.maskFilter = filter
+        }
         if(!currentItem.imageURL.isNullOrBlank()) {
             holder.articleImg.visibility = View.VISIBLE
             Picasso.get().load(currentItem.imageURL).into(holder.articleImg)
@@ -52,7 +60,7 @@ class HomeFollowingArticleAdapters(private val articles: MutableList<Article>) :
         val dur = Duration.between(datePublished, LocalDateTime.now())
         if(dur.toDays() < 1) {
             val hours = dur.toHours()
-            holder.postTime.text = "${hours} h ago"
+            holder.postTime.text = "${abs(hours)} h ago"
         }
         if(dur.toDays() in 1..6) {
             holder.postTime.text = if (dur.toDays() <= 1) {
