@@ -64,7 +64,8 @@ class PublicationsFragment : Fragment() {
                                     publication.mostRecentArticle?.id,
                                     publication.mostRecentArticle?.title,
                                     publication.mostRecentArticle?.articleURL,
-                                    publication.mostRecentArticle?.imageURL))
+                                    publication.mostRecentArticle?.imageURL,
+                                    nsfw = publication.mostRecentArticle?.nsfw))
                 })
                 morepublicationRV = view.findViewById(R.id.follwing_more_publications_rv)
                 morepublicationRV.adapter = FollowPublicationsAdapter(morePublications, view.context)

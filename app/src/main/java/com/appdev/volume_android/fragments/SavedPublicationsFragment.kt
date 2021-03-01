@@ -58,7 +58,8 @@ class SavedPublicationsFragment: Fragment() {
                                 name = article.publication.name,
                                 profileImageURL = article.publication.profileImageURL),
                         article.date.toString(),
-                        shoutouts =  article.shoutouts)
+                        shoutouts =  article.shoutouts,
+                        nsfw = article.nsfw)
                 })
                 savedArticlesRV = view.findViewById(R.id.saved_articles_rv)
                 savedArticlesRV.adapter = SavedArticlesAdapter(savedArticles)

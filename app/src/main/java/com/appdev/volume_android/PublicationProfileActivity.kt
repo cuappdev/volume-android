@@ -119,7 +119,8 @@ class PublicationProfileActivity : AppCompatActivity() {
                                 id = article.publication.id,
                                 name = article.publication.name,
                                 profileImageURL = publication.profileImageURL),
-                        shoutouts = article.shoutouts)
+                        shoutouts = article.shoutouts,
+                        nsfw = article.nsfw)
             })
             profile_articles_rv.adapter = ArticleAdapter(articles)
             profile_articles_rv.layoutManager = LinearLayoutManager(this)
@@ -134,7 +135,7 @@ class PublicationProfileActivity : AppCompatActivity() {
         disposables.add(followingObs.subscribe {
             val publication = it.data?.getPublicationByID
             if (publication != null) {
-                for (rawSocial in publication.socialURLs) {
+                for (rawSocial in publication.socials) {
                     if (rawSocial.social == "insta") {
                         instaURL = rawSocial.uRL
                     } else if (rawSocial.social == "facebook") {

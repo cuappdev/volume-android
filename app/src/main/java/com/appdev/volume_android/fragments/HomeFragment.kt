@@ -66,7 +66,8 @@ class HomeFragment : Fragment() {
                                     id = rawArticle.publication.id,
                                     name = rawArticle.publication.name,
                                     profileImageURL = rawArticle.publication.profileImageURL),
-                            shoutouts = rawArticle.shoutouts)
+                            shoutouts = rawArticle.shoutouts,
+                            nsfw = rawArticle.nsfw)
                     )
                     trendingArticlesId.add(rawArticle.id)
                 }
@@ -99,7 +100,8 @@ class HomeFragment : Fragment() {
                                                 id = article.publication.id,
                                                 name = article.publication.name,
                                                 profileImageURL = article.publication.profileImageURL),
-                                        shoutouts = article.shoutouts)
+                                        shoutouts = article.shoutouts,
+                                        nsfw = article.nsfw)
                             })
                             followingArticles = followingArticles.filter { article ->
                                 !trendingArticlesId.contains(article.id)
@@ -165,7 +167,8 @@ class HomeFragment : Fragment() {
                                             name = article.publication.name,
                                             profileImageURL = article.publication.profileImageURL),
                                     article.date.toString(),
-                                    shoutouts = article.shoutouts)
+                                    shoutouts = article.shoutouts,
+                                    nsfw = article.nsfw)
                         })
                         otherArticles = otherArticles.filter { article ->
                             !trendingArticlesId.contains(article.id)

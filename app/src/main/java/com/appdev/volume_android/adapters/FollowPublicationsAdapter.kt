@@ -3,6 +3,7 @@ package com.appdev.volume_android.adapters
 import PrefUtils
 import android.content.Context
 import android.content.Intent
+import android.graphics.BlurMaskFilter
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -52,6 +53,12 @@ class FollowPublicationsAdapter(private val publicationList: List<Publication>,
 
         if(currentItem.profileImageURL != null && currentItem.profileImageURL != ""){
             Picasso.get().load(currentItem.profileImageURL).into(holder.pub_logo)
+        }
+        if(currentItem.mostRecentArticle?.nsfw == true) {
+            holder.pub_quote.setLayerType(View.LAYER_TYPE_SOFTWARE, null)
+            val radius: Float = holder.pub_quote.textSize / 3
+            val filter = BlurMaskFilter(radius, BlurMaskFilter.Blur.NORMAL)
+            holder.pub_quote.paint.maskFilter = filter
         }
 
         holder.pub_name.text = currentItem.name

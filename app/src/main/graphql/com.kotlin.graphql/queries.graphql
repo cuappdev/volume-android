@@ -7,6 +7,7 @@ query AllArticles{
             name
             profileImageURL
         }
+        nsfw
         articleURL
         imageURL
         publicationSlug
@@ -27,7 +28,7 @@ query AllPublications{
         slug
         shoutouts
         websiteURL
-        socialURLs{
+        socials{
             social
             URL
         }
@@ -37,6 +38,7 @@ query AllPublications{
             imageURL
             title
             shoutouts
+            nsfw
         }
     }
 }
@@ -53,7 +55,7 @@ query PublicationByID($id: String!){
         slug
         shoutouts
         websiteURL
-        socialURLs{
+        socials{
             social
             URL
         }
@@ -63,6 +65,7 @@ query PublicationByID($id: String!){
             imageURL
             title
             shoutouts
+            nsfw
         }
     }
 }
@@ -79,7 +82,7 @@ query PublicationsByIDs($ids: [String!]!){
         slug
         shoutouts
         websiteURL
-        socialURLs{
+        socials{
             social
             URL
         }
@@ -89,6 +92,7 @@ query PublicationsByIDs($ids: [String!]!){
             imageURL
             title
             shoutouts
+            nsfw
         }
     }
 }
@@ -106,6 +110,7 @@ query TrendingArticles ($limit: Float){
         imageURL
         date
         shoutouts
+        nsfw
     }
 }
 
@@ -122,6 +127,7 @@ query ArticlesByPublicationID($publicationID:String!){
         }
         shoutouts
         title
+        nsfw
     }
 
 }
@@ -139,6 +145,7 @@ query ArticlesByIDs($ids:[String!]!){
         imageURL
         date
         shoutouts
+        nsfw
     }
 }
 
@@ -155,6 +162,7 @@ query ArticlesByPublicationIDs($publicationIDs:[String!]!){
         }
         shoutouts
         title
+        nsfw
     }
 }
 
@@ -181,6 +189,7 @@ query ArticlesAfterDate($since: String!){
             profileImageURL
         }
         trendiness
+        nsfw
     }
 }
 
