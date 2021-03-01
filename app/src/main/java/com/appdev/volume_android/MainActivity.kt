@@ -1,4 +1,4 @@
-package com.cornellappdev.android.volume
+package com.appdev.volume_android
 
 import android.os.Bundle
 import android.os.PersistableBundle
@@ -6,10 +6,10 @@ import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.appcompat.app.AppCompatActivity
-import com.cornellappdev.android.volume.models.Article
-import com.cornellappdev.android.volume.views.ObservableWebView
-import com.cornellappdev.android.volume.views.WebviewBottom
-import com.cornellappdev.android.volume.views.WebviewTop
+import com.appdev.volume_android.models.Article
+import com.appdev.volume_android.views.ObservableWebView
+import com.appdev.volume_android.views.WebviewBottom
+import com.appdev.volume_android.views.WebviewTop
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {

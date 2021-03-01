@@ -1,50 +1,55 @@
-package com.cornellappdev.android.volume.adapters
+package com.appdev.volume_android.adapters
 
 import android.content.Intent
 import android.os.Build
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.RequiresApi
+import androidx.cardview.widget.CardView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
-import com.cornellappdev.android.volume.MainActivity
-import com.cornellappdev.android.volume.R
-import com.cornellappdev.android.volume.models.Article
+import com.appdev.volume_android.MainActivity
+import com.appdev.volume_android.R
+import com.appdev.volume_android.models.Article
 import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.following_home_card.view.*
+import kotlinx.android.synthetic.main.article_card.view.*
 import java.time.Duration
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
-class HomeFollowingArticleAdapters(private val articles: MutableList<Article>) :
-        RecyclerView.Adapter<HomeFollowingArticleAdapters.FollowingArticleVH>() {
+class ArticleAdapter(private val articles: List<Article>) :
+        RecyclerView.Adapter<ArticleAdapter.ArticleVH>() {
 
-    class FollowingArticleVH(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val pubName: TextView = itemView.article_pub_name_following
-        val articleTitle : TextView = itemView.article_title_home
-        val articleImg : ImageView = itemView.article_img_home
-        val postTime: TextView = itemView.following_home_time
-        val shoutoutCount: TextView = itemView.following_home_shout_out
-        val dot: TextView = itemView.following_home_dot
+    class ArticleVH(itemView : View) : RecyclerView.ViewHolder(itemView){
 
-        val layout: ConstraintLayout = itemView.following_home_layout
+        val articleTitle : TextView = itemView.article_title
+        val articleImg : ImageView = itemView.article_img
+        val postTime: TextView = itemView.post_time
+        val shoutoutCount: TextView = itemView.article_shout_count
+
+        val layout: ConstraintLayout = itemView.article_layout
+
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int):  FollowingArticleVH {
-        val itemView = LayoutInflater.from(parent.context).inflate(R.layout.following_home_card, parent, false)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ArticleVH {
+        val itemView = LayoutInflater.from(parent.context).inflate(R.layout.article_card, parent, false)
+        return ArticleVH(itemView)
 
-        return FollowingArticleVH(itemView)
+    }
+
+    override fun getItemCount(): Int {
+        return articles.size
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    override fun onBindViewHolder(holder: FollowingArticleVH, position: Int) {
+    override fun onBindViewHolder(holder: ArticleVH, position: Int) {
         val currentItem : Article = articles[position]
         holder.articleTitle.text = currentItem.title
-        if(!currentItem.imageURL.isNullOrBlank()) {
-            holder.articleImg.visibility = View.VISIBLE
+        if(currentItem.imageURL != null && currentItem.imageURL != ""){
             Picasso.get().load(currentItem.imageURL).into(holder.articleImg)
         }
         val format = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
@@ -86,16 +91,10 @@ class HomeFollowingArticleAdapters(private val articles: MutableList<Article>) :
             }
         }
         holder.shoutoutCount.text = currentItem.shoutouts?.toInt().toString() + " shout-outs"
-        holder.pubName.text = currentItem.publication!!.name
-
         holder.layout.setOnClickListener{
             val intent = Intent(holder.layout.context, MainActivity::class.java)
-            intent.putExtra("article", currentItem)
+            intent.putExtra("article",currentItem)
             holder.layout.context?.startActivity(intent)
         }
-    }
-
-    override fun getItemCount(): Int {
-        return articles.size
     }
 }

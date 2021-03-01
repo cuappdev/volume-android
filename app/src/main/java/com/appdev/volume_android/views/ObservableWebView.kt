@@ -1,11 +1,11 @@
-package com.cornellappdev.android.volume.views
+package com.appdev.volume_android.views
 
 import android.content.Context
 import android.util.AttributeSet
 import android.util.Log
 import android.view.View
 import android.webkit.WebView
-import com.cornellappdev.android.volume.R
+import com.appdev.volume_android.R
 import kotlinx.android.synthetic.main.activity_main.view.*
 
 class ObservableWebView @JvmOverloads constructor(

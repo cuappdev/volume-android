@@ -1,4 +1,4 @@
-package com.cornellappdev.android.volume;
+package com.appdev.volume_android;
 
 import org.junit.Test;
 

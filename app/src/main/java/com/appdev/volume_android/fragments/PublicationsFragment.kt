@@ -1,4 +1,4 @@
-package com.cornellappdev.android.volume.fragments
+package com.appdev.volume_android.fragments
 
 import PrefUtils
 import android.os.Bundle
@@ -8,12 +8,12 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.cornellappdev.android.volume.R
-import com.cornellappdev.android.volume.adapters.FollowPublicationsAdapter
-import com.cornellappdev.android.volume.adapters.FollowingHorizontalAdapter
-import com.cornellappdev.android.volume.models.Article
-import com.cornellappdev.android.volume.models.Publication
-import com.cornellappdev.android.volume.util.GraphQlUtil
+import com.appdev.volume_android.R
+import com.appdev.volume_android.adapters.FollowPublicationsAdapter
+import com.appdev.volume_android.adapters.FollowingHorizontalAdapter
+import com.appdev.volume_android.models.Article
+import com.appdev.volume_android.models.Publication
+import com.appdev.volume_android.util.GraphQlUtil
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
