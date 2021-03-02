@@ -13,7 +13,7 @@ import okhttp3.logging.HttpLoggingInterceptor
 
 class GraphQlUtil {
 
-    private val BASE_URL = "http://volume-dev.cornellappdev.com/graphql"
+    private val BASE_URL = "http://volume-backend.cornellappdev.com/graphql"
     private var client : ApolloClient
 
     init {
