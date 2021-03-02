@@ -50,7 +50,7 @@ class BigReadHomeAdapter(private val articles: List<Article>) :
     override fun onBindViewHolder(holder: BigReadArticleVH, position: Int) {
         val currentItem : Article = articles[position]
         holder.articleTitle.text = currentItem.title
-        currentItem.let { Article.applyNSFWFilter(it, holder.articleTitle) }
+        Article.applyNSFWFilter(currentItem, holder.articleTitle)
         if(!currentItem.imageURL.isNullOrEmpty()){
             Picasso.get().load(currentItem.imageURL).into(holder.articleImg)
         } else if (!currentItem.publication?.profileImageURL.isNullOrEmpty()) {
