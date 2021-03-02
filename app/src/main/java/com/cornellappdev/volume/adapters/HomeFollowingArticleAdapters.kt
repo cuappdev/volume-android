@@ -1,9 +1,8 @@
-package com.appdev.volume_android.adapters
+package com.cornellappdev.volume.adapters
 
 import android.content.Intent
 import android.graphics.BlurMaskFilter
 import android.os.Build
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,36 +11,38 @@ import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
-import com.appdev.volume_android.MainActivity
-import com.appdev.volume_android.R
-import com.appdev.volume_android.models.Article
+import com.cornellappdev.volume.MainActivity
+import com.cornellappdev.volume.R
+import com.cornellappdev.volume.models.Article
 import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.following_home_card.view.following_home_layout
-import kotlinx.android.synthetic.main.home_other_articles.view.*
+import kotlinx.android.synthetic.main.following_home_card.view.*
 import java.time.Duration
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
+import kotlin.math.abs
 
-class HomeOtherArticleAdapter(private val articles: List<Article>) :
-        RecyclerView.Adapter<HomeOtherArticleAdapter.OtherArticleVH>() {
+class HomeFollowingArticleAdapters(private val articles: MutableList<Article>) :
+        RecyclerView.Adapter<HomeFollowingArticleAdapters.FollowingArticleVH>() {
 
-    class OtherArticleVH(itemView : View) : RecyclerView.ViewHolder(itemView) {
-        val pubName: TextView = itemView.article_pub_name_following_o
-        val articleTitle : TextView = itemView.article_title_home_o
-        val articleImg : ImageView = itemView.article_img_home_o
-        val postTime: TextView = itemView.following_home_time_o
-        val shoutoutCount: TextView = itemView.following_home_shout_out_o
+    class FollowingArticleVH(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        val pubName: TextView = itemView.article_pub_name_following
+        val articleTitle : TextView = itemView.article_title_home
+        val articleImg : ImageView = itemView.article_img_home
+        val postTime: TextView = itemView.following_home_time
+        val shoutoutCount: TextView = itemView.following_home_shout_out
+        val dot: TextView = itemView.following_home_dot
+
         val layout: ConstraintLayout = itemView.following_home_layout
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int):  OtherArticleVH {
-        val itemView = LayoutInflater.from(parent.context).inflate(R.layout.home_other_articles, parent, false)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int):  FollowingArticleVH {
+        val itemView = LayoutInflater.from(parent.context).inflate(R.layout.following_home_card, parent, false)
 
-        return OtherArticleVH (itemView)
+        return FollowingArticleVH(itemView)
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    override fun onBindViewHolder(holder: OtherArticleVH, position: Int) {
+    override fun onBindViewHolder(holder: FollowingArticleVH, position: Int) {
         val currentItem : Article = articles[position]
         holder.articleTitle.text = currentItem.title
         if(currentItem.nsfw == true) {
@@ -59,7 +60,7 @@ class HomeOtherArticleAdapter(private val articles: List<Article>) :
         val dur = Duration.between(datePublished, LocalDateTime.now())
         if(dur.toDays() < 1) {
             val hours = dur.toHours()
-            holder.postTime.text = "${hours} h ago"
+            holder.postTime.text = "${abs(hours)} h ago"
         }
         if(dur.toDays() in 1..6) {
             holder.postTime.text = if (dur.toDays() <= 1) {
@@ -97,7 +98,7 @@ class HomeOtherArticleAdapter(private val articles: List<Article>) :
 
         holder.layout.setOnClickListener{
             val intent = Intent(holder.layout.context, MainActivity::class.java)
-            intent.putExtra("article",currentItem)
+            intent.putExtra("article", currentItem)
             holder.layout.context?.startActivity(intent)
         }
     }

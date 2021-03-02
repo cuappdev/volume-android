@@ -1,4 +1,4 @@
-package com.appdev.volume_android;
+package com.cornellappdev.volume;
 
 import android.content.Context;
 
@@ -22,6 +22,6 @@ public class ExampleInstrumentedTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
 
-        assertEquals("com.appdev.volume_android", appContext.getPackageName());
+        assertEquals("com.cornellappdev.volume", appContext.getPackageName());
     }
 }

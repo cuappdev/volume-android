@@ -1,12 +1,12 @@
-package com.appdev.volume_android
+package com.cornellappdev.volume
 
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager.widget.ViewPager
-import com.appdev.volume_android.adapters.CustomPagerAdapter
-import com.appdev.volume_android.models.Article
-import com.appdev.volume_android.models.Publication
+import com.cornellappdev.volume.adapters.CustomPagerAdapter
+import com.cornellappdev.volume.models.Article
+import com.cornellappdev.volume.models.Publication
 import com.google.android.material.tabs.TabLayout
 
 class TabbedActivity : AppCompatActivity() {

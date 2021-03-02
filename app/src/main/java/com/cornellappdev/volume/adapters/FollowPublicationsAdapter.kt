@@ -1,4 +1,4 @@
-package com.appdev.volume_android.adapters
+package com.cornellappdev.volume.adapters
 
 import PrefUtils
 import android.content.Context
@@ -13,9 +13,9 @@ import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
-import com.appdev.volume_android.PublicationProfileActivity
-import com.appdev.volume_android.R
-import com.appdev.volume_android.models.Publication
+import com.cornellappdev.volume.PublicationProfileActivity
+import com.cornellappdev.volume.R
+import com.cornellappdev.volume.models.Publication
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.publication_card.view.*
 import kotlinx.android.synthetic.main.publication_profile_activity.*

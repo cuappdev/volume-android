@@ -1,4 +1,4 @@
-package com.appdev.volume_android.views
+package com.cornellappdev.volume.views
 
 import PrefUtils
 import android.content.Context
@@ -13,12 +13,12 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.appdev.volume_android.PublicationProfileActivity
-import com.appdev.volume_android.R
-import com.appdev.volume_android.adapters.FollowPublicationsAdapter
-import com.appdev.volume_android.models.Article
-import com.appdev.volume_android.models.Publication
-import com.appdev.volume_android.util.GraphQlUtil
+import com.cornellappdev.volume.PublicationProfileActivity
+import com.cornellappdev.volume.R
+import com.cornellappdev.volume.adapters.FollowPublicationsAdapter
+import com.cornellappdev.volume.models.Article
+import com.cornellappdev.volume.models.Publication
+import com.cornellappdev.volume.util.GraphQlUtil
 import com.squareup.picasso.Picasso
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable

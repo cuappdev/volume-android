@@ -1,4 +1,4 @@
-package com.appdev.volume_android.adapters
+package com.cornellappdev.volume.adapters
 
 import android.content.Intent
 import android.graphics.BlurMaskFilter
@@ -13,9 +13,9 @@ import androidx.annotation.RequiresApi
 import androidx.cardview.widget.CardView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
-import com.appdev.volume_android.MainActivity
-import com.appdev.volume_android.R
-import com.appdev.volume_android.models.Article
+import com.cornellappdev.volume.MainActivity
+import com.cornellappdev.volume.R
+import com.cornellappdev.volume.models.Article
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.article_card.view.*
 import java.time.Duration
