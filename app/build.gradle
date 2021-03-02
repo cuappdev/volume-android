@@ -8,12 +8,11 @@ android {
     buildToolsVersion "30.0.2"
 
     defaultConfig {
-        applicationId "com.example.volume_android"
+        applicationId "com.cornellappdev.volume"
         minSdkVersion 23
         targetSdkVersion 30
         versionCode 1
         versionName "1.0"
-
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
         androidExtensions {
@@ -60,7 +59,7 @@ dependencies {
 
     implementation 'com.squareup.okhttp3:okhttp:4.9.0'
     implementation 'com.squareup.okhttp3:logging-interceptor:4.4.0'
-
+    implementation 'androidx.preference:preference-ktx:1.1.1'
     implementation 'com.squareup.picasso:picasso:2.71828'
 
     //RetroFit
