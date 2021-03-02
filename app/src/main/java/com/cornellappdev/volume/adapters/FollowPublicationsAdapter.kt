@@ -15,6 +15,7 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.cornellappdev.volume.PublicationProfileActivity
 import com.cornellappdev.volume.R
+import com.cornellappdev.volume.models.Article
 import com.cornellappdev.volume.models.Publication
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.publication_card.view.*
@@ -54,13 +55,7 @@ class FollowPublicationsAdapter(private val publicationList: List<Publication>,
         if(currentItem.profileImageURL != null && currentItem.profileImageURL != ""){
             Picasso.get().load(currentItem.profileImageURL).into(holder.pub_logo)
         }
-        if(currentItem.mostRecentArticle?.nsfw == true) {
-            holder.pub_quote.setLayerType(View.LAYER_TYPE_SOFTWARE, null)
-            val radius: Float = holder.pub_quote.textSize / 3
-            val filter = BlurMaskFilter(radius, BlurMaskFilter.Blur.NORMAL)
-            holder.pub_quote.paint.maskFilter = filter
-        }
-
+        currentItem.mostRecentArticle?.let { Article.applyNSFWFilter(it, holder.pub_quote) }
         holder.pub_name.text = currentItem.name
         holder.pub_desc.text = currentItem.bio
         holder.pub_quote.text = currentItem.mostRecentArticle?.title
