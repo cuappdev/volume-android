@@ -116,8 +116,7 @@ class HomeFragment : Fragment() {
                                 followingRv.adapter = HomeFollowingArticleAdapters(
                                         followingArticles.take(NUMBER_OF_FOLLOWING_ARTICLES) as MutableList<Article>
                                 )
-                                followingArticles =
-                                        if (followingArticles.size < NUMBER_OF_FOLLOWING_ARTICLES) {
+                                followingArticles = if (followingArticles.size <= NUMBER_OF_FOLLOWING_ARTICLES) {
                                     mutableListOf()
                                 } else {
                                     followingArticles.drop(NUMBER_OF_FOLLOWING_ARTICLES)
