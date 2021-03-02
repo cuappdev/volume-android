@@ -1,4 +1,4 @@
-package com.appdev.volume_android
+package com.cornellappdev.volume
 
 import PrefUtils
 import android.content.Context
@@ -16,9 +16,9 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.viewpager.widget.ViewPager
-import com.appdev.volume_android.adapters.OnboardingPageAdapter
-import com.appdev.volume_android.fragments.HomeFragment
-import com.appdev.volume_android.models.Publication
+import com.cornellappdev.volume.adapters.OnboardingPageAdapter
+import com.cornellappdev.volume.fragments.HomeFragment
+import com.cornellappdev.volume.models.Publication
 
 
 class OnboardingFragHolder : AppCompatActivity() {

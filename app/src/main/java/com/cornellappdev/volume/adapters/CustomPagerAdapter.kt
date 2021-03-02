@@ -1,11 +1,11 @@
-package com.appdev.volume_android.adapters
+package com.cornellappdev.volume.adapters
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
-import com.appdev.volume_android.fragments.HomeFragment
-import com.appdev.volume_android.fragments.PublicationsFragment
-import com.appdev.volume_android.fragments.SavedPublicationsFragment
+import com.cornellappdev.volume.fragments.HomeFragment
+import com.cornellappdev.volume.fragments.PublicationsFragment
+import com.cornellappdev.volume.fragments.SavedPublicationsFragment
 
 class CustomPagerAdapter(fragmentManager: FragmentManager, private val numOfTabs: Int)
     : FragmentPagerAdapter(fragmentManager, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {

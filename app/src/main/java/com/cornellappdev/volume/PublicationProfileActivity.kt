@@ -1,4 +1,4 @@
-package com.appdev.volume_android
+package com.cornellappdev.volume
 
 import PrefUtils
 import android.content.ActivityNotFoundException
@@ -14,10 +14,10 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.appdev.volume_android.adapters.ArticleAdapter
-import com.appdev.volume_android.models.Article
-import com.appdev.volume_android.models.Publication
-import com.appdev.volume_android.util.GraphQlUtil
+import com.cornellappdev.volume.adapters.ArticleAdapter
+import com.cornellappdev.volume.models.Article
+import com.cornellappdev.volume.models.Publication
+import com.cornellappdev.volume.util.GraphQlUtil
 import com.squareup.picasso.Picasso
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable

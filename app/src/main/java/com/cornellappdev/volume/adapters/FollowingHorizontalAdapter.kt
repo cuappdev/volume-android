@@ -1,4 +1,4 @@
-package com.appdev.volume_android.adapters
+package com.cornellappdev.volume.adapters
 
 import android.content.Intent
 import android.view.LayoutInflater
@@ -8,9 +8,9 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
-import com.appdev.volume_android.PublicationProfileActivity
-import com.appdev.volume_android.R
-import com.appdev.volume_android.models.Publication
+import com.cornellappdev.volume.PublicationProfileActivity
+import com.cornellappdev.volume.R
+import com.cornellappdev.volume.models.Publication
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.vertical_circular_publication_card.view.*
 

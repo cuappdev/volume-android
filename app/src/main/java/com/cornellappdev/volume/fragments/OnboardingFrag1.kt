@@ -1,11 +1,11 @@
-package com.appdev.volume_android.fragments
+package com.cornellappdev.volume.fragments
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import com.appdev.volume_android.R
+import com.cornellappdev.volume.R
 
 class OnboardingFrag1 : Fragment() {
 

@@ -1,4 +1,4 @@
-package com.appdev.volume_android.fragments
+package com.cornellappdev.volume.fragments
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -7,12 +7,12 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.appdev.volume_android.R
-import com.appdev.volume_android.adapters.BigReadHomeAdapter
-import com.appdev.volume_android.adapters.FollowPublicationsAdapter
-import com.appdev.volume_android.models.Article
-import com.appdev.volume_android.models.Publication
-import com.appdev.volume_android.util.GraphQlUtil
+import com.cornellappdev.volume.R
+import com.cornellappdev.volume.adapters.BigReadHomeAdapter
+import com.cornellappdev.volume.adapters.FollowPublicationsAdapter
+import com.cornellappdev.volume.models.Article
+import com.cornellappdev.volume.models.Publication
+import com.cornellappdev.volume.util.GraphQlUtil
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
