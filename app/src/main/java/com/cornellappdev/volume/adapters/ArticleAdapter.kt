@@ -18,9 +18,6 @@ import com.cornellappdev.volume.R
 import com.cornellappdev.volume.models.Article
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.article_card.view.*
-import java.time.Duration
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
 
 class ArticleAdapter(private val articles: List<Article>) :
         RecyclerView.Adapter<ArticleAdapter.ArticleVH>() {
@@ -50,8 +47,8 @@ class ArticleAdapter(private val articles: List<Article>) :
     override fun onBindViewHolder(holder: ArticleVH, position: Int) {
         val currentItem : Article = articles[position]
         holder.articleTitle.text = currentItem.title
-        currentItem.let { Article.applyNSFWFilter(it, holder.articleTitle) }
-        if(currentItem.imageURL != null && currentItem.imageURL != ""){
+        Article.applyNSFWFilter(currentItem, holder.articleTitle)
+        if(!currentItem.imageURL.isNullOrBlank()) {
             Picasso.get().load(currentItem.imageURL).into(holder.articleImg)
         }
         Article.setCorrectDateText(currentItem, holder.postTime)

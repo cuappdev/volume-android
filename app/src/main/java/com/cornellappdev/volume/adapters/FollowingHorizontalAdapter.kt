@@ -38,7 +38,7 @@ class FollowingHorizontalAdapter(private val followedPublications: List<Publicat
     override fun onBindViewHolder(holder: FollowHorizontalVH, position: Int) {
         val currentItem : Publication = followedPublications[position]
 
-        if(currentItem.profileImageURL != null && currentItem.profileImageURL != ""){
+        if(!currentItem.profileImageURL.isNullOrBlank()){
             Picasso.get().load(currentItem.profileImageURL).into(holder.pub_logo)
         }
 
