@@ -51,12 +51,7 @@ class SavedArticlesAdapter(private val articles: List<Article>) :
     override fun onBindViewHolder(holder: SavedArticleVH, position: Int) {
         val currentItem : Article = articles[position]
         holder.articleTitle.text = currentItem.title
-        if(currentItem.nsfw == true) {
-            holder.articleTitle.setLayerType(View.LAYER_TYPE_SOFTWARE, null)
-            val radius: Float = holder.articleTitle.textSize / 3
-            val filter = BlurMaskFilter(radius, BlurMaskFilter.Blur.NORMAL)
-            holder.articleTitle.paint.maskFilter = filter
-        }
+        currentItem.let { Article.applyNSFWFilter(it, holder.articleTitle) }
         if(!currentItem.imageURL.isNullOrBlank()) {
             holder.articleImg.visibility = View.VISIBLE
             Picasso.get().load(currentItem.imageURL).into(holder.articleImg)
