@@ -39,9 +39,25 @@ class OnboardingFrag2 (val publications: List<Publication>) : Fragment() {
     private fun loadArticlesLoadRV(view: View) {
         val pubsObs = graphQlUtil.getAllPublications().subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
         disposables.add(pubsObs.subscribe{
-            var allPubs = mutableListOf<Publication>()
-            it.data?.getAllPublications?.mapTo(allPubs, { it -> Publication(it.id, it.backgroundImageURL,
-                    it.bio, it.name, it.profileImageURL, it.rssName, it.rssURL, it.slug, it.shoutouts, it.websiteURL, Article())
+            val allPubs = mutableListOf<Publication>()
+            it.data?.getAllPublications?.mapTo(allPubs, { publication ->
+                Publication(
+                        publication.id,
+                        publication.backgroundImageURL,
+                        publication.bio,
+                        publication.name,
+                        publication.profileImageURL,
+                        publication.rssName,
+                        publication.rssURL,
+                        publication.slug,
+                        publication.shoutouts,
+                        publication.websiteURL,
+                        Article(
+                                publication.mostRecentArticle?.id,
+                                publication.mostRecentArticle?.title,
+                                publication.mostRecentArticle?.articleURL,
+                                publication.mostRecentArticle?.imageURL,
+                                nsfw = publication.mostRecentArticle?.nsfw))
             })
             publicationRV = view.findViewById(R.id.onboarding2_rv)
             publicationRV.adapter = FollowPublicationsAdapter(allPubs, view.context)
