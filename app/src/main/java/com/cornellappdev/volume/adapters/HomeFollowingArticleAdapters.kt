@@ -45,7 +45,7 @@ class HomeFollowingArticleAdapters(private val articles: MutableList<Article>) :
     override fun onBindViewHolder(holder: FollowingArticleVH, position: Int) {
         val currentItem : Article = articles[position]
         holder.articleTitle.text = currentItem.title
-        currentItem.let { Article.applyNSFWFilter(it, holder.articleTitle) }
+        Article.applyNSFWFilter(currentItem, holder.articleTitle)
         if(!currentItem.imageURL.isNullOrBlank()) {
             holder.articleImg.visibility = View.VISIBLE
             Picasso.get().load(currentItem.imageURL).into(holder.articleImg)
