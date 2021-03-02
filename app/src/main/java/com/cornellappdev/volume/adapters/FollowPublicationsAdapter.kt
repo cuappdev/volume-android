@@ -52,7 +52,7 @@ class FollowPublicationsAdapter(private val publicationList: List<Publication>,
         val currentFollowingSet = prefUtils.getStringSet("following", mutableSetOf())?.toMutableSet()
         Log.d("Following Pubs", currentFollowingSet?.size.toString())
 
-        if(currentItem.profileImageURL != null && currentItem.profileImageURL != ""){
+        if(!currentItem.profileImageURL.isNullOrBlank()){
             Picasso.get().load(currentItem.profileImageURL).into(holder.pub_logo)
         }
         currentItem.mostRecentArticle?.let { Article.applyNSFWFilter(it, holder.pub_quote) }
