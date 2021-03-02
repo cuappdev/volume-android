@@ -1,3 +1,15 @@
 <resources>
     <string name="app_name">Volume-Android</string>
+
+    <!-- Date formats for articles -->
+    <string name="h_ago">%1$d h ago</string>
+    <string name="day_ago">1 day ago</string>
+    <string name="days_ago">%1$d days ago</string>
+    <string name="week_ago">1 week ago</string>
+    <string name="weeks_ago">%1$d weeks ago</string>
+    <string name="month_ago">1 month ago</string>
+    <string name="months_ago">%1$d months ago</string>
+    <string name="year_ago">1 year ago</string>
+    <string name="years_ago">%1$d months ago</string>
+
 </resources>

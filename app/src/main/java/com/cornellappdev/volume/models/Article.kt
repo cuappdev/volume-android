@@ -6,6 +6,7 @@ import android.os.Parcelable
 import android.view.View
 import android.widget.TextView
 import androidx.annotation.RequiresApi
+import com.cornellappdev.volume.R
 import kotlinx.android.parcel.Parcelize
 import java.time.Duration
 import java.time.LocalDateTime
