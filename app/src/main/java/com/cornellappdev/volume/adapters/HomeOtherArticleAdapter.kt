@@ -49,44 +49,7 @@ class HomeOtherArticleAdapter(private val articles: List<Article>) :
             holder.articleImg.visibility = View.VISIBLE
             Picasso.get().load(currentItem.imageURL).into(holder.articleImg)
         }
-        val format = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
-        val datePublished = LocalDateTime.parse(currentItem.date, format)
-        val dur = Duration.between(datePublished, LocalDateTime.now())
-        if(dur.toDays() < 1) {
-            val hours = dur.toHours()
-            holder.postTime.text = "${hours} h ago"
-        }
-        if(dur.toDays() in 1..6) {
-            holder.postTime.text = if (dur.toDays() <= 1) {
-                "${dur.toDays()} day ago"
-            } else {
-                "${dur.toDays()} days ago"
-            }
-        }
-        if(dur.toDays() in 7..29) {
-            val weeks = dur.toDays().toInt()/7
-            holder.postTime.text = if(weeks <= 1) {
-                "$weeks week ago"
-            } else {
-                "$weeks weeks ago"
-            }
-        }
-        if(dur.toDays() in 30..364) {
-            val months = dur.toDays()/30
-            holder.postTime.text = if (months <= 1) {
-                "$months month ago"
-            } else {
-                "$months months ago"
-            }
-        }
-        if (dur.toDays() >= 365) {
-            val years = dur.toDays()/365
-            holder.postTime.text = if(years <= 1) {
-                "$years year ago"
-            } else {
-                "$years years ago"
-            }
-        }
+        Article.setCorrectDateText(currentItem, holder.postTime)
         holder.shoutoutCount.text = currentItem.shoutouts?.toInt().toString() + " shout-outs"
         holder.pubName.text = currentItem.publication!!.name
 
