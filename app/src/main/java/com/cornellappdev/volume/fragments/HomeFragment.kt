@@ -1,6 +1,7 @@
 package com.cornellappdev.volume.fragments
 
 import PrefUtils
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -11,6 +12,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.cornellappdev.volume.R
+import com.cornellappdev.volume.TabbedActivity
 import com.cornellappdev.volume.adapters.BigReadHomeAdapter
 import com.cornellappdev.volume.adapters.HomeFollowingArticleAdapters
 import com.cornellappdev.volume.adapters.HomeOtherArticleAdapter
@@ -43,6 +45,13 @@ class HomeFragment : Fragment() {
         homeView = inflater.inflate(R.layout.home_fragment, container, false)
         disposables = CompositeDisposable()
         graphQlUtil = GraphQlUtil()
+
+        val dropperSave = prefUtils.getBoolean("dropper_save", true)
+
+        if(dropperSave) {
+            prefUtils.remove("following")
+            prefUtils.save("dropper_save", false)
+        }
 
         val followingPublications = prefUtils.getStringSet("following", mutableSetOf())?.toMutableList()
         // Get the trending articles for Big Read section
