@@ -46,13 +46,6 @@ class HomeFragment : Fragment() {
         disposables = CompositeDisposable()
         graphQlUtil = GraphQlUtil()
 
-        val dropperSave = prefUtils.getBoolean("dropper_save", true)
-
-        if(dropperSave) {
-            prefUtils.remove("following")
-            prefUtils.save("dropper_save", false)
-        }
-
         val followingPublications = prefUtils.getStringSet("following", mutableSetOf())?.toMutableList()
         // Get the trending articles for Big Read section
         val trendingArticles = mutableListOf<Article>()

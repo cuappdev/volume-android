@@ -39,6 +39,14 @@ class OnboardingFragHolder : AppCompatActivity() {
         setContentView(R.layout.onboarding_holder)
 
         prefUtils = PrefUtils(this)
+
+        val dropperSave = prefUtils.getBoolean("dropper_save", true)
+
+        if(dropperSave) {
+            prefUtils.remove("following")
+            prefUtils.save("dropper_save", false)
+        }
+
         val firstStart = prefUtils.getBoolean("firstStart", true)
 
         if(!firstStart){
