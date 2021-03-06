@@ -55,9 +55,3 @@ local.properties
 .gradle
 build/
 
-# Networking
-/app/src/main/java/com/appdev/volume_android/util/GraphQlUtil.kt
-
-/app/src/main/graphql/com.kotlin.graphql/queries.graphql
-
-/app/src/main/graphql/com.kotlin.graphql/schema.json
