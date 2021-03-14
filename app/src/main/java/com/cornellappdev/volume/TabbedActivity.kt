@@ -2,6 +2,7 @@ package com.cornellappdev.volume
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.cornellappdev.volume.adapters.CustomPagerAdapter
 import com.google.android.material.tabs.TabLayout
@@ -15,11 +16,17 @@ class TabbedActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.tabbed_activity)
+
         viewPager = findViewById(R.id.view_pager_fragments)
+        viewPager.reduceDragSensitivity()
+        viewPager.isUserInputEnabled = true
         tabLayout = findViewById(R.id.tab_layout)
         viewPager.adapter = CustomPagerAdapter(this, tabLayout.tabCount)
         TabLayoutMediator(tabLayout, viewPager) { _, _ ->
         }.attach()
+        tabLayout.getTabAt(0)?.setIcon(R.drawable.ic_volumesvg_orange)
+        tabLayout.getTabAt(1)?.setIcon(R.drawable.ic_book_gray)
+        tabLayout.getTabAt(2)?.setIcon(R.drawable.ic_bookmark_gray)
         tabLayout.addOnTabSelectedListener(object: TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
                 when (tab?.position) {
@@ -50,10 +57,14 @@ class TabbedActivity : AppCompatActivity() {
         })
     }
 
-    override fun onResume() {
-        super.onResume()
-        if (viewPager != null) {
-            viewPager.adapter?.notifyDataSetChanged()
-        }
+    private fun ViewPager2.reduceDragSensitivity() {
+        val recyclerViewField = ViewPager2::class.java.getDeclaredField("mRecyclerView")
+        recyclerViewField.isAccessible = true
+        val recyclerView = recyclerViewField.get(this) as RecyclerView
+
+        val touchSlopField = RecyclerView::class.java.getDeclaredField("mTouchSlop")
+        touchSlopField.isAccessible = true
+        val touchSlop = touchSlopField.get(recyclerView) as Int
+        touchSlopField.set(recyclerView, touchSlop * 3)  // multiplier effects sensitivity of scroll
     }
 }
