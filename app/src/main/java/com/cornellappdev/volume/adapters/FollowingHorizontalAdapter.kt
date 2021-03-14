@@ -14,19 +14,21 @@ import com.cornellappdev.volume.models.Publication
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.vertical_circular_publication_card.view.*
 
-class FollowingHorizontalAdapter(private val followedPublications: List<Publication>) :
+class FollowingHorizontalAdapter(private val followedPublications: MutableList<Publication>) :
         RecyclerView.Adapter<FollowingHorizontalAdapter.FollowHorizontalVH>() {
 
-    class FollowHorizontalVH(itemView : View) : RecyclerView.ViewHolder(itemView){
-
+    class FollowHorizontalVH(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val pub_logo : ImageView = itemView.vertical_publication_logo
         val pub_name : TextView = itemView.vertical_publication_name
         val layout: ConstraintLayout = itemView.vert_cert_layout
-
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FollowHorizontalVH {
-        val itemView = LayoutInflater.from(parent.context).inflate(R.layout.vertical_circular_publication_card, parent, false)
+        val itemView =
+                LayoutInflater.from(parent.context).inflate(
+                        R.layout.vertical_circular_publication_card,
+                        parent,
+                        false)
         return FollowHorizontalVH(itemView)
 
     }
@@ -38,7 +40,7 @@ class FollowingHorizontalAdapter(private val followedPublications: List<Publicat
     override fun onBindViewHolder(holder: FollowHorizontalVH, position: Int) {
         val currentItem : Publication = followedPublications[position]
 
-        if(!currentItem.profileImageURL.isNullOrBlank()){
+        if(!currentItem.profileImageURL.isNullOrBlank()) {
             Picasso.get().load(currentItem.profileImageURL).into(holder.pub_logo)
         }
 
@@ -49,6 +51,15 @@ class FollowingHorizontalAdapter(private val followedPublications: List<Publicat
             intent.putExtra("publication", currentItem)
             holder.layout.context?.startActivity(intent)
         }
+    }
 
+    fun clear() {
+        followedPublications.clear()
+        notifyDataSetChanged()
+    }
+
+    fun addAll(list: List<Publication>) {
+        followedPublications.addAll(list)
+        notifyDataSetChanged()
     }
 }

@@ -1,65 +1,59 @@
 package com.cornellappdev.volume
 
 import android.os.Bundle
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
-import androidx.viewpager.widget.ViewPager
+import androidx.viewpager2.widget.ViewPager2
 import com.cornellappdev.volume.adapters.CustomPagerAdapter
-import com.cornellappdev.volume.models.Article
-import com.cornellappdev.volume.models.Publication
 import com.google.android.material.tabs.TabLayout
+import com.google.android.material.tabs.TabLayoutMediator
 
 class TabbedActivity : AppCompatActivity() {
 
-    private lateinit var viewPager: ViewPager
-    private lateinit var tabbedLayout: TabLayout
+    private lateinit var viewPager: ViewPager2
+    private lateinit var tabLayout: TabLayout
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.tabbed_activity)
         viewPager = findViewById(R.id.view_pager_fragments)
-        tabbedLayout = findViewById(R.id.tab_layout)
-        viewPager.adapter = CustomPagerAdapter(supportFragmentManager, tabbedLayout.tabCount)
-        tabbedLayout.setupWithViewPager(viewPager)
-
-        for (i in 0 until tabbedLayout.tabCount) {
-            if (i == 0){
-                tabbedLayout.getTabAt(i)?.setIcon(R.drawable.ic_volumesvg_orange)
-            }
-            if (i == 1){
-                tabbedLayout.getTabAt(i)?.setIcon(R.drawable.ic_book_gray)
-            }
-            if(i==2) {
-                tabbedLayout.getTabAt(i)?.setIcon(R.drawable.ic_bookmark_gray)
-            }
-        }
-
-        viewPager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
-
-            override fun onPageScrollStateChanged(state: Int) {
-            }
-
-            override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
-            }
-            override fun onPageSelected(position: Int) {
-                when (position) {
+        tabLayout = findViewById(R.id.tab_layout)
+        viewPager.adapter = CustomPagerAdapter(this, tabLayout.tabCount)
+        TabLayoutMediator(tabLayout, viewPager) { _, _ ->
+        }.attach()
+        tabLayout.addOnTabSelectedListener(object: TabLayout.OnTabSelectedListener {
+            override fun onTabSelected(tab: TabLayout.Tab?) {
+                when (tab?.position) {
                     0 -> {
-                        tabbedLayout.getTabAt(0)?.setIcon(R.drawable.ic_volumesvg_orange)
-                        tabbedLayout.getTabAt(1)?.setIcon(R.drawable.ic_book_gray)
-                        tabbedLayout.getTabAt(2)?.setIcon(R.drawable.ic_bookmark_gray)
+                        tabLayout.getTabAt(0)?.setIcon(R.drawable.ic_volumesvg_orange)
+                        tabLayout.getTabAt(1)?.setIcon(R.drawable.ic_book_gray)
+                        tabLayout.getTabAt(2)?.setIcon(R.drawable.ic_bookmark_gray)
                     }
                     1 -> {
-                        tabbedLayout.getTabAt(0)?.setIcon(R.drawable.ic_volumesvg_gray)
-                        tabbedLayout.getTabAt(1)?.setIcon(R.drawable.ic_book_orange)
-                        tabbedLayout.getTabAt(2)?.setIcon(R.drawable.ic_bookmark_gray)
+                        tabLayout.getTabAt(0)?.setIcon(R.drawable.ic_volumesvg_gray)
+                        tabLayout.getTabAt(1)?.setIcon(R.drawable.ic_book_orange)
+                        tabLayout.getTabAt(2)?.setIcon(R.drawable.ic_bookmark_gray)
                     }
-                    2 ->{
-                        tabbedLayout.getTabAt(0)?.setIcon(R.drawable.ic_volumesvg_gray)
-                        tabbedLayout.getTabAt(1)?.setIcon(R.drawable.ic_book_gray)
-                        tabbedLayout.getTabAt(2)?.setIcon(R.drawable.ic_bookmark_orange)}
+                    2 -> {
+                        tabLayout.getTabAt(0)?.setIcon(R.drawable.ic_volumesvg_gray)
+                        tabLayout.getTabAt(1)?.setIcon(R.drawable.ic_book_gray)
+                        tabLayout.getTabAt(2)?.setIcon(R.drawable.ic_bookmark_orange)
+                    }
                 }
             }
 
+            override fun onTabUnselected(tab: TabLayout.Tab?) {
+            }
+
+            override fun onTabReselected(tab: TabLayout.Tab?) {
+            }
+
         })
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (viewPager != null) {
+            viewPager.adapter?.notifyDataSetChanged()
+        }
     }
 }

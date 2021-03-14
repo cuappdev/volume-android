@@ -60,7 +60,7 @@ class PrefUtils {
     }
 
     fun save(key: String, value: Set<String>) {
-        editor.putStringSet(key, value).apply()
+        editor.putStringSet(key, value).commit()
     }
 
     fun getBoolean(key: String, defValue: Boolean) : Boolean {
@@ -89,6 +89,10 @@ class PrefUtils {
         } catch (ex: ClassCastException) {
             preferences.getString(key, defValue.toString())!!.toLong()
         }
+    }
+
+    fun contains(key: String) : Boolean {
+        return preferences.contains(key)
     }
 
     fun getString(key: String, defValue: String) : String? {
