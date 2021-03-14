@@ -31,8 +31,6 @@ class BigReadHomeAdapter(private val articles: List<Article>) :
         val articleImg : ImageView = itemView.vert_img_view
         val postTime: TextView = itemView.big_read_card_layout_time
         val shoutoutCount: TextView = itemView.big_read_card_layout_shoutouts
-        val dot: TextView = itemView.big_read_card_layout_dot
-
         val layout: ConstraintLayout = itemView.big_read_layout
     }
 
