@@ -60,7 +60,7 @@ class PrefUtils {
     }
 
     fun save(key: String, value: Set<String>) {
-        editor.putStringSet(key, value).commit()
+        editor.putStringSet(key, value).apply()
     }
 
     fun getBoolean(key: String, defValue: Boolean) : Boolean {
