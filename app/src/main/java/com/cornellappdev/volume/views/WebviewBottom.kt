@@ -140,7 +140,7 @@ class WebviewBottom @JvmOverloads constructor(
         this.article.id?.let {
             var numOfShoutouts = prefUtils.getInt(it, 0)
             if(numOfShoutouts < MAX_SHOUTOUTS) {
-                shoutOuts.startAnimation(AnimationUtils.loadAnimation(context ,R.anim.shake))
+                shoutOuts.startAnimation(AnimationUtils.loadAnimation(context, R.anim.shake))
                 val likeObs = graphQlUtil.likeArticle(it).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
                 disposables.add(likeObs.subscribe { response ->
                     shoutOutsNum.text = response.data!!.incrementShoutouts.shoutouts.toInt().toString()
