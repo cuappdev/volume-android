@@ -39,7 +39,7 @@ class PublicationsFragment : Fragment() {
         getMorePublications(view)
         val swipeRefreshLayout: SwipeRefreshLayout = view.findViewById(R.id.swipe_container)
         val volumeOrange: Int? = context?.let { ContextCompat.getColor(it, R.color.volumeOrange) }
-        if(volumeOrange != null) {
+        if (volumeOrange != null) {
             swipeRefreshLayout.setColorSchemeColors(volumeOrange, volumeOrange, volumeOrange)
         }
         swipeRefreshLayout.setOnRefreshListener {

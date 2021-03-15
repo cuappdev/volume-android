@@ -44,7 +44,7 @@ class FollowPublicationsAdapter(private val publicationList: List<Publication>,
 
         val prefUtils = PrefUtils(context)
         val currentItem = publicationList[position]
-        if(!currentItem.profileImageURL.isNullOrBlank()) {
+        if (!currentItem.profileImageURL.isNullOrBlank()) {
             Picasso.get().load(currentItem.profileImageURL).into(holder.pub_logo)
         }
         currentItem.mostRecentArticle?.let { Article.applyNSFWFilter(it, holder.pub_quote) }
@@ -55,19 +55,19 @@ class FollowPublicationsAdapter(private val publicationList: List<Publication>,
         val currentFollowingSet =
                 prefUtils.getStringSet("following", mutableSetOf())
 
-        if(currentFollowingSet?.contains(currentItem.id) == true) {
+        if (currentFollowingSet?.contains(currentItem.id) == true) {
             holder.pub_follow.setImageResource(R.drawable.ic_followchecksvg)
         } else {
             holder.pub_follow.setImageResource(R.drawable.ic_followplussvg)
         }
 
         holder.pub_follow.setOnClickListener {
-            if(holder.pub_follow.drawable.constantState == ContextCompat.getDrawable(context,
+            if (holder.pub_follow.drawable.constantState == ContextCompat.getDrawable(context,
                             R.drawable.ic_followplussvg)!!.constantState) {
                 holder.pub_follow.setImageResource(R.drawable.ic_followchecksvg)
                     val tempSet =
                             prefUtils.getStringSet("following", mutableSetOf())?.toMutableSet()
-                    if(tempSet != null) {
+                    if (tempSet != null) {
                         tempSet.add(currentItem.id)
                         prefUtils.save("following", tempSet)
                     }
@@ -75,7 +75,7 @@ class FollowPublicationsAdapter(private val publicationList: List<Publication>,
                 holder.pub_follow.setImageResource(R.drawable.ic_followplussvg)
                 val tempSet =
                         prefUtils.getStringSet("following", mutableSetOf())?.toMutableSet()
-                if(tempSet != null) {
+                if (tempSet != null) {
                     tempSet.remove(currentItem.id)
                     prefUtils.save("following", tempSet)
                 }
