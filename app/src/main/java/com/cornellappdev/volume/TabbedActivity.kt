@@ -13,10 +13,13 @@ class TabbedActivity : AppCompatActivity() {
     private lateinit var viewPager: ViewPager2
     private lateinit var tabLayout: TabLayout
 
+    companion object {
+        private const val VIEWPAGER_SENSITIVITY = 3
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.tabbed_activity)
-
         viewPager = findViewById(R.id.view_pager_fragments)
         viewPager.reduceDragSensitivity()
         viewPager.isUserInputEnabled = true
@@ -61,10 +64,9 @@ class TabbedActivity : AppCompatActivity() {
         val recyclerViewField = ViewPager2::class.java.getDeclaredField("mRecyclerView")
         recyclerViewField.isAccessible = true
         val recyclerView = recyclerViewField.get(this) as RecyclerView
-
         val touchSlopField = RecyclerView::class.java.getDeclaredField("mTouchSlop")
         touchSlopField.isAccessible = true
         val touchSlop = touchSlopField.get(recyclerView) as Int
-        touchSlopField.set(recyclerView, touchSlop * 3)  // multiplier effects sensitivity of scroll
+        touchSlopField.set(recyclerView, touchSlop * VIEWPAGER_SENSITIVITY)  // multiplier effects sensitivity of scroll
     }
 }
