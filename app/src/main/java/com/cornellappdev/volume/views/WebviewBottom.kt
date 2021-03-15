@@ -30,10 +30,6 @@ class WebviewBottom @JvmOverloads constructor(
         defStyleAttr: Int = 0
 ) : ConstraintLayout(context, attrs, defStyleAttr) {
 
-    companion object {
-        private const val MAX_SHOUTOUTS = 5
-    }
-
     private var profileImageView: ImageView
     private var seeMoreButton:Button
     private var bookMark:ImageView
@@ -46,6 +42,10 @@ class WebviewBottom @JvmOverloads constructor(
     private lateinit var article: Article
     private val currentBookmarks =
             prefUtils.getStringSet("savedArticles", mutableSetOf())?.toMutableSet()
+
+    companion object {
+        private const val MAX_SHOUTOUTS = 5
+    }
 
     init {
         LayoutInflater.from(context).inflate(R.layout.bottom_webview_actions, this, true)

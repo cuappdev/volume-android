@@ -24,13 +24,13 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 
 class HomeFragment : Fragment() {
+
     private lateinit var bigRedRv: RecyclerView
     private lateinit var followingRv: RecyclerView
     private lateinit var otherRV: RecyclerView
     private lateinit var disposables: CompositeDisposable
     private lateinit var graphQlUtil: GraphQlUtil
     private lateinit var homeView: View
-
     private val prefUtils: PrefUtils = PrefUtils()
 
     companion object {
