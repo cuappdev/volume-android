@@ -59,7 +59,7 @@ class WebviewBottom @JvmOverloads constructor(
     }
 
     fun setUpView() {
-        if(!article.publication?.profileImageURL.isNullOrBlank()) {
+        if (!article.publication?.profileImageURL.isNullOrBlank()) {
             Picasso.get().load(article.publication?.profileImageURL).into(profileImageView)
         }
         val articleFreshObs =
@@ -74,7 +74,7 @@ class WebviewBottom @JvmOverloads constructor(
         }
         shoutOutsNum.text = article.shoutouts?.toInt().toString()
         if (currentBookmarks != null) {
-            if(currentBookmarks.contains(article.id)) {
+            if (currentBookmarks.contains(article.id)) {
                 bookMark.setImageResource(R.drawable.orange_shoutout_svg)
             } else {
                 bookMark.setImageResource(R.drawable.ic_black_bookmarksvg)
@@ -85,7 +85,7 @@ class WebviewBottom @JvmOverloads constructor(
         seeMoreButton.setOnClickListener { publicationIntent() }
         shareContent.setOnClickListener { shareArticle() }
         article.id?.let {
-            if(prefUtils.getInt(it, 0) >= MAX_SHOUTOUTS) {
+            if (prefUtils.getInt(it, 0) >= MAX_SHOUTOUTS) {
                 shoutOuts.setImageResource(R.drawable.filled_shoutout)
             } else {
                 shoutOuts.setOnClickListener { likeArticle() }
@@ -109,7 +109,7 @@ class WebviewBottom @JvmOverloads constructor(
 
     fun bookmarkArticle() {
         if (currentBookmarks != null) {
-            if(!currentBookmarks.contains(article.id)) {
+            if (!currentBookmarks.contains(article.id)) {
                 article.id?.let { currentBookmarks.add(it) }
                 bookMark.startAnimation(AnimationUtils.loadAnimation(context ,R.anim.shake));
                 bookMark.setImageResource(R.drawable.orange_shoutout_svg)
@@ -139,16 +139,19 @@ class WebviewBottom @JvmOverloads constructor(
     fun likeArticle() {
         this.article.id?.let {
             var numOfShoutouts = prefUtils.getInt(it, 0)
-            if(numOfShoutouts < MAX_SHOUTOUTS) {
+            if (numOfShoutouts < MAX_SHOUTOUTS) {
                 shoutOuts.startAnimation(AnimationUtils.loadAnimation(context, R.anim.shake))
-                val likeObs = graphQlUtil.likeArticle(it).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+                val likeObs = graphQlUtil
+                        .likeArticle(it)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
                 disposables.add(likeObs.subscribe { response ->
                     shoutOutsNum.text = response.data!!.incrementShoutouts.shoutouts.toInt().toString()
                 })
                 numOfShoutouts++
                 prefUtils.save(it, numOfShoutouts)
             }
-            if(numOfShoutouts >= MAX_SHOUTOUTS) {
+            if (numOfShoutouts >= MAX_SHOUTOUTS) {
                 shoutOuts.setImageResource(R.drawable.filled_shoutout)
             }
         }
