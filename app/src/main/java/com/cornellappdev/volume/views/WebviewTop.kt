@@ -34,7 +34,7 @@ class WebviewTop @JvmOverloads constructor(
     }
 
     fun setName(article: Article) {
-        name.text = if (article.title!!.length < 40) article.title else article.title.substring(0, 41) + "..."
+        name.text = article.title
     }
 
     fun minimize(b: Boolean) {
