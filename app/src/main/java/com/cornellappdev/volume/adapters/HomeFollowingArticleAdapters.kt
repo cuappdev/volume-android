@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.cornellappdev.volume.MainActivity
 import com.cornellappdev.volume.R
 import com.cornellappdev.volume.models.Article
+import com.cornellappdev.volume.models.Publication
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.following_home_card.view.*
 import java.time.Duration
@@ -63,5 +64,15 @@ class HomeFollowingArticleAdapters(private val articles: MutableList<Article>) :
 
     override fun getItemCount(): Int {
         return articles.size
+    }
+
+    fun clear() {
+        articles.clear()
+        notifyDataSetChanged()
+    }
+
+    fun addAll(list: List<Article>) {
+        articles.addAll(list)
+        notifyDataSetChanged()
     }
 }

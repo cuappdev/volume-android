@@ -22,7 +22,7 @@ import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
 
-class BigReadHomeAdapter(private val articles: List<Article>) :
+class BigReadHomeAdapter(private val articles: MutableList<Article>) :
         RecyclerView.Adapter<BigReadHomeAdapter.BigReadArticleVH>() {
 
     class BigReadArticleVH(itemView: View) : RecyclerView.ViewHolder(itemView){
@@ -37,7 +37,6 @@ class BigReadHomeAdapter(private val articles: List<Article>) :
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BigReadArticleVH {
         val itemView = LayoutInflater.from(parent.context).inflate(R.layout.vertical_article_home_card, parent, false)
         return BigReadArticleVH(itemView)
-
     }
 
     override fun getItemCount(): Int {
@@ -69,5 +68,13 @@ class BigReadHomeAdapter(private val articles: List<Article>) :
         }
     }
 
+    fun clear() {
+        articles.clear()
+        notifyDataSetChanged()
+    }
 
+    fun addAll(list: List<Article>) {
+        articles.addAll(list)
+        notifyDataSetChanged()
+    }
 }
