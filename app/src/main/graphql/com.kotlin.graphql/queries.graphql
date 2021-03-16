@@ -149,6 +149,23 @@ query ArticlesByIDs($ids:[String!]!){
     }
 }
 
+query ArticleByID($id:String!) {
+    getArticleByID(id:$id) {
+        id
+        title
+        publication {
+            id
+            name
+            profileImageURL
+        }
+        articleURL
+        imageURL
+        date
+        shoutouts
+        nsfw
+    }
+}
+
 query ArticlesByPublicationIDs($publicationIDs:[String!]!){
     getArticlesByPublicationIDs(publicationIDs:$publicationIDs){
         id

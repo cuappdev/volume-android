@@ -49,9 +49,10 @@ class OnboardingFragHolder : AppCompatActivity() {
 
         val firstStart = prefUtils.getBoolean("firstStart", true)
 
-        if(!firstStart){
+        if (!firstStart) {
             val intent = Intent(this, TabbedActivity::class.java)
-            this?.startActivity(intent)
+            this.startActivity(intent)
+            finish()
         }
 
 

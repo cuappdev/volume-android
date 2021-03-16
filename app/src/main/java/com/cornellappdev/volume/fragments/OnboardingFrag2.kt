@@ -8,7 +8,6 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.cornellappdev.volume.R
-import com.cornellappdev.volume.adapters.BigReadHomeAdapter
 import com.cornellappdev.volume.adapters.FollowPublicationsAdapter
 import com.cornellappdev.volume.models.Article
 import com.cornellappdev.volume.models.Publication

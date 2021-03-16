@@ -39,9 +39,13 @@ class WebviewBottom @JvmOverloads constructor(
     private var prefUtils = PrefUtils()
     private var graphQlUtil = GraphQlUtil()
     private var disposables = CompositeDisposable()
-
     private lateinit var article: Article
-    val currentBookmarks = prefUtils.getStringSet("savedArticles", mutableSetOf())?.toMutableSet()
+    private val currentBookmarks =
+            prefUtils.getStringSet("savedArticles", mutableSetOf())?.toMutableSet()
+
+    companion object {
+        private const val MAX_SHOUTOUTS = 5
+    }
 
     init {
         LayoutInflater.from(context).inflate(R.layout.bottom_webview_actions, this, true)
@@ -54,26 +58,39 @@ class WebviewBottom @JvmOverloads constructor(
         prefUtils = PrefUtils(context)
     }
 
-    fun setUpView(){
-        if(article.publication?.profileImageURL != null && article.publication?.profileImageURL != ""){
+    fun setUpView() {
+        if (!article.publication?.profileImageURL.isNullOrBlank()) {
             Picasso.get().load(article.publication?.profileImageURL).into(profileImageView)
         }
+        val articleFreshObs =
+                article.id?.let { graphQlUtil
+                        .getArticleByID(it)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread()) }
+        if (articleFreshObs != null) {
+            disposables.add(articleFreshObs.subscribe { response ->
+                shoutOutsNum.text = response.data?.getArticleByID?.shoutouts?.toInt().toString()
+            })
+        }
         shoutOutsNum.text = article.shoutouts?.toInt().toString()
-
         if (currentBookmarks != null) {
-            if(currentBookmarks.contains(article.id)){
+            if (currentBookmarks.contains(article.id)) {
                 bookMark.setImageResource(R.drawable.orange_shoutout_svg)
-            }
-            else{
+            } else {
                 bookMark.setImageResource(R.drawable.ic_black_bookmarksvg)
             }
             prefUtils.save("savedArticles", currentBookmarks)
         }
-        bookMark.setOnClickListener{bookmarkArticle()}
-        seeMoreButton.setOnClickListener {publicationIntent()}
-        shareContent.setOnClickListener {shareArticle()}
-        shoutOuts.setOnClickListener { likeArticle() }
-
+        bookMark.setOnClickListener{ bookmarkArticle() }
+        seeMoreButton.setOnClickListener { publicationIntent() }
+        shareContent.setOnClickListener { shareArticle() }
+        article.id?.let {
+            if (prefUtils.getInt(it, 0) >= MAX_SHOUTOUTS) {
+                shoutOuts.setImageResource(R.drawable.filled_shoutout)
+            } else {
+                shoutOuts.setOnClickListener { likeArticle() }
+            }
+        }
     }
 
     fun minimize(b: Boolean) {
@@ -84,53 +101,58 @@ class WebviewBottom @JvmOverloads constructor(
         }
     }
 
-    fun publicationIntent(){
+    fun publicationIntent() {
         val intent = Intent(context, PublicationProfileActivity::class.java)
         intent.putExtra("publication", article.publication)
         context?.startActivity(intent)
     }
 
-    fun bookmarkArticle(){
+    fun bookmarkArticle() {
         if (currentBookmarks != null) {
-            if(!currentBookmarks.contains(article.id)){
+            if (!currentBookmarks.contains(article.id)) {
                 article.id?.let { currentBookmarks.add(it) }
                 bookMark.startAnimation(AnimationUtils.loadAnimation(context ,R.anim.shake));
                 bookMark.setImageResource(R.drawable.orange_shoutout_svg)
-            }
-            else{
+            } else {
                 currentBookmarks.remove(article.id)
                 bookMark.startAnimation(AnimationUtils.loadAnimation(context ,R.anim.shake));
                 bookMark.setImageResource(R.drawable.ic_black_bookmarksvg)
             }
             prefUtils.save("savedArticles", currentBookmarks)
         }
-        Log.d("WebviewBottom", "Article Pressed")
     }
 
-    fun shareArticle(){
+    fun shareArticle() {
         shareContent.startAnimation(AnimationUtils.loadAnimation(context ,R.anim.shake))
-        val intent= Intent()
-        intent.action=Intent.ACTION_SEND
-        intent.putExtra(Intent.EXTRA_TEXT,"Look at this article I found on Volume: ${article.articleURL}")
-        intent.type="text/plain"
+        val intent = Intent()
+        intent.action = Intent.ACTION_SEND
+        intent.putExtra(Intent.EXTRA_TEXT,
+                "Look at this article I found on Volume: ${article.articleURL}")
+        intent.type = "text/plain"
         context.startActivity(Intent.createChooser(intent,"Share To:"))
     }
 
-    fun setArticle(a: Article){
+    fun setArticle(a: Article) {
         this.article = a
     }
 
-    fun likeArticle(){
+    fun likeArticle() {
         this.article.id?.let {
             var numOfShoutouts = prefUtils.getInt(it, 0)
-            if(numOfShoutouts < 5) {
-                shoutOuts.startAnimation(AnimationUtils.loadAnimation(context ,R.anim.shake))
-                val likeObs = graphQlUtil.likeArticle(it).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+            if (numOfShoutouts < MAX_SHOUTOUTS) {
+                shoutOuts.startAnimation(AnimationUtils.loadAnimation(context, R.anim.shake))
+                val likeObs = graphQlUtil
+                        .likeArticle(it)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
                 disposables.add(likeObs.subscribe { response ->
                     shoutOutsNum.text = response.data!!.incrementShoutouts.shoutouts.toInt().toString()
                 })
                 numOfShoutouts++
                 prefUtils.save(it, numOfShoutouts)
+            }
+            if (numOfShoutouts >= MAX_SHOUTOUTS) {
+                shoutOuts.setImageResource(R.drawable.filled_shoutout)
             }
         }
     }
