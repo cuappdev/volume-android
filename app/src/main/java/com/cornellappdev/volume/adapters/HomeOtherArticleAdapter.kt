@@ -22,7 +22,7 @@ import java.time.Duration
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
-class HomeOtherArticleAdapter(private val articles: List<Article>) :
+class HomeOtherArticleAdapter(private val articles: MutableList<Article>) :
         RecyclerView.Adapter<HomeOtherArticleAdapter.OtherArticleVH>() {
 
     class OtherArticleVH(itemView : View) : RecyclerView.ViewHolder(itemView) {
@@ -62,5 +62,15 @@ class HomeOtherArticleAdapter(private val articles: List<Article>) :
 
     override fun getItemCount(): Int {
         return articles.size
+    }
+
+    fun clear() {
+        articles.clear()
+        notifyDataSetChanged()
+    }
+
+    fun addAll(list: List<Article>) {
+        articles.addAll(list)
+        notifyDataSetChanged()
     }
 }
