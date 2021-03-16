@@ -2,7 +2,6 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/creamy_white"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
@@ -42,7 +41,7 @@
         android:id="@+id/heart"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/orange_shoutout"
+        android:src="@drawable/ic_black_shoutout"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/like_count"

@@ -24,8 +24,8 @@ import io.reactivex.schedulers.Schedulers
 
 class HomeFragment : Fragment() {
 
-    private lateinit var bigRedRv: RecyclerView
-    private lateinit var followingRv: RecyclerView
+    private lateinit var bigRedRV: RecyclerView
+    private lateinit var followingRV: RecyclerView
     private lateinit var otherRV: RecyclerView
     private lateinit var disposables: CompositeDisposable
     private lateinit var graphQlUtil: GraphQlUtil
@@ -40,7 +40,7 @@ class HomeFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater,
                               container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+                              savedInstanceState: Bundle?): View {
         homeView = inflater.inflate(R.layout.home_fragment, container, false)
         disposables = CompositeDisposable()
         graphQlUtil = GraphQlUtil()
@@ -51,15 +51,12 @@ class HomeFragment : Fragment() {
             swipeRefreshLayout.setColorSchemeColors(volumeOrange, volumeOrange, volumeOrange)
         }
         swipeRefreshLayout.setOnRefreshListener {
-            handleRefresh(swipeRefreshLayout)
+            setUpHomeView(isRefreshing = true)
+            swipeRefreshLayout.isRefreshing = false
         }
         return homeView
     }
 
-    private fun handleRefresh(swipeRefreshLayout: SwipeRefreshLayout) {
-        setUpHomeView(isRefreshing = true)
-        swipeRefreshLayout.isRefreshing = false
-    }
 
     private fun setUpHomeView(isRefreshing: Boolean) {
         val followingPublications = prefUtils.getStringSet("following", mutableSetOf())?.toMutableList()
@@ -91,13 +88,13 @@ class HomeFragment : Fragment() {
                 }
             }
             if (!isRefreshing) {
-                bigRedRv = homeView.findViewById(R.id.big_red_rv)
-                bigRedRv.adapter = BigReadHomeAdapter(trendingArticles)
+                bigRedRV = homeView.findViewById(R.id.big_red_rv)
+                bigRedRV.adapter = BigReadHomeAdapter(trendingArticles)
                 val linearLayoutManager = LinearLayoutManager(homeView.context)
                 linearLayoutManager.orientation = LinearLayoutManager.HORIZONTAL
-                bigRedRv.layoutManager = linearLayoutManager
+                bigRedRV.layoutManager = linearLayoutManager
             } else {
-                val adapter = bigRedRv.adapter as BigReadHomeAdapter
+                val adapter = bigRedRV.adapter as BigReadHomeAdapter
                 adapter.clear()
                 adapter.addAll(trendingArticles)
             }
@@ -136,14 +133,14 @@ class HomeFragment : Fragment() {
                                         article -> article.date
                                     }) as MutableList<Article>
                             if (!isRefreshing) {
-                                followingRv = homeView.findViewById(R.id.follwing_rv)
-                                followingRv.layoutManager = LinearLayoutManager(homeView.context)
-                                followingRv.adapter = HomeFollowingArticleAdapters(
+                                followingRV = homeView.findViewById(R.id.follwing_rv)
+                                followingRV.layoutManager = LinearLayoutManager(homeView.context)
+                                followingRV.adapter = HomeFollowingArticleAdapters(
                                         followingArticles.take(NUMBER_OF_FOLLOWING_ARTICLES)
                                                 as MutableList<Article>
                                 )
                             } else {
-                                val adapter = followingRv.adapter as HomeFollowingArticleAdapters
+                                val adapter = followingRV.adapter as HomeFollowingArticleAdapters
                                 adapter.clear()
                                 adapter.addAll(followingArticles.take(NUMBER_OF_FOLLOWING_ARTICLES))
                             }
@@ -211,13 +208,13 @@ class HomeFragment : Fragment() {
                                 otherArticles.addAll(followingArticles.take(
                                         NUMBER_OF_OTHER_ARTICLES - otherArticles.size))
                             }
-                            if(!isRefreshing) {
+                            if (!isRefreshing) {
                                 otherRV = homeView.findViewById(R.id.other_articlesrv)
                                 otherRV.layoutManager = LinearLayoutManager(homeView.context)
                                 otherRV.adapter = HomeOtherArticleAdapter(otherArticles.shuffled()
                                         as MutableList<Article>)
                             } else {
-                                val adapter = followingRv.adapter as HomeOtherArticleAdapter
+                                val adapter = otherRV.adapter as HomeOtherArticleAdapter
                                 adapter.clear()
                                 adapter.addAll(otherArticles.shuffled())
                             }

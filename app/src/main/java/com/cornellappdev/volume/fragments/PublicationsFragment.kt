@@ -23,7 +23,7 @@ import io.reactivex.schedulers.Schedulers
 
 class PublicationsFragment : Fragment() {
 
-    private lateinit var followpublicationRV : RecyclerView
+    private lateinit var followpublicationRV: RecyclerView
     private lateinit var morepublicationRV: RecyclerView
     val graphQlUtil = GraphQlUtil()
     val disposables = CompositeDisposable()
@@ -35,7 +35,7 @@ class PublicationsFragment : Fragment() {
                               container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         val view =  inflater.inflate(R.layout.all_publications, container, false)
-        getFollowingPublications(view)
+        getFollowingPublications(view, isRefreshing = false)
         getMorePublications(view)
         val swipeRefreshLayout: SwipeRefreshLayout = view.findViewById(R.id.swipe_container)
         val volumeOrange: Int? = context?.let { ContextCompat.getColor(it, R.color.volumeOrange) }
@@ -43,7 +43,8 @@ class PublicationsFragment : Fragment() {
             swipeRefreshLayout.setColorSchemeColors(volumeOrange, volumeOrange, volumeOrange)
         }
         swipeRefreshLayout.setOnRefreshListener {
-            handleRefresh(swipeRefreshLayout)
+            getFollowingPublications(view, isRefreshing = true)
+            swipeRefreshLayout.isRefreshing = false
         }
         view1 = view
         return view
@@ -86,48 +87,7 @@ class PublicationsFragment : Fragment() {
         })
     }
 
-    fun handleRefresh(swipeRefreshLayout: SwipeRefreshLayout) {
-        val followingPublicationsIDs =
-                prefUtils.getStringSet("following", mutableSetOf())?.toMutableList()
-        val followingObs = followingPublicationsIDs?.let {
-            graphQlUtil
-                    .getPublicationsByIDs(it)
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-        }
-        if (followingObs != null) {
-            disposables.add(followingObs.subscribe { response ->
-                val followingPublications = mutableListOf<Publication>()
-                val publications = response.data?.getPublicationsByIDs
-                publications?.mapTo(followingPublications, { publication ->
-                    Publication(
-                            publication.id,
-                            publication.backgroundImageURL,
-                            publication.bio,
-                            publication.name,
-                            publication.profileImageURL,
-                            publication.rssName,
-                            publication.rssURL,
-                            publication.slug,
-                            publication.shoutouts,
-                            publication.websiteURL,
-                            Article(
-                                    publication.mostRecentArticle?.id,
-                                    publication.mostRecentArticle?.title,
-                                    publication.mostRecentArticle?.articleURL,
-                                    publication.mostRecentArticle?.imageURL))
-                })
-                val adapter = followpublicationRV.adapter as FollowingHorizontalAdapter
-                adapter.clear()
-                adapter.addAll(followingPublications)
-                swipeRefreshLayout.isRefreshing = false
-            })
-        } else {
-            swipeRefreshLayout.isRefreshing = false
-        }
-    }
-
-    fun getFollowingPublications(view: View) {
+    fun getFollowingPublications(view: View, isRefreshing: Boolean) {
         val followingPublicationsIDs =
                 prefUtils.getStringSet("following", mutableSetOf())?.toMutableList()
         val followingObs = followingPublicationsIDs?.let {
@@ -159,12 +119,18 @@ class PublicationsFragment : Fragment() {
                                         publication.mostRecentArticle?.articleURL,
                                         publication.mostRecentArticle?.imageURL))
                     })
-                    followpublicationRV = view.findViewById(R.id.following_all_publications_rv)
-                    followpublicationRV.adapter = FollowingHorizontalAdapter(followingPublications)
-                    val linearLayoutManager = LinearLayoutManager(view.context)
-                    linearLayoutManager.orientation = LinearLayoutManager.HORIZONTAL
-                    followpublicationRV.layoutManager = linearLayoutManager
-                    followpublicationRV.setHasFixedSize(true)
+                    if (!isRefreshing) {
+                        followpublicationRV = view.findViewById(R.id.following_all_publications_rv)
+                        followpublicationRV.adapter = FollowingHorizontalAdapter(followingPublications)
+                        val linearLayoutManager = LinearLayoutManager(view.context)
+                        linearLayoutManager.orientation = LinearLayoutManager.HORIZONTAL
+                        followpublicationRV.layoutManager = linearLayoutManager
+                        followpublicationRV.setHasFixedSize(true)
+                    } else {
+                        val adapter = followpublicationRV.adapter as FollowingHorizontalAdapter
+                        adapter.clear()
+                        adapter.addAll(followingPublications)
+                    }
                 }
             })
         }
@@ -173,6 +139,6 @@ class PublicationsFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         getMorePublications(view1)
-        getFollowingPublications(view1)
+        getFollowingPublications(view1, isRefreshing = true)
     }
 }
