@@ -45,7 +45,11 @@ class HomeFragment : Fragment() {
         homeView = inflater.inflate(R.layout.home_fragment, container, false)
         disposables = CompositeDisposable()
         graphQlUtil = GraphQlUtil()
+        setUpHomeView()
+        return homeView
+    }
 
+    fun setUpHomeView() {
         val followingPublications = prefUtils.getStringSet("following", mutableSetOf())?.toMutableList()
         // Get the trending articles for Big Read section
         val trendingArticles = mutableListOf<Article>()
@@ -85,47 +89,49 @@ class HomeFragment : Fragment() {
         if (!followingPublications.isNullOrEmpty()) {
             val followingObs =
                     graphQlUtil.getArticleByPublicationIDs(followingPublications)
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
+                            .subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread())
             if (followingObs != null) {
-                    disposables.add(followingObs.subscribe { response ->
-                        if (response.data?.getArticlesByPublicationIDs != null) {
-                            response.data?.getArticlesByPublicationIDs?.mapTo(
-                                    followingArticles, { article ->
-                                Article(
-                                        title = article.title,
-                                        articleURL = article.articleURL,
-                                        date = article.date.toString(),
-                                        id = article.id,
-                                        imageURL = article.imageURL,
-                                        publication = Publication(
-                                                id = article.publication.id,
-                                                name = article.publication.name,
-                                                profileImageURL = article.publication.profileImageURL),
-                                        shoutouts = article.shoutouts,
-                                        nsfw = article.nsfw)
-                            })
-                            followingArticles = followingArticles.filter { article ->
-                                !trendingArticlesId.contains(article.id)
-                            } as MutableList<Article>
-                            if (followingArticles.isNotEmpty()) {
-                                followingArticles = followingArticles.sortedWith(
-                                        compareByDescending {
-                                    article -> article.date
-                                }) as MutableList<Article>
-                                followingRv = homeView.findViewById(R.id.follwing_rv)
-                                followingRv.layoutManager = LinearLayoutManager(homeView.context)
-                                followingRv.adapter = HomeFollowingArticleAdapters(
-                                        followingArticles.take(NUMBER_OF_FOLLOWING_ARTICLES) as MutableList<Article>
-                                )
-                                followingArticles = if (followingArticles.size <= NUMBER_OF_FOLLOWING_ARTICLES) {
-                                    mutableListOf()
-                                } else {
-                                    followingArticles.drop(NUMBER_OF_FOLLOWING_ARTICLES)
+                disposables.add(followingObs.subscribe { response ->
+                    if (response.data?.getArticlesByPublicationIDs != null) {
+                        response.data?.getArticlesByPublicationIDs?.mapTo(
+                                followingArticles, { article ->
+                            Article(
+                                    title = article.title,
+                                    articleURL = article.articleURL,
+                                    date = article.date.toString(),
+                                    id = article.id,
+                                    imageURL = article.imageURL,
+                                    publication = Publication(
+                                            id = article.publication.id,
+                                            name = article.publication.name,
+                                            profileImageURL = article.publication.profileImageURL),
+                                    shoutouts = article.shoutouts,
+                                    nsfw = article.nsfw)
+                        })
+                        followingArticles = followingArticles.filter { article ->
+                            !trendingArticlesId.contains(article.id)
+                        } as MutableList<Article>
+                        if (followingArticles.isNotEmpty()) {
+                            followingArticles = followingArticles.sortedWith(
+                                    compareByDescending {
+                                        article -> article.date
+                                    }) as MutableList<Article>
+                            followingRv = homeView.findViewById(R.id.follwing_rv)
+                            followingRv.layoutManager = LinearLayoutManager(homeView.context)
+                            followingRv.adapter = HomeFollowingArticleAdapters(
+                                    followingArticles.take(NUMBER_OF_FOLLOWING_ARTICLES)
                                             as MutableList<Article>
-                                }
+                            )
+                            followingArticles = if (followingArticles.size
+                                    <= NUMBER_OF_FOLLOWING_ARTICLES) {
+                                mutableListOf()
+                            } else {
+                                followingArticles.drop(NUMBER_OF_FOLLOWING_ARTICLES)
+                                        as MutableList<Article>
                             }
                         }
+                    }
                 })
             }
         }
@@ -148,8 +154,8 @@ class HomeFragment : Fragment() {
             if (!followingPublications.isNullOrEmpty()) {
                 allPublicationIdsExcludingFollowing =
                         allPublicationIdsExcludingFollowing.filter { pubID ->
-                    !followingPublications.contains(pubID)
-                } as MutableList<String>
+                            !followingPublications.contains(pubID)
+                        } as MutableList<String>
             }
             val otherObs = graphQlUtil
                     .getArticleByPublicationIDs(allPublicationIdsExcludingFollowing)
@@ -188,14 +194,13 @@ class HomeFragment : Fragment() {
                 })
             }
         })
-        if(followingPublications?.isEmpty() == true) {
+        if (followingPublications?.isEmpty() == true) {
             homeView.findViewById<Group>(R.id.following_group).visibility = View.INVISIBLE
             homeView.findViewById<Group>(R.id.not_following_group).visibility = View.VISIBLE
         } else {
             homeView.findViewById<Group>(R.id.following_group).visibility = View.VISIBLE
             homeView.findViewById<Group>(R.id.not_following_group).visibility = View.GONE
         }
-        return homeView
     }
 
     override fun onDestroy() {
