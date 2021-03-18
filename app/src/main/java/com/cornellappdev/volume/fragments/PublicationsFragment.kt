@@ -43,7 +43,7 @@ class PublicationsFragment : Fragment() {
             swipeRefreshLayout.setColorSchemeColors(volumeOrange, volumeOrange, volumeOrange)
         }
         swipeRefreshLayout.setOnRefreshListener {
-            getFollowingPublications(view, isRefreshing = true)
+            getFollowingPublications(view, isRefreshing = this::followpublicationRV.isInitialized)
             swipeRefreshLayout.isRefreshing = false
         }
         view1 = view
@@ -139,6 +139,6 @@ class PublicationsFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         getMorePublications(view1)
-        getFollowingPublications(view1, isRefreshing = true)
+        getFollowingPublications(view1, isRefreshing = this::followpublicationRV.isInitialized)
     }
 }

@@ -51,7 +51,10 @@ class HomeFragment : Fragment() {
             swipeRefreshLayout.setColorSchemeColors(volumeOrange, volumeOrange, volumeOrange)
         }
         swipeRefreshLayout.setOnRefreshListener {
-            setUpHomeView(isRefreshing = true)
+            setUpHomeView(isRefreshing = (
+                    this::bigRedRV.isInitialized &&
+                            this::followingRV.isInitialized &&
+                                this::otherRV.isInitialized))
             swipeRefreshLayout.isRefreshing = false
         }
         return homeView
@@ -144,13 +147,12 @@ class HomeFragment : Fragment() {
                                 adapter.clear()
                                 adapter.addAll(followingArticles.take(NUMBER_OF_FOLLOWING_ARTICLES))
                             }
-                            if (followingArticles.size
+                            followingArticles = if (followingArticles.size
                                     <= NUMBER_OF_FOLLOWING_ARTICLES) {
-                                followingArticles.clear()
+                                mutableListOf()
                             } else {
-                                followingArticles =
-                                        followingArticles.drop(NUMBER_OF_FOLLOWING_ARTICLES)
-                                        as MutableList<Article>
+                                followingArticles.drop(NUMBER_OF_FOLLOWING_ARTICLES)
+                                as MutableList<Article>
                             }
                         }
                     }
