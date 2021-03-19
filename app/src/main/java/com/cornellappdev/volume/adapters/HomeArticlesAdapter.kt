@@ -8,27 +8,30 @@ import android.view.ViewGroup
 import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.RecyclerView
 import com.cornellappdev.volume.MainActivity
-import com.cornellappdev.volume.databinding.ItemArticleBinding
+import com.cornellappdev.volume.databinding.ItemHomeArticleBinding
 import com.cornellappdev.volume.models.Article
 import com.squareup.picasso.Picasso
 
-class ArticleAdapter(private val articles: List<Article>) :
-        RecyclerView.Adapter<ArticleAdapter.ArticleVH>() {
+class HomeArticlesAdapter(private val articles: MutableList<Article>) :
+        RecyclerView.Adapter<HomeArticlesAdapter.HomeArticleVH>() {
 
-    class ArticleVH(val binding: ItemArticleBinding) : RecyclerView.ViewHolder(binding.root)
+    class HomeArticleVH(val binding: ItemHomeArticleBinding) : RecyclerView.ViewHolder(binding.root)
+//        val pubName: TextView = itemView.article_pub_name_following_o
+//        val articleTitle: TextView = itemView.article_title_home_o
+//        val articleImg: ImageView = itemView.article_img_home_o
+//        val postTime: TextView = itemView.following_home_time_o
+//        val shoutoutCount: TextView = itemView.following_home_shout_out_o
+//        val layout: ConstraintLayout = itemView.following_home_layout
+//    }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ArticleVH {
-        val binding = ItemArticleBinding
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int):  HomeArticleVH {
+        val binding = ItemHomeArticleBinding
                 .inflate(LayoutInflater.from(parent.context), parent, false)
-        return ArticleVH(binding)
-    }
-
-    override fun getItemCount(): Int {
-        return articles.size
+        return HomeArticleVH(binding)
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    override fun onBindViewHolder(holder: ArticleVH, position: Int) {
+    override fun onBindViewHolder(holder: HomeArticleVH, position: Int) {
         val currentItem = articles[position]
         holder.binding.tvArticleTitle.text = currentItem.title
         Article.applyNSFWFilter(currentItem, holder.binding.tvArticleTitle)
@@ -39,13 +42,26 @@ class ArticleAdapter(private val articles: List<Article>) :
         Article.setCorrectDateText(currentItem, holder.binding.tvTimePosted)
         holder.binding.tvShoutoutCount.text =
                 currentItem.shoutouts?.toInt().toString() + " shout-outs"
+        holder.binding.tvPublicationName.text = currentItem.publication!!.name
+
         holder.binding.clArticleLayout.setOnClickListener { view ->
-//            val intent = Intent(holder.layout.context, MainActivity::class.java)
-//            intent.putExtra("article",currentItem)
-//            holder.layout.context?.startActivity(intent)
             val intent = Intent(view.context, MainActivity::class.java)
             intent.putExtra("article", currentItem)
             view.context.startActivity(intent)
         }
+    }
+
+    override fun getItemCount(): Int {
+        return articles.size
+    }
+
+    fun clear() {
+        articles.clear()
+        notifyDataSetChanged()
+    }
+
+    fun addAll(list: List<Article>) {
+        articles.addAll(list)
+        notifyDataSetChanged()
     }
 }

@@ -8,21 +8,20 @@
     tools:context=".MainActivity">
 
     <com.cornellappdev.volume.views.ObservableWebView
-        android:id="@+id/webview"
+        android:id="@+id/wv_article"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
     <com.cornellappdev.volume.views.WebviewTop
-        android:id="@+id/webview_top"
+        android:id="@+id/wv_top"
         app:layout_constraintTop_toTopOf="parent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
     <com.cornellappdev.volume.views.WebviewBottom
-        android:id="@+id/webview_bot"
+        android:id="@+id/wv_bottom"
         app:layout_constraintBottom_toBottomOf="parent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

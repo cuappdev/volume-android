@@ -9,10 +9,10 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.cornellappdev.volume.R
-import com.cornellappdev.volume.adapters.FollowPublicationsAdapter
 import com.cornellappdev.volume.adapters.FollowingHorizontalAdapter
+import com.cornellappdev.volume.adapters.MorePublicationsAdapter
+import com.cornellappdev.volume.databinding.FragmentPublicationsBinding
 import com.cornellappdev.volume.models.Article
 import com.cornellappdev.volume.models.Publication
 import com.cornellappdev.volume.util.GraphQlUtil
@@ -25,32 +25,32 @@ class PublicationsFragment : Fragment() {
 
     private lateinit var followpublicationRV: RecyclerView
     private lateinit var morepublicationRV: RecyclerView
-    val graphQlUtil = GraphQlUtil()
-    val disposables = CompositeDisposable()
-    val prefUtils: PrefUtils = PrefUtils()
-    private lateinit var view1: View
-
+    private val graphQlUtil = GraphQlUtil()
+    private val disposables = CompositeDisposable()
+    private val prefUtils = PrefUtils()
+    private var binding: FragmentPublicationsBinding? = null
 
     override fun onCreateView(inflater: LayoutInflater,
                               container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
-        val view =  inflater.inflate(R.layout.all_publications, container, false)
-        getFollowingPublications(view, isRefreshing = false)
-        getMorePublications(view)
-        val swipeRefreshLayout: SwipeRefreshLayout = view.findViewById(R.id.swipe_container)
+                              savedInstanceState: Bundle?): View {
+        binding = FragmentPublicationsBinding.inflate(inflater, container, false)
+        getFollowingPublications(binding!!, isRefreshing = false)
+        getMorePublications(binding!!)
         val volumeOrange: Int? = context?.let { ContextCompat.getColor(it, R.color.volumeOrange) }
         if (volumeOrange != null) {
-            swipeRefreshLayout.setColorSchemeColors(volumeOrange, volumeOrange, volumeOrange)
+            binding!!.srlQuery.setColorSchemeColors(volumeOrange, volumeOrange, volumeOrange)
         }
-        swipeRefreshLayout.setOnRefreshListener {
-            getFollowingPublications(view, isRefreshing = this::followpublicationRV.isInitialized)
-            swipeRefreshLayout.isRefreshing = false
+        binding?.srlQuery?.setOnRefreshListener {
+            if (binding != null) {
+                getFollowingPublications(binding!!,
+                        isRefreshing = this::followpublicationRV.isInitialized)
+                binding!!.srlQuery.isRefreshing = false
+            }
         }
-        view1 = view
-        return view
+        return binding!!.root
     }
 
-    fun getMorePublications(view: View) {
+    private fun getMorePublications(binding: FragmentPublicationsBinding) {
         val moreObs = graphQlUtil
                 .getAllPublications()
                 .subscribeOn(Schedulers.io())
@@ -78,16 +78,16 @@ class PublicationsFragment : Fragment() {
                                     publication.mostRecentArticle?.imageURL,
                                     nsfw = publication.mostRecentArticle?.nsfw))
                 })
-                morepublicationRV = view.findViewById(R.id.follwing_more_publications_rv)
+                morepublicationRV = binding.rvMorePublications
                 morepublicationRV.adapter =
-                        FollowPublicationsAdapter(morePublications, view.context)
-                morepublicationRV.layoutManager = LinearLayoutManager(view.context)
+                        MorePublicationsAdapter(morePublications, prefUtils)
+                morepublicationRV.layoutManager = LinearLayoutManager(context)
                 morepublicationRV.setHasFixedSize(true)
             }
         })
     }
 
-    fun getFollowingPublications(view: View, isRefreshing: Boolean) {
+    private fun getFollowingPublications(binding: FragmentPublicationsBinding, isRefreshing: Boolean) {
         val followingPublicationsIDs =
                 prefUtils.getStringSet("following", mutableSetOf())?.toMutableList()
         val followingObs = followingPublicationsIDs?.let {
@@ -120,9 +120,9 @@ class PublicationsFragment : Fragment() {
                                         publication.mostRecentArticle?.imageURL))
                     })
                     if (!isRefreshing) {
-                        followpublicationRV = view.findViewById(R.id.following_all_publications_rv)
+                        followpublicationRV = binding.rvFollowing
                         followpublicationRV.adapter = FollowingHorizontalAdapter(followingPublications)
-                        val linearLayoutManager = LinearLayoutManager(view.context)
+                        val linearLayoutManager = LinearLayoutManager(context)
                         linearLayoutManager.orientation = LinearLayoutManager.HORIZONTAL
                         followpublicationRV.layoutManager = linearLayoutManager
                         followpublicationRV.setHasFixedSize(true)
@@ -134,11 +134,21 @@ class PublicationsFragment : Fragment() {
                 }
             })
         }
+        if (followingPublicationsIDs?.isEmpty() == true) {
+            binding.groupNotFollowing.visibility = View.VISIBLE
+        }
     }
 
     override fun onResume() {
         super.onResume()
-        getMorePublications(view1)
-        getFollowingPublications(view1, isRefreshing = this::followpublicationRV.isInitialized)
+        if (binding != null) {
+            getMorePublications(binding!!)
+            getFollowingPublications(binding!!, isRefreshing = this::followpublicationRV.isInitialized)
+        }
+    }
+
+    override fun onDestroyView() {
+        binding = null
+        super.onDestroyView()
     }
 }
