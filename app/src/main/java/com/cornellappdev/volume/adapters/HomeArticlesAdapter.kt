@@ -16,13 +16,6 @@ class HomeArticlesAdapter(private val articles: MutableList<Article>) :
         RecyclerView.Adapter<HomeArticlesAdapter.HomeArticleVH>() {
 
     class HomeArticleVH(val binding: ItemHomeArticleBinding) : RecyclerView.ViewHolder(binding.root)
-//        val pubName: TextView = itemView.article_pub_name_following_o
-//        val articleTitle: TextView = itemView.article_title_home_o
-//        val articleImg: ImageView = itemView.article_img_home_o
-//        val postTime: TextView = itemView.following_home_time_o
-//        val shoutoutCount: TextView = itemView.following_home_shout_out_o
-//        val layout: ConstraintLayout = itemView.following_home_layout
-//    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int):  HomeArticleVH {
         val binding = ItemHomeArticleBinding

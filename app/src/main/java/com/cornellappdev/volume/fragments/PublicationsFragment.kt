@@ -28,26 +28,26 @@ class PublicationsFragment : Fragment() {
     private val graphQlUtil = GraphQlUtil()
     private val disposables = CompositeDisposable()
     private val prefUtils = PrefUtils()
-    private var binding: FragmentPublicationsBinding? = null
+    private var _binding: FragmentPublicationsBinding? = null
+    private val binding get() = _binding!!
+
 
     override fun onCreateView(inflater: LayoutInflater,
                               container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
-        binding = FragmentPublicationsBinding.inflate(inflater, container, false)
-        getFollowingPublications(binding!!, isRefreshing = false)
-        getMorePublications(binding!!)
+        _binding = FragmentPublicationsBinding.inflate(inflater, container, false)
+        getFollowingPublications(binding, isRefreshing = false)
+        getMorePublications(binding)
         val volumeOrange: Int? = context?.let { ContextCompat.getColor(it, R.color.volumeOrange) }
         if (volumeOrange != null) {
-            binding!!.srlQuery.setColorSchemeColors(volumeOrange, volumeOrange, volumeOrange)
+            binding.srlQuery.setColorSchemeColors(volumeOrange, volumeOrange, volumeOrange)
         }
-        binding?.srlQuery?.setOnRefreshListener {
-            if (binding != null) {
-                getFollowingPublications(binding!!,
-                        isRefreshing = this::followpublicationRV.isInitialized)
-                binding!!.srlQuery.isRefreshing = false
-            }
+        binding.srlQuery.setOnRefreshListener {
+            getFollowingPublications(binding,
+                    isRefreshing = this::followpublicationRV.isInitialized)
+            binding.srlQuery.isRefreshing = false
         }
-        return binding!!.root
+        return binding.root
     }
 
     private fun getMorePublications(binding: FragmentPublicationsBinding) {
@@ -136,19 +136,21 @@ class PublicationsFragment : Fragment() {
         }
         if (followingPublicationsIDs?.isEmpty() == true) {
             binding.groupNotFollowing.visibility = View.VISIBLE
+        } else {
+            binding.groupNotFollowing.visibility = View.GONE
         }
     }
 
     override fun onResume() {
         super.onResume()
-        if (binding != null) {
-            getMorePublications(binding!!)
-            getFollowingPublications(binding!!, isRefreshing = this::followpublicationRV.isInitialized)
+        binding?.let {
+            getMorePublications(it)
+            getFollowingPublications(it, isRefreshing = this::followpublicationRV.isInitialized)
         }
     }
 
     override fun onDestroyView() {
-        binding = null
         super.onDestroyView()
+        _binding = null
     }
 }

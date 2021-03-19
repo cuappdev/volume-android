@@ -64,7 +64,6 @@ class OnboardingFragTwo : Fragment() {
     }
 
     override fun onDestroyView() {
-        binding = null
         super.onDestroyView()
     }
 }

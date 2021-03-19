@@ -64,7 +64,7 @@
                 android:layout_marginTop="30dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/iv_following_header"/>
+                app:layout_constraintTop_toBottomOf="@id/rv_following"/>
 
             <TextView
                 android:id="@+id/more_articles_message_nothing"
@@ -96,7 +96,7 @@
                 android:layout_marginStart="12dp"
                 android:layout_marginTop="43dp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/rv_following"
+                app:layout_constraintTop_toBottomOf="@+id/more_articles_message_long_nothing"
                 app:srcCompat="@drawable/ic_more_publications_text"
                 tools:srcCompat="@drawable/ic_more_publications_text" />
 

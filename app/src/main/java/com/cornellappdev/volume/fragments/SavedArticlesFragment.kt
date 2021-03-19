@@ -21,14 +21,15 @@ class SavedArticlesFragment: Fragment() {
     private val prefUtils = PrefUtils()
     private var disposables = CompositeDisposable()
     private val graphQlUtil = GraphQlUtil()
-    private var binding: FragmentSavedArticlesBinding? = null
+    private var _binding: FragmentSavedArticlesBinding? = null
+    private val binding get() = _binding!!
 
     override fun onCreateView(inflater: LayoutInflater,
                               container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
-        binding = FragmentSavedArticlesBinding.inflate(inflater, container, false)
-        loadArticles(binding!!)
-        return binding!!.root
+        _binding = FragmentSavedArticlesBinding.inflate(inflater, container, false)
+        loadArticles(binding)
+        return binding.root
     }
 
     private fun loadArticles(savedArticlesBinding: FragmentSavedArticlesBinding) {
@@ -71,7 +72,7 @@ class SavedArticlesFragment: Fragment() {
     }
 
     override fun onDestroyView() {
-        binding = null
         super.onDestroyView()
+        _binding = null
     }
 }

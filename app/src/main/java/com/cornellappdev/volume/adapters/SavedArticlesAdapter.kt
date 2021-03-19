@@ -16,15 +16,6 @@ class SavedArticlesAdapter(private val articles: List<Article>) :
         RecyclerView.Adapter<SavedArticlesAdapter.SavedArticleVH>() {
 
     class SavedArticleVH(val binding: ItemSavedArticleBinding) : RecyclerView.ViewHolder(binding.root)
-//    class SavedArticleVH(val binding: ItemSavedArticleBinding) : RecyclerView.ViewHolder(binding.root) {
-//        val pubName: TextView = itemView.pub_name_article_layout_b
-//        val articleTitle : TextView = itemView.article_title_b
-//        val articleImg : ImageView = itemView.article_img_b
-//        val postTime: TextView = itemView.post_time_b
-//        val shoutoutCount: TextView = itemView.article_shout_count_b
-//        val layout: ConstraintLayout = itemView.desc_holder_b
-//        val layoutMain: ConstraintLayout = itemView.saved_article_layout
-//    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int):  SavedArticleVH {
         val binding = ItemSavedArticleBinding
@@ -46,9 +37,6 @@ class SavedArticlesAdapter(private val articles: List<Article>) :
                 currentItem.shoutouts?.toInt().toString() + " shout-outs"
         holder.binding.tvPublicationName.text = currentItem.publication!!.name
         holder.binding.clArticleLayout.setOnClickListener { view ->
-//            val intent = Intent(holder.layout.context, MainActivity::class.java)
-//            intent.putExtra("article",currentItem)
-//            holder.layout.context?.startActivity(intent)
             val intent = Intent(view.context, MainActivity::class.java)
             intent.putExtra("article", currentItem)
             view.context.startActivity(intent)

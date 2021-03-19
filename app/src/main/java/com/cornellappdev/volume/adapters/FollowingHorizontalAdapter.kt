@@ -14,11 +14,6 @@ class FollowingHorizontalAdapter(private val followedPublications: MutableList<P
 
     class FollowHorizontalVH(
             val binding: ItemFollowedPublicationBinding) : RecyclerView.ViewHolder(binding.root)
-//    {
-//        val pub_logo: ImageView = itemView.vertical_publication_logo
-//        val pub_name: TextView = itemView.vertical_publication_name
-//        val layout: ConstraintLayout = itemView.vert_cert_layout
-//    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FollowHorizontalVH {
         val binding = ItemFollowedPublicationBinding

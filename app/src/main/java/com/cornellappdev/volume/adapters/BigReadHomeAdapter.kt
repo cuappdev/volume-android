@@ -15,14 +15,6 @@ class BigReadHomeAdapter(private val articles: MutableList<Article>) :
         RecyclerView.Adapter<BigReadHomeAdapter.BigReadArticleVH>() {
 
     class BigReadArticleVH(val binding: ItemBigReadBinding) : RecyclerView.ViewHolder(binding.root)
-//    {
-//        val pubName: TextView = itemView.vert_card_pub_name
-//        val articleTitle: TextView = itemView.article_title_big_read
-//        val articleImg: ImageView = itemView.vert_img_view
-//        val postTime: TextView = itemView.big_read_card_layout_time
-//        val shoutoutCount: TextView = itemView.big_read_card_layout_shoutouts
-//        val layout: ConstraintLayout = itemView.big_read_layout
-//    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BigReadArticleVH {
         val binding = ItemBigReadBinding
@@ -53,9 +45,6 @@ class BigReadHomeAdapter(private val articles: MutableList<Article>) :
                 currentItem.shoutouts?.toInt().toString() + " shout-outs"
         holder.binding.tvPublicationName.text = currentItem.publication!!.name
         holder.binding.clBigReadLayout.setOnClickListener { view ->
-//            val intent = Intent(holder.layout.context, MainActivity::class.java)
-//            intent.putExtra("article",currentItem)
-//            holder.layout.context?.startActivity(intent)
             val intent = Intent(view.context, MainActivity::class.java)
             intent.putExtra("article", currentItem)
             view.context.startActivity(intent)
