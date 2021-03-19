@@ -14,8 +14,14 @@ import com.cornellappdev.volume.models.Publication
 import com.squareup.picasso.Picasso
 
 class MorePublicationsAdapter(private val publicationList: List<Publication>,
-                              private val prefUtils: PrefUtils) :
+                              private val prefUtils: PrefUtils,
+                              private val mAdapterOnClickHandler: AdapterOnClickHandler?) :
         RecyclerView.Adapter<MorePublicationsAdapter.MorePublicationVH>() {
+
+    interface AdapterOnClickHandler {
+        // you can define the parameters to be what you need
+        fun onFollowClick(wasFollowed : Boolean)
+    }
 
     class MorePublicationVH(
             val binding: ItemMorePublicationBinding) : RecyclerView.ViewHolder(binding.root)
@@ -69,6 +75,7 @@ class MorePublicationsAdapter(private val publicationList: List<Publication>,
                         tempSet.add(currentItem.id)
                         prefUtils.save("following", tempSet)
                     }
+                    mAdapterOnClickHandler?.onFollowClick(wasFollowed = true)
             } else {
                 holder.binding.btnFollow.setImageResource(R.drawable.ic_followplussvg)
                 val tempSet =
@@ -77,6 +84,7 @@ class MorePublicationsAdapter(private val publicationList: List<Publication>,
                     tempSet.remove(currentItem.id)
                     prefUtils.save("following", tempSet)
                 }
+                mAdapterOnClickHandler?.onFollowClick(wasFollowed = false)
             }
         }
 

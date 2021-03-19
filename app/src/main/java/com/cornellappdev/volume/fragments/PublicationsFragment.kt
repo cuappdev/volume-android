@@ -80,7 +80,7 @@ class PublicationsFragment : Fragment() {
                 })
                 morepublicationRV = binding.rvMorePublications
                 morepublicationRV.adapter =
-                        MorePublicationsAdapter(morePublications, prefUtils)
+                        MorePublicationsAdapter(morePublications, prefUtils, null)
                 morepublicationRV.layoutManager = LinearLayoutManager(context)
                 morepublicationRV.setHasFixedSize(true)
             }

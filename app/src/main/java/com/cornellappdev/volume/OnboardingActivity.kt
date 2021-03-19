@@ -10,12 +10,14 @@ import android.view.ViewGroup
 import android.view.animation.Animation
 import android.view.animation.Transformation
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.viewpager2.widget.ViewPager2
 import com.cornellappdev.volume.adapters.OnboardingPagerAdapter
 import com.cornellappdev.volume.databinding.ActivityOnboardingBinding
+import com.cornellappdev.volume.fragments.OnboardingFragTwo
 
 
-class OnboardingActivity : AppCompatActivity() {
+class OnboardingActivity : AppCompatActivity(), OnboardingFragTwo.DataPassListener {
 
     companion object {
         private const val FRAGMENT_COUNT = 2
@@ -49,7 +51,12 @@ class OnboardingActivity : AppCompatActivity() {
             override fun onPageSelected(position: Int) {
                 when (position) {
                     0 -> binding.btnNext.text = "Next"
-                    1 -> binding.btnNext.text = "Start Reading"
+                    1 -> {
+                        binding.btnNext.text = "Start Reading"
+                        binding.btnNext.isClickable = false
+                        binding.btnNext.setTextColor(ContextCompat.getColor(
+                                this@OnboardingActivity, R.color.grey))
+                    }
                 }
             }
         })
@@ -59,7 +66,9 @@ class OnboardingActivity : AppCompatActivity() {
             val context = it.context
 
             when (current) {
-                0 -> binding.vpOnboarding.currentItem = 1
+                0 -> {
+                    binding.vpOnboarding.currentItem = 1
+                }
                 1 -> {
                     val intent = Intent(context, TabActivity::class.java)
                     context?.startActivity(intent)
@@ -125,5 +134,18 @@ class OnboardingActivity : AppCompatActivity() {
         }, 3000)
         
         prefUtils.save("firstStart", false)
+    }
+
+    override fun onPublicationFollowed(numFollowed: Int) {
+        if (this::binding.isInitialized) {
+            binding.btnNext.isClickable = numFollowed > 0
+            binding.btnNext.setTextColor(if (numFollowed > 0) {
+                ContextCompat.getColor(
+                        this@OnboardingActivity, R.color.volumeOrange)
+            } else {
+                ContextCompat.getColor(
+                        this@OnboardingActivity, R.color.grey)
+            })
+        }
     }
 }
