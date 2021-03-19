@@ -5,7 +5,7 @@ import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.cornellappdev.volume.fragments.HomeFragment
 import com.cornellappdev.volume.fragments.PublicationsFragment
-import com.cornellappdev.volume.fragments.SavedPublicationsFragment
+import com.cornellappdev.volume.fragments.SavedArticlesFragment
 
 class CustomPagerAdapter(fa: FragmentActivity, private val numOfTabs: Int)
     : FragmentStateAdapter(fa) {
@@ -18,7 +18,7 @@ class CustomPagerAdapter(fa: FragmentActivity, private val numOfTabs: Int)
         return when (position) {
             0 -> HomeFragment()
             1 -> PublicationsFragment()
-            else -> SavedPublicationsFragment()
+            else -> SavedArticlesFragment()
         }
     }
 }

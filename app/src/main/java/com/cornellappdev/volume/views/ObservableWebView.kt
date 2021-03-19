@@ -2,18 +2,13 @@ package com.cornellappdev.volume.views
 
 import android.content.Context
 import android.util.AttributeSet
-import android.util.Log
-import android.view.View
 import android.webkit.WebView
-import com.cornellappdev.volume.R
-import kotlinx.android.synthetic.main.activity_main.view.*
 
 class ObservableWebView @JvmOverloads constructor(
         context: Context,
         attrs: AttributeSet,
         defStyleAttr: Int = 0
 ) : WebView(context, attrs, defStyleAttr) {
-
 
     private lateinit var top: WebviewTop
     private lateinit var bot: WebviewBottom
@@ -35,7 +30,6 @@ class ObservableWebView @JvmOverloads constructor(
                 bot.minimize(false)
             }
         }
-        Log.d("WebView", "Scrolled")
     }
 }
 

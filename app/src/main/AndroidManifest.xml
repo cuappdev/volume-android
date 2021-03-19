@@ -12,11 +12,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity"></activity>
-        <activity android:name=".PublicationProfileActivity"></activity>
-        <activity android:name=".TabbedActivity">
+        <activity android:name=".MainActivity" />
+        <activity android:name=".PublicationProfileActivity" />
+        <activity android:name=".TabActivity">
         </activity>
-        <activity android:name=".OnboardingFragHolder">
+        <activity android:name=".OnboardingActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

@@ -2,32 +2,28 @@ package com.cornellappdev.volume.adapters
 
 import android.content.Intent
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.cornellappdev.volume.PublicationProfileActivity
-import com.cornellappdev.volume.R
+import com.cornellappdev.volume.databinding.ItemFollowedPublicationBinding
 import com.cornellappdev.volume.models.Publication
 import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.vertical_circular_publication_card.view.*
 
 class FollowingHorizontalAdapter(private val followedPublications: MutableList<Publication>) :
         RecyclerView.Adapter<FollowingHorizontalAdapter.FollowHorizontalVH>() {
 
-    class FollowHorizontalVH(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val pub_logo: ImageView = itemView.vertical_publication_logo
-        val pub_name: TextView = itemView.vertical_publication_name
-        val layout: ConstraintLayout = itemView.vert_cert_layout
-    }
+    class FollowHorizontalVH(
+            val binding: ItemFollowedPublicationBinding) : RecyclerView.ViewHolder(binding.root)
+//    {
+//        val pub_logo: ImageView = itemView.vertical_publication_logo
+//        val pub_name: TextView = itemView.vertical_publication_name
+//        val layout: ConstraintLayout = itemView.vert_cert_layout
+//    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FollowHorizontalVH {
-        val itemView = LayoutInflater
-                .from(parent.context)
-                .inflate(R.layout.vertical_circular_publication_card, parent, false)
-        return FollowHorizontalVH(itemView)
+        val binding = ItemFollowedPublicationBinding
+                .inflate(LayoutInflater.from(parent.context), parent, false)
+        return FollowHorizontalVH(binding)
     }
 
     override fun getItemCount(): Int {
@@ -37,13 +33,13 @@ class FollowingHorizontalAdapter(private val followedPublications: MutableList<P
     override fun onBindViewHolder(holder: FollowHorizontalVH, position: Int) {
         val currentItem = followedPublications[position]
         if (!currentItem.profileImageURL.isNullOrBlank()) {
-            Picasso.get().load(currentItem.profileImageURL).into(holder.pub_logo)
+            Picasso.get().load(currentItem.profileImageURL).into(holder.binding.ivLogo)
         }
-        holder.pub_name.text = currentItem.name
-        holder.layout.setOnClickListener {
-            val intent = Intent(holder.layout.context, PublicationProfileActivity::class.java)
+        holder.binding.tvName.text = currentItem.name
+        holder.binding.clVeticalPublicationLayout.setOnClickListener { view ->
+            val intent = Intent(view.context, PublicationProfileActivity::class.java)
             intent.putExtra("publication", currentItem)
-            holder.layout.context?.startActivity(intent)
+            view.context.startActivity(intent)
         }
     }
 
