@@ -21,15 +21,16 @@ class OnboardingFragTwo : Fragment() {
     private lateinit var disposables: CompositeDisposable
     private val graphQlUtil = GraphQlUtil()
     private val prefUtils = PrefUtils()
-    private var binding: FragmentOnboardingTwoBinding? = null
+    private var _binding: FragmentOnboardingTwoBinding? = null
+    private val binding get() = _binding!!
 
     override fun onCreateView(inflater: LayoutInflater,
                               container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
         disposables = CompositeDisposable()
-        binding = FragmentOnboardingTwoBinding.inflate(inflater, container, false)
-        setupArticlesRV(binding!!)
-        return binding!!.root
+        _binding = FragmentOnboardingTwoBinding.inflate(inflater, container, false)
+        setupArticlesRV(binding)
+        return binding.root
     }
 
     private fun setupArticlesRV(onboardingBinding: FragmentOnboardingTwoBinding) {
@@ -56,7 +57,8 @@ class OnboardingFragTwo : Fragment() {
                                 nsfw = publication.mostRecentArticle?.nsfw))
             })
             if (this.context != null) {
-                onboardingBinding.rvPublications.adapter = MorePublicationsAdapter(allPubs, prefUtils)
+                onboardingBinding.rvPublications.adapter =
+                        MorePublicationsAdapter(allPubs, prefUtils)
                 onboardingBinding.rvPublications.layoutManager = LinearLayoutManager(context)
                 onboardingBinding.rvPublications.setHasFixedSize(true)
             }
@@ -65,5 +67,6 @@ class OnboardingFragTwo : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
+        _binding = null
     }
 }
