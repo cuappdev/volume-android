@@ -40,9 +40,6 @@ class ArticleAdapter(private val articles: List<Article>) :
         holder.binding.tvShoutoutCount.text =
                 currentItem.shoutouts?.toInt().toString() + " shout-outs"
         holder.binding.clArticleLayout.setOnClickListener { view ->
-//            val intent = Intent(holder.layout.context, MainActivity::class.java)
-//            intent.putExtra("article",currentItem)
-//            holder.layout.context?.startActivity(intent)
             val intent = Intent(view.context, MainActivity::class.java)
             intent.putExtra("article", currentItem)
             view.context.startActivity(intent)

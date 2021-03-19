@@ -10,9 +10,11 @@ import android.view.ViewGroup
 import android.view.animation.Animation
 import android.view.animation.Transformation
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.viewpager2.widget.ViewPager2
 import com.cornellappdev.volume.adapters.OnboardingPagerAdapter
 import com.cornellappdev.volume.databinding.ActivityOnboardingBinding
+import com.cornellappdev.volume.fragments.OnboardingFragTwo
 
 
 class OnboardingActivity : AppCompatActivity() {
@@ -63,6 +65,7 @@ class OnboardingActivity : AppCompatActivity() {
                 1 -> {
                     val intent = Intent(context, TabActivity::class.java)
                     context?.startActivity(intent)
+                    finish()
                 }
             }
         }

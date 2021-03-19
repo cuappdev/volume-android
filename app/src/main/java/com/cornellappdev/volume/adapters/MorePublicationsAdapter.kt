@@ -19,14 +19,6 @@ class MorePublicationsAdapter(private val publicationList: List<Publication>,
 
     class MorePublicationVH(
             val binding: ItemMorePublicationBinding) : RecyclerView.ViewHolder(binding.root)
-//    {
-//        val pub_logo : ImageView = itemView.publication_card_logo
-//        val pub_name : TextView = itemView.publication_card_name
-//        val pub_desc : TextView = itemView.publication_card_description
-//        val pub_quote : TextView = itemView.publication_card_quote
-//        val pub_follow: ImageView = itemView.publication_card_follow
-//        val pub_layout: ConstraintLayout = itemView.other_pub_layout
-//    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MorePublicationVH {
         val binding = ItemMorePublicationBinding
