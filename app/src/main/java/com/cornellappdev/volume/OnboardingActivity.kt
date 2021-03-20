@@ -10,17 +10,18 @@ import android.view.ViewGroup
 import android.view.animation.Animation
 import android.view.animation.Transformation
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
 import androidx.viewpager2.widget.ViewPager2
 import com.cornellappdev.volume.adapters.OnboardingPagerAdapter
 import com.cornellappdev.volume.databinding.ActivityOnboardingBinding
-import com.cornellappdev.volume.fragments.OnboardingFragTwo
 
 
 class OnboardingActivity : AppCompatActivity() {
 
     companion object {
         private const val FRAGMENT_COUNT = 2
+        private const val SLIDE_UP_DURATION_MS: Long = 1000
+        private const val VOLUME_LOGO_FADE_AWAY_MS: Long = 3000
+        private const val VOLUME_LOGO_MARGIN_TOP = 100
     }
 
     private lateinit var prefUtils: PrefUtils
@@ -103,11 +104,10 @@ class OnboardingActivity : AppCompatActivity() {
 
         val slideUp: Animation = object : Animation() {
             override fun applyTransformation(interpolatedTime: Float, t: Transformation?) {
-                val top = 100
-                binding.ivVolumeLogo.setMarginTop(top, interpolatedTime)
+                binding.ivVolumeLogo.setMarginTop(VOLUME_LOGO_MARGIN_TOP, interpolatedTime)
             }
         }
-        slideUp.duration = 1000 // in ms
+        slideUp.duration = SLIDE_UP_DURATION_MS
         slideUp.setAnimationListener(object : Animation.AnimationListener {
             override fun onAnimationRepeat(animation: Animation?) {
             }
@@ -125,7 +125,7 @@ class OnboardingActivity : AppCompatActivity() {
         
         Handler(Looper.getMainLooper()).postDelayed({
             binding.ivVolumeLogo.startAnimation(slideUp)
-        }, 3000)
+        }, VOLUME_LOGO_FADE_AWAY_MS)
         
         prefUtils.save("firstStart", false)
     }
