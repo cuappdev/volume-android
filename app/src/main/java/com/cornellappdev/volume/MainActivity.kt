@@ -17,7 +17,7 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        //Grab Article
+        // Grab Article
         val article = intent.getParcelableExtra<Article>("article")
 
         if (article?.articleURL != null) {
@@ -28,7 +28,7 @@ class MainActivity : AppCompatActivity() {
             binding.wvArticle.setTopBot(binding.wvTop, binding.wvBottom)
         }
 
-        //Code to prevent from launching in external browser
+        // Code to prevent from launching in external browser
         binding.wvArticle.webViewClient = object : WebViewClient() {
             override fun shouldOverrideUrlLoading(
                     view: WebView?,
