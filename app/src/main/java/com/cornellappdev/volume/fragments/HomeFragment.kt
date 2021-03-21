@@ -53,8 +53,10 @@ class HomeFragment : Fragment() {
         swipeRefreshLayout.setOnRefreshListener {
             setUpHomeView(isRefreshing = (
                     this::bigRedRV.isInitialized &&
-                            this::followingRV.isInitialized &&
-                                this::otherRV.isInitialized))
+                    this::followingRV.isInitialized &&
+                    this::otherRV.isInitialized
+                    )
+            )
             swipeRefreshLayout.isRefreshing = false
         }
         return homeView
@@ -70,7 +72,7 @@ class HomeFragment : Fragment() {
                 graphQlUtil.getTrendingArticles(NUMBER_OF_TRENDING_ARTICLES)
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
-        disposables.add(trendingObs.subscribe{ response ->
+        disposables.add(trendingObs.subscribe { response ->
             val rawTrendingArticles = response.data?.getTrendingArticles
             if (rawTrendingArticles != null) {
                 for (rawArticle in rawTrendingArticles) {
@@ -105,35 +107,37 @@ class HomeFragment : Fragment() {
         // Retrieve articles from those followed
         var followingArticles = mutableListOf<Article>()
         if (!followingPublications.isNullOrEmpty()) {
-            val followingObs =
-                    graphQlUtil.getArticleByPublicationIDs(followingPublications)
-                            .subscribeOn(Schedulers.io())
-                            .observeOn(AndroidSchedulers.mainThread())
+            val followingObs = graphQlUtil.getArticleByPublicationIDs(followingPublications)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
             if (followingObs != null) {
                 disposables.add(followingObs.subscribe { response ->
                     if (response.data?.getArticlesByPublicationIDs != null) {
                         response.data?.getArticlesByPublicationIDs?.mapTo(
                                 followingArticles, { article ->
-                            Article(
-                                    title = article.title,
-                                    articleURL = article.articleURL,
-                                    date = article.date.toString(),
-                                    id = article.id,
-                                    imageURL = article.imageURL,
-                                    publication = Publication(
-                                            id = article.publication.id,
-                                            name = article.publication.name,
-                                            profileImageURL = article.publication.profileImageURL),
-                                    shoutouts = article.shoutouts,
-                                    nsfw = article.nsfw)
-                        })
+                                    Article(
+                                            title = article.title,
+                                            articleURL = article.articleURL,
+                                            date = article.date.toString(),
+                                            id = article.id,
+                                            imageURL = article.imageURL,
+                                            publication = Publication(
+                                                    id = article.publication.id,
+                                                    name = article.publication.name,
+                                                    profileImageURL = article.publication.profileImageURL
+                                            ),
+                                            shoutouts = article.shoutouts,
+                                            nsfw = article.nsfw
+                                    )
+                                }
+                        )
                         followingArticles = followingArticles.filter { article ->
                             !trendingArticlesId.contains(article.id)
                         } as MutableList<Article>
                         if (followingArticles.isNotEmpty()) {
                             followingArticles = followingArticles.sortedWith(
-                                    compareByDescending {
-                                        article -> article.date
+                                    compareByDescending { article ->
+                                        article.date
                                     }) as MutableList<Article>
                             if (!isRefreshing) {
                                 followingRV = homeView.findViewById(R.id.follwing_rv)
@@ -152,7 +156,7 @@ class HomeFragment : Fragment() {
                                 mutableListOf()
                             } else {
                                 followingArticles.drop(NUMBER_OF_FOLLOWING_ARTICLES)
-                                as MutableList<Article>
+                                        as MutableList<Article>
                             }
                         }
                     }
@@ -168,7 +172,7 @@ class HomeFragment : Fragment() {
                 graphQlUtil.getAllPublications()
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
-        disposables.add(allPublicationsObs.subscribe{ response ->
+        disposables.add(allPublicationsObs.subscribe { response ->
             val rawPublications = response.data?.getAllPublications
             if (rawPublications != null) {
                 for (publication in rawPublications) {

@@ -9,7 +9,7 @@ import com.cornellappdev.volume.models.Publication
 
 private const val COUNT = 3
 
-class OnboardingPageAdapter(fragmentManager: FragmentManager, val publications : List<Publication>) : FragmentPagerAdapter(fragmentManager) {
+class OnboardingPageAdapter(fragmentManager: FragmentManager, val publications: List<Publication>) : FragmentPagerAdapter(fragmentManager) {
 
     override fun getCount(): Int {
         return COUNT

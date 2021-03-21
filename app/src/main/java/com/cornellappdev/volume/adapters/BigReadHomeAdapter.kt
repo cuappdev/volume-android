@@ -20,7 +20,7 @@ import kotlinx.android.synthetic.main.vertical_article_home_card.view.*
 class BigReadHomeAdapter(private val articles: MutableList<Article>) :
         RecyclerView.Adapter<BigReadHomeAdapter.BigReadArticleVH>() {
 
-    class BigReadArticleVH(itemView: View) : RecyclerView.ViewHolder(itemView){
+    class BigReadArticleVH(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val pubName: TextView = itemView.vert_card_pub_name
         val articleTitle: TextView = itemView.article_title_big_read
         val articleImg: ImageView = itemView.vert_img_view
@@ -42,7 +42,7 @@ class BigReadHomeAdapter(private val articles: MutableList<Article>) :
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onBindViewHolder(holder: BigReadArticleVH, position: Int) {
-        val currentItem : Article = articles[position]
+        val currentItem: Article = articles[position]
         holder.articleTitle.text = currentItem.title
         Article.applyNSFWFilter(currentItem, holder.articleTitle)
         if (!currentItem.imageURL.isNullOrEmpty()) {

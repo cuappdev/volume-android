@@ -30,7 +30,7 @@ class TabbedActivity : AppCompatActivity() {
         tabLayout.getTabAt(0)?.setIcon(R.drawable.ic_volumesvg_orange)
         tabLayout.getTabAt(1)?.setIcon(R.drawable.ic_book_gray)
         tabLayout.getTabAt(2)?.setIcon(R.drawable.ic_bookmark_gray)
-        tabLayout.addOnTabSelectedListener(object: TabLayout.OnTabSelectedListener {
+        tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
                 when (tab?.position) {
                     0 -> {
