@@ -45,7 +45,7 @@ class OnboardingActivity : AppCompatActivity() {
             this.startActivity(intent)
             finish()
         }
-        
+
         binding.vpOnboarding.adapter = OnboardingPagerAdapter(this, FRAGMENT_COUNT)
 
         binding.vpOnboarding.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
@@ -65,7 +65,7 @@ class OnboardingActivity : AppCompatActivity() {
                 0 -> binding.vpOnboarding.currentItem = 1
                 1 -> {
                     val intent = Intent(context, TabActivity::class.java)
-                    context?.startActivity(intent)
+                    context.startActivity(intent)
                     finish()
                 }
             }
@@ -73,12 +73,12 @@ class OnboardingActivity : AppCompatActivity() {
 
         fun View.setMarginTop(marginStart: Int, interpolatedTime: Float) {
             val params = layoutParams as ViewGroup.MarginLayoutParams
-            val animateMargin = 
+            val animateMargin =
                     params.topMargin + ((marginStart - params.topMargin) * interpolatedTime).toInt()
             params.setMargins(
-                    params.leftMargin, 
-                    animateMargin, 
-                    params.rightMargin, 
+                    params.leftMargin,
+                    animateMargin,
+                    params.rightMargin,
                     params.bottomMargin
             )
             layoutParams = params
@@ -122,11 +122,11 @@ class OnboardingActivity : AppCompatActivity() {
             override fun onAnimationStart(animation: Animation?) {
             }
         })
-        
+
         Handler(Looper.getMainLooper()).postDelayed({
             binding.ivVolumeLogo.startAnimation(slideUp)
         }, VOLUME_LOGO_FADE_AWAY_MS)
-        
+
         prefUtils.save("firstStart", false)
     }
 }

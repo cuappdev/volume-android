@@ -92,9 +92,9 @@ class PublicationsFragment : Fragment() {
                 prefUtils.getStringSet("following", mutableSetOf())?.toMutableList()
         val followingObs = followingPublicationsIDs?.let {
             graphQlUtil
-                .getPublicationsByIDs(it)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
+                    .getPublicationsByIDs(it)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
         }
         if (followingObs != null) {
             disposables.add(followingObs.subscribe { response ->
@@ -143,7 +143,7 @@ class PublicationsFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        binding?.let {
+        binding.let {
             getMorePublications(it)
             getFollowingPublications(it, isRefreshing = this::followpublicationRV.isInitialized)
         }

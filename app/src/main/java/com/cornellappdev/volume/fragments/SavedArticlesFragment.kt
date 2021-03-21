@@ -16,7 +16,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 
-class SavedArticlesFragment: Fragment() {
+class SavedArticlesFragment : Fragment() {
 
     private val prefUtils = PrefUtils()
     private var disposables = CompositeDisposable()
@@ -37,20 +37,20 @@ class SavedArticlesFragment: Fragment() {
         val obs = articleIds?.let { graphQlUtil.getArticlesByIDs(it).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()) }
         val savedArticles = mutableListOf<Article>()
         if (obs != null) {
-            disposables.add(obs.subscribe{
+            disposables.add(obs.subscribe {
                 it.data?.getArticlesByIDs?.mapTo(savedArticles, { article ->
                     Article(
-                        article.id,
-                        article.title,
-                        article.articleURL,
-                        article.imageURL,
-                        Publication(
-                                id = article.publication.id,
-                                name = article.publication.name,
-                                profileImageURL = article.publication.profileImageURL),
-                        article.date.toString(),
-                        shoutouts =  article.shoutouts,
-                        nsfw = article.nsfw)
+                            article.id,
+                            article.title,
+                            article.articleURL,
+                            article.imageURL,
+                            Publication(
+                                    id = article.publication.id,
+                                    name = article.publication.name,
+                                    profileImageURL = article.publication.profileImageURL),
+                            article.date.toString(),
+                            shoutouts = article.shoutouts,
+                            nsfw = article.nsfw)
                 })
                 if (context != null) {
                     savedArticlesBinding.rvSavedArticles.adapter = SavedArticlesAdapter(savedArticles)
@@ -68,7 +68,7 @@ class SavedArticlesFragment: Fragment() {
 
     override fun onResume() {
         super.onResume()
-        binding?.let { loadArticles(it) }
+        binding.let { loadArticles(it) }
     }
 
     override fun onDestroyView() {

@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.core.widget.NestedScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fillViewport="true">
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/bookmarks_layout"
         android:layout_width="match_parent"
@@ -35,39 +35,39 @@
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_saved_articles"
-            android:layout_marginStart="6dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/tv_saved_articles"
+            android:layout_marginStart="6dp"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"/>
+            app:layout_constraintTop_toBottomOf="@id/tv_saved_articles" />
 
 
         <androidx.constraintlayout.widget.Group
+            android:id="@+id/no_saved_articles_group"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/no_saved_articles_group"
             android:visibility="visible"
-            app:constraint_referenced_ids="iv_volume_logo, tv_nothing_to_see, tv_no_saved_articles"/>
+            app:constraint_referenced_ids="iv_volume_logo, tv_nothing_to_see, tv_no_saved_articles" />
 
         <ImageView
             android:id="@+id/iv_volume_logo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:srcCompat="@drawable/volume_logo"
+            android:layout_marginTop="100dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@id/tv_saved_articles"
-            android:layout_marginTop="100dp"/>
+            app:srcCompat="@drawable/volume_logo" />
 
         <TextView
             android:id="@+id/tv_nothing_to_see"
             style="@style/helvetica_black"
-            android:textStyle="bold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Nothing to see here!"
             android:textSize="12sp"
+            android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/iv_volume_logo" />

@@ -17,7 +17,7 @@ class SavedArticlesAdapter(private val articles: List<Article>) :
 
     class SavedArticleVH(val binding: ItemSavedArticleBinding) : RecyclerView.ViewHolder(binding.root)
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int):  SavedArticleVH {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SavedArticleVH {
         val binding = ItemSavedArticleBinding
                 .inflate(LayoutInflater.from(parent.context), parent, false)
         return SavedArticleVH(binding)
