@@ -156,6 +156,9 @@ class HomeFragment : Fragment() {
                     }
                 })
             }
+        } else if (isRefreshing) {
+            val adapter = followingRV.adapter as HomeArticlesAdapter
+            adapter.clear()
         }
         // Get the articles for the other section, first taken from
         // publications the user doesn't follow then so to make up the difference
