@@ -22,11 +22,11 @@ class FollowPublicationsAdapter(private val publicationList: List<Publication>,
                                 private val context: Context) :
         RecyclerView.Adapter<FollowPublicationsAdapter.FollowPublicationVH>() {
 
-    class FollowPublicationVH(itemView : View) : RecyclerView.ViewHolder(itemView) {
-        val pub_logo : ImageView = itemView.publication_card_logo
-        val pub_name : TextView = itemView.publication_card_name
-        val pub_desc : TextView = itemView.publication_card_description
-        val pub_quote : TextView = itemView.publication_card_quote
+    class FollowPublicationVH(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        val pub_logo: ImageView = itemView.publication_card_logo
+        val pub_name: TextView = itemView.publication_card_name
+        val pub_desc: TextView = itemView.publication_card_description
+        val pub_quote: TextView = itemView.publication_card_quote
         val pub_follow: ImageView = itemView.publication_card_follow
         val pub_layout: ConstraintLayout = itemView.other_pub_layout
     }
@@ -65,12 +65,12 @@ class FollowPublicationsAdapter(private val publicationList: List<Publication>,
             if (holder.pub_follow.drawable.constantState == ContextCompat.getDrawable(context,
                             R.drawable.ic_followplussvg)!!.constantState) {
                 holder.pub_follow.setImageResource(R.drawable.ic_followchecksvg)
-                    val tempSet =
-                            prefUtils.getStringSet("following", mutableSetOf())?.toMutableSet()
-                    if (tempSet != null) {
-                        tempSet.add(currentItem.id)
-                        prefUtils.save("following", tempSet)
-                    }
+                val tempSet =
+                        prefUtils.getStringSet("following", mutableSetOf())?.toMutableSet()
+                if (tempSet != null) {
+                    tempSet.add(currentItem.id)
+                    prefUtils.save("following", tempSet)
+                }
             } else {
                 holder.pub_follow.setImageResource(R.drawable.ic_followplussvg)
                 val tempSet =
