@@ -32,18 +32,10 @@ class WebviewBottom @JvmOverloads constructor(
             prefUtils.getStringSet("savedArticles", mutableSetOf())?.toMutableSet()
 
     private val binding: LayoutWebviewBottomBinding =
-            LayoutWebviewBottomBinding.bind(
-                    LayoutInflater
-                            .from(context)
-                            .inflate(
-                                    R.layout.layout_webview_bottom,
-                                    this,
-                                    true))
-//    private val binding: LayoutWebviewBottomBinding =
-//            LayoutWebviewBottomBinding.inflate(
-//                    LayoutInflater.from(context),
-//                    this,
-//                    true)
+            LayoutWebviewBottomBinding.inflate(
+                    LayoutInflater.from(context),
+                    this,
+                    true)
 
     companion object {
         private const val MAX_SHOUTOUTS = 5
