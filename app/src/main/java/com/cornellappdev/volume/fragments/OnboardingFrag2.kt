@@ -16,9 +16,9 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 
-class OnboardingFrag2 (val publications: List<Publication>) : Fragment() {
+class OnboardingFrag2(val publications: List<Publication>) : Fragment() {
 
-    private lateinit var publicationRV : RecyclerView
+    private lateinit var publicationRV: RecyclerView
     private lateinit var disposables: CompositeDisposable
     private val graphQlUtil = GraphQlUtil()
 
@@ -26,7 +26,7 @@ class OnboardingFrag2 (val publications: List<Publication>) : Fragment() {
     override fun onCreateView(inflater: LayoutInflater,
                               container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        val view =  inflater.inflate(R.layout.onboardingfrag2, container, false)
+        val view = inflater.inflate(R.layout.onboardingfrag2, container, false)
 
         disposables = CompositeDisposable()
 
@@ -37,7 +37,7 @@ class OnboardingFrag2 (val publications: List<Publication>) : Fragment() {
 
     private fun loadArticlesLoadRV(view: View) {
         val pubsObs = graphQlUtil.getAllPublications().subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
-        disposables.add(pubsObs.subscribe{
+        disposables.add(pubsObs.subscribe {
             val allPubs = mutableListOf<Publication>()
             it.data?.getAllPublications?.mapTo(allPubs, { publication ->
                 Publication(

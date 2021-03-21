@@ -1,7 +1,6 @@
 package com.cornellappdev.volume
 
 import android.os.Bundle
-import android.os.PersistableBundle
 import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import android.webkit.WebViewClient
@@ -28,7 +27,7 @@ class MainActivity : AppCompatActivity() {
         //Grab Article
         val article = intent.getParcelableExtra<Article>("article")
 
-        if(article?.articleURL != null) {
+        if (article?.articleURL != null) {
             webView = findViewById(R.id.webview)
             webView.loadUrl(article.articleURL)
             topWebView.setName(article)

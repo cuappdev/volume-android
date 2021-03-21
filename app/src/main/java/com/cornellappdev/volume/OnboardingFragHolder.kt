@@ -1,9 +1,7 @@
 package com.cornellappdev.volume
 
 import PrefUtils
-import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -17,7 +15,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.viewpager.widget.ViewPager
 import com.cornellappdev.volume.adapters.OnboardingPageAdapter
-import com.cornellappdev.volume.fragments.HomeFragment
 import com.cornellappdev.volume.models.Publication
 
 
@@ -33,7 +30,6 @@ class OnboardingFragHolder : AppCompatActivity() {
     private lateinit var prefUtils: PrefUtils
 
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.onboarding_holder)
@@ -42,7 +38,7 @@ class OnboardingFragHolder : AppCompatActivity() {
 
         val dropperSave = prefUtils.getBoolean("dropper_save", true)
 
-        if(dropperSave) {
+        if (dropperSave) {
             prefUtils.remove("following")
             prefUtils.save("dropper_save", false)
         }
@@ -57,7 +53,7 @@ class OnboardingFragHolder : AppCompatActivity() {
 
 
         var initialClick = true
-        Log.d("Test",initialClick.toString())
+        Log.d("Test", initialClick.toString())
 
         viewPager = findViewById(R.id.onboarding_pageviewer)
         volLogo = findViewById(R.id.vol_logo)
@@ -69,7 +65,7 @@ class OnboardingFragHolder : AppCompatActivity() {
 
 
         //TODO: This is fake data for onboarding
-        val onboardingdata : ArrayList<Publication>  = ArrayList()
+        val onboardingdata: ArrayList<Publication> = ArrayList()
         onboardingdata.add(Publication("We are Creme de Cornell", "1", "bio", "Creme de Cornell", "image", "rssName", "rssURL", "website"))
         onboardingdata.add(Publication("We are Creme de Cornell", "1", "bio", "Creme de Cornell", "image", "rssName", "rssURL", "website"))
         onboardingdata.add(Publication("We are Creme de Cornell", "1", "bio", "Creme de Cornell", "image", "rssName", "rssURL", "website"))
@@ -81,17 +77,18 @@ class OnboardingFragHolder : AppCompatActivity() {
         viewPager.adapter = fragmentAdapter
 
 
-        viewPager?.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
+        viewPager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
 
             override fun onPageScrollStateChanged(state: Int) {
             }
 
             override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
             }
+
             override fun onPageSelected(position: Int) {
                 when (position) {
-                    0 -> nextButton.setText("Next")
-                    1 -> nextButton.setText("Start Reading")
+                    0 -> nextButton.text = "Next"
+                    1 -> nextButton.text = "Start Reading"
                 }
             }
 
@@ -101,10 +98,12 @@ class OnboardingFragHolder : AppCompatActivity() {
             var current = viewPager.currentItem
             val context = it.context
 
-            when(current){
-                0 -> viewPager.setCurrentItem(1)
-                1 -> {val intent = Intent(context, TabbedActivity::class.java)
-                context?.startActivity(intent)}
+            when (current) {
+                0 -> viewPager.currentItem = 1
+                1 -> {
+                    val intent = Intent(context, TabbedActivity::class.java)
+                    context?.startActivity(intent)
+                }
             }
         }
 
@@ -126,44 +125,44 @@ class OnboardingFragHolder : AppCompatActivity() {
             }
         }
 
-            fun View.setMarginTop(marginStart: Int, interpolatedTime: Float) {
+        fun View.setMarginTop(marginStart: Int, interpolatedTime: Float) {
 
-                val params = layoutParams as ViewGroup.MarginLayoutParams
-                val topMargStart = params.topMargin
-                val animateMargin = topMargStart +  ((marginStart - topMargStart) * interpolatedTime).toInt()
-                params.setMargins(params.leftMargin, animateMargin, params.rightMargin, params.bottomMargin)
-                layoutParams = params
+            val params = layoutParams as ViewGroup.MarginLayoutParams
+            val topMargStart = params.topMargin
+            val animateMargin = topMargStart + ((marginStart - topMargStart) * interpolatedTime).toInt()
+            params.setMargins(params.leftMargin, animateMargin, params.rightMargin, params.bottomMargin)
+            layoutParams = params
+        }
+
+        val slideUp: Animation = object : Animation() {
+            override fun applyTransformation(interpolatedTime: Float, t: Transformation?) {
+                val top = 100
+                volLogo.setMarginTop(top, interpolatedTime)
+            }
+        }
+        slideUp.duration = 1000 // in ms
+        slideUp.setAnimationListener(object : Animation.AnimationListener {
+            override fun onAnimationRepeat(animation: Animation?) {
             }
 
-            val slideUp: Animation = object : Animation() {
-                override fun applyTransformation(interpolatedTime: Float, t: Transformation?) {
-                    val top = 100
-                    volLogo.setMarginTop(top, interpolatedTime)
-                }
+            override fun onAnimationEnd(animation: Animation?) {
+                volMsg.fadeIn()
+                divider.fadeIn()
+                vPager.fadeIn()
+                nextButton.fadeIn()
             }
-            slideUp.duration = 1000 // in ms
-            slideUp.setAnimationListener( object: Animation.AnimationListener {
-                override fun onAnimationRepeat(animation: Animation?) {
-                }
 
-                override fun onAnimationEnd(animation: Animation?) {
-                    volMsg.fadeIn()
-                    divider.fadeIn()
-                    vPager.fadeIn()
-                    nextButton.fadeIn()
-                }
-
-                override fun onAnimationStart(animation: Animation?) {
-                }
-            })
-
-            holderLayout.setOnClickListener {
-                if (initialClick) {
-                    volLogo.startAnimation(slideUp)
-                    initialClick = false
-                }
-
+            override fun onAnimationStart(animation: Animation?) {
             }
+        })
+
+        holderLayout.setOnClickListener {
+            if (initialClick) {
+                volLogo.startAnimation(slideUp)
+                initialClick = false
+            }
+
+        }
 
         prefUtils.save("firstStart", false)
 

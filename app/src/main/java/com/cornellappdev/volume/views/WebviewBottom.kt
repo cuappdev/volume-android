@@ -4,7 +4,6 @@ import PrefUtils
 import android.content.Context
 import android.content.Intent
 import android.util.AttributeSet
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.animation.AnimationUtils
@@ -12,12 +11,9 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.cornellappdev.volume.PublicationProfileActivity
 import com.cornellappdev.volume.R
-import com.cornellappdev.volume.adapters.FollowPublicationsAdapter
 import com.cornellappdev.volume.models.Article
-import com.cornellappdev.volume.models.Publication
 import com.cornellappdev.volume.util.GraphQlUtil
 import com.squareup.picasso.Picasso
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -31,10 +27,10 @@ class WebviewBottom @JvmOverloads constructor(
 ) : ConstraintLayout(context, attrs, defStyleAttr) {
 
     private var profileImageView: ImageView
-    private var seeMoreButton:Button
-    private var bookMark:ImageView
-    private var shareContent:ImageView
-    private var shoutOuts:ImageView
+    private var seeMoreButton: Button
+    private var bookMark: ImageView
+    private var shareContent: ImageView
+    private var shoutOuts: ImageView
     private var shoutOutsNum: TextView
     private var prefUtils = PrefUtils()
     private var graphQlUtil = GraphQlUtil()
@@ -63,10 +59,12 @@ class WebviewBottom @JvmOverloads constructor(
             Picasso.get().load(article.publication?.profileImageURL).into(profileImageView)
         }
         val articleFreshObs =
-                article.id?.let { graphQlUtil
-                        .getArticleByID(it)
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread()) }
+                article.id?.let {
+                    graphQlUtil
+                            .getArticleByID(it)
+                            .subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread())
+                }
         if (articleFreshObs != null) {
             disposables.add(articleFreshObs.subscribe { response ->
                 shoutOutsNum.text = response.data?.getArticleByID?.shoutouts?.toInt().toString()
@@ -81,7 +79,7 @@ class WebviewBottom @JvmOverloads constructor(
             }
             prefUtils.save("savedArticles", currentBookmarks)
         }
-        bookMark.setOnClickListener{ bookmarkArticle() }
+        bookMark.setOnClickListener { bookmarkArticle() }
         seeMoreButton.setOnClickListener { publicationIntent() }
         shareContent.setOnClickListener { shareArticle() }
         article.id?.let {
@@ -111,11 +109,11 @@ class WebviewBottom @JvmOverloads constructor(
         if (currentBookmarks != null) {
             if (!currentBookmarks.contains(article.id)) {
                 article.id?.let { currentBookmarks.add(it) }
-                bookMark.startAnimation(AnimationUtils.loadAnimation(context ,R.anim.shake));
+                bookMark.startAnimation(AnimationUtils.loadAnimation(context, R.anim.shake))
                 bookMark.setImageResource(R.drawable.orange_shoutout_svg)
             } else {
                 currentBookmarks.remove(article.id)
-                bookMark.startAnimation(AnimationUtils.loadAnimation(context ,R.anim.shake));
+                bookMark.startAnimation(AnimationUtils.loadAnimation(context, R.anim.shake))
                 bookMark.setImageResource(R.drawable.ic_black_bookmarksvg)
             }
             prefUtils.save("savedArticles", currentBookmarks)
@@ -123,13 +121,13 @@ class WebviewBottom @JvmOverloads constructor(
     }
 
     fun shareArticle() {
-        shareContent.startAnimation(AnimationUtils.loadAnimation(context ,R.anim.shake))
+        shareContent.startAnimation(AnimationUtils.loadAnimation(context, R.anim.shake))
         val intent = Intent()
         intent.action = Intent.ACTION_SEND
         intent.putExtra(Intent.EXTRA_TEXT,
                 "Look at this article I found on Volume: ${article.articleURL}")
         intent.type = "text/plain"
-        context.startActivity(Intent.createChooser(intent,"Share To:"))
+        context.startActivity(Intent.createChooser(intent, "Share To:"))
     }
 
     fun setArticle(a: Article) {
