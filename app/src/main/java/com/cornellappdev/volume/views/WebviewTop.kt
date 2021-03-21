@@ -5,7 +5,6 @@ import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
 import androidx.constraintlayout.widget.ConstraintLayout
-import com.cornellappdev.volume.R
 import com.cornellappdev.volume.databinding.LayoutWebviewTopBinding
 import com.cornellappdev.volume.models.Article
 
@@ -17,20 +16,10 @@ class WebviewTop @JvmOverloads constructor(
 ) : ConstraintLayout(context, attrs, defStyleAttr) {
 
     private val binding: LayoutWebviewTopBinding =
-            LayoutWebviewTopBinding.bind(
-                    LayoutInflater
-                            .from(context)
-                            .inflate(
-                                    R.layout.layout_webview_top,
-                                    this,
-                                    true))
-
-
-//    private val binding: LayoutWebviewTopBinding =
-//            LayoutWebviewTopBinding.inflate(
-//                    LayoutInflater.from(context),
-//                    this,
-//                    true)
+            LayoutWebviewTopBinding.inflate(
+                    LayoutInflater.from(context),
+                    this,
+                    true)
 
     fun setName(article: Article) {
         binding.tvArticleTitle.text = article.title
