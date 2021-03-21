@@ -52,7 +52,8 @@ class HomeFragment : Fragment() {
             setUpHomeView(binding, isRefreshing = (
                     this::bigRedRV.isInitialized &&
                             this::followingRV.isInitialized &&
-                            this::otherRV.isInitialized))
+                            this::otherRV.isInitialized)
+            )
             binding.srlQuery.isRefreshing = false
         }
         return binding.root
@@ -129,8 +130,8 @@ class HomeFragment : Fragment() {
                         } as MutableList<Article>
                         if (followingArticles.isNotEmpty()) {
                             followingArticles = followingArticles.sortedWith(
-                                    compareByDescending {
-                                        article -> article.date
+                                    compareByDescending { article ->
+                                        article.date
                                     }) as MutableList<Article>
                             if (!isRefreshing) {
                                 followingRV = binding.rvFollowing
@@ -149,7 +150,7 @@ class HomeFragment : Fragment() {
                                 mutableListOf()
                             } else {
                                 followingArticles.drop(NUMBER_OF_FOLLOWING_ARTICLES)
-                                as MutableList<Article>
+                                        as MutableList<Article>
                             }
                         }
                     }
@@ -165,7 +166,7 @@ class HomeFragment : Fragment() {
                 graphQlUtil.getAllPublications()
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
-        disposables.add(allPublicationsObs.subscribe{ response ->
+        disposables.add(allPublicationsObs.subscribe { response ->
             val rawPublications = response.data?.getAllPublications
             if (rawPublications != null) {
                 for (publication in rawPublications) {

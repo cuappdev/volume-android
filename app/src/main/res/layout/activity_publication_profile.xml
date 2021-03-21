@@ -1,30 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools">
+    android:layout_height="match_parent">
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+
         <ImageView
             android:id="@+id/iv_banner"
             android:layout_width="match_parent"
             android:layout_height="135dp"
             android:scaleType="fitXY"
             android:src="@drawable/banner_template"
-            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
             android:id="@+id/iv_logo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
             android:layout_marginTop="135dp"
             android:src="@drawable/logo_template"
-            android:layout_marginStart="15dp"
             app:layout_constraintBottom_toBottomOf="@+id/iv_banner"
-            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@id/iv_banner" />
 
         <TextView
@@ -35,8 +37,8 @@
             android:layout_marginStart="15dp"
             android:text="Publication Name"
             android:textSize="18sp"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toStartOf="@id/btn_follow"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/iv_logo" />
 
         <Button
@@ -51,7 +53,7 @@
             android:textColor="@color/volumeOrange"
             android:textSize="12sp"
             app:layout_constraintBottom_toBottomOf="@+id/tv_name"
-            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/tv_name" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -59,7 +61,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            app:layout_constraintLeft_toLeftOf="@+id/tv_name"
+            app:layout_constraintStart_toStartOf="@+id/tv_name"
             app:layout_constraintTop_toBottomOf="@+id/tv_name">
 
             <TextView
@@ -69,7 +71,7 @@
                 android:layout_height="wrap_content"
                 android:text="10 articles"
                 android:textSize="12sp"
-                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <ImageView
@@ -79,7 +81,7 @@
                 android:layout_marginStart="10dp"
                 android:src="@drawable/smalldot"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintLeft_toRightOf="@+id/tv_article_count"
+                app:layout_constraintStart_toEndOf="@+id/tv_article_count"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
@@ -90,7 +92,7 @@
                 android:layout_marginStart="10dp"
                 android:text="205 shout-outs"
                 android:textSize="12sp"
-                app:layout_constraintLeft_toRightOf="@+id/iv_dot"
+                app:layout_constraintStart_toEndOf="@+id/iv_dot"
                 app:layout_constraintTop_toTopOf="@+id/tv_article_count" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -103,7 +105,7 @@
             android:layout_marginTop="10dp"
             android:text="We are a group of passionate food enthusiasts who come together to publish a diversity of recipes, articles and stories. Once each semester, we publish our magazine Crème de Cornell to highlight a theme in our submitted writings. "
             android:textSize="14sp"
-            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/cl_count_holder" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -111,7 +113,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            app:layout_constraintLeft_toLeftOf="@id/tv_name"
+            app:layout_constraintStart_toStartOf="@id/tv_name"
             app:layout_constraintTop_toBottomOf="@id/tv_description">
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -119,7 +121,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:visibility="visible"
-                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
                 <ImageView
@@ -127,8 +129,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@drawable/ic_insta"
-                    app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
@@ -140,7 +142,7 @@
                     android:text="Instagram"
                     android:textSize="12sp"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintLeft_toRightOf="@+id/iv_insta"
+                    app:layout_constraintStart_toEndOf="@+id/iv_insta"
                     app:layout_constraintTop_toTopOf="parent" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -150,7 +152,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
                 android:visibility="visible"
-                app:layout_constraintLeft_toRightOf="@+id/cl_insta_holder"
+                app:layout_constraintStart_toEndOf="@+id/cl_insta_holder"
                 app:layout_constraintTop_toTopOf="parent">
 
                 <ImageView
@@ -158,9 +160,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@drawable/ic_fb"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
                     android:id="@+id/tv_fb"
@@ -171,7 +173,7 @@
                     android:text="Facebook"
                     android:textSize="12sp"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintLeft_toRightOf="@+id/iv_fb"
+                    app:layout_constraintStart_toEndOf="@+id/iv_fb"
                     app:layout_constraintTop_toTopOf="parent" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -181,7 +183,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
                 android:visibility="visible"
-                app:layout_constraintLeft_toRightOf="@+id/cl_fb_holder"
+                app:layout_constraintStart_toEndOf="@+id/cl_fb_holder"
                 app:layout_constraintTop_toTopOf="parent">
 
                 <ImageView
@@ -189,8 +191,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@drawable/ic_link"
-                    app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
@@ -199,13 +201,13 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="5dp"
+                    android:ellipsize="end"
+                    android:maxEms="10"
+                    android:maxLines="1"
                     android:text="cremedecornell.net"
                     android:textSize="12sp"
-                    android:ellipsize="end"
-                    android:maxLines="1"
-                    android:maxEms="10"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintLeft_toRightOf="@+id/iv_link_image"
+                    app:layout_constraintStart_toEndOf="@+id/iv_link_image"
                     app:layout_constraintTop_toTopOf="parent" />
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -216,8 +218,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="40dp"
             android:src="@drawable/ic_divider"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/cl_social_media_holder" />
 
         <ImageView
@@ -226,7 +228,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="40dp"
             android:src="@drawable/ic_articles"
-            app:layout_constraintLeft_toLeftOf="@id/tv_name"
+            app:layout_constraintStart_toStartOf="@id/tv_name"
             app:layout_constraintTop_toBottomOf="@id/iv_divider" />
 
         <androidx.recyclerview.widget.RecyclerView
@@ -234,7 +236,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            tools:listitem="@layout/item_article"
-            app:layout_constraintTop_toBottomOf="@+id/iv_articles_header" />
+            app:layout_constraintTop_toBottomOf="@+id/iv_articles_header"
+            tools:listitem="@layout/item_article" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.core.widget.NestedScrollView>

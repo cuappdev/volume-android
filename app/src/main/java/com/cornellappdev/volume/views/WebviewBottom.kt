@@ -54,10 +54,12 @@ class WebviewBottom @JvmOverloads constructor(
             Picasso.get().load(article.publication?.profileImageURL).into(binding.ivPublicationLogo)
         }
         val articleFreshObs =
-                article.id?.let { graphQlUtil
-                        .getArticleByID(it)
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread()) }
+                article.id?.let {
+                    graphQlUtil
+                            .getArticleByID(it)
+                            .subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread())
+                }
         if (articleFreshObs != null) {
             disposables.add(articleFreshObs.subscribe { response ->
                 binding.tvShoutoutCount.text = response.data?.getArticleByID?.shoutouts?.toInt().toString()
@@ -72,7 +74,7 @@ class WebviewBottom @JvmOverloads constructor(
             }
             prefUtils.save("savedArticles", currentBookmarks)
         }
-        binding.ivBookmarkIcon.setOnClickListener{ bookmarkArticle() }
+        binding.ivBookmarkIcon.setOnClickListener { bookmarkArticle() }
         binding.btnSeeMore.setOnClickListener { publicationIntent() }
         binding.ivShare.setOnClickListener { shareArticle() }
         article.id?.let {
@@ -120,7 +122,7 @@ class WebviewBottom @JvmOverloads constructor(
         intent.putExtra(Intent.EXTRA_TEXT,
                 "Look at this article I found on Volume: ${article.articleURL}")
         intent.type = "text/plain"
-        context.startActivity(Intent.createChooser(intent,"Share To:"))
+        context.startActivity(Intent.createChooser(intent, "Share To:"))
     }
 
     fun setArticle(a: Article) {

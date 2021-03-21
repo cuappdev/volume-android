@@ -20,7 +20,7 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 
 class PublicationProfileActivity : AppCompatActivity() {
-    
+
     private lateinit var publication: Publication
     private lateinit var binding: ActivityPublicationProfileBinding
     private val disposables = CompositeDisposable()
@@ -46,7 +46,8 @@ class PublicationProfileActivity : AppCompatActivity() {
         } else {
             binding.btnFollow.apply {
                 text = " +  Follow"
-                setBackgroundResource(R.drawable.rounded_rectangle_button)}
+                setBackgroundResource(R.drawable.rounded_rectangle_button)
+            }
         }
 
         binding.btnFollow.setOnClickListener {

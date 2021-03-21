@@ -55,12 +55,12 @@ class MorePublicationsAdapter(private val publicationList: List<Publication>,
             if (holder.binding.btnFollow.drawable.constantState == ContextCompat.getDrawable(it.context,
                             R.drawable.ic_followplussvg)!!.constantState) {
                 holder.binding.btnFollow.setImageResource(R.drawable.ic_followchecksvg)
-                    val tempSet =
-                            prefUtils.getStringSet("following", mutableSetOf())?.toMutableSet()
-                    if (tempSet != null) {
-                        tempSet.add(currentItem.id)
-                        prefUtils.save("following", tempSet)
-                    }
+                val tempSet =
+                        prefUtils.getStringSet("following", mutableSetOf())?.toMutableSet()
+                if (tempSet != null) {
+                    tempSet.add(currentItem.id)
+                    prefUtils.save("following", tempSet)
+                }
             } else {
                 holder.binding.btnFollow.setImageResource(R.drawable.ic_followplussvg)
                 val tempSet =

@@ -20,13 +20,13 @@
             style="@style/begum_black"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="1"
             android:text="Creme de Cornell"
             android:textSize="12sp"
-            android:maxLines="1"
-            android:ellipsize="end"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toStartOf="@id/iv_article_image"
-            app:layout_constraintTop_toTopOf="parent"  />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/tv_article_title"
@@ -35,12 +35,12 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="2dp"
             android:layout_marginEnd="10dp"
-            android:text="Sangkhaya: Thai Pandan Custard Dip"
-            android:maxLines="3"
-            android:textSize="16sp"
             android:ellipsize="end"
-            app:layout_constraintStart_toStartOf="parent"
+            android:maxLines="3"
+            android:text="Sangkhaya: Thai Pandan Custard Dip"
+            android:textSize="16sp"
             app:layout_constraintEnd_toStartOf="@id/iv_article_image"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_publication_name" />
 
         <ImageView
@@ -50,22 +50,10 @@
             android:background="@color/creamy_white"
             android:scaleType="fitXY"
             android:visibility="gone"
-            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@color/creamy_white"
             tools:srcCompat="@color/creamy_white" />
-
-
-<!--        <androidx.constraintlayout.widget.ConstraintLayout-->
-<!--            android:id="@+id/desc_holder_home"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_marginTop="10dp"-->
-<!--            app:layout_constraintBottom_toBottomOf="parent"-->
-<!--            app:layout_constraintLeft_toLeftOf="parent">-->
-
-
-<!--        </androidx.constraintlayout.widget.ConstraintLayout>-->
 
         <TextView
             android:id="@+id/tv_dot"

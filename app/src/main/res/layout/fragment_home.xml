@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.swiperefreshlayout.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/srl_query"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:id="@+id/srl_query">
+    android:layout_height="match_parent">
+
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -45,20 +45,20 @@
                 app:layout_constraintTop_toBottomOf="@id/iv_big_read_header" />
 
             <androidx.constraintlayout.widget.Group
+                android:id="@+id/group_following"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/group_following"
                 android:visibility="visible"
                 app:constraint_referenced_ids="more_articles_message,
-                up_to_date_line, more_articles_message_long"/>
+                up_to_date_line, more_articles_message_long" />
 
             <androidx.constraintlayout.widget.Group
+                android:id="@+id/group_not_following"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/group_not_following"
                 android:visibility="gone"
                 app:constraint_referenced_ids="more_articles_message_nothing,
-                more_articles_message_long_nothing"/>
+                more_articles_message_long_nothing" />
 
             <ImageView
                 android:id="@+id/iv_following_header"
@@ -83,11 +83,11 @@
                 android:id="@+id/volume_logo_more_articles"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:srcCompat="@drawable/volume_logo"
                 android:layout_marginTop="30dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/rv_following"/>
+                app:layout_constraintTop_toBottomOf="@id/rv_following"
+                app:srcCompat="@drawable/volume_logo" />
 
             <TextView
                 android:id="@+id/more_articles_message"
@@ -104,10 +104,10 @@
                 android:id="@+id/up_to_date_line"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:srcCompat="@drawable/ic_line"
-                app:layout_constraintStart_toStartOf="@id/more_articles_message"
                 app:layout_constraintEnd_toEndOf="@id/more_articles_message"
-                app:layout_constraintTop_toBottomOf="@id/more_articles_message"/>
+                app:layout_constraintStart_toStartOf="@id/more_articles_message"
+                app:layout_constraintTop_toBottomOf="@id/more_articles_message"
+                app:srcCompat="@drawable/ic_line" />
 
             <TextView
                 android:id="@+id/more_articles_message_long"

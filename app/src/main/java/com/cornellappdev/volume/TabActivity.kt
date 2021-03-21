@@ -10,7 +10,7 @@ import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 
 class TabActivity : AppCompatActivity() {
-    
+
     private lateinit var binding: ActivityTabBinding
 
     companion object {
@@ -21,7 +21,7 @@ class TabActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityTabBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        
+
         binding.vpFragments.reduceDragSensitivity()
         binding.vpFragments.isUserInputEnabled = true
         binding.vpFragments.adapter = CustomPagerAdapter(this, binding.tlTabs.tabCount)
@@ -30,7 +30,7 @@ class TabActivity : AppCompatActivity() {
         binding.tlTabs.getTabAt(0)?.setIcon(R.drawable.ic_volumesvg_orange)
         binding.tlTabs.getTabAt(1)?.setIcon(R.drawable.ic_book_gray)
         binding.tlTabs.getTabAt(2)?.setIcon(R.drawable.ic_bookmark_gray)
-        binding.tlTabs.addOnTabSelectedListener(object: TabLayout.OnTabSelectedListener {
+        binding.tlTabs.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
                 when (tab?.position) {
                     0 -> {

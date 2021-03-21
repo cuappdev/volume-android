@@ -35,7 +35,7 @@ class OnboardingFragTwo : Fragment() {
 
     private fun setupArticlesRV(onboardingBinding: FragmentOnboardingTwoBinding) {
         val pubsObs = graphQlUtil.getAllPublications().subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
-        disposables.add(pubsObs.subscribe{
+        disposables.add(pubsObs.subscribe {
             val allPubs = mutableListOf<Publication>()
             it.data?.getAllPublications?.mapTo(allPubs, { publication ->
                 Publication(
@@ -54,7 +54,8 @@ class OnboardingFragTwo : Fragment() {
                                 publication.mostRecentArticle?.title,
                                 publication.mostRecentArticle?.articleURL,
                                 publication.mostRecentArticle?.imageURL,
-                                nsfw = publication.mostRecentArticle?.nsfw))
+                                nsfw = publication.mostRecentArticle?.nsfw)
+                )
             })
             if (this.context != null) {
                 onboardingBinding.rvPublications.adapter =

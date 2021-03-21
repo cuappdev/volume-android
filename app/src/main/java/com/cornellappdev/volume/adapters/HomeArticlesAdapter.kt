@@ -17,7 +17,7 @@ class HomeArticlesAdapter(private val articles: MutableList<Article>) :
 
     class HomeArticleVH(val binding: ItemHomeArticleBinding) : RecyclerView.ViewHolder(binding.root)
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int):  HomeArticleVH {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HomeArticleVH {
         val binding = ItemHomeArticleBinding
                 .inflate(LayoutInflater.from(parent.context), parent, false)
         return HomeArticleVH(binding)
