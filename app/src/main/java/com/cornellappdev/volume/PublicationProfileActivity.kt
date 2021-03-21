@@ -27,8 +27,8 @@ import kotlinx.android.synthetic.main.publication_profile_activity.*
 
 class PublicationProfileActivity : AppCompatActivity() {
 
-    private lateinit var profile_banner : ImageView
-    private lateinit var profile_logo : ImageView
+    private lateinit var profile_banner: ImageView
+    private lateinit var profile_logo: ImageView
     private lateinit var profile_name: TextView
     private lateinit var profile_follow: Button
     private lateinit var profile_articles: TextView
@@ -37,7 +37,7 @@ class PublicationProfileActivity : AppCompatActivity() {
     private lateinit var profile_link: TextView
     private lateinit var profile_desc: TextView
     private lateinit var profile_articles_rv: RecyclerView
-    private lateinit var publication:Publication
+    private lateinit var publication: Publication
 
     val disposables = CompositeDisposable()
 
@@ -65,7 +65,7 @@ class PublicationProfileActivity : AppCompatActivity() {
         publication = intent.getParcelableExtra("publication")!!
         getPublication(publication.id)
 
-        if(currentFollowingSet!!.contains(publication.id)) {
+        if (currentFollowingSet!!.contains(publication.id)) {
             follow_button.apply {
                 text = "Following"
                 setTextColor(ContextCompat.getColor(this.context, R.color.ligthgray))
@@ -74,12 +74,13 @@ class PublicationProfileActivity : AppCompatActivity() {
         } else {
             follow_button.apply {
                 text = " +  Follow"
-                setBackgroundResource(R.drawable.rounded_rectangle_button)}
+                setBackgroundResource(R.drawable.rounded_rectangle_button)
+            }
         }
 
         follow_button.setOnClickListener {
-            if(follow_button.text.equals("Following")){
-                follow_button.apply{
+            if (follow_button.text.equals("Following")) {
+                follow_button.apply {
                     text = " +  Follow"
                     setBackgroundResource(R.drawable.rounded_rectangle_button)
                     setTextColor(ContextCompat.getColor(this.context, R.color.volumeOrange))
@@ -87,8 +88,7 @@ class PublicationProfileActivity : AppCompatActivity() {
                     prefUtils.save("following", currentFollowingSet)
                 }
 
-            }
-            else {
+            } else {
                 follow_button.apply {
                     text = "Following"
                     setTextColor(ContextCompat.getColor(this.context, R.color.ligthgray))
@@ -101,7 +101,7 @@ class PublicationProfileActivity : AppCompatActivity() {
         setUpArticleRV()
     }
 
-    private fun setUpArticleRV(){
+    private fun setUpArticleRV() {
         val articles = mutableListOf<Article>()
         val followingObs = graphQlUtil
                 .getArticleByPublicationID(publication.id)
@@ -128,7 +128,7 @@ class PublicationProfileActivity : AppCompatActivity() {
         })
     }
 
-    private fun getPublication(pub: String){
+    private fun getPublication(pub: String) {
         var instaURL = ""
         var facebookURL = ""
         val followingObs = graphQlUtil.getPublicationByID(pub).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
@@ -164,7 +164,7 @@ class PublicationProfileActivity : AppCompatActivity() {
                     findViewById<ConstraintLayout>(R.id.fb_holder).visibility = View.GONE
                 }
                 profile_name.text = publication.name
-                profile_shoutouts.text = publication.shoutouts?.toInt().toString() + " shoutouts"
+                profile_shoutouts.text = publication.shoutouts.toInt().toString() + " shoutouts"
                 profile_desc.text = publication.bio
                 Picasso.get().load(publication.backgroundImageURL).into(profile_banner)
                 Picasso.get().load(publication.profileImageURL).into(profile_logo)

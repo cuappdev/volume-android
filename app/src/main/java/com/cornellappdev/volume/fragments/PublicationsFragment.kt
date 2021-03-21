@@ -34,7 +34,7 @@ class PublicationsFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater,
                               container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        val view =  inflater.inflate(R.layout.all_publications, container, false)
+        val view = inflater.inflate(R.layout.all_publications, container, false)
         getFollowingPublications(view, isRefreshing = false)
         getMorePublications(view)
         val swipeRefreshLayout: SwipeRefreshLayout = view.findViewById(R.id.swipe_container)
@@ -92,9 +92,9 @@ class PublicationsFragment : Fragment() {
                 prefUtils.getStringSet("following", mutableSetOf())?.toMutableList()
         val followingObs = followingPublicationsIDs?.let {
             graphQlUtil
-                .getPublicationsByIDs(it)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
+                    .getPublicationsByIDs(it)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
         }
         if (followingObs != null) {
             disposables.add(followingObs.subscribe { response ->

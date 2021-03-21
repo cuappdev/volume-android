@@ -20,7 +20,7 @@ import kotlinx.android.synthetic.main.home_other_articles.view.*
 class HomeOtherArticleAdapter(private val articles: MutableList<Article>) :
         RecyclerView.Adapter<HomeOtherArticleAdapter.OtherArticleVH>() {
 
-    class OtherArticleVH(itemView : View) : RecyclerView.ViewHolder(itemView) {
+    class OtherArticleVH(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val pubName: TextView = itemView.article_pub_name_following_o
         val articleTitle: TextView = itemView.article_title_home_o
         val articleImg: ImageView = itemView.article_img_home_o
@@ -29,11 +29,11 @@ class HomeOtherArticleAdapter(private val articles: MutableList<Article>) :
         val layout: ConstraintLayout = itemView.following_home_layout
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int):  OtherArticleVH {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): OtherArticleVH {
         val itemView = LayoutInflater
                 .from(parent.context)
                 .inflate(R.layout.home_other_articles, parent, false)
-        return OtherArticleVH (itemView)
+        return OtherArticleVH(itemView)
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -51,7 +51,7 @@ class HomeOtherArticleAdapter(private val articles: MutableList<Article>) :
 
         holder.layout.setOnClickListener {
             val intent = Intent(holder.layout.context, MainActivity::class.java)
-            intent.putExtra("article",currentItem)
+            intent.putExtra("article", currentItem)
             holder.layout.context?.startActivity(intent)
         }
     }
