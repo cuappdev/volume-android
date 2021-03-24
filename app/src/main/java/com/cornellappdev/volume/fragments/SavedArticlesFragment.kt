@@ -68,7 +68,7 @@ class SavedArticlesFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        binding.let { loadArticles(it) }
+        binding?.let { loadArticles(it) }
     }
 
     override fun onDestroyView() {

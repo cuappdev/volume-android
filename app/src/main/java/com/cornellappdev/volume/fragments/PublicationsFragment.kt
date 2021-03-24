@@ -143,7 +143,7 @@ class PublicationsFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        binding.let {
+        binding?.let {
             getMorePublications(it)
             getFollowingPublications(it, isRefreshing = this::followpublicationRV.isInitialized)
         }
