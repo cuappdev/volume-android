@@ -27,24 +27,24 @@ class TabActivity : AppCompatActivity() {
         binding.vpFragments.adapter = CustomPagerAdapter(this, binding.tlTabs.tabCount)
         TabLayoutMediator(binding.tlTabs, binding.vpFragments) { _, _ ->
         }.attach()
-        binding.tlTabs.getTabAt(0)?.setIcon(R.drawable.ic_volumesvg_orange)
+        binding.tlTabs.getTabAt(0)?.setIcon(R.drawable.ic_volume_bars_orange_tab)
         binding.tlTabs.getTabAt(1)?.setIcon(R.drawable.ic_book_gray)
         binding.tlTabs.getTabAt(2)?.setIcon(R.drawable.ic_bookmark_gray)
         binding.tlTabs.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
                 when (tab?.position) {
                     0 -> {
-                        binding.tlTabs.getTabAt(0)?.setIcon(R.drawable.ic_volumesvg_orange)
+                        binding.tlTabs.getTabAt(0)?.setIcon(R.drawable.ic_volume_bars_orange_tab)
                         binding.tlTabs.getTabAt(1)?.setIcon(R.drawable.ic_book_gray)
                         binding.tlTabs.getTabAt(2)?.setIcon(R.drawable.ic_bookmark_gray)
                     }
                     1 -> {
-                        binding.tlTabs.getTabAt(0)?.setIcon(R.drawable.ic_volumesvg_gray)
+                        binding.tlTabs.getTabAt(0)?.setIcon(R.drawable.ic_volume_bars_gray_tab)
                         binding.tlTabs.getTabAt(1)?.setIcon(R.drawable.ic_book_orange)
                         binding.tlTabs.getTabAt(2)?.setIcon(R.drawable.ic_bookmark_gray)
                     }
                     2 -> {
-                        binding.tlTabs.getTabAt(0)?.setIcon(R.drawable.ic_volumesvg_gray)
+                        binding.tlTabs.getTabAt(0)?.setIcon(R.drawable.ic_volume_bars_gray_tab)
                         binding.tlTabs.getTabAt(1)?.setIcon(R.drawable.ic_book_gray)
                         binding.tlTabs.getTabAt(2)?.setIcon(R.drawable.ic_bookmark_orange)
                     }
