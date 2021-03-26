@@ -52,37 +52,28 @@
                 android:id="@+id/group_not_following"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:visibility="gone"
-                app:constraint_referenced_ids="volume_logo_more_articles, more_articles_message_nothing,
+                android:visibility="visible"
+                app:constraint_referenced_ids="more_articles_message_nothing,
                 more_articles_message_long_nothing" />
-
-            <ImageView
-                android:id="@+id/volume_logo_more_articles"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="30dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/rv_following"
-                app:srcCompat="@drawable/volume_logo" />
 
             <TextView
                 android:id="@+id/more_articles_message_nothing"
                 style="@style/begum_black"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Nothing to see here!"
-                android:textSize="16sp"
+                android:layout_marginTop="30dp"
+                android:text="No Followed Publications!"
+                android:textSize="18sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/volume_logo_more_articles" />
+                app:layout_constraintTop_toBottomOf="@id/rv_following" />
 
             <TextView
                 android:id="@+id/more_articles_message_long_nothing"
                 style="@style/helvetica_black"
                 android:layout_width="291dp"
                 android:layout_height="wrap_content"
-                android:text="Follow some student publications that you are interested in."
+                android:text="Follow some below and we’ll show them up here."
                 android:textAlignment="center"
                 android:textSize="12sp"
                 app:layout_constraintEnd_toEndOf="parent"

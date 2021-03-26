@@ -43,46 +43,51 @@
             app:layout_constraintTop_toBottomOf="@id/tv_saved_articles" />
 
 
-        <androidx.constraintlayout.widget.Group
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/no_saved_articles_group"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:visibility="visible"
-            app:constraint_referenced_ids="iv_volume_logo, tv_nothing_to_see, tv_no_saved_articles" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintRight_toRightOf="parent">
 
-        <ImageView
-            android:id="@+id/iv_volume_logo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="100dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@id/tv_saved_articles"
-            app:srcCompat="@drawable/volume_logo" />
+            <ImageView
+                android:id="@+id/iv_volume_logo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="18dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/ic_volume_bars" />
 
-        <TextView
-            android:id="@+id/tv_nothing_to_see"
-            style="@style/helvetica_black"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Nothing to see here!"
-            android:textSize="12sp"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/iv_volume_logo" />
+            <TextView
+                android:id="@+id/tv_nothing_to_see"
+                style="@style/begum_black"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Nothing to see here!"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                android:layout_marginBottom="8dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/iv_volume_logo" />
 
-        <TextView
-            android:id="@+id/tv_no_saved_articles"
-            style="@style/helvetica_black"
-            android:layout_width="291dp"
-            android:layout_height="wrap_content"
-            android:text="You have no saved articles."
-            android:textAlignment="center"
-            android:textSize="12sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_nothing_to_see" />
+            <TextView
+                android:id="@+id/tv_no_saved_articles"
+                style="@style/helvetica_black"
+                android:layout_width="291dp"
+                android:layout_height="wrap_content"
+                android:text="You have no saved articles."
+                android:textAlignment="center"
+                android:textSize="16sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_nothing_to_see" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

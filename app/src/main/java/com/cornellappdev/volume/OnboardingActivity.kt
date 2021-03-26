@@ -58,7 +58,7 @@ class OnboardingActivity : AppCompatActivity(), OnboardingFragTwo.DataPassListen
                         binding.btnNext.text = "Start Reading"
                         binding.btnNext.isClickable = false
                         binding.btnNext.setTextColor(ContextCompat.getColor(
-                                this@OnboardingActivity, R.color.grey))
+                                this@OnboardingActivity, R.color.gray))
                     }
                 }
             }
@@ -145,7 +145,7 @@ class OnboardingActivity : AppCompatActivity(), OnboardingFragTwo.DataPassListen
                         this@OnboardingActivity, R.color.volumeOrange)
             } else {
                 ContextCompat.getColor(
-                        this@OnboardingActivity, R.color.grey)
+                        this@OnboardingActivity, R.color.gray)
             })
         }
     }
