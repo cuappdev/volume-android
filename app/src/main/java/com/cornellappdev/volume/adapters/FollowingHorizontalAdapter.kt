@@ -33,7 +33,7 @@ class FollowingHorizontalAdapter(private val followedPublications: MutableList<P
         holder.binding.tvName.text = currentItem.name
         holder.binding.clVeticalPublicationLayout.setOnClickListener { view ->
             val intent = Intent(view.context, PublicationProfileActivity::class.java)
-            intent.putExtra("publication", currentItem)
+            intent.putExtra(Publication.INTENT_KEY, currentItem)
             view.context.startActivity(intent)
         }
     }

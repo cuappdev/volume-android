@@ -30,7 +30,7 @@ class SavedArticlesAdapter(private val articles: List<Article>) :
         Article.applyNSFWFilter(currentItem, holder.binding.tvArticleTitle)
         if (!currentItem.imageURL.isNullOrBlank()) {
             holder.binding.ivArticleImage.visibility = View.VISIBLE
-            Picasso.get().load(currentItem.imageURL).into(holder.binding.ivArticleImage)
+            Picasso.get().load(currentItem.imageURL).fit().centerCrop().into(holder.binding.ivArticleImage)
         }
         Article.setCorrectDateText(currentItem, holder.binding.tvTimePosted)
         holder.binding.tvShoutoutCount.text =
@@ -38,7 +38,7 @@ class SavedArticlesAdapter(private val articles: List<Article>) :
         holder.binding.tvPublicationName.text = currentItem.publication!!.name
         holder.binding.clArticleLayout.setOnClickListener { view ->
             val intent = Intent(view.context, MainActivity::class.java)
-            intent.putExtra("article", currentItem)
+            intent.putExtra(Article.INTENT_KEY, currentItem)
             view.context.startActivity(intent)
         }
     }

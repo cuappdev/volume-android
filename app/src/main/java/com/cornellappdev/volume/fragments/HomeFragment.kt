@@ -60,7 +60,7 @@ class HomeFragment : Fragment() {
     }
 
     private fun setUpHomeView(binding: FragmentHomeBinding, isRefreshing: Boolean) {
-        val followingPublications = prefUtils.getStringSet("following", mutableSetOf())?.toMutableList()
+        val followingPublications = prefUtils.getStringSet(PrefUtils.FOLLOWING_KEY, mutableSetOf())?.toMutableList()
         // Get the trending articles for Big Read section
         val trendingArticles = mutableListOf<Article>()
         val trendingArticlesId = mutableListOf<String>()
@@ -90,6 +90,7 @@ class HomeFragment : Fragment() {
             }
             if (!isRefreshing) {
                 bigRedRV = binding.rvBigRead
+                bigRedRV.isNestedScrollingEnabled = false
                 bigRedRV.adapter = BigReadHomeAdapter(trendingArticles)
                 val linearLayoutManager = LinearLayoutManager(context)
                 linearLayoutManager.orientation = LinearLayoutManager.HORIZONTAL
@@ -135,6 +136,7 @@ class HomeFragment : Fragment() {
                                     }) as MutableList<Article>
                             if (!isRefreshing) {
                                 followingRV = binding.rvFollowing
+                                followingRV.isNestedScrollingEnabled = false
                                 followingRV.layoutManager = LinearLayoutManager(context)
                                 followingRV.adapter = HomeArticlesAdapter(
                                         followingArticles.take(NUMBER_OF_FOLLOWING_ARTICLES)
@@ -213,6 +215,7 @@ class HomeFragment : Fragment() {
                             }
                             if (!isRefreshing) {
                                 otherRV = binding.rvOtherArticles
+                                otherRV.isNestedScrollingEnabled = false
                                 otherRV.layoutManager = LinearLayoutManager(context)
                                 otherRV.adapter = HomeArticlesAdapter(otherArticles.shuffled()
                                         as MutableList<Article>)

@@ -33,7 +33,7 @@ class SavedArticlesFragment : Fragment() {
     }
 
     private fun loadArticles(savedArticlesBinding: FragmentSavedArticlesBinding) {
-        val articleIds = prefUtils.getStringSet("savedArticles", mutableSetOf())?.toMutableSet()
+        val articleIds = prefUtils.getStringSet(PrefUtils.SAVED_ARTICLES_KEY, mutableSetOf())?.toMutableSet()
         val obs = articleIds?.let { graphQlUtil.getArticlesByIDs(it).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()) }
         val savedArticles = mutableListOf<Article>()
         if (obs != null) {
