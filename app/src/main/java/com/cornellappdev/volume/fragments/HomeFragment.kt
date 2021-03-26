@@ -5,16 +5,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.constraintlayout.widget.Group
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.cornellappdev.volume.R
 import com.cornellappdev.volume.adapters.BigReadHomeAdapter
-import com.cornellappdev.volume.adapters.HomeFollowingArticleAdapters
-import com.cornellappdev.volume.adapters.HomeOtherArticleAdapter
+import com.cornellappdev.volume.adapters.HomeArticlesAdapter
+import com.cornellappdev.volume.databinding.FragmentHomeBinding
 import com.cornellappdev.volume.models.Article
 import com.cornellappdev.volume.models.Publication
 import com.cornellappdev.volume.util.GraphQlUtil
@@ -29,8 +27,9 @@ class HomeFragment : Fragment() {
     private lateinit var otherRV: RecyclerView
     private lateinit var disposables: CompositeDisposable
     private lateinit var graphQlUtil: GraphQlUtil
-    private lateinit var homeView: View
-    private val prefUtils: PrefUtils = PrefUtils()
+    private var _binding: FragmentHomeBinding? = null
+    private val binding get() = _binding!!
+    private val prefUtils = PrefUtils()
 
     companion object {
         private const val NUMBER_OF_TRENDING_ARTICLES = 7.0
@@ -41,30 +40,27 @@ class HomeFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater,
                               container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
-        homeView = inflater.inflate(R.layout.home_fragment, container, false)
+        _binding = FragmentHomeBinding.inflate(inflater, container, false)
         disposables = CompositeDisposable()
         graphQlUtil = GraphQlUtil()
-        setUpHomeView(isRefreshing = false)
-        val swipeRefreshLayout: SwipeRefreshLayout = homeView.findViewById(R.id.swipe_container)
+        setUpHomeView(binding, isRefreshing = false)
         val volumeOrange: Int? = context?.let { ContextCompat.getColor(it, R.color.volumeOrange) }
         if (volumeOrange != null) {
-            swipeRefreshLayout.setColorSchemeColors(volumeOrange, volumeOrange, volumeOrange)
+            binding.srlQuery.setColorSchemeColors(volumeOrange, volumeOrange, volumeOrange)
         }
-        swipeRefreshLayout.setOnRefreshListener {
-            setUpHomeView(isRefreshing = (
+        binding.srlQuery.setOnRefreshListener {
+            setUpHomeView(binding, isRefreshing = (
                     this::bigRedRV.isInitialized &&
-                    this::followingRV.isInitialized &&
-                    this::otherRV.isInitialized
-                    )
+                            this::followingRV.isInitialized &&
+                            this::otherRV.isInitialized)
             )
-            swipeRefreshLayout.isRefreshing = false
+            binding.srlQuery.isRefreshing = false
         }
-        return homeView
+        return binding.root
     }
 
-
-    private fun setUpHomeView(isRefreshing: Boolean) {
-        val followingPublications = prefUtils.getStringSet("following", mutableSetOf())?.toMutableList()
+    private fun setUpHomeView(binding: FragmentHomeBinding, isRefreshing: Boolean) {
+        val followingPublications = prefUtils.getStringSet(PrefUtils.FOLLOWING_KEY, mutableSetOf())?.toMutableList()
         // Get the trending articles for Big Read section
         val trendingArticles = mutableListOf<Article>()
         val trendingArticlesId = mutableListOf<String>()
@@ -93,9 +89,10 @@ class HomeFragment : Fragment() {
                 }
             }
             if (!isRefreshing) {
-                bigRedRV = homeView.findViewById(R.id.big_red_rv)
+                bigRedRV = binding.rvBigRead
+                bigRedRV.isNestedScrollingEnabled = false
                 bigRedRV.adapter = BigReadHomeAdapter(trendingArticles)
-                val linearLayoutManager = LinearLayoutManager(homeView.context)
+                val linearLayoutManager = LinearLayoutManager(context)
                 linearLayoutManager.orientation = LinearLayoutManager.HORIZONTAL
                 bigRedRV.layoutManager = linearLayoutManager
             } else {
@@ -107,30 +104,28 @@ class HomeFragment : Fragment() {
         // Retrieve articles from those followed
         var followingArticles = mutableListOf<Article>()
         if (!followingPublications.isNullOrEmpty()) {
-            val followingObs = graphQlUtil.getArticleByPublicationIDs(followingPublications)
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
+            val followingObs =
+                    graphQlUtil.getArticleByPublicationIDs(followingPublications)
+                            .subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread())
             if (followingObs != null) {
                 disposables.add(followingObs.subscribe { response ->
                     if (response.data?.getArticlesByPublicationIDs != null) {
                         response.data?.getArticlesByPublicationIDs?.mapTo(
                                 followingArticles, { article ->
-                                    Article(
-                                            title = article.title,
-                                            articleURL = article.articleURL,
-                                            date = article.date.toString(),
-                                            id = article.id,
-                                            imageURL = article.imageURL,
-                                            publication = Publication(
-                                                    id = article.publication.id,
-                                                    name = article.publication.name,
-                                                    profileImageURL = article.publication.profileImageURL
-                                            ),
-                                            shoutouts = article.shoutouts,
-                                            nsfw = article.nsfw
-                                    )
-                                }
-                        )
+                            Article(
+                                    title = article.title,
+                                    articleURL = article.articleURL,
+                                    date = article.date.toString(),
+                                    id = article.id,
+                                    imageURL = article.imageURL,
+                                    publication = Publication(
+                                            id = article.publication.id,
+                                            name = article.publication.name,
+                                            profileImageURL = article.publication.profileImageURL),
+                                    shoutouts = article.shoutouts,
+                                    nsfw = article.nsfw)
+                        })
                         followingArticles = followingArticles.filter { article ->
                             !trendingArticlesId.contains(article.id)
                         } as MutableList<Article>
@@ -140,14 +135,15 @@ class HomeFragment : Fragment() {
                                         article.date
                                     }) as MutableList<Article>
                             if (!isRefreshing) {
-                                followingRV = homeView.findViewById(R.id.follwing_rv)
-                                followingRV.layoutManager = LinearLayoutManager(homeView.context)
-                                followingRV.adapter = HomeFollowingArticleAdapters(
+                                followingRV = binding.rvFollowing
+                                followingRV.isNestedScrollingEnabled = false
+                                followingRV.layoutManager = LinearLayoutManager(context)
+                                followingRV.adapter = HomeArticlesAdapter(
                                         followingArticles.take(NUMBER_OF_FOLLOWING_ARTICLES)
                                                 as MutableList<Article>
                                 )
                             } else {
-                                val adapter = followingRV.adapter as HomeFollowingArticleAdapters
+                                val adapter = followingRV.adapter as HomeArticlesAdapter
                                 adapter.clear()
                                 adapter.addAll(followingArticles.take(NUMBER_OF_FOLLOWING_ARTICLES))
                             }
@@ -162,6 +158,9 @@ class HomeFragment : Fragment() {
                     }
                 })
             }
+        } else if (isRefreshing) {
+            val adapter = followingRV.adapter as HomeArticlesAdapter
+            adapter.clear()
         }
         // Get the articles for the other section, first taken from
         // publications the user doesn't follow then so to make up the difference
@@ -215,12 +214,13 @@ class HomeFragment : Fragment() {
                                         NUMBER_OF_OTHER_ARTICLES - otherArticles.size))
                             }
                             if (!isRefreshing) {
-                                otherRV = homeView.findViewById(R.id.other_articlesrv)
-                                otherRV.layoutManager = LinearLayoutManager(homeView.context)
-                                otherRV.adapter = HomeOtherArticleAdapter(otherArticles.shuffled()
+                                otherRV = binding.rvOtherArticles
+                                otherRV.isNestedScrollingEnabled = false
+                                otherRV.layoutManager = LinearLayoutManager(context)
+                                otherRV.adapter = HomeArticlesAdapter(otherArticles.shuffled()
                                         as MutableList<Article>)
                             } else {
-                                val adapter = otherRV.adapter as HomeOtherArticleAdapter
+                                val adapter = otherRV.adapter as HomeArticlesAdapter
                                 adapter.clear()
                                 adapter.addAll(otherArticles.shuffled())
                             }
@@ -230,16 +230,21 @@ class HomeFragment : Fragment() {
             }
         })
         if (followingPublications?.isEmpty() == true) {
-            homeView.findViewById<Group>(R.id.following_group).visibility = View.INVISIBLE
-            homeView.findViewById<Group>(R.id.not_following_group).visibility = View.VISIBLE
+            binding.groupFollowing.visibility = View.INVISIBLE
+            binding.groupNotFollowing.visibility = View.VISIBLE
         } else {
-            homeView.findViewById<Group>(R.id.following_group).visibility = View.VISIBLE
-            homeView.findViewById<Group>(R.id.not_following_group).visibility = View.GONE
+            binding.groupFollowing.visibility = View.VISIBLE
+            binding.groupNotFollowing.visibility = View.GONE
         }
     }
 
     override fun onDestroy() {
         disposables.clear()
         super.onDestroy()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

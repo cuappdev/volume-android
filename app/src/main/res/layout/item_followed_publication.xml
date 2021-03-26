@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/cl_vetical_publication_layout"
+    android:layout_width="90dp"
+    android:layout_height="110dp"
+    android:layout_marginEnd="20dp">
+
+    <ImageView
+        android:id="@+id/iv_logo"
+        android:layout_width="75dp"
+        android:layout_height="75dp"
+        android:src="@drawable/cremelogotrans"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_name"
+        style="@style/begum_black"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:ellipsize="end"
+        android:gravity="center"
+        android:maxLines="2"
+        android:text="Creme de Cornell"
+        android:textSize="12sp"
+        app:layout_constraintStart_toStartOf="@+id/iv_logo"
+        app:layout_constraintEnd_toEndOf="@id/iv_logo"
+        app:layout_constraintTop_toBottomOf="@+id/iv_logo" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
