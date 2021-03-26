@@ -16,20 +16,28 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 
-class OnboardingFragTwo : Fragment() {
+class OnboardingFragTwo : Fragment(), MorePublicationsAdapter.AdapterOnClickHandler {
+
+    interface DataPassListener {
+        fun onPublicationFollowed(numFollowed: Int)
+    }
 
     private lateinit var disposables: CompositeDisposable
     private val graphQlUtil = GraphQlUtil()
     private val prefUtils = PrefUtils()
+    private lateinit var mCallback: DataPassListener
     private var _binding: FragmentOnboardingTwoBinding? = null
     private val binding get() = _binding!!
+    private var followCounter = 0
 
     override fun onCreateView(inflater: LayoutInflater,
                               container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
         disposables = CompositeDisposable()
+        mCallback = activity as DataPassListener
         _binding = FragmentOnboardingTwoBinding.inflate(inflater, container, false)
         setupArticlesRV(binding)
+        mCallback.onPublicationFollowed(0)
         return binding.root
     }
 
@@ -59,7 +67,7 @@ class OnboardingFragTwo : Fragment() {
             })
             if (this.context != null) {
                 onboardingBinding.rvPublications.adapter =
-                        MorePublicationsAdapter(allPubs, prefUtils)
+                        MorePublicationsAdapter(allPubs, prefUtils, this)
                 onboardingBinding.rvPublications.layoutManager = LinearLayoutManager(context)
                 onboardingBinding.rvPublications.setHasFixedSize(true)
             }
@@ -69,5 +77,14 @@ class OnboardingFragTwo : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    override fun onFollowClick(wasFollowed: Boolean) {
+        if (wasFollowed) {
+            followCounter++
+        } else {
+            followCounter = (followCounter - 1).coerceAtLeast(0)
+        }
+        mCallback.onPublicationFollowed(followCounter)
     }
 }

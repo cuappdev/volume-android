@@ -9,8 +9,12 @@
         android:id="@+id/rv_publications"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="parent"
+        android:fadingEdge="horizontal"
+        android:fadingEdgeLength="30dp"
+        android:fillViewport="false"
+        android:requiresFadingEdge="vertical"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:listitem="@layout/item_more_publication">
 
