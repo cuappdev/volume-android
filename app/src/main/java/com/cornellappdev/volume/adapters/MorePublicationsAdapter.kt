@@ -59,7 +59,7 @@ class MorePublicationsAdapter(private val publicationList: List<Publication>,
                         prefUtils.getStringSet(PrefUtils.FOLLOWING_KEY, mutableSetOf())?.toMutableSet()
                 if (tempSet != null) {
                     tempSet.add(currentItem.id)
-                    prefUtils.save("following", tempSet)
+                    prefUtils.save(PrefUtils.FOLLOWING_KEY, tempSet)
                 }
             } else {
                 holder.binding.btnFollow.setImageResource(R.drawable.ic_followplussvg)
@@ -67,7 +67,7 @@ class MorePublicationsAdapter(private val publicationList: List<Publication>,
                         prefUtils.getStringSet(PrefUtils.FOLLOWING_KEY, mutableSetOf())?.toMutableSet()
                 if (tempSet != null) {
                     tempSet.remove(currentItem.id)
-                    prefUtils.save("following", tempSet)
+                    prefUtils.save(PrefUtils.FOLLOWING_KEY, tempSet)
                 }
             }
         }
