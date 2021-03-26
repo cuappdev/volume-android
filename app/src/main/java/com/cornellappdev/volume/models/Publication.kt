@@ -16,4 +16,8 @@ class Publication(
         val shoutouts: Double? = 0.0,
         val websiteURL: String? = "",
         val mostRecentArticle: Article? = null
-) : Parcelable
+) : Parcelable {
+    companion object {
+        const val INTENT_KEY = "publication"
+    }
+}

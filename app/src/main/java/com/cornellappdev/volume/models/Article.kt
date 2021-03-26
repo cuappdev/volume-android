@@ -25,6 +25,8 @@ class Article(
 ) : Parcelable {
 
     companion object {
+        const val INTENT_KEY = "article"
+
         fun applyNSFWFilter(article: Article, target: TextView) {
             if (article.nsfw == true) {
                 target.setLayerType(View.LAYER_TYPE_SOFTWARE, null)

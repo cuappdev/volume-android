@@ -89,7 +89,7 @@ class PublicationsFragment : Fragment() {
 
     private fun getFollowingPublications(binding: FragmentPublicationsBinding, isRefreshing: Boolean) {
         val followingPublicationsIDs =
-                prefUtils.getStringSet("following", mutableSetOf())?.toMutableList()
+                prefUtils.getStringSet(PrefUtils.FOLLOWING_KEY, mutableSetOf())?.toMutableList()
         val followingObs = followingPublicationsIDs?.let {
             graphQlUtil
                     .getPublicationsByIDs(it)

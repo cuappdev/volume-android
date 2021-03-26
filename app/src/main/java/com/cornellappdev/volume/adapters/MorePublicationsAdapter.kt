@@ -43,7 +43,7 @@ class MorePublicationsAdapter(private val publicationList: List<Publication>,
         holder.binding.tvRecentArticleTitle.text = currentItem.mostRecentArticle?.title
 
         val currentFollowingSet =
-                prefUtils.getStringSet("following", mutableSetOf())
+                prefUtils.getStringSet(PrefUtils.FOLLOWING_KEY, mutableSetOf())
 
         if (currentFollowingSet?.contains(currentItem.id) == true) {
             holder.binding.btnFollow.setImageResource(R.drawable.ic_followchecksvg)
@@ -56,7 +56,7 @@ class MorePublicationsAdapter(private val publicationList: List<Publication>,
                             R.drawable.ic_followplussvg)!!.constantState) {
                 holder.binding.btnFollow.setImageResource(R.drawable.ic_followchecksvg)
                 val tempSet =
-                        prefUtils.getStringSet("following", mutableSetOf())?.toMutableSet()
+                        prefUtils.getStringSet(PrefUtils.FOLLOWING_KEY, mutableSetOf())?.toMutableSet()
                 if (tempSet != null) {
                     tempSet.add(currentItem.id)
                     prefUtils.save("following", tempSet)
@@ -64,7 +64,7 @@ class MorePublicationsAdapter(private val publicationList: List<Publication>,
             } else {
                 holder.binding.btnFollow.setImageResource(R.drawable.ic_followplussvg)
                 val tempSet =
-                        prefUtils.getStringSet("following", mutableSetOf())?.toMutableSet()
+                        prefUtils.getStringSet(PrefUtils.FOLLOWING_KEY, mutableSetOf())?.toMutableSet()
                 if (tempSet != null) {
                     tempSet.remove(currentItem.id)
                     prefUtils.save("following", tempSet)
@@ -74,7 +74,7 @@ class MorePublicationsAdapter(private val publicationList: List<Publication>,
 
         holder.binding.clPublicationLayout.setOnClickListener { view ->
             val intent = Intent(view.context, PublicationProfileActivity::class.java)
-            intent.putExtra("publication", currentItem)
+            intent.putExtra(Publication.INTENT_KEY, currentItem)
             view.context.startActivity(intent)
         }
     }

@@ -35,11 +35,11 @@ class OnboardingActivity : AppCompatActivity() {
         prefUtils = PrefUtils(this)
         val dropperSave = prefUtils.getBoolean("dropper_save", true)
         if (dropperSave) {
-            prefUtils.remove("following")
+            prefUtils.remove(PrefUtils.FOLLOWING_KEY)
             prefUtils.save("dropper_save", false)
         }
 
-        val firstStart = prefUtils.getBoolean("firstStart", true)
+        val firstStart = prefUtils.getBoolean(PrefUtils.FIRST_START_KEY, true)
         if (!firstStart) {
             val intent = Intent(this, TabActivity::class.java)
             this.startActivity(intent)
@@ -127,6 +127,6 @@ class OnboardingActivity : AppCompatActivity() {
             binding.ivVolumeLogo.startAnimation(slideUp)
         }, VOLUME_LOGO_FADE_AWAY_MS)
 
-        prefUtils.save("firstStart", false)
+        prefUtils.save(PrefUtils.FIRST_START_KEY, false)
     }
 }

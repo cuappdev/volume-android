@@ -77,7 +77,7 @@
             style="@style/helvetica_black"
             android:layout_width="291dp"
             android:layout_height="wrap_content"
-            android:text="You have no saved articles"
+            android:text="You have no saved articles."
             android:textAlignment="center"
             android:textSize="12sp"
             app:layout_constraintEnd_toEndOf="parent"

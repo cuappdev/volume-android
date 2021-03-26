@@ -32,11 +32,11 @@ class BigReadHomeAdapter(private val articles: MutableList<Article>) :
         holder.binding.tvArticleTitle.text = currentItem.title
         Article.applyNSFWFilter(currentItem, holder.binding.tvArticleTitle)
         if (!currentItem.imageURL.isNullOrEmpty()) {
-            Picasso.get().load(currentItem.imageURL).into(holder.binding.ivArticleImage)
+            Picasso.get().load(currentItem.imageURL).fit().centerCrop().into(holder.binding.ivArticleImage)
         } else if (!currentItem.publication?.profileImageURL.isNullOrEmpty()) {
             Picasso.get()
                     .load(currentItem.publication?.profileImageURL)
-                    .resize(180, 180)
+                    .fit()
                     .centerCrop()
                     .into(holder.binding.ivArticleImage)
         }
@@ -46,7 +46,7 @@ class BigReadHomeAdapter(private val articles: MutableList<Article>) :
         holder.binding.tvPublicationName.text = currentItem.publication!!.name
         holder.binding.clBigReadLayout.setOnClickListener { view ->
             val intent = Intent(view.context, MainActivity::class.java)
-            intent.putExtra("article", currentItem)
+            intent.putExtra(Article.INTENT_KEY, currentItem)
             view.context.startActivity(intent)
         }
     }

@@ -33,7 +33,8 @@ class PublicationProfileActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         val currentFollowingSet =
-                prefUtils.getStringSet("following", mutableSetOf())?.toMutableSet()
+                prefUtils.getStringSet(PrefUtils.FOLLOWING_KEY, mutableSetOf())?.toMutableSet()
+
         publication = intent.getParcelableExtra("publication")!!
         getPublication(publication.id)
 
@@ -57,7 +58,7 @@ class PublicationProfileActivity : AppCompatActivity() {
                     setBackgroundResource(R.drawable.rounded_rectangle_button)
                     setTextColor(ContextCompat.getColor(this.context, R.color.volumeOrange))
                     currentFollowingSet.remove(publication.id)
-                    prefUtils.save("following", currentFollowingSet)
+                    prefUtils.save(PrefUtils.FOLLOWING_KEY, currentFollowingSet)
                 }
             } else {
                 binding.btnFollow.apply {
@@ -65,7 +66,7 @@ class PublicationProfileActivity : AppCompatActivity() {
                     setTextColor(ContextCompat.getColor(this.context, R.color.ligthgray))
                     setBackgroundResource(R.drawable.rounded_rectange_button_orange)
                     currentFollowingSet.add(publication.id)
-                    prefUtils.save("following", currentFollowingSet)
+                    prefUtils.save(PrefUtils.FOLLOWING_KEY, currentFollowingSet)
                 }
             }
         }
@@ -136,7 +137,7 @@ class PublicationProfileActivity : AppCompatActivity() {
                 }
                 binding.tvName.text = publication.name
                 binding.tvShoutoutCount.text =
-                        publication.shoutouts.toInt().toString() + " shoutouts"
+                        publication.shoutouts.toInt().toString() + " shout-outs"
                 binding.tvDescription.text = publication.bio
                 Picasso.get().load(publication.backgroundImageURL).into(binding.ivBanner)
                 Picasso.get().load(publication.profileImageURL).into(binding.ivLogo)

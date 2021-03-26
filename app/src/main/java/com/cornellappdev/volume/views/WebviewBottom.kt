@@ -12,6 +12,7 @@ import com.cornellappdev.volume.PublicationProfileActivity
 import com.cornellappdev.volume.R
 import com.cornellappdev.volume.databinding.LayoutWebviewBottomBinding
 import com.cornellappdev.volume.models.Article
+import com.cornellappdev.volume.models.Publication
 import com.cornellappdev.volume.util.GraphQlUtil
 import com.squareup.picasso.Picasso
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -29,7 +30,7 @@ class WebviewBottom @JvmOverloads constructor(
     private var disposables = CompositeDisposable()
     private lateinit var article: Article
     private val currentBookmarks =
-            prefUtils.getStringSet("savedArticles", mutableSetOf())?.toMutableSet()
+            prefUtils.getStringSet(PrefUtils.SAVED_ARTICLES_KEY, mutableSetOf())?.toMutableSet()
 
     private val binding: LayoutWebviewBottomBinding =
             LayoutWebviewBottomBinding.inflate(
@@ -64,7 +65,7 @@ class WebviewBottom @JvmOverloads constructor(
             } else {
                 binding.ivBookmarkIcon.setImageResource(R.drawable.ic_black_bookmarksvg)
             }
-            prefUtils.save("savedArticles", currentBookmarks)
+            prefUtils.save(PrefUtils.SAVED_ARTICLES_KEY, currentBookmarks)
         }
         binding.ivBookmarkIcon.setOnClickListener { bookmarkArticle() }
         binding.btnSeeMore.setOnClickListener { publicationIntent() }
@@ -88,7 +89,7 @@ class WebviewBottom @JvmOverloads constructor(
 
     private fun publicationIntent() {
         val intent = Intent(context, PublicationProfileActivity::class.java)
-        intent.putExtra("publication", article.publication)
+        intent.putExtra(Publication.INTENT_KEY, article.publication)
         context?.startActivity(intent)
     }
 
@@ -103,7 +104,7 @@ class WebviewBottom @JvmOverloads constructor(
                 binding.ivBookmarkIcon.startAnimation(AnimationUtils.loadAnimation(context, R.anim.shake))
                 binding.ivBookmarkIcon.setImageResource(R.drawable.ic_black_bookmarksvg)
             }
-            prefUtils.save("savedArticles", currentBookmarks)
+            prefUtils.save(PrefUtils.SAVED_ARTICLES_KEY, currentBookmarks)
         }
     }
 
