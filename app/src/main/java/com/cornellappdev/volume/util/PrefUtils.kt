@@ -6,6 +6,9 @@ import androidx.preference.PreferenceManager
 class PrefUtils {
 
     companion object {
+        const val FOLLOWING_KEY: String = "following"
+        const val FIRST_START_KEY: String = "firstStart"
+        const val SAVED_ARTICLES_KEY: String = "savedArticles"
         private var singleton: PrefUtils? = null
         private lateinit var preferences: SharedPreferences
         private lateinit var editor: SharedPreferences.Editor

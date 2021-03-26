@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/cl_article_layout"
+    android:layout_width="match_parent"
+    android:layout_height="100dp"
+    android:layout_below="@+id/article_layout"
+    android:layout_margin="10dp"
+    android:background="@color/creamy_white">
+
+    <TextView
+        android:id="@+id/tv_article_title"
+        style="@style/helvetica_bold"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:maxLines="3"
+        android:text="Sangkhaya: Thai Pandan Custard Dip"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toStartOf="@id/iv_article_image"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/iv_article_image"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:background="@color/creamy_white"
+        android:scaleType="fitXY"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@color/creamy_white"
+        tools:srcCompat="@color/creamy_white" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <TextView
+            android:id="@+id/tv_time_posted"
+            style="@style/helvetica_gray"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="6h ago"
+            android:textSize="10sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_dot"
+            style="@style/helvetica_gray"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=" • "
+            android:textSize="10sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/tv_time_posted"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_shoutout_count"
+            style="@style/helvetica_gray"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="15 shout-outs"
+            android:textSize="10sp"
+            app:layout_constraintStart_toEndOf="@+id/tv_dot"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

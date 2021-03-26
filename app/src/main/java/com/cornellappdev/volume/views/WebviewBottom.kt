@@ -7,13 +7,12 @@ import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
 import android.view.animation.AnimationUtils
-import android.widget.Button
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.cornellappdev.volume.PublicationProfileActivity
 import com.cornellappdev.volume.R
+import com.cornellappdev.volume.databinding.LayoutWebviewBottomBinding
 import com.cornellappdev.volume.models.Article
+import com.cornellappdev.volume.models.Publication
 import com.cornellappdev.volume.util.GraphQlUtil
 import com.squareup.picasso.Picasso
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -26,37 +25,26 @@ class WebviewBottom @JvmOverloads constructor(
         defStyleAttr: Int = 0
 ) : ConstraintLayout(context, attrs, defStyleAttr) {
 
-    private var profileImageView: ImageView
-    private var seeMoreButton: Button
-    private var bookMark: ImageView
-    private var shareContent: ImageView
-    private var shoutOuts: ImageView
-    private var shoutOutsNum: TextView
-    private var prefUtils = PrefUtils()
+    private val prefUtils = PrefUtils(context)
     private var graphQlUtil = GraphQlUtil()
     private var disposables = CompositeDisposable()
     private lateinit var article: Article
     private val currentBookmarks =
-            prefUtils.getStringSet("savedArticles", mutableSetOf())?.toMutableSet()
+            prefUtils.getStringSet(PrefUtils.SAVED_ARTICLES_KEY, mutableSetOf())?.toMutableSet()
+
+    private val binding: LayoutWebviewBottomBinding =
+            LayoutWebviewBottomBinding.inflate(
+                    LayoutInflater.from(context),
+                    this,
+                    true)
 
     companion object {
         private const val MAX_SHOUTOUTS = 5
     }
 
-    init {
-        LayoutInflater.from(context).inflate(R.layout.bottom_webview_actions, this, true)
-        profileImageView = findViewById(R.id.placeholder_org_profile)
-        seeMoreButton = findViewById(R.id.see_more_button)
-        bookMark = findViewById(R.id.bookmark)
-        shareContent = findViewById(R.id.share_content)
-        shoutOuts = findViewById(R.id.heart)
-        shoutOutsNum = findViewById(R.id.like_count)
-        prefUtils = PrefUtils(context)
-    }
-
     fun setUpView() {
         if (!article.publication?.profileImageURL.isNullOrBlank()) {
-            Picasso.get().load(article.publication?.profileImageURL).into(profileImageView)
+            Picasso.get().load(article.publication?.profileImageURL).into(binding.ivPublicationLogo)
         }
         val articleFreshObs =
                 article.id?.let {
@@ -67,61 +55,61 @@ class WebviewBottom @JvmOverloads constructor(
                 }
         if (articleFreshObs != null) {
             disposables.add(articleFreshObs.subscribe { response ->
-                shoutOutsNum.text = response.data?.getArticleByID?.shoutouts?.toInt().toString()
+                binding.tvShoutoutCount.text = response.data?.getArticleByID?.shoutouts?.toInt().toString()
             })
         }
-        shoutOutsNum.text = article.shoutouts?.toInt().toString()
+        binding.tvShoutoutCount.text = article.shoutouts?.toInt().toString()
         if (currentBookmarks != null) {
             if (currentBookmarks.contains(article.id)) {
-                bookMark.setImageResource(R.drawable.orange_shoutout_svg)
+                binding.ivBookmarkIcon.setImageResource(R.drawable.orange_shoutout_svg)
             } else {
-                bookMark.setImageResource(R.drawable.ic_black_bookmarksvg)
+                binding.ivBookmarkIcon.setImageResource(R.drawable.ic_black_bookmarksvg)
             }
-            prefUtils.save("savedArticles", currentBookmarks)
+            prefUtils.save(PrefUtils.SAVED_ARTICLES_KEY, currentBookmarks)
         }
-        bookMark.setOnClickListener { bookmarkArticle() }
-        seeMoreButton.setOnClickListener { publicationIntent() }
-        shareContent.setOnClickListener { shareArticle() }
+        binding.ivBookmarkIcon.setOnClickListener { bookmarkArticle() }
+        binding.btnSeeMore.setOnClickListener { publicationIntent() }
+        binding.ivShare.setOnClickListener { shareArticle() }
         article.id?.let {
             if (prefUtils.getInt(it, 0) >= MAX_SHOUTOUTS) {
-                shoutOuts.setImageResource(R.drawable.filled_shoutout)
+                binding.ivShoutout.setImageResource(R.drawable.filled_shoutout)
             } else {
-                shoutOuts.setOnClickListener { likeArticle() }
+                binding.ivShoutout.setOnClickListener { likeArticle() }
             }
         }
     }
 
-    fun minimize(b: Boolean) {
-        if (b) {
+    fun minimize(isMinimized: Boolean) {
+        if (isMinimized) {
             this.visibility = View.GONE
         } else {
             this.visibility = View.VISIBLE
         }
     }
 
-    fun publicationIntent() {
+    private fun publicationIntent() {
         val intent = Intent(context, PublicationProfileActivity::class.java)
-        intent.putExtra("publication", article.publication)
+        intent.putExtra(Publication.INTENT_KEY, article.publication)
         context?.startActivity(intent)
     }
 
-    fun bookmarkArticle() {
+    private fun bookmarkArticle() {
         if (currentBookmarks != null) {
             if (!currentBookmarks.contains(article.id)) {
                 article.id?.let { currentBookmarks.add(it) }
-                bookMark.startAnimation(AnimationUtils.loadAnimation(context, R.anim.shake))
-                bookMark.setImageResource(R.drawable.orange_shoutout_svg)
+                binding.ivBookmarkIcon.startAnimation(AnimationUtils.loadAnimation(context, R.anim.shake))
+                binding.ivBookmarkIcon.setImageResource(R.drawable.orange_shoutout_svg)
             } else {
                 currentBookmarks.remove(article.id)
-                bookMark.startAnimation(AnimationUtils.loadAnimation(context, R.anim.shake))
-                bookMark.setImageResource(R.drawable.ic_black_bookmarksvg)
+                binding.ivBookmarkIcon.startAnimation(AnimationUtils.loadAnimation(context, R.anim.shake))
+                binding.ivBookmarkIcon.setImageResource(R.drawable.ic_black_bookmarksvg)
             }
-            prefUtils.save("savedArticles", currentBookmarks)
+            prefUtils.save(PrefUtils.SAVED_ARTICLES_KEY, currentBookmarks)
         }
     }
 
-    fun shareArticle() {
-        shareContent.startAnimation(AnimationUtils.loadAnimation(context, R.anim.shake))
+    private fun shareArticle() {
+        binding.ivShare.startAnimation(AnimationUtils.loadAnimation(context, R.anim.shake))
         val intent = Intent()
         intent.action = Intent.ACTION_SEND
         intent.putExtra(Intent.EXTRA_TEXT,
@@ -134,23 +122,23 @@ class WebviewBottom @JvmOverloads constructor(
         this.article = a
     }
 
-    fun likeArticle() {
+    private fun likeArticle() {
         this.article.id?.let {
             var numOfShoutouts = prefUtils.getInt(it, 0)
             if (numOfShoutouts < MAX_SHOUTOUTS) {
-                shoutOuts.startAnimation(AnimationUtils.loadAnimation(context, R.anim.shake))
+                binding.ivShoutout.startAnimation(AnimationUtils.loadAnimation(context, R.anim.shake))
                 val likeObs = graphQlUtil
                         .likeArticle(it)
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                 disposables.add(likeObs.subscribe { response ->
-                    shoutOutsNum.text = response.data!!.incrementShoutouts.shoutouts.toInt().toString()
+                    binding.tvShoutoutCount.text = response.data!!.incrementShoutouts.shoutouts.toInt().toString()
                 })
                 numOfShoutouts++
                 prefUtils.save(it, numOfShoutouts)
             }
             if (numOfShoutouts >= MAX_SHOUTOUTS) {
-                shoutOuts.setImageResource(R.drawable.filled_shoutout)
+                binding.ivShoutout.setImageResource(R.drawable.filled_shoutout)
             }
         }
     }
