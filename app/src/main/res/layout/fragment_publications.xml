@@ -14,89 +14,109 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
+            <FrameLayout
+                android:id="@+id/fragmentContainer"
+                android:layout_width="match_parent"
+                android:layout_height="400dp"
+                android:translationZ="100dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/iv_publication_header" />
+
             <ImageView
-                android:id="@+id/tv_publication_header"
+                android:id="@+id/iv_publication_header"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="6dp"
                 android:layout_marginTop="80dp"
                 android:layout_marginBottom="15dp"
-                app:layout_constraintBottom_toTopOf="@+id/iv_following_header"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/ic_publications_title_text"
                 tools:srcCompat="@drawable/ic_publications_title_text" />
 
-            <ImageView
-                android:id="@+id/iv_following_header"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="12dp"
-                android:layout_marginTop="15dp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tv_publication_header"
-                app:srcCompat="@drawable/ic_following_text"
-                tools:srcCompat="@drawable/ic_following_text" />
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rv_following"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/cl_publication_page"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="5dp"
-                android:layout_marginTop="15dp"
-                android:layout_marginEnd="5dp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/iv_following_header" />
-
-            <androidx.constraintlayout.widget.Group
-                android:id="@+id/group_not_following"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:visibility="visible"
-                app:constraint_referenced_ids="more_articles_message_nothing,
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/iv_publication_header">
+
+                <ImageView
+                    android:id="@+id/iv_following_header"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:layout_marginTop="15dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@drawable/ic_following_text"
+                    tools:srcCompat="@drawable/ic_following_text" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_following"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginEnd="5dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/iv_following_header" />
+
+                <androidx.constraintlayout.widget.Group
+                    android:id="@+id/group_not_following"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:visibility="visible"
+                    app:constraint_referenced_ids="more_articles_message_nothing,
                 more_articles_message_long_nothing" />
 
-            <TextView
-                android:id="@+id/more_articles_message_nothing"
-                style="@style/begum_black"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="30dp"
-                android:text="No Followed Publications!"
-                android:textSize="18sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/rv_following" />
+                <TextView
+                    android:id="@+id/more_articles_message_nothing"
+                    style="@style/begum_black"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="30dp"
+                    android:text="No Followed Publications!"
+                    android:textSize="18sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/rv_following" />
 
-            <TextView
-                android:id="@+id/more_articles_message_long_nothing"
-                style="@style/helvetica_black"
-                android:layout_width="291dp"
-                android:layout_height="wrap_content"
-                android:text="Follow some below and we’ll show them up here."
-                android:textAlignment="center"
-                android:textSize="12sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/more_articles_message_nothing" />
+                <TextView
+                    android:id="@+id/more_articles_message_long_nothing"
+                    style="@style/helvetica_black"
+                    android:layout_width="291dp"
+                    android:layout_height="wrap_content"
+                    android:text="Follow some below and we’ll show them up here."
+                    android:textAlignment="center"
+                    android:textSize="12sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/more_articles_message_nothing" />
 
-            <ImageView
-                android:id="@+id/iv_more_publications_header"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="12dp"
-                android:layout_marginTop="43dp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/more_articles_message_long_nothing"
-                app:srcCompat="@drawable/ic_more_publications_text"
-                tools:srcCompat="@drawable/ic_more_publications_text" />
+                <ImageView
+                    android:id="@+id/iv_more_publications_header"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:layout_marginTop="43dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/more_articles_message_long_nothing"
+                    app:srcCompat="@drawable/ic_more_publications_text"
+                    tools:srcCompat="@drawable/ic_more_publications_text" />
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rv_more_publications"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/iv_more_publications_header" />
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_more_publications"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/iv_more_publications_header" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.core.widget.NestedScrollView>

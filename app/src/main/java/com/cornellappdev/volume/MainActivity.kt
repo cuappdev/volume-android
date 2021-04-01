@@ -20,6 +20,7 @@ class MainActivity : AppCompatActivity() {
         // Grab Article
         val article = intent.getParcelableExtra<Article>("article")
 
+        //experiment w/ behaviors with no internet, specfically loadUrl
         if (article?.articleURL != null) {
             binding.wvArticle.loadUrl(article.articleURL)
             binding.wvTop.setName(article)

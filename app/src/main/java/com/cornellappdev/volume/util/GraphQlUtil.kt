@@ -1,5 +1,9 @@
 package com.cornellappdev.volume.util
 
+import android.content.Context
+import android.net.ConnectivityManager
+import android.util.Log
+import androidx.core.content.ContextCompat.getSystemService
 import com.apollographql.apollo.ApolloClient
 import com.apollographql.apollo.api.Response
 import com.apollographql.apollo.api.toInput
@@ -8,13 +12,33 @@ import com.apollographql.apollo.rx2.rxQuery
 import com.kotlin.graphql.*
 import io.reactivex.Observable
 import io.reactivex.Single
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
+import java.io.IOException
+import java.net.*
+
 
 class GraphQlUtil {
 
     private val BASE_URL = "https://volume-backend.cornellappdev.com/graphql"
     private var client: ApolloClient
+
+    companion object {
+        private val PING_URL: String = "volume-backend.cornellappdev.com"
+
+        fun hasInternetConnection(): Single<Boolean> {
+            return Single.fromCallable {
+                try {
+                    val command = "ping -i 5 -c 1 $PING_URL"
+                    return@fromCallable Runtime.getRuntime().exec(command).waitFor() == 0
+                } catch (e: IOException) {
+                    return@fromCallable false
+                }
+            }.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+        }
+    }
 
     init {
         client = setUpApolloCllient()
