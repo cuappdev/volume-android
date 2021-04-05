@@ -5,5 +5,6 @@
     <color name="volumeOrange">#D07000</color>
     <color name="ligthgray">#EEEEEE</color>
     <color name="white">#FFFFFF</color>
+    <color name="placeholder">#E5E6E5</color>
 
 </resources>

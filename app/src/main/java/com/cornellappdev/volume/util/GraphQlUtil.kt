@@ -1,9 +1,5 @@
 package com.cornellappdev.volume.util
 
-import android.content.Context
-import android.net.ConnectivityManager
-import android.util.Log
-import androidx.core.content.ContextCompat.getSystemService
 import com.apollographql.apollo.ApolloClient
 import com.apollographql.apollo.api.Response
 import com.apollographql.apollo.api.toInput
@@ -26,7 +22,7 @@ class GraphQlUtil {
     private var client: ApolloClient
 
     companion object {
-        private val PING_URL: String = "volume-backend.cornellappdev.com"
+        private const val PING_URL: String = "volume-backend.cornellappdev.com"
 
         fun hasInternetConnection(): Single<Boolean> {
             return Single.fromCallable {
