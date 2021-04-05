@@ -21,14 +21,14 @@ class Article(
         val publication: Publication? = null,
         val date: String? = "",
         val shoutouts: Double? = 0.0,
-        val nsfw: Boolean? = false
+        val nsfw: Boolean = false
 ) : Parcelable {
 
     companion object {
         const val INTENT_KEY = "article"
 
         fun applyNSFWFilter(article: Article, target: TextView) {
-            if (article.nsfw == true) {
+            if (article.nsfw) {
                 target.setLayerType(View.LAYER_TYPE_SOFTWARE, null)
                 val radius: Float = target.textSize / 3
                 val filter = BlurMaskFilter(radius, BlurMaskFilter.Blur.NORMAL)

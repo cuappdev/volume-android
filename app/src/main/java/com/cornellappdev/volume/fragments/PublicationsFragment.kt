@@ -16,6 +16,7 @@ import com.cornellappdev.volume.adapters.MorePublicationsAdapter
 import com.cornellappdev.volume.databinding.FragmentPublicationsBinding
 import com.cornellappdev.volume.models.Article
 import com.cornellappdev.volume.models.Publication
+import com.cornellappdev.volume.models.Social
 import com.cornellappdev.volume.util.GraphQlUtil
 import com.cornellappdev.volume.util.GraphQlUtil.Companion.hasInternetConnection
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -45,7 +46,7 @@ class PublicationsFragment : Fragment() {
         binding.srlQuery.setOnRefreshListener {
             getFollowingPublications(binding,
                     isRefreshing = this::followpublicationRV.isInitialized)
-            if(!this::morepublicationRV.isInitialized) {
+            if (!this::morepublicationRV.isInitialized) {
                 getMorePublications(binding)
             }
             binding.srlQuery.isRefreshing = false
@@ -92,12 +93,15 @@ class PublicationsFragment : Fragment() {
                                     publication.slug,
                                     publication.shoutouts,
                                     publication.websiteURL,
-                                    Article(
-                                            publication.mostRecentArticle?.id,
-                                            publication.mostRecentArticle?.title,
-                                            publication.mostRecentArticle?.articleURL,
-                                            publication.mostRecentArticle?.imageURL,
-                                            nsfw = publication.mostRecentArticle?.nsfw))
+                                    publication.mostRecentArticle?.nsfw?.let {
+                                        Article(
+                                                publication.mostRecentArticle.id,
+                                                publication.mostRecentArticle.title,
+                                                publication.mostRecentArticle.articleURL,
+                                                publication.mostRecentArticle.imageURL,
+                                                nsfw = it)
+                                    },
+                                    publication.socials.toList().map { Social(it.social, it.uRL) })
                         })
                         morepublicationRV = binding.rvMorePublications
                         morepublicationRV.adapter =
@@ -107,7 +111,7 @@ class PublicationsFragment : Fragment() {
                     }
                 })
             } else {
-                if(childFragmentManager.findFragmentByTag(NoInternetDialog.TAG) == null) {
+                if (childFragmentManager.findFragmentByTag(NoInternetDialog.TAG) == null) {
                     binding.clPublicationPage.visibility = View.GONE
                     val ft = childFragmentManager.beginTransaction()
                     val dialog = NoInternetDialog()
@@ -153,7 +157,8 @@ class PublicationsFragment : Fragment() {
                                                 publication.mostRecentArticle?.id,
                                                 publication.mostRecentArticle?.title,
                                                 publication.mostRecentArticle?.articleURL,
-                                                publication.mostRecentArticle?.imageURL))
+                                                publication.mostRecentArticle?.imageURL),
+                                        publication.socials.toList().map { Social(it.social, it.uRL) })
                             })
                             if (!isRefreshing) {
                                 followpublicationRV = binding.rvFollowing
@@ -170,7 +175,7 @@ class PublicationsFragment : Fragment() {
                         }
                     })
                 } else {
-                    if(childFragmentManager.findFragmentByTag(NoInternetDialog.TAG) == null) {
+                    if (childFragmentManager.findFragmentByTag(NoInternetDialog.TAG) == null) {
                         binding.clPublicationPage.visibility = View.GONE
                         val ft = childFragmentManager.beginTransaction()
                         val dialog = NoInternetDialog()
@@ -188,9 +193,9 @@ class PublicationsFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        binding?.let {
+        binding.let {
             getFollowingPublications(it, isRefreshing = this::followpublicationRV.isInitialized)
-            if(!this::morepublicationRV.isInitialized) {
+            if (!this::morepublicationRV.isInitialized) {
                 getMorePublications(binding)
             }
         }

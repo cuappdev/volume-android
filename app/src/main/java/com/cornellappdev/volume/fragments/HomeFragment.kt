@@ -16,6 +16,7 @@ import com.cornellappdev.volume.adapters.HomeArticlesAdapter
 import com.cornellappdev.volume.databinding.FragmentHomeBinding
 import com.cornellappdev.volume.models.Article
 import com.cornellappdev.volume.models.Publication
+import com.cornellappdev.volume.models.Social
 import com.cornellappdev.volume.util.GraphQlUtil
 import com.cornellappdev.volume.util.GraphQlUtil.Companion.hasInternetConnection
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -82,26 +83,33 @@ class HomeFragment : Fragment() {
                 disposables.add(trendingObs.subscribe { response ->
                     val rawTrendingArticles = response.data?.getTrendingArticles
                     if (rawTrendingArticles != null) {
-                        for (rawArticle in rawTrendingArticles) {
+                        for (trendingArticle in rawTrendingArticles) {
+                            val publication = trendingArticle.publication
                             trendingArticles.add(Article(
-                                    title = rawArticle.title,
-                                    articleURL = rawArticle.articleURL,
-                                    date = rawArticle.date.toString(),
-                                    id = rawArticle.id,
-                                    imageURL = rawArticle.imageURL,
+                                    title = trendingArticle.title,
+                                    articleURL = trendingArticle.articleURL,
+                                    date = trendingArticle.date.toString(),
+                                    id = trendingArticle.id,
+                                    imageURL = trendingArticle.imageURL,
                                     publication = Publication(
-                                            id = rawArticle.publication.id,
-                                            name = rawArticle.publication.name,
-                                            profileImageURL = rawArticle.publication.profileImageURL),
-                                    shoutouts = rawArticle.shoutouts,
-                                    nsfw = rawArticle.nsfw)
-                            )
-                            trendingArticlesId.add(rawArticle.id)
+                                            id = publication.id,
+                                            backgroundImageURL = publication.backgroundImageURL,
+                                            bio = publication.bio,
+                                            name = publication.name,
+                                            profileImageURL = publication.profileImageURL,
+                                            rssName = publication.rssName,
+                                            rssURL = publication.rssURL,
+                                            slug = publication.slug,
+                                            shoutouts = publication.shoutouts,
+                                            websiteURL = publication.websiteURL,
+                                            socials = publication.socials.toList().map { Social(it.social, it.uRL) }),
+                                    shoutouts = trendingArticle.shoutouts,
+                                    nsfw = trendingArticle.nsfw))
+                            trendingArticlesId.add(trendingArticle.id)
                         }
                     }
                     if (!isRefreshing) {
                         bigRedRV = binding.rvBigRead
-                        bigRedRV.isNestedScrollingEnabled = false
                         bigRedRV.adapter = BigReadHomeAdapter(trendingArticles)
                         val linearLayoutManager = LinearLayoutManager(context)
                         linearLayoutManager.orientation = LinearLayoutManager.HORIZONTAL
@@ -124,6 +132,7 @@ class HomeFragment : Fragment() {
                             if (response.data?.getArticlesByPublicationIDs != null) {
                                 response.data?.getArticlesByPublicationIDs?.mapTo(
                                         followingArticles, { article ->
+                                    val publication = article.publication
                                     Article(
                                             title = article.title,
                                             articleURL = article.articleURL,
@@ -131,9 +140,17 @@ class HomeFragment : Fragment() {
                                             id = article.id,
                                             imageURL = article.imageURL,
                                             publication = Publication(
-                                                    id = article.publication.id,
-                                                    name = article.publication.name,
-                                                    profileImageURL = article.publication.profileImageURL),
+                                                    id = publication.id,
+                                                    backgroundImageURL = publication.backgroundImageURL,
+                                                    bio = publication.bio,
+                                                    name = publication.name,
+                                                    profileImageURL = publication.profileImageURL,
+                                                    rssName = publication.rssName,
+                                                    rssURL = publication.rssURL,
+                                                    slug = publication.slug,
+                                                    shoutouts = publication.shoutouts,
+                                                    websiteURL = publication.websiteURL,
+                                                    socials = publication.socials.toList().map { Social(it.social, it.uRL) }),
                                             shoutouts = article.shoutouts,
                                             nsfw = article.nsfw)
                                 })
@@ -147,7 +164,6 @@ class HomeFragment : Fragment() {
                                             }) as MutableList<Article>
                                     if (!isRefreshing) {
                                         followingRV = binding.rvFollowing
-                                        followingRV.isNestedScrollingEnabled = false
                                         followingRV.layoutManager = LinearLayoutManager(context)
                                         followingRV.adapter = HomeArticlesAdapter(
                                                 followingArticles.take(NUMBER_OF_FOLLOWING_ARTICLES)
@@ -203,15 +219,25 @@ class HomeFragment : Fragment() {
                         disposables.add(otherObs.subscribe {
                             if (it.data?.getArticlesByPublicationIDs != null) {
                                 it.data?.getArticlesByPublicationIDs?.mapTo(otherArticles, { article ->
+                                    val publication = article.publication
                                     Article(
-                                            article.id,
-                                            article.title,
-                                            article.articleURL,
-                                            article.imageURL,
-                                            Publication(id = article.publication.id,
-                                                    name = article.publication.name,
-                                                    profileImageURL = article.publication.profileImageURL),
-                                            article.date.toString(),
+                                            title = article.title,
+                                            articleURL = article.articleURL,
+                                            date = article.date.toString(),
+                                            id = article.id,
+                                            imageURL = article.imageURL,
+                                            publication = Publication(
+                                                    id = publication.id,
+                                                    backgroundImageURL = publication.backgroundImageURL,
+                                                    bio = publication.bio,
+                                                    name = publication.name,
+                                                    profileImageURL = publication.profileImageURL,
+                                                    rssName = publication.rssName,
+                                                    rssURL = publication.rssURL,
+                                                    slug = publication.slug,
+                                                    shoutouts = publication.shoutouts,
+                                                    websiteURL = publication.websiteURL,
+                                                    socials = publication.socials.toList().map { Social(it.social, it.uRL) }),
                                             shoutouts = article.shoutouts,
                                             nsfw = article.nsfw)
                                 })
@@ -226,7 +252,6 @@ class HomeFragment : Fragment() {
                                     }
                                     if (!isRefreshing) {
                                         otherRV = binding.rvOtherArticles
-                                        otherRV.isNestedScrollingEnabled = false
                                         otherRV.layoutManager = LinearLayoutManager(context)
                                         otherRV.adapter = HomeArticlesAdapter(otherArticles.shuffled()
                                                 as MutableList<Article>)
@@ -265,4 +290,5 @@ class HomeFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
+
 }

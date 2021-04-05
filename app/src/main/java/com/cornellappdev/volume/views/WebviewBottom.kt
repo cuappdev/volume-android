@@ -46,18 +46,17 @@ class WebviewBottom @JvmOverloads constructor(
         if (!article.publication?.profileImageURL.isNullOrBlank()) {
             Picasso.get().load(article.publication?.profileImageURL).into(binding.ivPublicationLogo)
         }
-        val articleFreshObs =
-                article.id?.let {
-                    graphQlUtil
-                            .getArticleByID(it)
-                            .subscribeOn(Schedulers.io())
-                            .observeOn(AndroidSchedulers.mainThread())
+        disposables.add(GraphQlUtil.hasInternetConnection().subscribe { hasInternet ->
+            article.id?.let {
+                if (prefUtils.getInt(it, 0) >= MAX_SHOUTOUTS) {
+                    binding.ivShoutout.setImageResource(R.drawable.filled_shoutout)
+                } else {
+                    if (hasInternet) {
+                        binding.ivShoutout.setOnClickListener { likeArticle() }
+                    }
                 }
-        if (articleFreshObs != null) {
-            disposables.add(articleFreshObs.subscribe { response ->
-                binding.tvShoutoutCount.text = response.data?.getArticleByID?.shoutouts?.toInt().toString()
-            })
-        }
+            }
+        })
         binding.tvShoutoutCount.text = article.shoutouts?.toInt().toString()
         if (currentBookmarks != null) {
             if (currentBookmarks.contains(article.id)) {
@@ -70,13 +69,6 @@ class WebviewBottom @JvmOverloads constructor(
         binding.ivBookmarkIcon.setOnClickListener { bookmarkArticle() }
         binding.btnSeeMore.setOnClickListener { publicationIntent() }
         binding.ivShare.setOnClickListener { shareArticle() }
-        article.id?.let {
-            if (prefUtils.getInt(it, 0) >= MAX_SHOUTOUTS) {
-                binding.ivShoutout.setImageResource(R.drawable.filled_shoutout)
-            } else {
-                binding.ivShoutout.setOnClickListener { likeArticle() }
-            }
-        }
     }
 
     fun minimize(isMinimized: Boolean) {

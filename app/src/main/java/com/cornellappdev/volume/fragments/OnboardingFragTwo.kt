@@ -11,6 +11,7 @@ import com.cornellappdev.volume.adapters.MorePublicationsAdapter
 import com.cornellappdev.volume.databinding.FragmentOnboardingTwoBinding
 import com.cornellappdev.volume.models.Article
 import com.cornellappdev.volume.models.Publication
+import com.cornellappdev.volume.models.Social
 import com.cornellappdev.volume.util.GraphQlUtil
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -43,9 +44,9 @@ class OnboardingFragTwo : Fragment(), MorePublicationsAdapter.AdapterOnClickHand
 
     private fun setupArticlesRV(onboardingBinding: FragmentOnboardingTwoBinding) {
         val pubsObs = graphQlUtil.getAllPublications().subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
-        disposables.add(pubsObs.subscribe {
+        disposables.add(pubsObs.subscribe { response ->
             val allPubs = mutableListOf<Publication>()
-            it.data?.getAllPublications?.mapTo(allPubs, { publication ->
+            response.data?.getAllPublications?.mapTo(allPubs, { publication ->
                 Publication(
                         publication.id,
                         publication.backgroundImageURL,
@@ -57,13 +58,15 @@ class OnboardingFragTwo : Fragment(), MorePublicationsAdapter.AdapterOnClickHand
                         publication.slug,
                         publication.shoutouts,
                         publication.websiteURL,
-                        Article(
-                                publication.mostRecentArticle?.id,
-                                publication.mostRecentArticle?.title,
-                                publication.mostRecentArticle?.articleURL,
-                                publication.mostRecentArticle?.imageURL,
-                                nsfw = publication.mostRecentArticle?.nsfw)
-                )
+                        publication.mostRecentArticle?.nsfw?.let {
+                            Article(
+                                    publication.mostRecentArticle.id,
+                                    publication.mostRecentArticle.title,
+                                    publication.mostRecentArticle.articleURL,
+                                    publication.mostRecentArticle.imageURL,
+                                    nsfw = it)
+                        },
+                        publication.socials.toList().map { Social(it.social, it.uRL) })
             })
             if (this.context != null) {
                 onboardingBinding.rvPublications.adapter =
