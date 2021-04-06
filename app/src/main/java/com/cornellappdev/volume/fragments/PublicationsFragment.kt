@@ -34,7 +34,6 @@ class PublicationsFragment : Fragment() {
     private var _binding: FragmentPublicationsBinding? = null
     private val binding get() = _binding!!
 
-
     override fun onCreateView(inflater: LayoutInflater,
                               container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
@@ -195,9 +194,7 @@ class PublicationsFragment : Fragment() {
         super.onResume()
         binding.let {
             getFollowingPublications(it, isRefreshing = this::followpublicationRV.isInitialized)
-            if (!this::morepublicationRV.isInitialized) {
-                getMorePublications(binding)
-            }
+            getMorePublications(it)
         }
     }
 
