@@ -1,5 +1,6 @@
 package com.cornellappdev.volume.fragments
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,6 +10,7 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.cornellappdev.volume.R
+import com.cornellappdev.volume.SettingsActivity
 import com.cornellappdev.volume.adapters.SavedArticlesAdapter
 import com.cornellappdev.volume.databinding.FragmentSavedArticlesBinding
 import com.cornellappdev.volume.models.Article
@@ -41,6 +43,7 @@ class SavedArticlesFragment : Fragment() {
                     loadArticles(binding)
                 } else {
                     binding.clBookmarkPage.visibility = View.GONE
+                    binding.ivSettings.visibility = View.GONE
                     binding.fragmentContainer.visibility = View.VISIBLE
                     val ft = childFragmentManager.beginTransaction()
                     val dialog = NoInternetDialog()
@@ -56,6 +59,12 @@ class SavedArticlesFragment : Fragment() {
             loadArticles(binding)
             binding.srlQuery.isRefreshing = false
         }
+
+        binding.ivSettings.setOnClickListener {
+            val intent = Intent(requireActivity(), SettingsActivity::class.java)
+            requireActivity().startActivity(intent)
+        }
+
         return binding.root
     }
 
@@ -70,6 +79,7 @@ class SavedArticlesFragment : Fragment() {
                         (dialogFrag as? DialogFragment)?.dismiss()
                     }
                     binding.clBookmarkPage.visibility = View.VISIBLE
+                    binding.ivSettings.visibility = View.VISIBLE
                     disposables.add(obs.subscribe { response ->
                         response.data?.getArticlesByIDs?.mapTo(savedArticles, { article ->
                             val publication = article.publication
