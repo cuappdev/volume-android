@@ -4,8 +4,27 @@ query AllArticles{
         title
         publication{
             id
+            backgroundImageURL
+            bio
             name
             profileImageURL
+            rssName
+            rssURL
+            slug
+            shoutouts
+            websiteURL
+            socials{
+                social
+                URL
+            }
+            mostRecentArticle{
+                id
+                articleURL
+                imageURL
+                title
+                shoutouts
+                nsfw
+            }
         }
         nsfw
         articleURL
@@ -103,8 +122,27 @@ query TrendingArticles ($limit: Float){
         title
         publication{
             id
+            backgroundImageURL
+            bio
             name
             profileImageURL
+            rssName
+            rssURL
+            slug
+            shoutouts
+            websiteURL
+            socials{
+                social
+                URL
+            }
+            mostRecentArticle{
+                id
+                articleURL
+                imageURL
+                title
+                shoutouts
+                nsfw
+            }
         }
         articleURL
         imageURL
@@ -122,8 +160,27 @@ query ArticlesByPublicationID($publicationID:String!){
         imageURL
         publication{
             id
+            backgroundImageURL
+            bio
             name
             profileImageURL
+            rssName
+            rssURL
+            slug
+            shoutouts
+            websiteURL
+            socials{
+                social
+                URL
+            }
+            mostRecentArticle{
+                id
+                articleURL
+                imageURL
+                title
+                shoutouts
+                nsfw
+            }
         }
         shoutouts
         title
@@ -138,8 +195,27 @@ query ArticlesByIDs($ids:[String!]!){
         title
         publication{
             id
+            backgroundImageURL
+            bio
             name
             profileImageURL
+            rssName
+            rssURL
+            slug
+            shoutouts
+            websiteURL
+            socials{
+                social
+                URL
+            }
+            mostRecentArticle{
+                id
+                articleURL
+                imageURL
+                title
+                shoutouts
+                nsfw
+            }
         }
         articleURL
         imageURL
@@ -155,8 +231,27 @@ query ArticleByID($id:String!) {
         title
         publication {
             id
+            backgroundImageURL
+            bio
             name
             profileImageURL
+            rssName
+            rssURL
+            slug
+            shoutouts
+            websiteURL
+            socials{
+                social
+                URL
+            }
+            mostRecentArticle{
+                id
+                articleURL
+                imageURL
+                title
+                shoutouts
+                nsfw
+            }
         }
         articleURL
         imageURL
@@ -174,8 +269,27 @@ query ArticlesByPublicationIDs($publicationIDs:[String!]!){
         imageURL
         publication{
             id
+            backgroundImageURL
+            bio
             name
             profileImageURL
+            rssName
+            rssURL
+            slug
+            shoutouts
+            websiteURL
+            socials{
+                social
+                URL
+            }
+            mostRecentArticle{
+                id
+                articleURL
+                imageURL
+                title
+                shoutouts
+                nsfw
+            }
         }
         shoutouts
         title
@@ -202,8 +316,27 @@ query ArticlesAfterDate($since: String!){
         title
         publication{
             id
+            backgroundImageURL
+            bio
             name
             profileImageURL
+            rssName
+            rssURL
+            slug
+            shoutouts
+            websiteURL
+            socials{
+                social
+                URL
+            }
+            mostRecentArticle{
+                id
+                articleURL
+                imageURL
+                title
+                shoutouts
+                nsfw
+            }
         }
         trendiness
         nsfw

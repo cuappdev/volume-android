@@ -45,7 +45,7 @@
 
     <style name="begum_grey">
         <item name="android:fontFamily">@font/begum</item>
-        <item name="android:textColor">@color/grey</item>
+        <item name="android:textColor">@color/gray</item>
     </style>
 
     <style name="begum_black_bold">

@@ -13,6 +13,7 @@ import com.cornellappdev.volume.adapters.ArticleAdapter
 import com.cornellappdev.volume.databinding.ActivityPublicationProfileBinding
 import com.cornellappdev.volume.models.Article
 import com.cornellappdev.volume.models.Publication
+import com.cornellappdev.volume.models.Social
 import com.cornellappdev.volume.util.GraphQlUtil
 import com.squareup.picasso.Picasso
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -36,7 +37,15 @@ class PublicationProfileActivity : AppCompatActivity() {
                 prefUtils.getStringSet(PrefUtils.FOLLOWING_KEY, mutableSetOf())?.toMutableSet()
 
         publication = intent.getParcelableExtra("publication")!!
-        getPublication(publication.id)
+        getPublication(publication)
+
+        val volumeOrange = ContextCompat.getColor(this, R.color.volumeOrange)
+        binding.srlQuery.setColorSchemeColors(volumeOrange, volumeOrange, volumeOrange)
+
+        binding.srlQuery.setOnRefreshListener {
+            setUpArticleRV()
+            binding.srlQuery.isRefreshing = false
+        }
 
         if (currentFollowingSet!!.contains(publication.id)) {
             binding.btnFollow.apply {
@@ -79,70 +88,89 @@ class PublicationProfileActivity : AppCompatActivity() {
                 .getArticleByPublicationID(publication.id)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-        disposables.add(followingObs.subscribe {
-            it.data?.getArticlesByPublicationID?.mapTo(articles, { article ->
-                Article(
-                        title = article.title,
-                        articleURL = article.articleURL,
-                        date = article.date.toString(),
-                        id = article.id,
-                        imageURL = article.imageURL,
-                        publication = Publication(
-                                id = article.publication.id,
-                                name = article.publication.name,
-                                profileImageURL = publication.profileImageURL),
-                        shoutouts = article.shoutouts,
-                        nsfw = article.nsfw)
-            })
-            binding.rvArticles.adapter = ArticleAdapter(articles)
-            binding.rvArticles.layoutManager = LinearLayoutManager(this)
-            binding.rvArticles.setHasFixedSize(true)
+        disposables.add(GraphQlUtil.hasInternetConnection().subscribe { hasInternet ->
+            if (hasInternet) {
+                disposables.add(followingObs.subscribe { response ->
+                    binding.mShimmerViewContainer.stopShimmer()
+                    binding.mShimmerViewContainer.visibility = View.GONE
+                    response.data?.getArticlesByPublicationID?.mapTo(articles, { article ->
+                        val publication = article.publication
+                        Article(
+                                title = article.title,
+                                articleURL = article.articleURL,
+                                date = article.date.toString(),
+                                id = article.id,
+                                imageURL = article.imageURL,
+                                publication = Publication(
+                                        id = publication.id,
+                                        backgroundImageURL = publication.backgroundImageURL,
+                                        bio = publication.bio,
+                                        name = publication.name,
+                                        profileImageURL = publication.profileImageURL,
+                                        rssName = publication.rssName,
+                                        rssURL = publication.rssURL,
+                                        slug = publication.slug,
+                                        shoutouts = publication.shoutouts,
+                                        websiteURL = publication.websiteURL,
+                                        socials = publication.socials.toList().map { Social(it.social, it.uRL) }),
+                                shoutouts = article.shoutouts,
+                                nsfw = article.nsfw)
+                    })
+                    with(binding.rvArticles) {
+                        adapter = ArticleAdapter(articles)
+                        visibility = View.VISIBLE
+                        layoutManager = LinearLayoutManager(context)
+                        isClickable = true
+                        setHasFixedSize(true)
+                    }
+                })
+            } else {
+                binding.mShimmerViewContainer.startShimmer()
+                binding.mShimmerViewContainer.visibility = View.VISIBLE
+                binding.rvArticles.visibility = View.GONE
+            }
         })
     }
 
-    private fun getPublication(pub: String) {
+    private fun getPublication(publication: Publication) {
         var instaURL = ""
         var facebookURL = ""
-        val followingObs = graphQlUtil.getPublicationByID(pub).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
-        disposables.add(followingObs.subscribe {
-            val publication = it.data?.getPublicationByID
-            if (publication != null) {
-                for (rawSocial in publication.socials) {
-                    if (rawSocial.social == "insta") {
-                        instaURL = rawSocial.uRL
-                    } else if (rawSocial.social == "facebook") {
-                        facebookURL = rawSocial.uRL
-                    }
+        if (publication.socials != null) {
+            for (social in publication.socials) {
+                if (social.social == "insta") {
+                    instaURL = social.URL
+                } else if (social.social == "facebook") {
+                    facebookURL = social.URL
                 }
-                if (publication.websiteURL.isNotEmpty()) {
-                    binding.tvWebsiteLink.text = publication.websiteURL
-                    binding.clWebsiteHolder.setOnClickListener {
-                        startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(publication.websiteURL)))
-                    }
-                } else {
-                    binding.clWebsiteHolder.visibility = View.GONE
-                }
-                if (instaURL.isNotEmpty()) {
-                    setUpInstaOnClick(instaURL)
-                } else {
-                    binding.clInstaHolder.visibility = View.GONE
-                }
-                if (facebookURL.isNotEmpty()) {
-                    binding.clFbHolder.setOnClickListener {
-                        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(facebookURL))
-                        startActivity(intent)
-                    }
-                } else {
-                    binding.clFbHolder.visibility = View.GONE
-                }
-                binding.tvName.text = publication.name
-                binding.tvShoutoutCount.text =
-                        publication.shoutouts.toInt().toString() + " shout-outs"
-                binding.tvDescription.text = publication.bio
-                Picasso.get().load(publication.backgroundImageURL).into(binding.ivBanner)
-                Picasso.get().load(publication.profileImageURL).into(binding.ivLogo)
             }
-        })
+        }
+        if (publication.websiteURL.isNotEmpty()) {
+            binding.tvWebsiteLink.text = publication.websiteURL
+            binding.clWebsiteHolder.setOnClickListener {
+                startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(publication.websiteURL)))
+            }
+        } else {
+            binding.clWebsiteHolder.visibility = View.GONE
+        }
+        if (instaURL.isNotEmpty()) {
+            setUpInstaOnClick(instaURL)
+        } else {
+            binding.clInstaHolder.visibility = View.GONE
+        }
+        if (facebookURL.isNotEmpty()) {
+            binding.clFbHolder.setOnClickListener {
+                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(facebookURL))
+                startActivity(intent)
+            }
+        } else {
+            binding.clFbHolder.visibility = View.GONE
+        }
+        binding.tvName.text = publication.name
+        binding.tvShoutoutCount.text =
+                publication.shoutouts.toInt().toString() + " shout-outs"
+        binding.tvDescription.text = publication.bio
+        Picasso.get().load(publication.backgroundImageURL).fit().centerCrop().into(binding.ivBanner)
+        Picasso.get().load(publication.profileImageURL).into(binding.ivLogo)
     }
 
     private fun setUpInstaOnClick(url: String) {

@@ -10,8 +10,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="300dp"
         android:src="@drawable/volumelogopic"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
@@ -23,8 +23,8 @@
         android:text="Welcome to Volume"
         android:textSize="16sp"
         android:visibility="gone"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/iv_volume_logo" />
 
     <ImageView
@@ -34,8 +34,8 @@
         android:layout_marginTop="50dp"
         android:src="@drawable/ic_divider"
         android:visibility="gone"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tv_welcome" />
 
     <androidx.viewpager2.widget.ViewPager2
@@ -55,8 +55,8 @@
         android:text="Next"
         android:textColor="@color/volumeOrange"
         android:visibility="gone"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/vp_onboarding" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
