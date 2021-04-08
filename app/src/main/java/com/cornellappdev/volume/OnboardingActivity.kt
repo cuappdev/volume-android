@@ -53,9 +53,9 @@ class OnboardingActivity : AppCompatActivity(), OnboardingFragTwo.DataPassListen
         binding.vpOnboarding.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 when (position) {
-                    0 -> binding.btnNext.text = "Next"
+                    0 -> binding.btnNext.text = this@OnboardingActivity.getString(R.string.next)
                     1 -> {
-                        binding.btnNext.text = "Start Reading"
+                        binding.btnNext.text = this@OnboardingActivity.getString(R.string.start_reading)
                         binding.btnNext.isClickable = false
                         binding.btnNext.setTextColor(ContextCompat.getColor(
                                 this@OnboardingActivity, R.color.gray))

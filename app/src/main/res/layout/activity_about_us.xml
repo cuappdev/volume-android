@@ -48,6 +48,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
+                android:contentDescription="@string/our_mission_header"
                 android:src="@drawable/ic_our_mission" />
         </RelativeLayout>
 
@@ -87,6 +88,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
+                android:contentDescription="@string/the_team"
                 android:src="@drawable/ic_the_team" />
         </RelativeLayout>
 
