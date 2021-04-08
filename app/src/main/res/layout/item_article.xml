@@ -3,11 +3,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/cl_article_layout"
+    style="@style/creamy_background"
     android:layout_width="match_parent"
     android:layout_height="100dp"
     android:layout_below="@+id/article_layout"
-    android:layout_margin="10dp"
-    style="@style/creamy_background">
+    android:layout_margin="10dp">
 
     <TextView
         android:id="@+id/tv_article_title"
