@@ -60,7 +60,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="110dp"
             android:text="2h ago"
-            android:textSize="10sp"
+            android:textSize="12sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/iv_article_image" />
 
@@ -71,7 +71,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="110dp"
             android:text=" • "
-            android:textSize="10sp"
+            android:textSize="12sp"
             app:layout_constraintStart_toEndOf="@id/tv_time_posted"
             app:layout_constraintTop_toBottomOf="@id/iv_article_image" />
 
@@ -82,7 +82,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="110dp"
             android:text="123 shout-outs"
-            android:textSize="10sp"
+            android:textSize="12sp"
             app:layout_constraintStart_toEndOf="@id/tv_dot"
             app:layout_constraintTop_toBottomOf="@id/iv_article_image" />
 

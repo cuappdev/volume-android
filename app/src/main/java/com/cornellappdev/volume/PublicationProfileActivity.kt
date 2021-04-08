@@ -1,6 +1,5 @@
 package com.cornellappdev.volume
 
-import PrefUtils
 import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.net.Uri
@@ -15,6 +14,7 @@ import com.cornellappdev.volume.models.Article
 import com.cornellappdev.volume.models.Publication
 import com.cornellappdev.volume.models.Social
 import com.cornellappdev.volume.util.GraphQlUtil
+import com.cornellappdev.volume.util.PrefUtils
 import com.squareup.picasso.Picasso
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable

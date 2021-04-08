@@ -1,15 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/cl_article_layout"
+    android:id="@+id/cl_placeholder_article_layout"
     android:layout_width="match_parent"
     android:layout_height="100dp"
-    android:layout_below="@+id/article_layout"
     android:layout_margin="10dp"
-    android:background="@color/creamy_white">
+    style="@style/creamy_background">
 
     <TextView
-        android:id="@+id/tv_article_title"
+        android:id="@+id/tv_placeholder_article_title"
         style="@style/helvetica_bold"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -18,12 +17,12 @@
         android:ellipsize="end"
         android:minLines="3"
         android:textSize="16sp"
-        app:layout_constraintEnd_toStartOf="@id/iv_article_image"
+        app:layout_constraintEnd_toStartOf="@id/iv_placeholder_article_image"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
-        android:id="@+id/iv_article_image"
+        android:id="@+id/iv_placeholder_article_image"
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:background="@color/placeholder"
@@ -40,38 +39,38 @@
         app:layout_constraintStart_toStartOf="parent">
 
         <TextView
-            android:id="@+id/tv_time_posted"
+            android:id="@+id/tv_placeholder_time_posted"
             style="@style/helvetica_gray"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@color/placeholder"
             android:text="6h ago"
             android:textColor="@color/placeholder"
-            android:textSize="10sp"
+            android:textSize="12sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/tv_dot"
+            android:id="@+id/tv_placeholder_dot"
             style="@style/helvetica_gray"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text=" • "
-            android:textSize="10sp"
+            android:textSize="12sp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/tv_time_posted"
+            app:layout_constraintStart_toEndOf="@+id/tv_placeholder_time_posted"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/tv_shoutout_count"
+            android:id="@+id/tv_placeholder_shoutout_count"
             style="@style/helvetica_gray"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@color/placeholder"
             android:text="15 shout-outs"
             android:textColor="@color/placeholder"
-            android:textSize="10sp"
-            app:layout_constraintStart_toEndOf="@+id/tv_dot"
+            android:textSize="12sp"
+            app:layout_constraintStart_toEndOf="@+id/tv_placeholder_dot"
             app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -2,10 +2,13 @@
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
-        <!-- Customize your theme here. -->
         <item name="colorPrimary">#000</item>
         <item name="colorPrimaryDark">#000</item>
         <item name="colorAccent">#000</item>
+    </style>
+
+    <style name="creamy_background">
+        <item name="android:background">@color/creamy_white</item>
     </style>
 
     <style name="roboto_black">

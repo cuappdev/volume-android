@@ -1,6 +1,5 @@
 package com.cornellappdev.volume
 
-import PrefUtils
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
@@ -15,6 +14,7 @@ import androidx.viewpager2.widget.ViewPager2
 import com.cornellappdev.volume.adapters.OnboardingPagerAdapter
 import com.cornellappdev.volume.databinding.ActivityOnboardingBinding
 import com.cornellappdev.volume.fragments.OnboardingFragTwo
+import com.cornellappdev.volume.util.PrefUtils
 
 
 class OnboardingActivity : AppCompatActivity(), OnboardingFragTwo.DataPassListener {
