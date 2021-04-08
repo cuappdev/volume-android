@@ -1,6 +1,5 @@
 package com.cornellappdev.volume.fragments
 
-import PrefUtils
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -16,6 +15,7 @@ import com.cornellappdev.volume.models.Article
 import com.cornellappdev.volume.models.Publication
 import com.cornellappdev.volume.models.Social
 import com.cornellappdev.volume.util.GraphQlUtil
+import com.cornellappdev.volume.util.PrefUtils
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
@@ -117,7 +117,7 @@ class SavedArticlesFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        binding.let { loadArticles(it) }
+        loadArticles(binding)
     }
 
     override fun onDestroyView() {

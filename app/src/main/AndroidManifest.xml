@@ -12,6 +12,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
+        android:fullBackupContent="@xml/backup_descriptor"
         android:usesCleartextTraffic="true">
         <activity android:name=".MainActivity" />
         <activity android:name=".PublicationProfileActivity" />
