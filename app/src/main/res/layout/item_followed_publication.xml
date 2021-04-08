@@ -11,8 +11,8 @@
         android:layout_width="75dp"
         android:layout_height="75dp"
         android:src="@drawable/cremelogotrans"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
@@ -26,8 +26,8 @@
         android:maxLines="2"
         android:text="Creme de Cornell"
         android:textSize="12sp"
-        app:layout_constraintStart_toStartOf="@+id/iv_logo"
         app:layout_constraintEnd_toEndOf="@id/iv_logo"
+        app:layout_constraintStart_toStartOf="@+id/iv_logo"
         app:layout_constraintTop_toBottomOf="@+id/iv_logo" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

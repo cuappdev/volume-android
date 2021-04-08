@@ -37,7 +37,7 @@ class WebviewTop @JvmOverloads constructor(
             param.setMargins(0, 20, 0, 0)
             binding.tvArticleTitle.layoutParams = param
             binding.tvReading.visibility = View.VISIBLE
-            binding.ivCompass.visibility = View.VISIBLE
+            binding.ivCompass.visibility = View.INVISIBLE
         }
     }
 }
