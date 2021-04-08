@@ -1,0 +1,299 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    style="@style/creamy_background"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginStart="24dp"
+    android:layout_marginEnd="24dp"
+    android:fillViewport="true">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/tv_about_us"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="65dp"
+            android:fontFamily="@font/begummedium"
+            android:lineSpacingExtra="-5sp"
+            android:text="@string/about_us"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            android:textStyle="normal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <RelativeLayout
+            android:id="@+id/rl_our_mission"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="36dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_about_us">
+
+            <TextView
+                android:id="@+id/tv_our_mission_header"
+                style="@style/begum_black_medium"
+                android:layout_width="wrap_content"
+                android:layout_height="24dp"
+                android:text="@string/our_mission_header"
+                android:textSize="20sp"
+                android:textStyle="normal" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:src="@drawable/ic_our_mission" />
+        </RelativeLayout>
+
+
+        <TextView
+            android:id="@+id/tv_our_mission"
+            style="@style/helvetica_black"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:letterSpacing="-0.02"
+            android:lineSpacingExtra="4sp"
+            android:text="@string/our_mission"
+            android:textSize="16sp"
+            android:textStyle="normal"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/rl_our_mission" />
+
+
+        <RelativeLayout
+            android:id="@+id/rl_the_team"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="36dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_our_mission">
+
+            <TextView
+                android:id="@+id/tv_the_team"
+                style="@style/begum_black_medium"
+                android:layout_width="wrap_content"
+                android:layout_height="24dp"
+                android:text="@string/the_team"
+                android:textSize="20sp"
+                android:textStyle="normal" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:src="@drawable/ic_the_team" />
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/tv_founding_members_intro"
+            style="@style/helvetica_black"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="14dp"
+            android:letterSpacing="-0.02"
+            android:lineSpacingExtra="4sp"
+            android:text="@string/founding_members_intro"
+            android:textSize="16sp"
+            android:textStyle="normal"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/rl_the_team" />
+
+        <TextView
+            android:id="@+id/tv_megaphone_android"
+            style="@style/helvetica_black"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:letterSpacing="-0.02"
+            android:lineSpacingExtra="4sp"
+            android:text="@string/megaphone"
+            android:textSize="16sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_founding_members_intro" />
+
+        <TextView
+            style="@style/helvetica_bold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="@string/android"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@id/tv_megaphone_android"
+            app:layout_constraintStart_toEndOf="@id/tv_megaphone_android"
+            app:layout_constraintTop_toTopOf="@id/tv_megaphone_android" />
+
+        <TextView
+            android:id="@+id/tv_android_members"
+            style="@style/helvetica_black"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="4dp"
+            android:letterSpacing="-0.02"
+            android:lineSpacingExtra="4sp"
+            android:text="@string/android_members"
+            android:textSize="16sp"
+            app:layout_constraintStart_toEndOf="@id/tv_megaphone_android"
+            app:layout_constraintTop_toBottomOf="@id/tv_megaphone_android" />
+
+        <TextView
+            android:id="@+id/tv_megaphone_backend"
+            style="@style/helvetica_black"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:letterSpacing="-0.02"
+            android:lineSpacingExtra="4sp"
+            android:text="@string/megaphone"
+            android:textSize="16sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_android_members" />
+
+        <TextView
+            style="@style/helvetica_bold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="@string/backend"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@id/tv_megaphone_backend"
+            app:layout_constraintStart_toEndOf="@id/tv_megaphone_backend"
+            app:layout_constraintTop_toTopOf="@id/tv_megaphone_backend" />
+
+        <TextView
+            android:id="@+id/tv_backend_members"
+            style="@style/helvetica_black"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="4dp"
+            android:letterSpacing="-0.02"
+            android:lineSpacingExtra="4sp"
+            android:text="@string/backend_members"
+            android:textSize="16sp"
+            app:layout_constraintStart_toEndOf="@id/tv_megaphone_backend"
+            app:layout_constraintTop_toBottomOf="@id/tv_megaphone_backend" />
+
+        <TextView
+            android:id="@+id/tv_megaphone_design"
+            style="@style/helvetica_black"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:letterSpacing="-0.02"
+            android:lineSpacingExtra="4sp"
+            android:text="@string/megaphone"
+            android:textSize="16sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_backend_members" />
+
+        <TextView
+            style="@style/helvetica_bold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="@string/design"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@id/tv_megaphone_design"
+            app:layout_constraintStart_toEndOf="@id/tv_megaphone_design"
+            app:layout_constraintTop_toTopOf="@id/tv_megaphone_design" />
+
+        <TextView
+            android:id="@+id/tv_design_members"
+            style="@style/helvetica_black"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="4dp"
+            android:letterSpacing="-0.02"
+            android:lineSpacingExtra="4sp"
+            android:text="@string/design_members"
+            android:textSize="16sp"
+            app:layout_constraintStart_toEndOf="@id/tv_megaphone_design"
+            app:layout_constraintTop_toBottomOf="@id/tv_megaphone_design" />
+
+        <TextView
+            android:id="@+id/tv_megaphone_ios"
+            style="@style/helvetica_black"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:letterSpacing="-0.02"
+            android:lineSpacingExtra="4sp"
+            android:text="@string/megaphone"
+            android:textSize="16sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_design_members" />
+
+        <TextView
+            style="@style/helvetica_bold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="@string/iOS"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@id/tv_megaphone_ios"
+            app:layout_constraintStart_toEndOf="@id/tv_megaphone_ios"
+            app:layout_constraintTop_toTopOf="@id/tv_megaphone_ios" />
+
+        <TextView
+            android:id="@+id/tv_ios_members"
+            style="@style/helvetica_black"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="4dp"
+            android:letterSpacing="-0.02"
+            android:lineSpacingExtra="4sp"
+            android:text="@string/ios_members"
+            android:textSize="16sp"
+            app:layout_constraintStart_toEndOf="@id/tv_megaphone_ios"
+            app:layout_constraintTop_toBottomOf="@id/tv_megaphone_ios" />
+
+        <TextView
+            android:id="@+id/tv_megaphone_marketing"
+            style="@style/helvetica_black"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:letterSpacing="-0.02"
+            android:lineSpacingExtra="4sp"
+            android:text="@string/megaphone"
+            android:textSize="16sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_ios_members" />
+
+        <TextView
+            style="@style/helvetica_bold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="@string/marketing"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@id/tv_megaphone_marketing"
+            app:layout_constraintStart_toEndOf="@id/tv_megaphone_marketing"
+            app:layout_constraintTop_toTopOf="@id/tv_megaphone_marketing" />
+
+        <TextView
+            style="@style/helvetica_black"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="4dp"
+            android:letterSpacing="-0.02"
+            android:lineSpacingExtra="4sp"
+            android:text="@string/marketing_members"
+            android:textSize="16sp"
+            app:layout_constraintStart_toEndOf="@id/tv_megaphone_marketing"
+            app:layout_constraintTop_toBottomOf="@id/tv_megaphone_marketing" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.core.widget.NestedScrollView>

@@ -1,4 +1,34 @@
 <resources>
     <string name="app_name">Volume-Android</string>
     <string name="follow_button">Follow Button</string>
+
+    <!-- Settings Activity -->
+    <string name="settings">Settings</string>
+    <string name="send_feedback">Send Feedback</string>
+    <string name="visit_our_website">Visit Our Website</string>
+    <string name="about_us">About Us</string>
+    <string name="our_mission_header">Our Mission</string>
+    <string name="the_team">The Team</string>
+    <string name="our_mission">
+        Created by Cornell AppDev, Volume aims to better connect student publications with student
+        readers by making it easy and accessible to digest student created content. Volume believes
+        in the unique power that lies in the sharing and distribution of content by students and
+        for students to spark conversation, experiences, and connections that improve the
+        collegiate experience.
+    </string>
+    <string name="founding_members_intro">
+        The founding members that together made Volume a reality ✨
+    </string>
+    <string name="megaphone">📣</string>
+    <string name="android">Android</string>
+    <string name="iOS">iOS</string>
+    <string name="backend">Backend</string>
+    <string name="marketing">Marketing</string>
+    <string name="design">Design</string>
+    <string name="android_members">Chris Desir, Justin Jiang, Aastha Shah</string>
+    <string name="backend_members">Tedi Mitiku, Orko Sinha</string>
+    <string name="ios_members">Sergio Diaz, Cameron Russell, Daniel Vebman</string>
+    <string name="marketing_members">Jonna Chen, Monan Modi, Yi Hsin Wei</string>
+    <string name="design_members">Amanda He, Zixian Jia, Maggie Ying</string>
+
 </resources>
