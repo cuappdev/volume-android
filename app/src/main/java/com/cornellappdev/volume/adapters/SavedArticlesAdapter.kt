@@ -1,5 +1,6 @@
 package com.cornellappdev.volume.adapters
 
+import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.view.LayoutInflater
@@ -8,6 +9,7 @@ import android.view.ViewGroup
 import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.RecyclerView
 import com.cornellappdev.volume.MainActivity
+import com.cornellappdev.volume.R
 import com.cornellappdev.volume.databinding.ItemSavedArticleBinding
 import com.cornellappdev.volume.models.Article
 import com.squareup.picasso.Picasso
@@ -15,11 +17,14 @@ import com.squareup.picasso.Picasso
 class SavedArticlesAdapter(private val articles: List<Article>) :
         RecyclerView.Adapter<SavedArticlesAdapter.SavedArticleVH>() {
 
+    private lateinit var context: Context
+
     class SavedArticleVH(val binding: ItemSavedArticleBinding) : RecyclerView.ViewHolder(binding.root)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SavedArticleVH {
         val binding = ItemSavedArticleBinding
                 .inflate(LayoutInflater.from(parent.context), parent, false)
+        context = parent.context
         return SavedArticleVH(binding)
     }
 
@@ -32,9 +37,9 @@ class SavedArticlesAdapter(private val articles: List<Article>) :
             holder.binding.ivArticleImage.visibility = View.VISIBLE
             Picasso.get().load(currentItem.imageURL).fit().centerCrop().into(holder.binding.ivArticleImage)
         }
-        Article.setCorrectDateText(currentItem, holder.binding.tvTimePosted)
+        Article.setCorrectDateText(currentItem, holder.binding.tvTimePosted, context)
         holder.binding.tvShoutoutCount.text =
-                currentItem.shoutouts?.toInt().toString() + " shout-outs"
+                context.getString(R.string.shoutout_count, currentItem.shoutouts?.toInt())
         holder.binding.tvPublicationName.text = currentItem.publication!!.name
         holder.binding.clArticleLayout.setOnClickListener { view ->
             val intent = Intent(view.context, MainActivity::class.java)

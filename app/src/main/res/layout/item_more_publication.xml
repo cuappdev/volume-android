@@ -21,6 +21,7 @@
             android:layout_height="50dp"
             android:layout_marginStart="5dp"
             android:layout_marginTop="5dp"
+            android:contentDescription="@string/description_logo"
             android:src="@drawable/cremelogotrans"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -31,7 +32,7 @@
             android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
-            android:text="Creme de Cornell"
+            android:text="@string/publication_example"
             android:textSize="18sp"
             app:layout_constraintStart_toEndOf="@id/iv_logo"
             app:layout_constraintTop_toTopOf="@id/iv_logo" />
@@ -42,7 +43,7 @@
             android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
-            android:text="A description about Creme de Cornell"
+            android:text="@string/publication_example"
             android:textSize="12sp"
             app:layout_constraintStart_toStartOf="@id/tv_name"
             app:layout_constraintTop_toBottomOf="@id/tv_name" />
@@ -52,6 +53,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
+            android:contentDescription="@string/description_line_divider"
             android:src="@drawable/ic_smalllinesvg"
             app:layout_constraintStart_toStartOf="@id/tv_description"
             app:layout_constraintTop_toBottomOf="@id/tv_description" />
@@ -64,7 +66,7 @@
             android:layout_marginStart="5dp"
             android:ellipsize="end"
             android:maxLines="2"
-            android:text=' "We cream for Cornell" '
+            android:text="@string/title_example"
             android:textSize="12sp"
             app:layout_constraintBottom_toBottomOf="@id/iv_small_line"
             app:layout_constraintStart_toEndOf="@id/iv_small_line"
