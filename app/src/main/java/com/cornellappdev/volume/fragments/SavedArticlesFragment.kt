@@ -34,13 +34,13 @@ class SavedArticlesFragment : Fragment() {
                               container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
         _binding = FragmentSavedArticlesBinding.inflate(inflater, container, false)
-        loadArticles(binding)
+        loadArticles()
         val volumeOrange: Int? = context?.let { ContextCompat.getColor(it, R.color.volumeOrange) }
         if (volumeOrange != null) {
             binding.srlQuery.setColorSchemeColors(volumeOrange, volumeOrange, volumeOrange)
         }
         binding.srlQuery.setOnRefreshListener {
-            loadArticles(binding)
+            loadArticles()
             binding.srlQuery.isRefreshing = false
         }
 
@@ -52,75 +52,70 @@ class SavedArticlesFragment : Fragment() {
         return binding.root
     }
 
-    private fun loadArticles(savedArticlesBinding: FragmentSavedArticlesBinding) {
+    private fun loadArticles() {
         val articleIds = prefUtils.getStringSet(PrefUtils.SAVED_ARTICLES_KEY, mutableSetOf())?.toMutableSet()
         val obs = articleIds?.let { graphQlUtil.getArticlesByIDs(it).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()) }
         val savedArticles = mutableListOf<Article>()
-        if (articleIds?.isEmpty() == true) {
-            binding.noSavedArticlesGroup.visibility = View.VISIBLE
-            binding.clBookmarkPage.visibility = View.GONE
-            binding.fragmentContainer.visibility = View.GONE
-        } else {
-            if (obs != null) {
-                disposables.add(GraphQlUtil.hasInternetConnection().subscribe { hasInternet ->
-                    if (hasInternet) {
-                        childFragmentManager.findFragmentByTag(NoInternetDialog.TAG).let { dialogFrag ->
-                            (dialogFrag as? DialogFragment)?.dismiss()
-                        }
-                        binding.clBookmarkPage.visibility = View.VISIBLE
-                        binding.noSavedArticlesGroup.visibility = View.GONE
-                        binding.fragmentContainer.visibility = View.GONE
-                        disposables.add(obs.subscribe { response ->
-                            response.data?.getArticlesByIDs?.mapTo(savedArticles, { article ->
-                                val publication = article.publication
-                                Article(
-                                        title = article.title,
-                                        articleURL = article.articleURL,
-                                        date = article.date.toString(),
-                                        id = article.id,
-                                        imageURL = article.imageURL,
-                                        publication = Publication(
-                                                id = publication.id,
-                                                backgroundImageURL = publication.backgroundImageURL,
-                                                bio = publication.bio,
-                                                name = publication.name,
-                                                profileImageURL = publication.profileImageURL,
-                                                rssName = publication.rssName,
-                                                rssURL = publication.rssURL,
-                                                slug = publication.slug,
-                                                shoutouts = publication.shoutouts,
-                                                websiteURL = publication.websiteURL,
-                                                socials = publication.socials.toList().map { Social(it.social, it.uRL) }),
-                                        shoutouts = article.shoutouts,
-                                        nsfw = article.nsfw)
-                            })
-                            if (context != null) {
-                                savedArticlesBinding.rvSavedArticles.adapter = SavedArticlesAdapter(savedArticles)
-                                val layoutManager = LinearLayoutManager(context)
-                                savedArticlesBinding.rvSavedArticles.layoutManager = layoutManager
-                                savedArticlesBinding.noSavedArticlesGroup.visibility = if (savedArticles.isEmpty()) {
-                                    View.VISIBLE
-                                } else {
-                                    View.GONE
-                                }
-                            }
-                        })
-                    } else {
-                        binding.clBookmarkPage.visibility = View.GONE
-                        binding.noSavedArticlesGroup.visibility = View.GONE
-                        binding.fragmentContainer.visibility = View.VISIBLE
-                        val ft = childFragmentManager.beginTransaction()
-                        val dialog = NoInternetDialog()
-                        ft.replace(binding.fragmentContainer.id, dialog, NoInternetDialog.TAG).commit()
+        if (obs != null) {
+            disposables.add(GraphQlUtil.hasInternetConnection().subscribe { hasInternet ->
+                if (hasInternet) {
+                    childFragmentManager.findFragmentByTag(NoInternetDialog.TAG).let { dialogFrag ->
+                        (dialogFrag as? DialogFragment)?.dismiss()
                     }
-                })
-            }
+                    binding.clBookmarkPage.visibility = View.VISIBLE
+                    binding.noSavedArticlesGroup.visibility = View.GONE
+                    binding.fragmentContainer.visibility = View.GONE
+                    disposables.add(obs.subscribe { response ->
+                        response.data?.getArticlesByIDs?.mapTo(savedArticles, { article ->
+                            val publication = article.publication
+                            Article(
+                                    title = article.title,
+                                    articleURL = article.articleURL,
+                                    date = article.date.toString(),
+                                    id = article.id,
+                                    imageURL = article.imageURL,
+                                    publication = Publication(
+                                            id = publication.id,
+                                            backgroundImageURL = publication.backgroundImageURL,
+                                            bio = publication.bio,
+                                            name = publication.name,
+                                            profileImageURL = publication.profileImageURL,
+                                            rssName = publication.rssName,
+                                            rssURL = publication.rssURL,
+                                            slug = publication.slug,
+                                            shoutouts = publication.shoutouts,
+                                            websiteURL = publication.websiteURL,
+                                            socials = publication.socials.toList().map { Social(it.social, it.uRL) }),
+                                    shoutouts = article.shoutouts,
+                                    nsfw = article.nsfw)
+                        })
+                        if (context != null) {
+                            if (savedArticles.isEmpty()) {
+                                binding.noSavedArticlesGroup.visibility = View.VISIBLE
+                                binding.clBookmarkPage.visibility = View.GONE
+                                binding.fragmentContainer.visibility = View.GONE
+                            } else {
+                                binding.rvSavedArticles.adapter = SavedArticlesAdapter(savedArticles)
+                                val layoutManager = LinearLayoutManager(context)
+                                binding.rvSavedArticles.layoutManager = layoutManager
+                            }
+                        }
+                    })
+                } else {
+                    binding.clBookmarkPage.visibility = View.GONE
+                    binding.noSavedArticlesGroup.visibility = View.GONE
+                    binding.fragmentContainer.visibility = View.VISIBLE
+                    val ft = childFragmentManager.beginTransaction()
+                    val dialog = NoInternetDialog()
+                    ft.replace(binding.fragmentContainer.id, dialog, NoInternetDialog.TAG).commit()
+                }
+            })
         }
     }
 
     override fun onResume() {
         super.onResume()
-        loadArticles(binding)
+        loadArticles()
     }
 
     override fun onDestroyView() {
