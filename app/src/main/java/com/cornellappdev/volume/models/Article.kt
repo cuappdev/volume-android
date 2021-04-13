@@ -1,11 +1,13 @@
 package com.cornellappdev.volume.models
 
+import android.content.Context
 import android.graphics.BlurMaskFilter
 import android.os.Build
 import android.os.Parcelable
 import android.view.View
 import android.widget.TextView
 import androidx.annotation.RequiresApi
+import com.cornellappdev.volume.R
 import kotlinx.parcelize.Parcelize
 import java.time.Duration
 import java.time.LocalDateTime
@@ -37,43 +39,42 @@ class Article(
         }
 
         @RequiresApi(Build.VERSION_CODES.O)
-        fun setCorrectDateText(article: Article, target: TextView) {
+        fun setCorrectDateText(article: Article, target: TextView, context: Context) {
             val format = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
             val datePublished = LocalDateTime.parse(article.date, format)
             val dur = Duration.between(datePublished, LocalDateTime.now())
-            if (dur.toDays() < 1) {
-                val hours = dur.toHours()
-                target.text = "${abs(hours)} h ago"
-            }
-            if (dur.toDays() in 1..6) {
-                target.text = if (dur.toDays() <= 1) {
-                    "${dur.toDays()} day ago"
+            val hours = dur.toHours()
+            val days = dur.toDays()
+
+            val weeks = days / 7
+            val months = days / 30
+            val years = days / 365
+
+            target.text = if (days < 1) {
+                context.getString(R.string.x_h_ago, abs(hours))
+            } else if (days in 1..6) {
+                if (days <= 1) {
+                    context.getString(R.string.one_day_ago)
                 } else {
-                    "${dur.toDays()} days ago"
+                    context.getString(R.string.x_days_ago, dur.toDays())
                 }
-            }
-            if (dur.toDays() in 7..29) {
-                val weeks = dur.toDays().toInt() / 7
-                target.text = if (weeks <= 1) {
-                    "$weeks week ago"
+            } else if (days in 7..29) {
+                if (weeks <= 1) {
+                    context.getString(R.string.one_week_ago)
                 } else {
-                    "$weeks weeks ago"
+                    context.getString(R.string.x_weeks_ago, weeks)
                 }
-            }
-            if (dur.toDays() in 30..364) {
-                val months = dur.toDays() / 30
-                target.text = if (months <= 1) {
-                    "$months month ago"
+            } else if (days in 30..364) {
+                if (months <= 1) {
+                    context.getString(R.string.one_month_ago)
                 } else {
-                    "$months months ago"
+                    context.getString(R.string.x_months_ago, months)
                 }
-            }
-            if (dur.toDays() >= 365) {
-                val years = dur.toDays() / 365
-                target.text = if (years <= 1) {
-                    "$years year ago"
+            } else {
+                if (years <= 1) {
+                    context.getString(R.string.one_year_ago)
                 } else {
-                    "$years years ago"
+                    context.getString(R.string.x_years_ago, years)
                 }
             }
         }

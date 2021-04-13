@@ -1,6 +1,5 @@
 package com.cornellappdev.volume
 
-import PrefUtils
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
@@ -15,6 +14,7 @@ import androidx.viewpager2.widget.ViewPager2
 import com.cornellappdev.volume.adapters.OnboardingPagerAdapter
 import com.cornellappdev.volume.databinding.ActivityOnboardingBinding
 import com.cornellappdev.volume.fragments.OnboardingFragTwo
+import com.cornellappdev.volume.util.PrefUtils
 
 
 class OnboardingActivity : AppCompatActivity(), OnboardingFragTwo.DataPassListener {
@@ -53,9 +53,9 @@ class OnboardingActivity : AppCompatActivity(), OnboardingFragTwo.DataPassListen
         binding.vpOnboarding.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 when (position) {
-                    0 -> binding.btnNext.text = "Next"
+                    0 -> binding.btnNext.text = this@OnboardingActivity.getString(R.string.next)
                     1 -> {
-                        binding.btnNext.text = "Start Reading"
+                        binding.btnNext.text = this@OnboardingActivity.getString(R.string.start_reading)
                         binding.btnNext.isClickable = false
                         binding.btnNext.setTextColor(ContextCompat.getColor(
                                 this@OnboardingActivity, R.color.gray))

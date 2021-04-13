@@ -1,6 +1,6 @@
 package com.cornellappdev.volume.fragments
 
-import PrefUtils
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,12 +10,14 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.cornellappdev.volume.R
+import com.cornellappdev.volume.SettingsActivity
 import com.cornellappdev.volume.adapters.SavedArticlesAdapter
 import com.cornellappdev.volume.databinding.FragmentSavedArticlesBinding
 import com.cornellappdev.volume.models.Article
 import com.cornellappdev.volume.models.Publication
 import com.cornellappdev.volume.models.Social
 import com.cornellappdev.volume.util.GraphQlUtil
+import com.cornellappdev.volume.util.PrefUtils
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
@@ -32,34 +34,25 @@ class SavedArticlesFragment : Fragment() {
                               container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
         _binding = FragmentSavedArticlesBinding.inflate(inflater, container, false)
-        if (prefUtils.getStringSet(PrefUtils.SAVED_ARTICLES_KEY, mutableSetOf())?.isEmpty() == true) {
-            binding.noSavedArticlesGroup.visibility = View.VISIBLE
-        } else {
-            disposables.add(GraphQlUtil.hasInternetConnection().subscribe { hasInternet ->
-                if (hasInternet) {
-                    binding.noSavedArticlesGroup.visibility = View.GONE
-                    loadArticles(binding)
-                } else {
-                    binding.clBookmarkPage.visibility = View.GONE
-                    binding.fragmentContainer.visibility = View.VISIBLE
-                    val ft = childFragmentManager.beginTransaction()
-                    val dialog = NoInternetDialog()
-                    ft.replace(binding.fragmentContainer.id, dialog, NoInternetDialog.TAG).commit()
-                }
-            })
-        }
+        loadArticles()
         val volumeOrange: Int? = context?.let { ContextCompat.getColor(it, R.color.volumeOrange) }
         if (volumeOrange != null) {
             binding.srlQuery.setColorSchemeColors(volumeOrange, volumeOrange, volumeOrange)
         }
         binding.srlQuery.setOnRefreshListener {
-            loadArticles(binding)
+            loadArticles()
             binding.srlQuery.isRefreshing = false
         }
+
+        binding.ivSettings.setOnClickListener {
+            val intent = Intent(requireActivity(), SettingsActivity::class.java)
+            requireActivity().startActivity(intent)
+        }
+
         return binding.root
     }
 
-    private fun loadArticles(savedArticlesBinding: FragmentSavedArticlesBinding) {
+    private fun loadArticles() {
         val articleIds = prefUtils.getStringSet(PrefUtils.SAVED_ARTICLES_KEY, mutableSetOf())?.toMutableSet()
         val obs = articleIds?.let { graphQlUtil.getArticlesByIDs(it).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()) }
         val savedArticles = mutableListOf<Article>()
@@ -70,6 +63,8 @@ class SavedArticlesFragment : Fragment() {
                         (dialogFrag as? DialogFragment)?.dismiss()
                     }
                     binding.clBookmarkPage.visibility = View.VISIBLE
+                    binding.noSavedArticlesGroup.visibility = View.GONE
+                    binding.fragmentContainer.visibility = View.GONE
                     disposables.add(obs.subscribe { response ->
                         response.data?.getArticlesByIDs?.mapTo(savedArticles, { article ->
                             val publication = article.publication
@@ -95,18 +90,21 @@ class SavedArticlesFragment : Fragment() {
                                     nsfw = article.nsfw)
                         })
                         if (context != null) {
-                            savedArticlesBinding.rvSavedArticles.adapter = SavedArticlesAdapter(savedArticles)
-                            val layoutManager = LinearLayoutManager(context)
-                            savedArticlesBinding.rvSavedArticles.layoutManager = layoutManager
-                            savedArticlesBinding.noSavedArticlesGroup.visibility = if (savedArticles.isEmpty()) {
-                                View.VISIBLE
+                            if (savedArticles.isEmpty()) {
+                                binding.noSavedArticlesGroup.visibility = View.VISIBLE
+                                binding.clBookmarkPage.visibility = View.GONE
+                                binding.fragmentContainer.visibility = View.GONE
                             } else {
-                                View.GONE
+                                binding.rvSavedArticles.adapter = SavedArticlesAdapter(savedArticles)
+                                val layoutManager = LinearLayoutManager(context)
+                                binding.rvSavedArticles.layoutManager = layoutManager
                             }
                         }
                     })
                 } else {
                     binding.clBookmarkPage.visibility = View.GONE
+                    binding.noSavedArticlesGroup.visibility = View.GONE
+                    binding.fragmentContainer.visibility = View.VISIBLE
                     val ft = childFragmentManager.beginTransaction()
                     val dialog = NoInternetDialog()
                     ft.replace(binding.fragmentContainer.id, dialog, NoInternetDialog.TAG).commit()
@@ -117,7 +115,7 @@ class SavedArticlesFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        binding.let { loadArticles(it) }
+        loadArticles()
     }
 
     override fun onDestroyView() {

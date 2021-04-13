@@ -1,6 +1,5 @@
 package com.cornellappdev.volume.adapters
 
-import PrefUtils
 import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -11,6 +10,7 @@ import com.cornellappdev.volume.R
 import com.cornellappdev.volume.databinding.ItemMorePublicationBinding
 import com.cornellappdev.volume.models.Article
 import com.cornellappdev.volume.models.Publication
+import com.cornellappdev.volume.util.PrefUtils
 import com.squareup.picasso.Picasso
 
 class MorePublicationsAdapter(private val publicationList: List<Publication>,
@@ -37,7 +37,7 @@ class MorePublicationsAdapter(private val publicationList: List<Publication>,
 
     override fun onBindViewHolder(holder: MorePublicationVH, position: Int) {
         val currentItem = publicationList[position]
-        if (!currentItem.profileImageURL.isNullOrBlank()) {
+        if (currentItem.profileImageURL.isNotBlank()) {
             Picasso.get().load(currentItem.profileImageURL).into(holder.binding.ivLogo)
         }
         currentItem.mostRecentArticle?.let {
