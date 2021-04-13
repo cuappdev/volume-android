@@ -18,7 +18,7 @@ import java.net.*
 
 class GraphQlUtil {
 
-    private val BASE_URL = "https://volume-backend.cornellappdev.com/graphql"
+    private val baseURL = "https://volume-backend.cornellappdev.com/graphql"
     private var client: ApolloClient
 
     companion object {
@@ -37,17 +37,17 @@ class GraphQlUtil {
     }
 
     init {
-        client = setUpApolloCllient()
+        client = setUpApolloClient()
     }
 
-    private fun setUpApolloCllient(): ApolloClient {
+    private fun setUpApolloClient(): ApolloClient {
         val logging = HttpLoggingInterceptor()
         logging.level = HttpLoggingInterceptor.Level.BODY
         val okHttp = OkHttpClient
                 .Builder()
                 .addInterceptor(logging)
         return ApolloClient.builder()
-                .serverUrl(BASE_URL)
+                .serverUrl(baseURL)
                 .okHttpClient(okHttp.build())
                 .build()
     }

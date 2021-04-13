@@ -1,4 +1,113 @@
 <resources>
     <string name="app_name">Volume-Android</string>
     <string name="follow_button">Follow Button</string>
+
+    <!-- General -->
+    <string name="shoutout_count">%1$d shout-outs</string>
+    <string name="dot">&#160;•&#160;</string>
+    <string name="title_example">Top 6 Ice Cream Places in Ithaca: Ranked</string>
+    <string name="publication_example">Creme de Cornell</string>
+    <string name="website_example">cremedecornell.net</string>
+
+    <!-- Onboarding -->
+    <string name="welcome_to_volume">Welcome to Volume</string>
+    <string name="next">Next</string>
+    <string name="start_reading">Start Reading</string>
+
+    <!-- Publication Profile Activity -->
+    <string name="follow">&#160;+&#160;&#160;Follow</string>
+    <string name="following">Following</string>
+    <string name="article_count">10 articles</string>
+    <string name="description">We are a group of passionate food enthusiasts who come together to publish a diversity of recipes, articles and stories. Once each semester, we publish our magazine Crème de Cornell to highlight a theme in our submitted writings.</string>
+    <string name="instagram">Instagram</string>
+    <string name="facebook">Facebook</string>
+
+    <!-- WebView -->
+    <string name="see_more">See More</string>
+    <string name="reading_in_volume">Reading in Volume</string>
+
+    <!-- Home Fragment -->
+    <string name="up_to_date">You\'re up to date!</string>
+    <string name="caught_up">You\'ve seen all the new articles from the publications you have been following.</string>
+    <string name="nothing_to_see">Nothing to see here!</string>
+    <string name="follow_some">Follow some student publications that you are interested in.</string>
+
+    <!-- Publication Fragment -->
+    <string name="follow_below">Follow some below and we’ll show them up here.</string>
+    <string name="no_followed">No Followed Publications!</string>
+
+    <!-- Saved Fragment -->
+    <string name="no_saved_articles">You have no saved articles.</string>
+
+    <!-- Article class -->
+    <string name="x_h_ago">%1$d h ago</string>
+    <string name="one_day_ago">1 day ago</string>
+    <string name="x_days_ago">%1$d days ago</string>
+    <string name="one_week_ago">1 week ago</string>
+    <string name="x_weeks_ago">%1$d weeks ago</string>
+    <string name="one_month_ago">1 month ago</string>
+    <string name="x_months_ago">%1$d months ago</string>
+    <string name="one_year_ago">1 year ago</string>
+    <string name="x_years_ago">%1$d years ago</string>
+
+    <!-- Settings Activity -->
+    <string name="settings">Settings</string>
+    <string name="send_feedback">Send Feedback</string>
+    <string name="visit_our_website">Visit Our Website</string>
+    <string name="about_us">About Us</string>
+    <string name="our_mission_header">Our Mission</string>
+    <string name="the_team">The Team</string>
+    <string name="our_mission">
+        Created by Cornell AppDev, Volume aims to better connect student publications with student
+        readers by making it easy and accessible to digest student created content. Volume believes
+        in the unique power that lies in the sharing and distribution of content by students and
+        for students to spark conversation, experiences, and connections that improve the
+        collegiate experience.
+    </string>
+    <string name="founding_members_intro">
+        The founding members that together made Volume a reality ✨
+    </string>
+    <string name="megaphone">📣</string>
+    <string name="android">Android</string>
+    <string name="iOS">iOS</string>
+    <string name="backend">Backend</string>
+    <string name="marketing">Marketing</string>
+    <string name="design">Design</string>
+    <string name="android_members">Chris Desir, Justin Jiang, Aastha Shah</string>
+    <string name="backend_members">Tedi Mitiku, Orko Sinha</string>
+    <string name="ios_members">Sergio Diaz, Cameron Russell, Daniel Vebman</string>
+    <string name="marketing_members">Jonna Chen, Monan Modi, Yi Hsin Wei</string>
+    <string name="design_members">Amanda He, Zixian Jia, Maggie Ying</string>
+
+    <!-- No internet -->
+    <string name="no_connection">No connection</string>
+    <string name="please_try_again_later">Please try again later</string>
+
+    <!-- Content descriptions -->
+    <string name="description_main_volume_logo">Main Volume logo</string>
+    <string name="description_line_divider">A line divider</string>
+    <string name="description_logo">Logo of the publication</string>
+    <string name="description_banner">Banner of the publication</string>
+    <string name="description_instagram_logo">Instagram Logo</string>
+    <string name="description_facebook_logo">Facebook Logo</string>
+    <string name="description_website_image_link">Website image/link</string>
+    <string name="description_header_for_articles">Header for Articles section - holds articles created by publication</string>
+    <string name="description_right_arrow">Right arrow - press to enter menu</string>
+    <string name="description_big_read_header">Big read header</string>
+    <string name="description_following_header">Following header</string>
+    <string name="description_volume_bars_logo">Volume bars logo</string>
+    <string name="description_other_articles_header">Other articles header</string>
+    <string name="description_no_wifi_symbol">No wifi symbol</string>
+    <string name="description_onboarding_page">Onboarding page</string>
+    <string name="description_publications_header">Publications header</string>
+    <string name="description_more_publications_header">More publications header</string>
+    <string name="description_bookmarks_header">Bookmarks header</string>
+    <string name="description_settings_icon">Settings icon</string>
+    <string name="description_saved_articles_header">Saved articles header</string>
+    <string name="description_article_image">Image of article / thumbnail</string>
+    <string name="description_bookmark_icon">Bookmark icon</string>
+    <string name="description_shout_out_icon">Shout-out icon</string>
+    <string name="description_share_icon">Share icon</string>
+    <string name="description_compass">Compass</string>
+
 </resources>

@@ -1,6 +1,5 @@
 package com.cornellappdev.volume
 
-import PrefUtils
 import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.net.Uri
@@ -15,6 +14,7 @@ import com.cornellappdev.volume.models.Article
 import com.cornellappdev.volume.models.Publication
 import com.cornellappdev.volume.models.Social
 import com.cornellappdev.volume.util.GraphQlUtil
+import com.cornellappdev.volume.util.PrefUtils
 import com.squareup.picasso.Picasso
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -49,13 +49,13 @@ class PublicationProfileActivity : AppCompatActivity() {
 
         if (currentFollowingSet!!.contains(publication.id)) {
             binding.btnFollow.apply {
-                text = "Following"
+                text = this@PublicationProfileActivity.getString(R.string.following)
                 setTextColor(ContextCompat.getColor(this.context, R.color.ligthgray))
                 setBackgroundResource(R.drawable.rounded_rectange_button_orange)
             }
         } else {
             binding.btnFollow.apply {
-                text = " +  Follow"
+                text = this@PublicationProfileActivity.getString(R.string.follow)
                 setBackgroundResource(R.drawable.rounded_rectangle_button)
             }
         }
@@ -63,7 +63,7 @@ class PublicationProfileActivity : AppCompatActivity() {
         binding.btnFollow.setOnClickListener {
             if (binding.btnFollow.text.equals("Following")) {
                 binding.btnFollow.apply {
-                    text = " +  Follow"
+                    text = this@PublicationProfileActivity.getString(R.string.follow)
                     setBackgroundResource(R.drawable.rounded_rectangle_button)
                     setTextColor(ContextCompat.getColor(this.context, R.color.volumeOrange))
                     currentFollowingSet.remove(publication.id)
@@ -71,7 +71,7 @@ class PublicationProfileActivity : AppCompatActivity() {
                 }
             } else {
                 binding.btnFollow.apply {
-                    text = "Following"
+                    text = this@PublicationProfileActivity.getString(R.string.following)
                     setTextColor(ContextCompat.getColor(this.context, R.color.ligthgray))
                     setBackgroundResource(R.drawable.rounded_rectange_button_orange)
                     currentFollowingSet.add(publication.id)
@@ -167,7 +167,7 @@ class PublicationProfileActivity : AppCompatActivity() {
         }
         binding.tvName.text = publication.name
         binding.tvShoutoutCount.text =
-                publication.shoutouts.toInt().toString() + " shout-outs"
+                this.getString(R.string.shoutout_count, publication.shoutouts.toInt())
         binding.tvDescription.text = publication.bio
         Picasso.get().load(publication.backgroundImageURL).fit().centerCrop().into(binding.ivBanner)
         Picasso.get().load(publication.profileImageURL).into(binding.ivLogo)

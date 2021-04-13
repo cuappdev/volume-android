@@ -27,7 +27,7 @@ class FollowingHorizontalAdapter(private val followedPublications: MutableList<P
 
     override fun onBindViewHolder(holder: FollowHorizontalVH, position: Int) {
         val currentItem = followedPublications[position]
-        if (!currentItem.profileImageURL.isNullOrBlank()) {
+        if (currentItem.profileImageURL.isNotBlank()) {
             Picasso.get().load(currentItem.profileImageURL).into(holder.binding.ivLogo)
         }
         holder.binding.tvName.text = currentItem.name

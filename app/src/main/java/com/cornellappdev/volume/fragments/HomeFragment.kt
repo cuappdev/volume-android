@@ -1,6 +1,5 @@
 package com.cornellappdev.volume.fragments
 
-import PrefUtils
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -19,6 +18,7 @@ import com.cornellappdev.volume.models.Publication
 import com.cornellappdev.volume.models.Social
 import com.cornellappdev.volume.util.GraphQlUtil
 import com.cornellappdev.volume.util.GraphQlUtil.Companion.hasInternetConnection
+import com.cornellappdev.volume.util.PrefUtils
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
@@ -216,9 +216,9 @@ class HomeFragment : Fragment() {
                             .subscribeOn(Schedulers.io())
                             .observeOn(AndroidSchedulers.mainThread())
                     if (otherObs != null) {
-                        disposables.add(otherObs.subscribe {
-                            if (it.data?.getArticlesByPublicationIDs != null) {
-                                it.data?.getArticlesByPublicationIDs?.mapTo(otherArticles, { article ->
+                        disposables.add(otherObs.subscribe { articleResponse ->
+                            if (articleResponse.data?.getArticlesByPublicationIDs != null) {
+                                articleResponse.data?.getArticlesByPublicationIDs?.mapTo(otherArticles, { article ->
                                     val publication = article.publication
                                     Article(
                                             title = article.title,

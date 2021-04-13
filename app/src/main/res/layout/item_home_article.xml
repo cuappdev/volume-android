@@ -22,7 +22,7 @@
             android:layout_height="wrap_content"
             android:ellipsize="end"
             android:maxLines="1"
-            android:text="Creme de Cornell"
+            android:text="@string/publication_example"
             android:textSize="12sp"
             app:layout_constraintEnd_toStartOf="@id/iv_article_image"
             app:layout_constraintStart_toStartOf="parent"
@@ -37,7 +37,7 @@
             android:layout_marginEnd="10dp"
             android:ellipsize="end"
             android:maxLines="3"
-            android:text="Sangkhaya: Thai Pandan Custard Dip"
+            android:text="@string/title_example"
             android:textSize="16sp"
             app:layout_constraintEnd_toStartOf="@id/iv_article_image"
             app:layout_constraintStart_toStartOf="parent"
@@ -48,6 +48,7 @@
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:background="@color/creamy_white"
+            android:contentDescription="@string/description_article_image"
             android:scaleType="fitXY"
             android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
@@ -60,8 +61,8 @@
             style="@style/helvetica_gray"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text=" • "
-            android:textSize="10sp"
+            android:text="@string/dot"
+            android:textSize="12sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/tv_time_posted" />
 
@@ -70,8 +71,8 @@
             style="@style/helvetica_gray"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="6h ago"
-            android:textSize="10sp"
+            android:text="@string/x_h_ago"
+            android:textSize="12sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 
@@ -80,8 +81,8 @@
             style="@style/helvetica_gray"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="123 shout-outs"
-            android:textSize="10sp"
+            android:text="@string/shoutout_count"
+            android:textSize="12sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/tv_dot" />
     </androidx.constraintlayout.widget.ConstraintLayout>
