@@ -83,7 +83,7 @@ class PublicationProfileActivity : AppCompatActivity() {
     }
 
     private fun setUpArticleRV() {
-        val articles = mutableListOf<Article>()
+        var articles = mutableListOf<Article>()
         val followingObs = graphQlUtil
                 .getArticleByPublicationID(publication.id)
                 .subscribeOn(Schedulers.io())
@@ -116,6 +116,10 @@ class PublicationProfileActivity : AppCompatActivity() {
                                 shoutouts = article.shoutouts,
                                 nsfw = article.nsfw)
                     })
+                    articles = articles.sortedWith(
+                            compareByDescending { article ->
+                                article.date
+                            }) as MutableList<Article>
                     with(binding.rvArticles) {
                         adapter = ArticleAdapter(articles)
                         visibility = View.VISIBLE
