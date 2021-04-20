@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
-import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.cornellappdev.volume.R
@@ -49,7 +48,7 @@ class HomeFragment : Fragment() {
         graphQlUtil = GraphQlUtil()
 
         setUpHomeView(binding, isRefreshing = false)
-        val volumeOrange: Int? = context?.let { ContextCompat.getColor(it, R.color.volumeOrange) }
+        val volumeOrange: Int? = context.let { ContextCompat.getColor(it, R.color.volumeOrange) }
         if (volumeOrange != null) {
             binding.srlQuery.setColorSchemeColors(volumeOrange, volumeOrange, volumeOrange)
         }
@@ -158,10 +157,7 @@ class HomeFragment : Fragment() {
                                     !trendingArticlesId.contains(article.id)
                                 } as MutableList<Article>
                                 if (followingArticles.isNotEmpty()) {
-                                    followingArticles = followingArticles.sortedWith(
-                                            compareByDescending { article ->
-                                                article.date
-                                            }) as MutableList<Article>
+                                    followingArticles = Article.sortByDate(followingArticles)
                                     if (!isRefreshing) {
                                         followingRV = binding.rvFollowing
                                         followingRV.layoutManager = LinearLayoutManager(context)

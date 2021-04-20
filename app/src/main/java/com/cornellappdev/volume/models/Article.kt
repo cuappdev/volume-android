@@ -38,6 +38,13 @@ class Article(
             }
         }
 
+        fun sortByDate(articles: List<Article>): MutableList<Article> {
+            return articles.sortedWith(
+                    compareByDescending { article ->
+                        article.date
+                    }) as MutableList<Article>
+        }
+
         @RequiresApi(Build.VERSION_CODES.O)
         fun setCorrectDateText(article: Article, target: TextView, context: Context) {
             val format = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
