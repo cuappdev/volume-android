@@ -116,10 +116,7 @@ class PublicationProfileActivity : AppCompatActivity() {
                                 shoutouts = article.shoutouts,
                                 nsfw = article.nsfw)
                     })
-                    articles = articles.sortedWith(
-                            compareByDescending { article ->
-                                article.date
-                            }) as MutableList<Article>
+                    articles = Article.sortByDate(articles)
                     with(binding.rvArticles) {
                         adapter = ArticleAdapter(articles)
                         visibility = View.VISIBLE
