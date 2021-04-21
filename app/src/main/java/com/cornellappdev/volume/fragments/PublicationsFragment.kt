@@ -81,6 +81,7 @@ class PublicationsFragment : Fragment() {
                     val publications = response.data?.getAllPublications
                     if (publications != null) {
                         publications.mapTo(morePublications, { publication ->
+                            val article = publication.mostRecentArticle
                             Publication(
                                     publication.id,
                                     publication.backgroundImageURL,
@@ -92,13 +93,15 @@ class PublicationsFragment : Fragment() {
                                     publication.slug,
                                     publication.shoutouts,
                                     publication.websiteURL,
-                                    publication.mostRecentArticle?.nsfw?.let {
+                                    article?.let {
                                         Article(
-                                                publication.mostRecentArticle.id,
-                                                publication.mostRecentArticle.title,
-                                                publication.mostRecentArticle.articleURL,
-                                                publication.mostRecentArticle.imageURL,
-                                                nsfw = it)
+                                                title = article.title,
+                                                articleURL = article.articleURL,
+                                                date = article.date.toString(),
+                                                id = article.id,
+                                                imageURL = article.imageURL,
+                                                shoutouts = article.shoutouts,
+                                                nsfw = article.nsfw)
                                     },
                                     publication.socials.toList().map { Social(it.social, it.uRL) })
                         })
@@ -141,6 +144,7 @@ class PublicationsFragment : Fragment() {
                         val publications = response.data?.getPublicationsByIDs
                         if (publications != null) {
                             publications.mapTo(followingPublications, { publication ->
+                                val article = publication.mostRecentArticle
                                 Publication(
                                         publication.id,
                                         publication.backgroundImageURL,
@@ -152,11 +156,16 @@ class PublicationsFragment : Fragment() {
                                         publication.slug,
                                         publication.shoutouts,
                                         publication.websiteURL,
-                                        Article(
-                                                publication.mostRecentArticle?.id,
-                                                publication.mostRecentArticle?.title,
-                                                publication.mostRecentArticle?.articleURL,
-                                                publication.mostRecentArticle?.imageURL),
+                                        article?.let {
+                                            Article(
+                                                    title = article.title,
+                                                    articleURL = article.articleURL,
+                                                    date = article.date.toString(),
+                                                    id = article.id,
+                                                    imageURL = article.imageURL,
+                                                    shoutouts = article.shoutouts,
+                                                    nsfw = article.nsfw)
+                                        },
                                         publication.socials.toList().map { Social(it.social, it.uRL) })
                             })
                             if (!isRefreshing) {

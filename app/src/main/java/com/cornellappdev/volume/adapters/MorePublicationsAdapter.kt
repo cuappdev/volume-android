@@ -7,6 +7,10 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.cornellappdev.volume.PublicationProfileActivity
 import com.cornellappdev.volume.R
+import com.cornellappdev.volume.analytics.EventType
+import com.cornellappdev.volume.analytics.NavigationSource
+import com.cornellappdev.volume.analytics.NavigationSource.Companion.putParcelableExtra
+import com.cornellappdev.volume.analytics.VolumeEvent
 import com.cornellappdev.volume.databinding.ItemMorePublicationBinding
 import com.cornellappdev.volume.models.Article
 import com.cornellappdev.volume.models.Publication
@@ -15,7 +19,8 @@ import com.squareup.picasso.Picasso
 
 class MorePublicationsAdapter(private val publicationList: List<Publication>,
                               private val prefUtils: PrefUtils,
-                              private val mAdapterOnClickHandler: AdapterOnClickHandler?) :
+                              private val mAdapterOnClickHandler: AdapterOnClickHandler?,
+                              private val isOnboarding: Boolean = false) :
         RecyclerView.Adapter<MorePublicationsAdapter.MorePublicationVH>() {
 
     interface AdapterOnClickHandler {
@@ -63,25 +68,37 @@ class MorePublicationsAdapter(private val publicationList: List<Publication>,
                 val tempSet =
                         prefUtils.getStringSet(PrefUtils.FOLLOWING_KEY, mutableSetOf())?.toMutableSet()
                 if (tempSet != null) {
+                    VolumeEvent.logEvent(EventType.PUBLICATION, VolumeEvent.FOLLOW_PUBLICATION, if (isOnboarding) {
+                        NavigationSource.ONBOARDING
+                    } else {
+                        NavigationSource.MORE_PUBLICATIONS
+                    },
+                            currentItem.id)
                     tempSet.add(currentItem.id)
                     prefUtils.save(PrefUtils.FOLLOWING_KEY, tempSet)
+                    mAdapterOnClickHandler?.onFollowClick(wasFollowed = true)
                 }
-                mAdapterOnClickHandler?.onFollowClick(wasFollowed = true)
             } else {
                 holder.binding.btnFollow.setImageResource(R.drawable.ic_followplussvg)
                 val tempSet =
                         prefUtils.getStringSet(PrefUtils.FOLLOWING_KEY, mutableSetOf())?.toMutableSet()
                 if (tempSet != null) {
+                    VolumeEvent.logEvent(EventType.PUBLICATION, VolumeEvent.UNFOLLOW_PUBLICATION, id = currentItem.id)
                     tempSet.remove(currentItem.id)
                     prefUtils.save(PrefUtils.FOLLOWING_KEY, tempSet)
+                    mAdapterOnClickHandler?.onFollowClick(wasFollowed = false)
                 }
-                mAdapterOnClickHandler?.onFollowClick(wasFollowed = false)
             }
         }
 
         holder.binding.clPublicationLayout.setOnClickListener { view ->
             val intent = Intent(view.context, PublicationProfileActivity::class.java)
             intent.putExtra(Publication.INTENT_KEY, currentItem)
+            intent.putParcelableExtra(NavigationSource.INTENT_KEY, if (isOnboarding) {
+                NavigationSource.ONBOARDING
+            } else {
+                NavigationSource.MORE_PUBLICATIONS
+            })
             view.context.startActivity(intent)
         }
     }

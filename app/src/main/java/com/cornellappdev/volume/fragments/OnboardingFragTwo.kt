@@ -47,6 +47,7 @@ class OnboardingFragTwo : Fragment(), MorePublicationsAdapter.AdapterOnClickHand
         disposables.add(pubsObs.subscribe { response ->
             val allPubs = mutableListOf<Publication>()
             response.data?.getAllPublications?.mapTo(allPubs, { publication ->
+                val article = publication.mostRecentArticle
                 Publication(
                         publication.id,
                         publication.backgroundImageURL,
@@ -58,13 +59,15 @@ class OnboardingFragTwo : Fragment(), MorePublicationsAdapter.AdapterOnClickHand
                         publication.slug,
                         publication.shoutouts,
                         publication.websiteURL,
-                        publication.mostRecentArticle?.nsfw?.let {
+                        article?.let {
                             Article(
-                                    publication.mostRecentArticle.id,
-                                    publication.mostRecentArticle.title,
-                                    publication.mostRecentArticle.articleURL,
-                                    publication.mostRecentArticle.imageURL,
-                                    nsfw = it)
+                                    title = article.title,
+                                    articleURL = article.articleURL,
+                                    date = article.date.toString(),
+                                    id = article.id,
+                                    imageURL = article.imageURL,
+                                    shoutouts = article.shoutouts,
+                                    nsfw = article.nsfw)
                         },
                         publication.socials.toList().map { Social(it.social, it.uRL) })
             })

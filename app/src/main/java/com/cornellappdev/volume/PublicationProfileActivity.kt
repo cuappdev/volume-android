@@ -9,6 +9,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.cornellappdev.volume.adapters.ArticleAdapter
+import com.cornellappdev.volume.analytics.EventType
+import com.cornellappdev.volume.analytics.NavigationSource
+import com.cornellappdev.volume.analytics.VolumeEvent
 import com.cornellappdev.volume.databinding.ActivityPublicationProfileBinding
 import com.cornellappdev.volume.models.Article
 import com.cornellappdev.volume.models.Publication
@@ -23,6 +26,7 @@ import io.reactivex.schedulers.Schedulers
 class PublicationProfileActivity : AppCompatActivity() {
 
     private lateinit var publication: Publication
+    private lateinit var navigationSource: NavigationSource
     private lateinit var binding: ActivityPublicationProfileBinding
     private val disposables = CompositeDisposable()
     private val graphQlUtil = GraphQlUtil()
@@ -37,7 +41,12 @@ class PublicationProfileActivity : AppCompatActivity() {
                 prefUtils.getStringSet(PrefUtils.FOLLOWING_KEY, mutableSetOf())?.toMutableSet()
 
         publication = intent.getParcelableExtra("publication")!!
+        navigationSource = intent.getParcelableExtra(NavigationSource.INTENT_KEY)!!
+
         getPublication(publication)
+
+        VolumeEvent.logEvent(EventType.PUBLICATION, VolumeEvent.OPEN_PUBLICATION, navigationSource, publication.id)
+
 
         val volumeOrange = ContextCompat.getColor(this, R.color.volumeOrange)
         binding.srlQuery.setColorSchemeColors(volumeOrange, volumeOrange, volumeOrange)
@@ -68,6 +77,7 @@ class PublicationProfileActivity : AppCompatActivity() {
                     setTextColor(ContextCompat.getColor(this.context, R.color.volumeOrange))
                     currentFollowingSet.remove(publication.id)
                     prefUtils.save(PrefUtils.FOLLOWING_KEY, currentFollowingSet)
+                    VolumeEvent.logEvent(EventType.PUBLICATION, VolumeEvent.UNFOLLOW_PUBLICATION, id = publication.id)
                 }
             } else {
                 binding.btnFollow.apply {
@@ -76,6 +86,10 @@ class PublicationProfileActivity : AppCompatActivity() {
                     setBackgroundResource(R.drawable.rounded_rectange_button_orange)
                     currentFollowingSet.add(publication.id)
                     prefUtils.save(PrefUtils.FOLLOWING_KEY, currentFollowingSet)
+                    VolumeEvent.logEvent(EventType.PUBLICATION,
+                            VolumeEvent.FOLLOW_PUBLICATION,
+                            NavigationSource.PUBLICATION_DETAIL,
+                            publication.id)
                 }
             }
         }
@@ -187,5 +201,10 @@ class PublicationProfileActivity : AppCompatActivity() {
                 startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)))
             }
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        VolumeEvent.logEvent(EventType.PUBLICATION, VolumeEvent.CLOSE_PUBLICATION, id = publication.id)
     }
 }
