@@ -9,6 +9,10 @@ import android.view.animation.AnimationUtils
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.cornellappdev.volume.PublicationProfileActivity
 import com.cornellappdev.volume.R
+import com.cornellappdev.volume.analytics.EventType
+import com.cornellappdev.volume.analytics.NavigationSource
+import com.cornellappdev.volume.analytics.NavigationSource.Companion.putParcelableExtra
+import com.cornellappdev.volume.analytics.VolumeEvent
 import com.cornellappdev.volume.databinding.LayoutWebviewBottomBinding
 import com.cornellappdev.volume.models.Article
 import com.cornellappdev.volume.models.Publication
@@ -53,20 +57,16 @@ class WebviewBottom @JvmOverloads constructor(
         }
 
         disposables.add(GraphQlUtil.hasInternetConnection().subscribe { hasInternet ->
-            article.id?.let {
-                // The way shoutout count is kept track of per user is through SharedPreferences.
-                if (prefUtils.getInt(it, 0) >= MAX_SHOUTOUTS) {
-                    binding.ivShoutout.setImageResource(R.drawable.filled_shoutout)
-                } else {
-                    if (hasInternet) {
-                        binding.ivShoutout.setOnClickListener { shoutoutArticle() }
-                    }
+            if (prefUtils.getInt(article.id, 0) >= MAX_SHOUTOUTS) {
+                binding.ivShoutout.setImageResource(R.drawable.filled_shoutout)
+            } else {
+                if (hasInternet) {
+                    binding.ivShoutout.setOnClickListener { shoutoutArticle() }
                 }
             }
         })
 
-        binding.tvShoutoutCount.text = article.shoutouts?.toInt().toString()
-
+        binding.tvShoutoutCount.text = article.shoutouts.toInt().toString()
         if (currentBookmarks != null) {
             if (currentBookmarks.contains(article.id)) {
                 binding.ivBookmarkIcon.setImageResource(R.drawable.orange_shoutout_svg)
@@ -93,6 +93,7 @@ class WebviewBottom @JvmOverloads constructor(
      */
     private fun publicationIntent() {
         val intent = Intent(context, PublicationProfileActivity::class.java)
+        intent.putParcelableExtra(NavigationSource.INTENT_KEY, NavigationSource.ARTICLE_DETAIL)
         intent.putExtra(Publication.INTENT_KEY, article.publication)
         context?.startActivity(intent)
     }
@@ -103,7 +104,12 @@ class WebviewBottom @JvmOverloads constructor(
     private fun bookmarkArticle() {
         if (currentBookmarks != null) {
             if (!currentBookmarks.contains(article.id)) {
-                article.id?.let { currentBookmarks.add(it) }
+                VolumeEvent.logEvent(
+                    EventType.ARTICLE,
+                    VolumeEvent.BOOKMARK_ARTICLE,
+                    id = article.id
+                )
+                currentBookmarks.add(article.id)
                 binding.ivBookmarkIcon.startAnimation(
                     AnimationUtils.loadAnimation(
                         context,
@@ -112,6 +118,11 @@ class WebviewBottom @JvmOverloads constructor(
                 )
                 binding.ivBookmarkIcon.setImageResource(R.drawable.orange_shoutout_svg)
             } else {
+                VolumeEvent.logEvent(
+                    EventType.ARTICLE,
+                    VolumeEvent.UNBOOKMARK_ARTICLE,
+                    id = article.id
+                )
                 currentBookmarks.remove(article.id)
                 binding.ivBookmarkIcon.startAnimation(
                     AnimationUtils.loadAnimation(
@@ -129,6 +140,7 @@ class WebviewBottom @JvmOverloads constructor(
      * Creates a choosing intent for users to share the articles.
      */
     private fun shareArticle() {
+        VolumeEvent.logEvent(EventType.ARTICLE, VolumeEvent.SHARE_ARTICLE, id = article.id)
         binding.ivShare.startAnimation(AnimationUtils.loadAnimation(context, R.anim.shake))
         val intent = Intent()
         intent.action = Intent.ACTION_SEND
@@ -152,29 +164,28 @@ class WebviewBottom @JvmOverloads constructor(
      * (e.g. text, shoutout icon).
      */
     private fun shoutoutArticle() {
-        this.article.id?.let {
-            var numOfShoutouts = prefUtils.getInt(it, 0)
-            if (numOfShoutouts < MAX_SHOUTOUTS) {
-                binding.ivShoutout.startAnimation(
-                    AnimationUtils.loadAnimation(
-                        context,
-                        R.anim.shake
-                    )
+        var numOfShoutouts = prefUtils.getInt(this.article.id, 0)
+        if (numOfShoutouts < MAX_SHOUTOUTS) {
+            VolumeEvent.logEvent(EventType.ARTICLE, VolumeEvent.SHOUTOUT_ARTICLE, id = article.id)
+            binding.ivShoutout.startAnimation(
+                AnimationUtils.loadAnimation(
+                    context,
+                    R.anim.shake
                 )
-                val likeObs = graphQlUtil
-                    .likeArticle(it)
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                disposables.add(likeObs.subscribe { response ->
-                    binding.tvShoutoutCount.text =
-                        response.data!!.incrementShoutouts.shoutouts.toInt().toString()
-                })
-                numOfShoutouts++
-                prefUtils.save(it, numOfShoutouts)
-            }
-            if (numOfShoutouts >= MAX_SHOUTOUTS) {
-                binding.ivShoutout.setImageResource(R.drawable.filled_shoutout)
-            }
+            )
+            val likeObs = graphQlUtil
+                .likeArticle(this.article.id)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+            disposables.add(likeObs.subscribe { response ->
+                binding.tvShoutoutCount.text =
+                    response.data!!.incrementShoutouts.shoutouts.toInt().toString()
+            })
+            numOfShoutouts++
+            prefUtils.save(this.article.id, numOfShoutouts)
+        }
+        if (numOfShoutouts >= MAX_SHOUTOUTS) {
+            binding.ivShoutout.setImageResource(R.drawable.filled_shoutout)
         }
     }
 }

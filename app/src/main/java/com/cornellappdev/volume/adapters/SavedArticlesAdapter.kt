@@ -10,6 +10,8 @@ import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.RecyclerView
 import com.cornellappdev.volume.MainActivity
 import com.cornellappdev.volume.R
+import com.cornellappdev.volume.analytics.NavigationSource
+import com.cornellappdev.volume.analytics.NavigationSource.Companion.putParcelableExtra
 import com.cornellappdev.volume.databinding.ItemSavedArticleBinding
 import com.cornellappdev.volume.models.Article
 import com.squareup.picasso.Picasso
@@ -33,17 +35,18 @@ class SavedArticlesAdapter(private val articles: List<Article>) :
         val currentItem = articles[position]
         holder.binding.tvArticleTitle.text = currentItem.title
         Article.applyNSFWFilter(currentItem, holder.binding.tvArticleTitle)
-        if (!currentItem.imageURL.isNullOrBlank()) {
+        if (!currentItem.imageURL.isBlank()) {
             holder.binding.ivArticleImage.visibility = View.VISIBLE
             Picasso.get().load(currentItem.imageURL).fit().centerCrop().into(holder.binding.ivArticleImage)
         }
         Article.setCorrectDateText(currentItem, holder.binding.tvTimePosted, context)
         holder.binding.tvShoutoutCount.text =
-                context.getString(R.string.shoutout_count, currentItem.shoutouts?.toInt())
+                context.getString(R.string.shoutout_count, currentItem.shoutouts.toInt())
         holder.binding.tvPublicationName.text = currentItem.publication!!.name
         holder.binding.clArticleLayout.setOnClickListener { view ->
             val intent = Intent(view.context, MainActivity::class.java)
             intent.putExtra(Article.INTENT_KEY, currentItem)
+            intent.putParcelableExtra(NavigationSource.INTENT_KEY, NavigationSource.BOOKMARK_ARTICLES)
             view.context.startActivity(intent)
         }
     }

@@ -1,7 +1,8 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-parcelize'
-apply plugin: "com.apollographql.apollo"
+apply plugin: 'com.apollographql.apollo'
+apply plugin: 'com.google.gms.google-services'
 
 
 android {
@@ -65,6 +66,8 @@ dependencies {
     implementation 'com.squareup.okhttp3:logging-interceptor:5.0.0-alpha.2'
     implementation 'androidx.preference:preference-ktx:1.1.1'
     implementation 'com.squareup.picasso:picasso:2.71828'
+    implementation platform('com.google.firebase:firebase-bom:27.0.0')
+    implementation 'com.google.firebase:firebase-analytics-ktx'
 
     // RetroFit
     def retrofitVersion = "2.9.0"
