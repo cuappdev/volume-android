@@ -5,6 +5,8 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.cornellappdev.volume.PublicationProfileActivity
+import com.cornellappdev.volume.analytics.NavigationSource
+import com.cornellappdev.volume.analytics.NavigationSource.Companion.putParcelableExtra
 import com.cornellappdev.volume.databinding.ItemFollowedPublicationBinding
 import com.cornellappdev.volume.models.Publication
 import com.squareup.picasso.Picasso
@@ -34,6 +36,7 @@ class FollowingHorizontalAdapter(private val followedPublications: MutableList<P
         holder.binding.clVeticalPublicationLayout.setOnClickListener { view ->
             val intent = Intent(view.context, PublicationProfileActivity::class.java)
             intent.putExtra(Publication.INTENT_KEY, currentItem)
+            intent.putParcelableExtra(NavigationSource.INTENT_KEY, NavigationSource.FOLLOWING_PUBLICATIONS)
             view.context.startActivity(intent)
         }
     }

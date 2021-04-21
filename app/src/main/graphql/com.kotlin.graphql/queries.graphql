@@ -21,6 +21,7 @@ query AllArticles{
                 id
                 articleURL
                 imageURL
+                date
                 title
                 shoutouts
                 nsfw
@@ -55,6 +56,7 @@ query AllPublications{
             id
             articleURL
             imageURL
+            date
             title
             shoutouts
             nsfw
@@ -82,6 +84,7 @@ query PublicationByID($id: String!){
             id
             articleURL
             imageURL
+            date
             title
             shoutouts
             nsfw
@@ -109,6 +112,7 @@ query PublicationsByIDs($ids: [String!]!){
             id
             articleURL
             imageURL
+            date
             title
             shoutouts
             nsfw
@@ -139,6 +143,7 @@ query TrendingArticles ($limit: Float){
                 id
                 articleURL
                 imageURL
+                date
                 title
                 shoutouts
                 nsfw
@@ -177,6 +182,7 @@ query ArticlesByPublicationID($publicationID:String!){
                 id
                 articleURL
                 imageURL
+                date
                 title
                 shoutouts
                 nsfw
@@ -212,6 +218,7 @@ query ArticlesByIDs($ids:[String!]!){
                 id
                 articleURL
                 imageURL
+                date
                 title
                 shoutouts
                 nsfw
@@ -248,6 +255,7 @@ query ArticleByID($id:String!) {
                 id
                 articleURL
                 imageURL
+                date
                 title
                 shoutouts
                 nsfw
@@ -286,6 +294,7 @@ query ArticlesByPublicationIDs($publicationIDs:[String!]!){
                 id
                 articleURL
                 imageURL
+                date
                 title
                 shoutouts
                 nsfw
@@ -333,6 +342,7 @@ query ArticlesAfterDate($since: String!){
                 id
                 articleURL
                 imageURL
+                date
                 title
                 shoutouts
                 nsfw

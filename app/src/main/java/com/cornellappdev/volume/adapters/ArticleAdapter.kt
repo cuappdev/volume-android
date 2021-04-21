@@ -10,6 +10,8 @@ import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.RecyclerView
 import com.cornellappdev.volume.MainActivity
 import com.cornellappdev.volume.R
+import com.cornellappdev.volume.analytics.NavigationSource
+import com.cornellappdev.volume.analytics.NavigationSource.Companion.putParcelableExtra
 import com.cornellappdev.volume.databinding.ItemArticleBinding
 import com.cornellappdev.volume.models.Article
 import com.squareup.picasso.Picasso
@@ -43,10 +45,11 @@ class ArticleAdapter(private val articles: List<Article>) :
         }
         Article.setCorrectDateText(currentItem, holder.binding.tvTimePosted, context)
         holder.binding.tvShoutoutCount.text =
-                context.getString(R.string.shoutout_count, currentItem.shoutouts?.toInt())
+                context.getString(R.string.shoutout_count, currentItem.shoutouts.toInt())
         holder.binding.clArticleLayout.setOnClickListener { view ->
             val intent = Intent(view.context, MainActivity::class.java)
             intent.putExtra(Article.INTENT_KEY, currentItem)
+            intent.putParcelableExtra(NavigationSource.INTENT_KEY, NavigationSource.PUBLICATION_DETAIL)
             view.context.startActivity(intent)
         }
     }

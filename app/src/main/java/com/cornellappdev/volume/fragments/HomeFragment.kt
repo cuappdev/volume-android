@@ -250,7 +250,7 @@ class HomeFragment : Fragment() {
                                         otherRV = binding.rvOtherArticles
                                         otherRV.layoutManager = LinearLayoutManager(context)
                                         otherRV.adapter = HomeArticlesAdapter(otherArticles.shuffled()
-                                                as MutableList<Article>)
+                                                as MutableList<Article>, isOtherArtices = true)
                                     } else {
                                         val adapter = otherRV.adapter as HomeArticlesAdapter
                                         adapter.clear()
