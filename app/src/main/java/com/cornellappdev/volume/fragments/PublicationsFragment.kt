@@ -163,16 +163,32 @@ class PublicationsFragment : Fragment() {
                 publication.slug,
                 publication.shoutouts,
                 publication.websiteURL,
-                publication.mostRecentArticle?.nsfw?.let {
+                publication.mostRecentArticle?.nsfw?.let { isNSFW ->
                     Article(
                         publication.mostRecentArticle.id,
                         publication.mostRecentArticle.title,
                         publication.mostRecentArticle.articleURL,
                         publication.mostRecentArticle.imageURL,
-                        nsfw = it
+                        Publication(
+                            id = publication.id,
+                            backgroundImageURL = publication.backgroundImageURL,
+                            bio = publication.bio,
+                            name = publication.name,
+                            profileImageURL = publication.profileImageURL,
+                            rssName = publication.rssName,
+                            rssURL = publication.rssURL,
+                            slug = publication.slug,
+                            shoutouts = publication.shoutouts,
+                            websiteURL = publication.websiteURL,
+                            socials = publication.socials.toList()
+                                .map { Social(it.social, it.uRL) }),
+                        publication.mostRecentArticle.date.toString(),
+                        publication.mostRecentArticle.shoutouts,
+                        isNSFW,
                     )
                 },
-                publication.socials.toList().map { Social(it.social, it.uRL) })
+                publication.socials.toList()
+                    .map { social -> Social(social.social, social.uRL) })
         })
     }
 
@@ -196,16 +212,32 @@ class PublicationsFragment : Fragment() {
                 publication.slug,
                 publication.shoutouts,
                 publication.websiteURL,
-                publication.mostRecentArticle?.nsfw?.let {
+                publication.mostRecentArticle?.nsfw?.let { isNSFW ->
                     Article(
                         publication.mostRecentArticle.id,
                         publication.mostRecentArticle.title,
                         publication.mostRecentArticle.articleURL,
                         publication.mostRecentArticle.imageURL,
-                        nsfw = it
+                        Publication(
+                            id = publication.id,
+                            backgroundImageURL = publication.backgroundImageURL,
+                            bio = publication.bio,
+                            name = publication.name,
+                            profileImageURL = publication.profileImageURL,
+                            rssName = publication.rssName,
+                            rssURL = publication.rssURL,
+                            slug = publication.slug,
+                            shoutouts = publication.shoutouts,
+                            websiteURL = publication.websiteURL,
+                            socials = publication.socials.toList()
+                                .map { Social(it.social, it.uRL) }),
+                        publication.mostRecentArticle.date.toString(),
+                        publication.mostRecentArticle.shoutouts,
+                        isNSFW,
                     )
                 },
-                publication.socials.toList().map { Social(it.social, it.uRL) })
+                publication.socials.toList()
+                    .map { social -> Social(social.social, social.uRL) })
         })
     }
 

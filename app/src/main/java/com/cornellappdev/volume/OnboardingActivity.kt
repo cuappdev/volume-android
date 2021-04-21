@@ -12,6 +12,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.viewpager2.widget.ViewPager2
 import com.cornellappdev.volume.adapters.OnboardingPagerAdapter
+import com.cornellappdev.volume.analytics.EventType
+import com.cornellappdev.volume.analytics.VolumeEvent
 import com.cornellappdev.volume.databinding.ActivityOnboardingBinding
 import com.cornellappdev.volume.fragments.OnboardingFragTwo
 import com.cornellappdev.volume.util.PrefUtils
@@ -65,7 +67,9 @@ class OnboardingActivity : AppCompatActivity(), OnboardingFragTwo.DataPassListen
      * The ViewPager includes the two main onboarding page fragments.
      */
     private fun setupViewPager() {
+        VolumeEvent.logEvent(EventType.GENERAL, VolumeEvent.START_ONBOARDING)
         binding.vpOnboarding.adapter = OnboardingPagerAdapter(this, FRAGMENT_COUNT)
+        binding.vpOnboarding.isUserInputEnabled = false
 
         // Updates UI to reflect what's on the respective page.
         binding.vpOnboarding.registerOnPageChangeCallback(object :
@@ -99,6 +103,7 @@ class OnboardingActivity : AppCompatActivity(), OnboardingFragTwo.DataPassListen
             when (current) {
                 0 -> binding.vpOnboarding.currentItem = 1
                 1 -> {
+                    VolumeEvent.logEvent(EventType.GENERAL, VolumeEvent.COMPLETE_ONBOARDING)
                     // On the second page, if the button is clickable then the user is able to
                     // transition to the home page.
                     val intent = Intent(context, TabActivity::class.java)
