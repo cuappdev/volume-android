@@ -62,45 +62,45 @@ class SavedArticlesFragment : Fragment() {
                     childFragmentManager.findFragmentByTag(NoInternetDialog.TAG).let { dialogFrag ->
                         (dialogFrag as? DialogFragment)?.dismiss()
                     }
-                    binding.clBookmarkPage.visibility = View.VISIBLE
-                    binding.noSavedArticlesGroup.visibility = View.GONE
-                    binding.fragmentContainer.visibility = View.GONE
-                    disposables.add(obs.subscribe { response ->
-                        response.data?.getArticlesByIDs?.mapTo(savedArticles, { article ->
-                            val publication = article.publication
-                            Article(
-                                    title = article.title,
-                                    articleURL = article.articleURL,
-                                    date = article.date.toString(),
-                                    id = article.id,
-                                    imageURL = article.imageURL,
-                                    publication = Publication(
-                                            id = publication.id,
-                                            backgroundImageURL = publication.backgroundImageURL,
-                                            bio = publication.bio,
-                                            name = publication.name,
-                                            profileImageURL = publication.profileImageURL,
-                                            rssName = publication.rssName,
-                                            rssURL = publication.rssURL,
-                                            slug = publication.slug,
-                                            shoutouts = publication.shoutouts,
-                                            websiteURL = publication.websiteURL,
-                                            socials = publication.socials.toList().map { Social(it.social, it.uRL) }),
-                                    shoutouts = article.shoutouts,
-                                    nsfw = article.nsfw)
-                        })
-                        if (context != null) {
-                            if (savedArticles.isEmpty()) {
-                                binding.noSavedArticlesGroup.visibility = View.VISIBLE
-                                binding.clBookmarkPage.visibility = View.GONE
-                                binding.fragmentContainer.visibility = View.GONE
-                            } else {
+                    if (savedArticles.isEmpty()) {
+                        binding.noSavedArticlesGroup.visibility = View.VISIBLE
+                        binding.clBookmarkPage.visibility = View.GONE
+                        binding.fragmentContainer.visibility = View.GONE
+                    } else {
+                        binding.clBookmarkPage.visibility = View.VISIBLE
+                        binding.noSavedArticlesGroup.visibility = View.GONE
+                        binding.fragmentContainer.visibility = View.GONE
+                        disposables.add(obs.subscribe { response ->
+                            response.data?.getArticlesByIDs?.mapTo(savedArticles, { article ->
+                                val publication = article.publication
+                                Article(
+                                        title = article.title,
+                                        articleURL = article.articleURL,
+                                        date = article.date.toString(),
+                                        id = article.id,
+                                        imageURL = article.imageURL,
+                                        publication = Publication(
+                                                id = publication.id,
+                                                backgroundImageURL = publication.backgroundImageURL,
+                                                bio = publication.bio,
+                                                name = publication.name,
+                                                profileImageURL = publication.profileImageURL,
+                                                rssName = publication.rssName,
+                                                rssURL = publication.rssURL,
+                                                slug = publication.slug,
+                                                shoutouts = publication.shoutouts,
+                                                websiteURL = publication.websiteURL,
+                                                socials = publication.socials.toList().map { Social(it.social, it.uRL) }),
+                                        shoutouts = article.shoutouts,
+                                        nsfw = article.nsfw)
+                            })
+                            if (context != null) {
                                 binding.rvSavedArticles.adapter = SavedArticlesAdapter(savedArticles)
                                 val layoutManager = LinearLayoutManager(context)
                                 binding.rvSavedArticles.layoutManager = layoutManager
                             }
-                        }
-                    })
+                        })
+                    }
                 } else {
                     binding.clBookmarkPage.visibility = View.GONE
                     binding.noSavedArticlesGroup.visibility = View.GONE
