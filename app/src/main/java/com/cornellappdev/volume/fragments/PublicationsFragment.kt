@@ -58,7 +58,7 @@ class PublicationsFragment : Fragment() {
 
         setupPublicationsView(binding, isRefreshing = false)
 
-        val volumeOrange: Int? = context?.let { ContextCompat.getColor(it, R.color.volumeOrange) }
+        val volumeOrange: Int? = context?.let { ContextCompat.getColor(it, R.color.volume_orange) }
         with(binding.srlQuery) {
             if (volumeOrange != null) {
                 setColorSchemeColors(volumeOrange)
@@ -322,7 +322,7 @@ class PublicationsFragment : Fragment() {
                     adapter.addAll(morePublications)
                 }
             }
-            binding.shimmerMorePublication.visibility=View.INVISIBLE
+            binding.shimmerMorePublication.visibility = View.INVISIBLE
         })
     }
 
