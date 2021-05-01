@@ -17,7 +17,7 @@ import com.cornellappdev.volume.models.Article
 import com.squareup.picasso.Picasso
 
 class HomeArticlesAdapter(private val articles: MutableList<Article>,
-                          private val isOtherArtices: Boolean = false) :
+                          private val isOtherArticles: Boolean = false) :
         RecyclerView.Adapter<HomeArticlesAdapter.HomeArticleVH>() {
 
     private lateinit var context: Context
@@ -36,7 +36,7 @@ class HomeArticlesAdapter(private val articles: MutableList<Article>,
         val currentItem = articles[position]
         holder.binding.tvArticleTitle.text = currentItem.title
         Article.applyNSFWFilter(currentItem, holder.binding.tvArticleTitle)
-        if (!currentItem.imageURL.isNullOrBlank()) {
+        if (currentItem.imageURL.isNotBlank()) {
             holder.binding.ivArticleImage.visibility = View.VISIBLE
             Picasso.get().load(currentItem.imageURL).fit().centerCrop().into(holder.binding.ivArticleImage)
         }
@@ -48,7 +48,7 @@ class HomeArticlesAdapter(private val articles: MutableList<Article>,
         holder.binding.clArticleLayout.setOnClickListener { view ->
             val intent = Intent(view.context, MainActivity::class.java)
             intent.putExtra(Article.INTENT_KEY, currentItem)
-            intent.putParcelableExtra(NavigationSource.INTENT_KEY, if (isOtherArtices) {
+            intent.putParcelableExtra(NavigationSource.INTENT_KEY, if (isOtherArticles) {
                 NavigationSource.OTHER_ARTICLES
             } else {
                 NavigationSource.FOLLOWING_ARTICLES
