@@ -55,7 +55,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
         android:text="@string/next"
-        android:textColor="@color/volumeOrange"
+        android:textColor="@color/volume_orange"
         android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

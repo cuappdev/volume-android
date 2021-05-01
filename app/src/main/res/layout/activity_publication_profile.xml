@@ -58,7 +58,7 @@
                 android:background="@drawable/rounded_rectangle_button"
                 android:text="@string/follow"
                 android:textAllCaps="false"
-                android:textColor="@color/volumeOrange"
+                android:textColor="@color/volume_orange"
                 android:textSize="12sp"
                 app:layout_constraintBottom_toBottomOf="@+id/tv_name"
                 app:layout_constraintEnd_toEndOf="parent"

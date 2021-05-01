@@ -38,7 +38,7 @@ class PublicationsFragment : Fragment() {
                               container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
         _binding = FragmentPublicationsBinding.inflate(inflater, container, false)
-        val volumeOrange: Int? = context?.let { ContextCompat.getColor(it, R.color.volumeOrange) }
+        val volumeOrange: Int? = context?.let { ContextCompat.getColor(it, R.color.volume_orange) }
         if (volumeOrange != null) {
             binding.srlQuery.setColorSchemeColors(volumeOrange, volumeOrange, volumeOrange)
         }
