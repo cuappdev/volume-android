@@ -97,9 +97,10 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal">
-                        <include layout="@layout/layout_shimmer_followed_publication"></include>
-                        <include layout="@layout/layout_shimmer_followed_publication"></include>                        <include layout="@layout/layout_shimmer_followed_publication"></include>
-                        <include layout="@layout/layout_shimmer_followed_publication"></include>
+                        <include layout="@layout/layout_shimmer_followed_publication" />
+                        <include layout="@layout/layout_shimmer_followed_publication" />
+                        <include layout="@layout/layout_shimmer_followed_publication" />
+                        <include layout="@layout/layout_shimmer_followed_publication" />
                     </LinearLayout>
                 </com.facebook.shimmer.ShimmerFrameLayout>
 
@@ -157,10 +158,10 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical">
-                        <include layout="@layout/layout_shimmer_more_publications"></include>
-                        <include layout="@layout/layout_shimmer_more_publications"></include>
-                        <include layout="@layout/layout_shimmer_more_publications"></include>
-                        <include layout="@layout/layout_shimmer_more_publications"></include>
+                        <include layout="@layout/layout_shimmer_more_publications" />
+                        <include layout="@layout/layout_shimmer_more_publications" />
+                        <include layout="@layout/layout_shimmer_more_publications" />
+                        <include layout="@layout/layout_shimmer_more_publications" />
                     </LinearLayout>
                 </com.facebook.shimmer.ShimmerFrameLayout>
 

@@ -68,7 +68,7 @@ class HomeFragment : Fragment() {
 
         setUpHomeView(binding, isRefreshing = false)
 
-        val volumeOrange: Int? = context?.let { ContextCompat.getColor(it, R.color.volumeOrange) }
+        val volumeOrange: Int? = context?.let { ContextCompat.getColor(it, R.color.volume_orange) }
         with(binding.srlQuery) {
             if (volumeOrange != null) {
                 setColorSchemeColors(volumeOrange)
@@ -454,7 +454,7 @@ class HomeFragment : Fragment() {
                     with(otherRV) {
                         adapter = HomeArticlesAdapter(
                                 otherArticles.shuffled()
-                                        as MutableList<Article>
+                                        as MutableList<Article>, true
                         )
                         layoutManager = LinearLayoutManager(context)
                     }

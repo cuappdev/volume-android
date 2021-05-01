@@ -191,7 +191,7 @@ class OnboardingActivity : AppCompatActivity(), OnboardingFragTwo.DataPassListen
             binding.btnNext.setTextColor(
                 if (numFollowed > 0) {
                     ContextCompat.getColor(
-                        this@OnboardingActivity, R.color.volumeOrange
+                        this@OnboardingActivity, R.color.volume_orange
                     )
                 } else {
                     ContextCompat.getColor(
@@ -211,8 +211,9 @@ class OnboardingActivity : AppCompatActivity(), OnboardingFragTwo.DataPassListen
         // callback from other activities to check for a new follow.
         if (followingPublications?.isEmpty() == false && this::binding.isInitialized) {
             binding.btnNext.isClickable = true
-            ContextCompat.getColor(this@OnboardingActivity, R.color.volumeOrange)
-
+            binding.btnNext.setTextColor(
+                ContextCompat.getColor(
+                        this@OnboardingActivity, R.color.volume_orange))
         }
     }
 }

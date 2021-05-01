@@ -51,7 +51,7 @@ class SavedArticlesFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         loadSavedArticles()
 
-        val volumeOrange: Int? = context?.let { ContextCompat.getColor(it, R.color.volumeOrange) }
+        val volumeOrange: Int? = context?.let { ContextCompat.getColor(it, R.color.volume_orange) }
         with(binding.srlQuery) {
             if (volumeOrange != null) {
                 setColorSchemeColors(volumeOrange)

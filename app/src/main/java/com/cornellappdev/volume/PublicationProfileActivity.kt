@@ -53,7 +53,7 @@ class PublicationProfileActivity : AppCompatActivity() {
         navigationSource = intent.getParcelableExtra(NavigationSource.INTENT_KEY)!!
         VolumeEvent.logEvent(EventType.PUBLICATION, VolumeEvent.OPEN_PUBLICATION, navigationSource, publication.id)
 
-        val volumeOrange = ContextCompat.getColor(this, R.color.volumeOrange)
+        val volumeOrange = ContextCompat.getColor(this, R.color.volume_orange)
         binding.srlQuery.setColorSchemeColors(volumeOrange, volumeOrange, volumeOrange)
 
         // The article RecyclerView attempts to re-populate on refresh,
@@ -75,7 +75,7 @@ class PublicationProfileActivity : AppCompatActivity() {
         if (currentFollowingSet!!.contains(publication.id)) {
             binding.btnFollow.apply {
                 text = this@PublicationProfileActivity.getString(R.string.following)
-                setTextColor(ContextCompat.getColor(this.context, R.color.ligthgray))
+                setTextColor(ContextCompat.getColor(this.context, R.color.light_gray))
                 setBackgroundResource(R.drawable.rounded_rectange_button_orange)
             }
         } else {
@@ -93,7 +93,7 @@ class PublicationProfileActivity : AppCompatActivity() {
                     // Removes and updates UI.
                     text = this@PublicationProfileActivity.getString(R.string.follow)
                     setBackgroundResource(R.drawable.rounded_rectangle_button)
-                    setTextColor(ContextCompat.getColor(this.context, R.color.volumeOrange))
+                    setTextColor(ContextCompat.getColor(this.context, R.color.volume_orange))
                     currentFollowingSet.remove(publication.id)
                     prefUtils.save(PrefUtils.FOLLOWING_KEY, currentFollowingSet)
                     VolumeEvent.logEvent(EventType.PUBLICATION, VolumeEvent.UNFOLLOW_PUBLICATION, id = publication.id)
@@ -102,7 +102,7 @@ class PublicationProfileActivity : AppCompatActivity() {
                 binding.btnFollow.apply {
                     // Adds and updates UI.
                     text = this@PublicationProfileActivity.getString(R.string.following)
-                    setTextColor(ContextCompat.getColor(this.context, R.color.ligthgray))
+                    setTextColor(ContextCompat.getColor(this.context, R.color.light_gray))
                     setBackgroundResource(R.drawable.rounded_rectange_button_orange)
                     currentFollowingSet.add(publication.id)
                     prefUtils.save(PrefUtils.FOLLOWING_KEY, currentFollowingSet)
