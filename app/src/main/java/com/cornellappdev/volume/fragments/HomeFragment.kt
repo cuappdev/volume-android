@@ -54,6 +54,7 @@ class HomeFragment : Fragment() {
             binding.srlQuery.setColorSchemeColors(volumeOrange, volumeOrange, volumeOrange)
         }
         binding.srlQuery.setOnRefreshListener {
+            binding.cover.visibility = View.VISIBLE
             setUpHomeView(binding, isRefreshing = (
                     this::bigRedRV.isInitialized &&
                             this::followingRV.isInitialized &&
@@ -258,6 +259,7 @@ class HomeFragment : Fragment() {
                                         adapter.addAll(otherArticles.shuffled())
                                     }
                                 }
+                                binding.cover.visibility = View.GONE
                             }
                         })
                     }
@@ -267,6 +269,7 @@ class HomeFragment : Fragment() {
                 val ft = childFragmentManager.beginTransaction()
                 val dialog = NoInternetDialog()
                 ft.replace(binding.fragmentContainer.id, dialog, NoInternetDialog.TAG).commit()
+                binding.cover.visibility = View.GONE
             }
         })
         if (followingPublications?.isEmpty() == true) {

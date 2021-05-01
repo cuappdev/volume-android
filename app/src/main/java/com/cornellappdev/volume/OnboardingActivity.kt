@@ -147,7 +147,7 @@ class OnboardingActivity : AppCompatActivity(), OnboardingFragTwo.DataPassListen
             binding.btnNext.isClickable = numFollowed > 0
             binding.btnNext.setTextColor(if (numFollowed > 0) {
                 ContextCompat.getColor(
-                        this@OnboardingActivity, R.color.volumeOrange)
+                        this@OnboardingActivity, R.color.volume_orange)
             } else {
                 ContextCompat.getColor(
                         this@OnboardingActivity, R.color.gray)

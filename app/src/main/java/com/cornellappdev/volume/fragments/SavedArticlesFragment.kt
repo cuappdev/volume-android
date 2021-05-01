@@ -35,7 +35,7 @@ class SavedArticlesFragment : Fragment() {
                               savedInstanceState: Bundle?): View {
         _binding = FragmentSavedArticlesBinding.inflate(inflater, container, false)
         loadArticles()
-        val volumeOrange: Int? = context?.let { ContextCompat.getColor(it, R.color.volumeOrange) }
+        val volumeOrange: Int? = context?.let { ContextCompat.getColor(it, R.color.volume_orange) }
         if (volumeOrange != null) {
             binding.srlQuery.setColorSchemeColors(volumeOrange, volumeOrange, volumeOrange)
         }
