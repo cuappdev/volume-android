@@ -35,10 +35,11 @@ class OnboardingActivity : AppCompatActivity(), OnboardingFragTwo.DataPassListen
         setContentView(binding.root)
 
         prefUtils = PrefUtils(this)
-        val dropperSave = prefUtils.getBoolean("dropper_save", true)
+        val dropperSave = prefUtils.getBoolean("dropper_save(1)", true)
         if (dropperSave) {
             prefUtils.remove(PrefUtils.FOLLOWING_KEY)
-            prefUtils.save("dropper_save", false)
+            prefUtils.remove(PrefUtils.SAVED_ARTICLES_KEY)
+            prefUtils.save("dropper_save(1)", false)
         }
 
         val firstStart = prefUtils.getBoolean(PrefUtils.FIRST_START_KEY, true)
