@@ -226,7 +226,7 @@ class PublicationProfileActivity : AppCompatActivity() {
             binding.clFbHolder.visibility = View.GONE
         }
 
-        if (publication.websiteURL.isNotEmpty()) {
+        if (publication.websiteURL.isNotBlank()) {
             binding.tvWebsiteLink.text = publication.websiteURL
             binding.clWebsiteHolder.setOnClickListener {
                 startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(publication.websiteURL)))

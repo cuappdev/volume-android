@@ -39,7 +39,7 @@ class ArticleAdapter(private val articles: List<Article>) :
         val currentItem = articles[position]
         holder.binding.tvArticleTitle.text = currentItem.title
         Article.applyNSFWFilter(currentItem, holder.binding.tvArticleTitle)
-        if (!currentItem.imageURL.isBlank()) {
+        if (currentItem.imageURL.isNotBlank()) {
             holder.binding.ivArticleImage.visibility = View.VISIBLE
             Picasso.get().load(currentItem.imageURL).fit().centerCrop().into(holder.binding.ivArticleImage)
         }
