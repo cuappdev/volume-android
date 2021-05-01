@@ -38,7 +38,7 @@ class BigReadHomeAdapter(private val articles: MutableList<Article>) :
         val currentItem = articles[position]
         holder.binding.tvArticleTitle.text = currentItem.title
         Article.applyNSFWFilter(currentItem, holder.binding.tvArticleTitle)
-        if (!currentItem.imageURL.isNullOrEmpty()) {
+        if (currentItem.imageURL.isNotBlank()) {
             Picasso.get().load(currentItem.imageURL).fit().centerCrop().into(holder.binding.ivArticleImage)
         } else if (!currentItem.publication?.profileImageURL.isNullOrEmpty()) {
             Picasso.get()

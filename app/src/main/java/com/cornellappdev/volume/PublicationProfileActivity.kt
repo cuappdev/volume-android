@@ -159,7 +159,7 @@ class PublicationProfileActivity : AppCompatActivity() {
                 }
             }
         }
-        if (publication.websiteURL.isNotEmpty()) {
+        if (publication.websiteURL.isNotBlank()) {
             binding.tvWebsiteLink.text = publication.websiteURL
             binding.clWebsiteHolder.setOnClickListener {
                 startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(publication.websiteURL)))
@@ -167,12 +167,12 @@ class PublicationProfileActivity : AppCompatActivity() {
         } else {
             binding.clWebsiteHolder.visibility = View.GONE
         }
-        if (instaURL.isNotEmpty()) {
+        if (instaURL.isNotBlank()) {
             setUpInstaOnClick(instaURL)
         } else {
             binding.clInstaHolder.visibility = View.GONE
         }
-        if (facebookURL.isNotEmpty()) {
+        if (facebookURL.isNotBlank()) {
             binding.clFbHolder.setOnClickListener {
                 val intent = Intent(Intent.ACTION_VIEW, Uri.parse(facebookURL))
                 startActivity(intent)

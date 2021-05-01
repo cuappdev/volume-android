@@ -49,7 +49,8 @@ class HomeFragment : Fragment() {
         graphQlUtil = GraphQlUtil()
 
         setUpHomeView(binding, isRefreshing = false)
-        val volumeOrange: Int? = context?.let { ContextCompat.getColor(it, R.color.volumeOrange) }
+
+        val volumeOrange: Int? = context?.let { ContextCompat.getColor(it, R.color.volume_orange) }
         if (volumeOrange != null) {
             binding.srlQuery.setColorSchemeColors(volumeOrange, volumeOrange, volumeOrange)
         }
@@ -252,7 +253,7 @@ class HomeFragment : Fragment() {
                                         otherRV = binding.rvOtherArticles
                                         otherRV.layoutManager = LinearLayoutManager(context)
                                         otherRV.adapter = HomeArticlesAdapter(otherArticles.shuffled()
-                                                as MutableList<Article>, isOtherArtices = true)
+                                                as MutableList<Article>, isOtherArticles = true)
                                     } else {
                                         val adapter = otherRV.adapter as HomeArticlesAdapter
                                         adapter.clear()
