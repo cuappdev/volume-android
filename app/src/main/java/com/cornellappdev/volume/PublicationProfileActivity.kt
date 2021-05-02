@@ -9,6 +9,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.cornellappdev.volume.adapters.ArticleAdapter
+import com.cornellappdev.volume.analytics.EventType
+import com.cornellappdev.volume.analytics.NavigationSource
+import com.cornellappdev.volume.analytics.VolumeEvent
 import com.cornellappdev.volume.databinding.ActivityPublicationProfileBinding
 import com.cornellappdev.volume.models.Article
 import com.cornellappdev.volume.models.Publication
@@ -23,6 +26,7 @@ import io.reactivex.schedulers.Schedulers
 class PublicationProfileActivity : AppCompatActivity() {
 
     private lateinit var publication: Publication
+    private lateinit var navigationSource: NavigationSource
     private lateinit var binding: ActivityPublicationProfileBinding
     private val disposables = CompositeDisposable()
     private val graphQlUtil = GraphQlUtil()
@@ -37,9 +41,14 @@ class PublicationProfileActivity : AppCompatActivity() {
                 prefUtils.getStringSet(PrefUtils.FOLLOWING_KEY, mutableSetOf())?.toMutableSet()
 
         publication = intent.getParcelableExtra("publication")!!
+        navigationSource = intent.getParcelableExtra(NavigationSource.INTENT_KEY)!!
+
         getPublication(publication)
 
-        val volumeOrange = ContextCompat.getColor(this, R.color.volumeOrange)
+        VolumeEvent.logEvent(EventType.PUBLICATION, VolumeEvent.OPEN_PUBLICATION, navigationSource, publication.id)
+
+
+        val volumeOrange = ContextCompat.getColor(this, R.color.volume_orange)
         binding.srlQuery.setColorSchemeColors(volumeOrange, volumeOrange, volumeOrange)
 
         binding.srlQuery.setOnRefreshListener {
@@ -50,7 +59,7 @@ class PublicationProfileActivity : AppCompatActivity() {
         if (currentFollowingSet!!.contains(publication.id)) {
             binding.btnFollow.apply {
                 text = this@PublicationProfileActivity.getString(R.string.following)
-                setTextColor(ContextCompat.getColor(this.context, R.color.ligthgray))
+                setTextColor(ContextCompat.getColor(this.context, R.color.light_gray))
                 setBackgroundResource(R.drawable.rounded_rectange_button_orange)
             }
         } else {
@@ -65,17 +74,22 @@ class PublicationProfileActivity : AppCompatActivity() {
                 binding.btnFollow.apply {
                     text = this@PublicationProfileActivity.getString(R.string.follow)
                     setBackgroundResource(R.drawable.rounded_rectangle_button)
-                    setTextColor(ContextCompat.getColor(this.context, R.color.volumeOrange))
+                    setTextColor(ContextCompat.getColor(this.context, R.color.volume_orange))
                     currentFollowingSet.remove(publication.id)
                     prefUtils.save(PrefUtils.FOLLOWING_KEY, currentFollowingSet)
+                    VolumeEvent.logEvent(EventType.PUBLICATION, VolumeEvent.UNFOLLOW_PUBLICATION, id = publication.id)
                 }
             } else {
                 binding.btnFollow.apply {
                     text = this@PublicationProfileActivity.getString(R.string.following)
-                    setTextColor(ContextCompat.getColor(this.context, R.color.ligthgray))
+                    setTextColor(ContextCompat.getColor(this.context, R.color.light_gray))
                     setBackgroundResource(R.drawable.rounded_rectange_button_orange)
                     currentFollowingSet.add(publication.id)
                     prefUtils.save(PrefUtils.FOLLOWING_KEY, currentFollowingSet)
+                    VolumeEvent.logEvent(EventType.PUBLICATION,
+                            VolumeEvent.FOLLOW_PUBLICATION,
+                            NavigationSource.PUBLICATION_DETAIL,
+                            publication.id)
                 }
             }
         }
@@ -145,7 +159,7 @@ class PublicationProfileActivity : AppCompatActivity() {
                 }
             }
         }
-        if (publication.websiteURL.isNotEmpty()) {
+        if (publication.websiteURL.isNotBlank()) {
             binding.tvWebsiteLink.text = publication.websiteURL
             binding.clWebsiteHolder.setOnClickListener {
                 startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(publication.websiteURL)))
@@ -153,12 +167,12 @@ class PublicationProfileActivity : AppCompatActivity() {
         } else {
             binding.clWebsiteHolder.visibility = View.GONE
         }
-        if (instaURL.isNotEmpty()) {
+        if (instaURL.isNotBlank()) {
             setUpInstaOnClick(instaURL)
         } else {
             binding.clInstaHolder.visibility = View.GONE
         }
-        if (facebookURL.isNotEmpty()) {
+        if (facebookURL.isNotBlank()) {
             binding.clFbHolder.setOnClickListener {
                 val intent = Intent(Intent.ACTION_VIEW, Uri.parse(facebookURL))
                 startActivity(intent)
@@ -187,5 +201,10 @@ class PublicationProfileActivity : AppCompatActivity() {
                 startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)))
             }
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        VolumeEvent.logEvent(EventType.PUBLICATION, VolumeEvent.CLOSE_PUBLICATION, id = publication.id)
     }
 }

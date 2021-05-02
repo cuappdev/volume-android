@@ -12,6 +12,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.viewpager2.widget.ViewPager2
 import com.cornellappdev.volume.adapters.OnboardingPagerAdapter
+import com.cornellappdev.volume.analytics.EventType
+import com.cornellappdev.volume.analytics.VolumeEvent
 import com.cornellappdev.volume.databinding.ActivityOnboardingBinding
 import com.cornellappdev.volume.fragments.OnboardingFragTwo
 import com.cornellappdev.volume.util.PrefUtils
@@ -49,6 +51,8 @@ class OnboardingActivity : AppCompatActivity(), OnboardingFragTwo.DataPassListen
             finish()
         }
 
+        VolumeEvent.logEvent(EventType.GENERAL, VolumeEvent.START_ONBOARDING)
+
         binding.vpOnboarding.adapter = OnboardingPagerAdapter(this, FRAGMENT_COUNT)
 
         binding.vpOnboarding.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
@@ -72,6 +76,7 @@ class OnboardingActivity : AppCompatActivity(), OnboardingFragTwo.DataPassListen
             when (current) {
                 0 -> binding.vpOnboarding.currentItem = 1
                 1 -> {
+                    VolumeEvent.logEvent(EventType.GENERAL, VolumeEvent.COMPLETE_ONBOARDING)
                     val intent = Intent(context, TabActivity::class.java)
                     context.startActivity(intent)
                     finish()
@@ -143,7 +148,7 @@ class OnboardingActivity : AppCompatActivity(), OnboardingFragTwo.DataPassListen
             binding.btnNext.isClickable = numFollowed > 0
             binding.btnNext.setTextColor(if (numFollowed > 0) {
                 ContextCompat.getColor(
-                        this@OnboardingActivity, R.color.volumeOrange)
+                        this@OnboardingActivity, R.color.volume_orange)
             } else {
                 ContextCompat.getColor(
                         this@OnboardingActivity, R.color.gray)

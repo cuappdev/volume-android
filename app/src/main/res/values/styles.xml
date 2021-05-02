@@ -28,7 +28,7 @@
 
     <style name="helvetica_orange">
         <item name="android:fontFamily">@font/helvetica</item>
-        <item name="android:textColor">@color/volumeOrange</item>
+        <item name="android:textColor">@color/volume_orange</item>
     </style>
 
     <style name="helvetica_bold">
