@@ -201,7 +201,7 @@
 
                 <TextView
                     android:id="@+id/more_articles_message_long"
-                    style="@style/helvetica_black"
+                    style="@style/lato_regular"
                     android:layout_width="291dp"
                     android:layout_height="wrap_content"
                     android:text="@string/caught_up"
@@ -224,7 +224,7 @@
 
                 <TextView
                     android:id="@+id/more_articles_message_long_nothing"
-                    style="@style/helvetica_black"
+                    style="@style/lato_regular"
                     android:layout_width="291dp"
                     android:layout_height="wrap_content"
                     android:text="@string/follow_some"
