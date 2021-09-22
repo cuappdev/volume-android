@@ -50,7 +50,7 @@
 
     <Button
         android:id="@+id/btn_next"
-        style="@style/helvetica_bold"
+        style="@style/lato_bold"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"

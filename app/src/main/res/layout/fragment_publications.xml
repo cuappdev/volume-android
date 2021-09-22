@@ -118,8 +118,8 @@
 
                 <TextView
                     android:id="@+id/more_articles_message_long_nothing"
-                    style="@style/helvetica_black"
-                    android:layout_width="291dp"
+                    style="@style/lato_regular"
+                    android:layout_width="205dp"
                     android:layout_height="wrap_content"
                     android:text="@string/follow_below"
                     android:textAlignment="center"

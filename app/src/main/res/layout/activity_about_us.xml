@@ -55,7 +55,7 @@
 
         <TextView
             android:id="@+id/tv_our_mission"
-            style="@style/helvetica_black"
+            style="@style/lato_regular"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:letterSpacing="-0.02"
@@ -94,7 +94,7 @@
 
         <TextView
             android:id="@+id/tv_founding_members_intro"
-            style="@style/helvetica_black"
+            style="@style/lato_regular"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="14dp"
@@ -102,13 +102,12 @@
             android:lineSpacingExtra="4sp"
             android:text="@string/founding_members_intro"
             android:textSize="16sp"
-            android:textStyle="normal"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/rl_the_team" />
 
         <TextView
             android:id="@+id/tv_megaphone_android"
-            style="@style/helvetica_black"
+            style="@style/lato_black"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
@@ -120,19 +119,18 @@
             app:layout_constraintTop_toBottomOf="@id/tv_founding_members_intro" />
 
         <TextView
-            style="@style/helvetica_bold"
+            style="@style/lato_bold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:text="@string/android"
-            android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="@id/tv_megaphone_android"
             app:layout_constraintStart_toEndOf="@id/tv_megaphone_android"
             app:layout_constraintTop_toTopOf="@id/tv_megaphone_android" />
 
         <TextView
             android:id="@+id/tv_android_members"
-            style="@style/helvetica_black"
+            style="@style/lato_regular"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -146,7 +144,7 @@
 
         <TextView
             android:id="@+id/tv_megaphone_backend"
-            style="@style/helvetica_black"
+            style="@style/lato_black"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
@@ -158,19 +156,18 @@
             app:layout_constraintTop_toBottomOf="@id/tv_android_members" />
 
         <TextView
-            style="@style/helvetica_bold"
+            style="@style/lato_bold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:text="@string/backend"
-            android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="@id/tv_megaphone_backend"
             app:layout_constraintStart_toEndOf="@id/tv_megaphone_backend"
             app:layout_constraintTop_toTopOf="@id/tv_megaphone_backend" />
 
         <TextView
             android:id="@+id/tv_backend_members"
-            style="@style/helvetica_black"
+            style="@style/lato_regular"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -184,7 +181,7 @@
 
         <TextView
             android:id="@+id/tv_megaphone_design"
-            style="@style/helvetica_black"
+            style="@style/lato_black"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
@@ -196,19 +193,18 @@
             app:layout_constraintTop_toBottomOf="@id/tv_backend_members" />
 
         <TextView
-            style="@style/helvetica_bold"
+            style="@style/lato_bold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:text="@string/design"
-            android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="@id/tv_megaphone_design"
             app:layout_constraintStart_toEndOf="@id/tv_megaphone_design"
             app:layout_constraintTop_toTopOf="@id/tv_megaphone_design" />
 
         <TextView
             android:id="@+id/tv_design_members"
-            style="@style/helvetica_black"
+            style="@style/lato_regular"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -222,7 +218,7 @@
 
         <TextView
             android:id="@+id/tv_megaphone_ios"
-            style="@style/helvetica_black"
+            style="@style/lato_black"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
@@ -234,19 +230,18 @@
             app:layout_constraintTop_toBottomOf="@id/tv_design_members" />
 
         <TextView
-            style="@style/helvetica_bold"
+            style="@style/lato_bold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:text="@string/iOS"
-            android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="@id/tv_megaphone_ios"
             app:layout_constraintStart_toEndOf="@id/tv_megaphone_ios"
             app:layout_constraintTop_toTopOf="@id/tv_megaphone_ios" />
 
         <TextView
             android:id="@+id/tv_ios_members"
-            style="@style/helvetica_black"
+            style="@style/lato_regular"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -260,7 +255,7 @@
 
         <TextView
             android:id="@+id/tv_megaphone_marketing"
-            style="@style/helvetica_black"
+            style="@style/lato_black"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
@@ -272,18 +267,17 @@
             app:layout_constraintTop_toBottomOf="@id/tv_ios_members" />
 
         <TextView
-            style="@style/helvetica_bold"
+            style="@style/lato_bold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:text="@string/marketing"
-            android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="@id/tv_megaphone_marketing"
             app:layout_constraintStart_toEndOf="@id/tv_megaphone_marketing"
             app:layout_constraintTop_toTopOf="@id/tv_megaphone_marketing" />
 
         <TextView
-            style="@style/helvetica_black"
+            style="@style/lato_regular"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"

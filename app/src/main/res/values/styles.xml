@@ -21,25 +21,56 @@
         <item name="android:textColor">#979797</item>
     </style>
 
-    <style name="helvetica_black">
-        <item name="android:fontFamily">@font/helvetica</item>
+    <style name="lato_regular">
+        <item name="android:fontFamily">@font/latoregular</item>
         <item name="android:textColor">#000000</item>
     </style>
 
-    <style name="helvetica_orange">
-        <item name="android:fontFamily">@font/helvetica</item>
+    <style name="lato_bold">
+        <item name="android:fontFamily">@font/latobold</item>
+        <item name="android:textColor">#000000</item>
+    </style>
+
+    <style name="lato_black">
+        <item name="android:fontFamily">@font/latoblack</item>
+        <item name="android:textColor">#000000</item>
+    </style>
+
+    <style name="lato_gray">
+        <item name="android:fontFamily">@font/latoregular</item>
+        <item name="android:textColor">@color/gray</item>
+    </style>
+
+    <style name="lato_bold_orange">
+        <item name="android:fontFamily">@font/latobold</item>
         <item name="android:textColor">@color/volume_orange</item>
     </style>
 
-    <style name="helvetica_bold">
-        <item name="android:fontFamily">@font/helveticabold</item>
-        <item name="android:textColor">#000000</item>
+    <style name="lato_regular_orange">
+        <item name="android:fontFamily">@font/latoregular</item>
+        <item name="android:textColor">@color/volume_orange</item>
     </style>
 
-    <style name="helvetica_gray">
-        <item name="android:fontFamily">@font/helvetica</item>
-        <item name="android:textColor">#979797</item>
-    </style>
+
+    <!--    <style name="helvetica_black">-->
+    <!--        <item name="android:fontFamily">@font/helvetica</item>-->
+    <!--        <item name="android:textColor">#000000</item>-->
+    <!--    </style>-->
+
+    <!--    <style name="helvetica_orange">-->
+    <!--        <item name="android:fontFamily">@font/helvetica</item>-->
+    <!--        <item name="android:textColor">@color/volume_orange</item>-->
+    <!--    </style>-->
+
+    <!--    <style name="helvetica_bold">-->
+    <!--        <item name="android:fontFamily">@font/helveticabold</item>-->
+    <!--        <item name="android:textColor">#000000</item>-->
+    <!--    </style>-->
+
+    <!--    <style name="helvetica_gray">-->
+    <!--        <item name="android:fontFamily">@font/helvetica</item>-->
+    <!--        <item name="android:textColor">#979797</item>-->
+    <!--    </style>-->
 
     <style name="begum_black">
         <item name="android:fontFamily">@font/begum</item>

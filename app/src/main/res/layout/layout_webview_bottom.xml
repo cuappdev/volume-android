@@ -62,7 +62,7 @@
 
     <TextView
         android:id="@+id/tv_shoutout_count"
-        style="@style/helvetica_bold"
+        style="@style/lato_bold"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
