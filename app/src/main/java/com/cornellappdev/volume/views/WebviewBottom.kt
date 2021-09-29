@@ -69,7 +69,7 @@ class WebviewBottom @JvmOverloads constructor(
         binding.tvShoutoutCount.text = article.shoutouts.toInt().toString()
         if (currentBookmarks != null) {
             if (currentBookmarks.contains(article.id)) {
-                binding.ivBookmarkIcon.setImageResource(R.drawable.orange_shoutout_svg)
+                binding.ivBookmarkIcon.setImageResource(R.drawable.orange_bookmark_svg)
             } else {
                 binding.ivBookmarkIcon.setImageResource(R.drawable.ic_black_bookmarksvg)
             }
@@ -116,7 +116,8 @@ class WebviewBottom @JvmOverloads constructor(
                         R.anim.shake
                     )
                 )
-                binding.ivBookmarkIcon.setImageResource(R.drawable.orange_shoutout_svg)
+
+                binding.ivBookmarkIcon.setImageResource(R.drawable.orange_bookmark_svg)
             } else {
                 VolumeEvent.logEvent(
                     EventType.ARTICLE,

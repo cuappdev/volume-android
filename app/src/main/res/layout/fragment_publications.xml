@@ -76,6 +76,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:visibility="visible"
+<<<<<<< HEAD
                     app:constraint_referenced_ids="rv_following, iv_following_header" />
 
                 <androidx.constraintlayout.widget.Group
@@ -85,6 +86,9 @@
                     android:visibility="gone"
                     app:constraint_referenced_ids="more_articles_message_nothing,
                 more_articles_message_long_nothing" />
+=======
+                    app:constraint_referenced_ids="more_articles_message_nothing, more_articles_message_long_nothing" />
+>>>>>>> cc0a809... Add baseline notifications
 
                 <com.facebook.shimmer.ShimmerFrameLayout
                     android:id="@+id/shimmer_following_publication"
