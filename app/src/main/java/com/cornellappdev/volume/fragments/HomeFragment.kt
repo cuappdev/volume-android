@@ -222,11 +222,11 @@ class HomeFragment : Fragment() {
      * Also adds the trending article ids to trendingArticlesId.
      */
     private fun retrieveTrendingArticlesFromResponse(
-        response: Response<TrendingArticlesQuery.Data>?,
+        response: Response<TrendingArticlesQuery.Data>,
         trendingArticles: MutableList<Article>,
         trendingArticlesId: HashSet<String>
     ) {
-        val rawTrendingArticles = response?.data?.getTrendingArticles
+        val rawTrendingArticles = response.data?.getTrendingArticles
         if (rawTrendingArticles != null) {
             for (trendingArticle in rawTrendingArticles) {
                 val publication = trendingArticle.publication
@@ -264,34 +264,34 @@ class HomeFragment : Fragment() {
      * RecyclerView.
      */
     private fun handleTrendingObservable(
-        trendingObs: Observable<Response<TrendingArticlesQuery.Data>>?,
+        trendingObs: Observable<Response<TrendingArticlesQuery.Data>>,
         isRefreshing: Boolean,
         trendingArticles: MutableList<Article>,
         trendingArticlesId: HashSet<String>
     ) {
-        if (trendingObs != null) {
-            disposables.add(trendingObs.subscribe { response ->
-                retrieveTrendingArticlesFromResponse(
-                    response,
-                    trendingArticles,
-                    trendingArticlesId
-                )
+        disposables.add(trendingObs.subscribe { response ->
+            retrieveTrendingArticlesFromResponse(
+                response,
+                trendingArticles,
+                trendingArticlesId
+            )
 
-                // If not refreshing, must initialize bigRedRV.
-                if (!isRefreshing) {
-                    bigRedRV = binding.rvBigRead
-                    bigRedRV.adapter = BigReadHomeAdapter(trendingArticles)
-                    val linearLayoutManager = LinearLayoutManager(context)
-                    linearLayoutManager.orientation = LinearLayoutManager.HORIZONTAL
-                    bigRedRV.layoutManager = linearLayoutManager
-                } else {
-                    // bigRedRV is already created if initialized, only need to repopulate adapter data.
-                    val adapter = bigRedRV.adapter as BigReadHomeAdapter
-                    adapter.clear()
-                    adapter.addAll(trendingArticles)
+            // If not refreshing, must initialize bigRedRV.
+            if (!isRefreshing) {
+                bigRedRV = binding.rvBigRead
+                with(bigRedRV) {
+                    adapter = BigReadHomeAdapter(trendingArticles)
+                    layoutManager = LinearLayoutManager(context)
+                    (layoutManager as LinearLayoutManager).orientation =
+                        LinearLayoutManager.HORIZONTAL
                 }
-            })
-        }
+            } else {
+                // bigRedRV is already created if initialized, only need to repopulate adapter data.
+                val adapter = bigRedRV.adapter as BigReadHomeAdapter
+                adapter.clear()
+                adapter.addAll(trendingArticles)
+            }
+        })
     }
 
     /**
@@ -322,11 +322,13 @@ class HomeFragment : Fragment() {
                     // If not refreshing, must initialize followingRV.
                     if (!isRefreshing) {
                         followingRV = binding.rvFollowing
-                        followingRV.layoutManager = LinearLayoutManager(context)
-                        followingRV.adapter = HomeArticlesAdapter(
-                            followingArticles.take(NUMBER_OF_FOLLOWING_ARTICLES)
-                                    as MutableList<Article>
-                        )
+                        with(followingRV) {
+                            adapter = HomeArticlesAdapter(
+                                followingArticles.take(NUMBER_OF_FOLLOWING_ARTICLES)
+                                        as MutableList<Article>
+                            )
+                            layoutManager = LinearLayoutManager(context)
+                        }
                     } else {
                         // followingRV is already created if initialized, only need to repopulate adapter data.
                         val adapter = followingRV.adapter as HomeArticlesAdapter
@@ -430,11 +432,13 @@ class HomeFragment : Fragment() {
                 // If not refreshing, must initialize otherRV.
                 if (!isRefreshing) {
                     otherRV = binding.rvOtherArticles
-                    otherRV.layoutManager = LinearLayoutManager(context)
-                    otherRV.adapter = HomeArticlesAdapter(
-                        otherArticles.shuffled()
-                                as MutableList<Article>
-                    )
+                    with(otherRV) {
+                        adapter = HomeArticlesAdapter(
+                            otherArticles.shuffled()
+                                    as MutableList<Article>
+                        )
+                        layoutManager = LinearLayoutManager(context)
+                    }
                 } else {
                     // otherRV is already created if initialized, only need to repopulate adapter data.
                     val adapter = otherRV.adapter as HomeArticlesAdapter
