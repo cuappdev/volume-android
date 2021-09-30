@@ -28,7 +28,10 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 
-
+/**
+ * Fragment for the home page, holds the Big Red Read, articles from publications users follows,
+ * and articles from other publications.
+ */
 class HomeFragment : Fragment() {
 
     private lateinit var bigRedRV: RecyclerView
@@ -58,22 +61,30 @@ class HomeFragment : Fragment() {
         setUpHomeView(binding, isRefreshing = false)
 
         val volumeOrange: Int? = context?.let { ContextCompat.getColor(it, R.color.volumeOrange) }
-        if (volumeOrange != null) {
-            binding.srlQuery.setColorSchemeColors(volumeOrange, volumeOrange, volumeOrange)
-        }
+        with(binding.srlQuery) {
+            if (volumeOrange != null) {
+                setColorSchemeColors(volumeOrange)
+            }
 
-        binding.srlQuery.setOnRefreshListener {
-            setUpHomeView(
-                binding, isRefreshing = (
-                        this::bigRedRV.isInitialized &&
-                                this::followingRV.isInitialized &&
-                                this::otherRV.isInitialized)
-            )
-            binding.srlQuery.isRefreshing = false
+            // Re-populates the RecyclerViews on refresh, is dependent on whether or not they are
+            // initialized.
+            setOnRefreshListener {
+                setUpHomeView(
+                    binding, isRefreshing = (
+                            this@HomeFragment::bigRedRV.isInitialized &&
+                                    this@HomeFragment::followingRV.isInitialized &&
+                                    this@HomeFragment::otherRV.isInitialized)
+                )
+                // After repopulating, can stop signifying the refresh animation.
+                binding.srlQuery.isRefreshing = false
+            }
         }
         return binding.root
     }
 
+    /**
+     * Sets up the home view and all three sections on the home page.
+     */
     private fun setUpHomeView(binding: FragmentHomeBinding, isRefreshing: Boolean) {
         val followingPublications =
             prefUtils.getStringSet(PrefUtils.FOLLOWING_KEY, mutableSetOf())?.toMutableList()
@@ -166,180 +177,16 @@ class HomeFragment : Fragment() {
         }
     }
 
-    private fun handleOtherSection(
-        allPublicationsObs: Observable<Response<AllPublicationsQuery.Data>>,
-        isRefreshing: Boolean,
-        followingPublications: MutableList<String>?,
-        followingArticles: MutableList<Article>,
-        allPublicationIdsExcludingFollowing: MutableList<String>,
-        otherArticles: MutableList<Article>,
-        trendingArticlesId: HashSet<String>
-    ) {
-        if (allPublicationsObs != null) {
-            disposables.add(allPublicationsObs.subscribe { response ->
-                val rawPublications = response.data?.getAllPublications
-                if (rawPublications != null) {
-                    for (publication in rawPublications) {
-                        allPublicationIdsExcludingFollowing.add(publication.id)
-                    }
-                }
-                if (!followingPublications.isNullOrEmpty()) {
-                    allPublicationIdsExcludingFollowing.removeAll { pubID ->
-                        followingPublications.contains(pubID)
-                    }
-                }
-
-                val otherObs = graphQlUtil
-                    .getArticleByPublicationIDs(allPublicationIdsExcludingFollowing)
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-
-                handleOtherObservable(
-                    otherObs,
-                    isRefreshing,
-                    followingArticles,
-                    otherArticles,
-                    trendingArticlesId
-                )
-            })
-        }
-    }
-
-    private fun handleOtherObservable(
-        otherObs: Observable<Response<ArticlesByPublicationIDsQuery.Data>>?,
-        isRefreshing: Boolean,
-        followingArticles: MutableList<Article>,
-        otherArticles: MutableList<Article>,
-        trendingArticlesId: HashSet<String>
-    ) {
-        if (otherObs != null) {
-            disposables.add(otherObs.subscribe { response ->
-                retrieveOtherArticlesFromResponse(response, otherArticles)
-
-                otherArticles.removeAll { article ->
-                    trendingArticlesId.contains(article.id)
-                }
-
-                if (otherArticles.size < NUMBER_OF_OTHER_ARTICLES && !followingArticles.isNullOrEmpty()
-                ) {
-                    otherArticles.addAll(
-                        followingArticles.take(
-                            NUMBER_OF_OTHER_ARTICLES - otherArticles.size
-                        )
-                    )
-                }
-
-                // If not refreshing, must initialize otherRV.
-                if (!isRefreshing) {
-                    otherRV = binding.rvOtherArticles
-                    otherRV.layoutManager = LinearLayoutManager(context)
-                    otherRV.adapter = HomeArticlesAdapter(
-                        otherArticles.shuffled()
-                                as MutableList<Article>
-                    )
-                } else {
-                    // otherRV is already created if initialized, only need to repopulate adapter data.
-                    val adapter = otherRV.adapter as HomeArticlesAdapter
-                    adapter.clear()
-                    adapter.addAll(otherArticles.shuffled())
-                }
-            })
-        }
-    }
-
-    private fun retrieveOtherArticlesFromResponse(
-        response: Response<ArticlesByPublicationIDsQuery.Data>?,
-        otherArticles: MutableList<Article>
-    ) {
-        response?.data?.getArticlesByPublicationIDs?.mapTo(otherArticles, { article ->
-            val publication = article.publication
-            Article(
-                title = article.title,
-                articleURL = article.articleURL,
-                date = article.date.toString(),
-                id = article.id,
-                imageURL = article.imageURL,
-                publication = Publication(
-                    id = publication.id,
-                    backgroundImageURL = publication.backgroundImageURL,
-                    bio = publication.bio,
-                    name = publication.name,
-                    profileImageURL = publication.profileImageURL,
-                    rssName = publication.rssName,
-                    rssURL = publication.rssURL,
-                    slug = publication.slug,
-                    shoutouts = publication.shoutouts,
-                    websiteURL = publication.websiteURL,
-                    socials = publication.socials.toList()
-                        .map { Social(it.social, it.uRL) }),
-                shoutouts = article.shoutouts,
-                nsfw = article.nsfw
-            )
-        })
-    }
-
-    private fun handleFollowingObservable(
-        followingObs: Observable<Response<ArticlesByPublicationIDsQuery.Data>>?,
-        isRefreshing: Boolean,
-        followingArticles: MutableList<Article>,
-        trendingArticlesId: HashSet<String>
-    ) {
-        if (followingObs != null) {
-            disposables.add(followingObs.subscribe { response ->
-                retrieveFollowingArticlesFromResponse(response, followingArticles)
-
-                // Filters any articles the user follows that are trending.
-                followingArticles.removeAll { article ->
-                    trendingArticlesId.contains(article.id)
-                }
-
-                if (followingArticles.isNotEmpty()) {
-                    Article.sortByDate(followingArticles)
-
-                    // If not refreshing, must initialize followingRV.
-                    if (!isRefreshing) {
-                        followingRV = binding.rvFollowing
-                        followingRV.layoutManager = LinearLayoutManager(context)
-                        followingRV.adapter = HomeArticlesAdapter(
-                            followingArticles.take(NUMBER_OF_FOLLOWING_ARTICLES)
-                                    as MutableList<Article>
-                        )
-                    } else {
-                        // followingRV is already created if initialized, only need to repopulate adapter data.
-                        val adapter = followingRV.adapter as HomeArticlesAdapter
-                        adapter.clear()
-                        adapter.addAll(followingArticles.take(NUMBER_OF_FOLLOWING_ARTICLES))
-                    }
-
-                    if (followingArticles.size
-                        <= NUMBER_OF_FOLLOWING_ARTICLES
-                    ) {
-                        // There would be nothing left if we dropped twenty, so we clear.
-                        followingArticles.clear()
-                    } else {
-                        // We took the first twenty articles, the remaining ones (after removing them)
-                        // can be used for the other article section
-                        followingArticles.removeAll(
-                            followingArticles.take(
-                                NUMBER_OF_FOLLOWING_ARTICLES
-                            )
-                        )
-                    }
-                }
-            })
-        }
-    }
-
     /**
      * Parses the raw articles from our ArticlesByPublicationIDs query, turning them into our Article
-     * model, adding said articles to followingArticles.
+     * model, adding said articles to the list passed in.
      */
-    private fun retrieveFollowingArticlesFromResponse(
+    private fun retrieveArticlesFromResponse(
         response: Response<ArticlesByPublicationIDsQuery.Data>?,
-        followingArticles: MutableList<Article>,
+        articles: MutableList<Article>,
     ) {
         response?.data?.getArticlesByPublicationIDs?.mapTo(
-            followingArticles, { article ->
+            articles, { article ->
                 val publication = article.publication
                 Article(
                     title = article.title,
@@ -364,37 +211,6 @@ class HomeFragment : Fragment() {
                     nsfw = article.nsfw
                 )
             })
-    }
-
-    private fun handleTrendingObservable(
-        trendingObs: Observable<Response<TrendingArticlesQuery.Data>>?,
-        isRefreshing: Boolean,
-        trendingArticles: MutableList<Article>,
-        trendingArticlesId: HashSet<String>
-    ) {
-        if (trendingObs != null) {
-            disposables.add(trendingObs.subscribe { response ->
-                retrieveTrendingArticlesFromResponse(
-                    response,
-                    trendingArticles,
-                    trendingArticlesId
-                )
-
-                // If not refreshing, must initialize bigRedRV.
-                if (!isRefreshing) {
-                    bigRedRV = binding.rvBigRead
-                    bigRedRV.adapter = BigReadHomeAdapter(trendingArticles)
-                    val linearLayoutManager = LinearLayoutManager(context)
-                    linearLayoutManager.orientation = LinearLayoutManager.HORIZONTAL
-                    bigRedRV.layoutManager = linearLayoutManager
-                } else {
-                    // bigRedRV is already created if initialized, only need to repopulate adapter data.
-                    val adapter = bigRedRV.adapter as BigReadHomeAdapter
-                    adapter.clear()
-                    adapter.addAll(trendingArticles)
-                }
-            })
-        }
     }
 
     /**
@@ -438,6 +254,192 @@ class HomeFragment : Fragment() {
                 )
                 trendingArticlesId.add(trendingArticle.id)
             }
+        }
+    }
+
+    /**
+     * Retrieves the articles that are trending on Volume and initializes/refreshes the Big Red Read
+     * RecyclerView.
+     */
+    private fun handleTrendingObservable(
+        trendingObs: Observable<Response<TrendingArticlesQuery.Data>>?,
+        isRefreshing: Boolean,
+        trendingArticles: MutableList<Article>,
+        trendingArticlesId: HashSet<String>
+    ) {
+        if (trendingObs != null) {
+            disposables.add(trendingObs.subscribe { response ->
+                retrieveTrendingArticlesFromResponse(
+                    response,
+                    trendingArticles,
+                    trendingArticlesId
+                )
+
+                // If not refreshing, must initialize bigRedRV.
+                if (!isRefreshing) {
+                    bigRedRV = binding.rvBigRead
+                    bigRedRV.adapter = BigReadHomeAdapter(trendingArticles)
+                    val linearLayoutManager = LinearLayoutManager(context)
+                    linearLayoutManager.orientation = LinearLayoutManager.HORIZONTAL
+                    bigRedRV.layoutManager = linearLayoutManager
+                } else {
+                    // bigRedRV is already created if initialized, only need to repopulate adapter data.
+                    val adapter = bigRedRV.adapter as BigReadHomeAdapter
+                    adapter.clear()
+                    adapter.addAll(trendingArticles)
+                }
+            })
+        }
+    }
+
+    /**
+     * Retrieves the articles by publications the user follows and initializes/refreshes the following reads
+     * RecyclerView.
+     *
+     * The section is populated with the first NUMBER_OF_FOLLOWING_ARTICLES most recent following
+     * articles. Following articles do not contain any of the articles from the Big Red Read.
+     */
+    private fun handleFollowingObservable(
+        followingObs: Observable<Response<ArticlesByPublicationIDsQuery.Data>>?,
+        isRefreshing: Boolean,
+        followingArticles: MutableList<Article>,
+        trendingArticlesId: HashSet<String>
+    ) {
+        if (followingObs != null) {
+            disposables.add(followingObs.subscribe { response ->
+                retrieveArticlesFromResponse(response, followingArticles)
+
+                // Filters any articles the user follows that are trending.
+                followingArticles.removeAll { article ->
+                    trendingArticlesId.contains(article.id)
+                }
+
+                if (followingArticles.isNotEmpty()) {
+                    Article.sortByDate(followingArticles)
+
+                    // If not refreshing, must initialize followingRV.
+                    if (!isRefreshing) {
+                        followingRV = binding.rvFollowing
+                        followingRV.layoutManager = LinearLayoutManager(context)
+                        followingRV.adapter = HomeArticlesAdapter(
+                            followingArticles.take(NUMBER_OF_FOLLOWING_ARTICLES)
+                                    as MutableList<Article>
+                        )
+                    } else {
+                        // followingRV is already created if initialized, only need to repopulate adapter data.
+                        val adapter = followingRV.adapter as HomeArticlesAdapter
+                        adapter.clear()
+                        adapter.addAll(followingArticles.take(NUMBER_OF_FOLLOWING_ARTICLES))
+                    }
+
+                    if (followingArticles.size
+                        <= NUMBER_OF_FOLLOWING_ARTICLES
+                    ) {
+                        // There would be nothing left if we dropped twenty, so we clear.
+                        followingArticles.clear()
+                    } else {
+                        // We took the first twenty articles, the remaining ones (after removing them)
+                        // can be used for the other article section (see the description of handleOtherObservable).
+                        followingArticles.removeAll(
+                            followingArticles.take(
+                                NUMBER_OF_FOLLOWING_ARTICLES
+                            )
+                        )
+                    }
+                }
+            })
+        }
+    }
+
+    /**
+     * Populates the section that contains articles from other publications.
+     */
+    private fun handleOtherSection(
+        allPublicationsObs: Observable<Response<AllPublicationsQuery.Data>>,
+        isRefreshing: Boolean,
+        followingPublications: MutableList<String>?,
+        followingArticles: MutableList<Article>,
+        allPublicationIdsExcludingFollowing: MutableList<String>,
+        otherArticles: MutableList<Article>,
+        trendingArticlesId: HashSet<String>
+    ) {
+        disposables.add(allPublicationsObs.subscribe { response ->
+            val rawPublications = response.data?.getAllPublications
+            if (rawPublications != null) {
+                for (publication in rawPublications) {
+                    allPublicationIdsExcludingFollowing.add(publication.id)
+                }
+            }
+            if (!followingPublications.isNullOrEmpty()) {
+                allPublicationIdsExcludingFollowing.removeAll { pubID ->
+                    followingPublications.contains(pubID)
+                }
+            }
+
+            val otherObs = graphQlUtil
+                .getArticleByPublicationIDs(allPublicationIdsExcludingFollowing)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+
+            handleOtherObservable(
+                otherObs,
+                isRefreshing,
+                followingArticles,
+                otherArticles,
+                trendingArticlesId
+            )
+        })
+    }
+
+    /**
+     * Retrieves the articles used for the other reads section and initializes/refreshes the other reads
+     * RecyclerView.
+     *
+     * The section is first populated with articles that aren't trending or from publications that
+     * users follow and then pulls from excess articles from pubs the user follows if there
+     * isn't enough to populate other reads.
+     */
+    private fun handleOtherObservable(
+        otherObs: Observable<Response<ArticlesByPublicationIDsQuery.Data>>?,
+        isRefreshing: Boolean,
+        followingArticles: MutableList<Article>,
+        otherArticles: MutableList<Article>,
+        trendingArticlesId: HashSet<String>
+    ) {
+        if (otherObs != null) {
+            disposables.add(otherObs.subscribe { response ->
+                retrieveArticlesFromResponse(response, otherArticles)
+
+                // Removes trending articles.
+                otherArticles.removeAll { article ->
+                    trendingArticlesId.contains(article.id)
+                }
+
+                // Adds excess followingArticles to otherArticles if below threshold.
+                if (otherArticles.size < NUMBER_OF_OTHER_ARTICLES && !followingArticles.isNullOrEmpty()
+                ) {
+                    otherArticles.addAll(
+                        followingArticles.take(
+                            NUMBER_OF_OTHER_ARTICLES - otherArticles.size
+                        )
+                    )
+                }
+
+                // If not refreshing, must initialize otherRV.
+                if (!isRefreshing) {
+                    otherRV = binding.rvOtherArticles
+                    otherRV.layoutManager = LinearLayoutManager(context)
+                    otherRV.adapter = HomeArticlesAdapter(
+                        otherArticles.shuffled()
+                                as MutableList<Article>
+                    )
+                } else {
+                    // otherRV is already created if initialized, only need to repopulate adapter data.
+                    val adapter = otherRV.adapter as HomeArticlesAdapter
+                    adapter.clear()
+                    adapter.addAll(otherArticles.shuffled())
+                }
+            })
         }
     }
 
