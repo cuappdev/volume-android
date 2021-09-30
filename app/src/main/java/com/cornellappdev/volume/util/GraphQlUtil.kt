@@ -15,11 +15,10 @@ import okhttp3.logging.HttpLoggingInterceptor
 import java.io.IOException
 import java.net.*
 
-
 class GraphQlUtil {
 
     private val baseURL = "https://volume-backend.cornellappdev.com/graphql"
-    private var client: ApolloClient
+    private var client: ApolloClient = setUpApolloClient()
 
     companion object {
         private const val PING_URL: String = "volume-backend.cornellappdev.com"
@@ -36,20 +35,16 @@ class GraphQlUtil {
         }
     }
 
-    init {
-        client = setUpApolloClient()
-    }
-
     private fun setUpApolloClient(): ApolloClient {
         val logging = HttpLoggingInterceptor()
         logging.level = HttpLoggingInterceptor.Level.BODY
         val okHttp = OkHttpClient
-                .Builder()
-                .addInterceptor(logging)
+            .Builder()
+            .addInterceptor(logging)
         return ApolloClient.builder()
-                .serverUrl(baseURL)
-                .okHttpClient(okHttp.build())
-                .build()
+            .serverUrl(baseURL)
+            .okHttpClient(okHttp.build())
+            .build()
     }
 
     fun getAllArticles(): Observable<Response<AllArticlesQuery.Data>> {
@@ -106,8 +101,4 @@ class GraphQlUtil {
         val query = ArticlesAfterDateQuery(since)
         return client.rxQuery(query)
     }
-
-
 }
-
-
