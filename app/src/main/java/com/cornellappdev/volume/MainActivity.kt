@@ -27,7 +27,7 @@ class MainActivity : AppCompatActivity() {
         // Grabs Article from the intent passed in.
         val article = intent.getParcelableExtra<Article>("article")
 
-        setUpWebView(article)
+        setupWebView(article)
 
         // Code to prevent from launching in external browser, but instead within the Volume app.
         binding.wvArticle.webViewClient = object : WebViewClient() {
@@ -43,14 +43,14 @@ class MainActivity : AppCompatActivity() {
     /**
      * Sets up the webview using the article passed in.
      */
-    private fun setUpWebView(article: Article?) {
+    private fun setupWebView(article: Article?) {
         // Makes sure the user has internet before attempting to load the url or else the app crashes.
         disposables.add(GraphQlUtil.hasInternetConnection().subscribe { hasInternet ->
             if (article?.articleURL != null) {
                 binding.wvTop.setName(article)
                 binding.wvBottom.setArticle(article)
                 binding.wvBottom.setUpView()
-                binding.wvArticle.setTopBot(binding.wvTop, binding.wvBottom)
+                binding.wvArticle.setWebViews(binding.wvTop, binding.wvBottom)
                 if (hasInternet) binding.wvArticle.loadUrl(article.articleURL)
             }
         })

@@ -6,6 +6,11 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.cornellappdev.volume.databinding.ActivitySettingsBinding
 
+/**
+ * This activity is for the settings page.
+ *
+ * @see {@link com.cornellappdev.volume.R.layout#activity_settings}
+ */
 class SettingsActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivitySettingsBinding
