@@ -50,8 +50,8 @@ class PublicationProfileActivity : AppCompatActivity() {
         val volumeOrange = ContextCompat.getColor(this, R.color.volumeOrange)
         binding.srlQuery.setColorSchemeColors(volumeOrange, volumeOrange, volumeOrange)
 
-        // The article RecyclerView refreshes on refresh, useful if user regains internet again and
-        // wants to re-query.
+        // The article RecyclerView attempts to re-populate on refresh,
+        // useful if user regains internet again and wants to re-query.
         binding.srlQuery.setOnRefreshListener {
             setupArticleRV()
             binding.srlQuery.isRefreshing = false
