@@ -168,7 +168,8 @@ class PublicationProfileActivity : AppCompatActivity() {
                 nsfw = article.nsfw
             )
         })
-        return Article.sortByDate(articles)
+        Article.sortByDate(articles)
+        return articles
     }
 
     /**
