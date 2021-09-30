@@ -31,6 +31,8 @@ import io.reactivex.schedulers.Schedulers
 /**
  * Fragment for the home page, holds the Big Red Read, articles from publications users follows,
  * and articles from other publications.
+ *
+ *  @see {@link com.cornellappdev.volume.R.layout#fragment_home}
  */
 class HomeFragment : Fragment() {
 
