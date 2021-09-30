@@ -7,8 +7,10 @@ import com.cornellappdev.volume.fragments.HomeFragment
 import com.cornellappdev.volume.fragments.PublicationsFragment
 import com.cornellappdev.volume.fragments.SavedArticlesFragment
 
-class CustomPagerAdapter(fa: FragmentActivity, private val numOfTabs: Int)
-    : FragmentStateAdapter(fa) {
+/**
+ * Used by the ViewPager in TabActivity. Holds all three of our pages.
+ */
+class CustomPagerAdapter(fa: FragmentActivity, private val numOfTabs: Int) : FragmentStateAdapter(fa) {
 
     override fun getItemCount(): Int {
         return numOfTabs

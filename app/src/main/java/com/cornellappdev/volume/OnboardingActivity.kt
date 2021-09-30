@@ -54,7 +54,7 @@ class OnboardingActivity : AppCompatActivity(), OnboardingFragTwo.DataPassListen
 
         setupViewPager()
         setupNextButton()
-        setUpAnimations()
+        setupAnimations()
 
         prefUtils.save(PrefUtils.FIRST_START_KEY, false)
     }
@@ -147,7 +147,7 @@ class OnboardingActivity : AppCompatActivity(), OnboardingFragTwo.DataPassListen
     /**
      * Sets up the animations for the various elements in the OnboardingActivity.
      */
-    private fun setUpAnimations() {
+    private fun setupAnimations() {
         val slideUp: Animation = object : Animation() {
             override fun applyTransformation(interpolatedTime: Float, t: Transformation?) {
                 binding.ivVolumeLogo.setMarginTop(VOLUME_LOGO_MARGIN_TOP, interpolatedTime)

@@ -8,7 +8,6 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import com.cornellappdev.volume.databinding.LayoutWebviewTopBinding
 import com.cornellappdev.volume.models.Article
 
-
 class WebviewTop @JvmOverloads constructor(
         context: Context,
         attrs: AttributeSet,
