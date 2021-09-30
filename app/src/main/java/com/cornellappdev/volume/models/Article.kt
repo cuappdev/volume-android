@@ -38,11 +38,10 @@ class Article(
             }
         }
 
-        fun sortByDate(articles: List<Article>): MutableList<Article> {
-            return articles.sortedWith(
-                    compareByDescending { article ->
-                        article.date
-                    }) as MutableList<Article>
+        fun sortByDate(articles: MutableList<Article>) {
+            articles.sortWith(compareByDescending { article ->
+                article.date
+            })
         }
 
         @RequiresApi(Build.VERSION_CODES.O)
