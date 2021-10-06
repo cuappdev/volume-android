@@ -17,6 +17,11 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 
+/**
+ * Page two of Onboarding.
+ *
+ * @see {@link com.cornellappdev.volume.R.layout#fragment_onboarding_two}
+ */
 class OnboardingFragTwo : Fragment(), MorePublicationsAdapter.AdapterOnClickHandler {
 
     interface DataPassListener {
@@ -31,46 +36,62 @@ class OnboardingFragTwo : Fragment(), MorePublicationsAdapter.AdapterOnClickHand
     private val binding get() = _binding!!
     private var followCounter = 0
 
-    override fun onCreateView(inflater: LayoutInflater,
-                              container: ViewGroup?,
-                              savedInstanceState: Bundle?): View {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
         disposables = CompositeDisposable()
         mCallback = activity as DataPassListener
         _binding = FragmentOnboardingTwoBinding.inflate(inflater, container, false)
-        setupArticlesRV(binding)
+        setupPublicationRV(binding)
+        // Notifies that no one has been followed.
         mCallback.onPublicationFollowed(0)
         return binding.root
     }
 
-    private fun setupArticlesRV(onboardingBinding: FragmentOnboardingTwoBinding) {
-        val pubsObs = graphQlUtil.getAllPublications().subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
-        disposables.add(pubsObs.subscribe { response ->
-            val allPubs = mutableListOf<Publication>()
-            response.data?.getAllPublications?.mapTo(allPubs, { publication ->
+    /**
+     * Sets up the RecyclerView showcasing all the publications on Volume.
+     */
+    private fun setupPublicationRV(onboardingBinding: FragmentOnboardingTwoBinding) {
+        // Creates API call observation for retrieving all publications in the Volume database.
+        val allPublicationsObs =
+            graphQlUtil.getAllPublications()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+
+        val allPublicationsList = mutableListOf<Publication>()
+
+
+        disposables.add(allPublicationsObs.subscribe { response ->
+            response.data?.getAllPublications?.mapTo(allPublicationsList, { publication ->
                 Publication(
-                        publication.id,
-                        publication.backgroundImageURL,
-                        publication.bio,
-                        publication.name,
-                        publication.profileImageURL,
-                        publication.rssName,
-                        publication.rssURL,
-                        publication.slug,
-                        publication.shoutouts,
-                        publication.websiteURL,
-                        publication.mostRecentArticle?.nsfw?.let {
-                            Article(
-                                    publication.mostRecentArticle.id,
-                                    publication.mostRecentArticle.title,
-                                    publication.mostRecentArticle.articleURL,
-                                    publication.mostRecentArticle.imageURL,
-                                    nsfw = it)
-                        },
-                        publication.socials.toList().map { Social(it.social, it.uRL) })
+                    publication.id,
+                    publication.backgroundImageURL,
+                    publication.bio,
+                    publication.name,
+                    publication.profileImageURL,
+                    publication.rssName,
+                    publication.rssURL,
+                    publication.slug,
+                    publication.shoutouts,
+                    publication.websiteURL,
+                    publication.mostRecentArticle?.nsfw?.let { isNSFW ->
+                        Article(
+                            publication.mostRecentArticle.id,
+                            publication.mostRecentArticle.title,
+                            publication.mostRecentArticle.articleURL,
+                            publication.mostRecentArticle.imageURL,
+                            nsfw = isNSFW
+                        )
+                    },
+                    publication.socials.toList()
+                        .map { social -> Social(social.social, social.uRL) })
             })
+
             if (this.context != null) {
                 onboardingBinding.rvPublications.adapter =
-                        MorePublicationsAdapter(allPubs, prefUtils, this)
+                    MorePublicationsAdapter(allPublicationsList, prefUtils, this)
                 onboardingBinding.rvPublications.layoutManager = LinearLayoutManager(context)
                 onboardingBinding.rvPublications.setHasFixedSize(true)
             }
@@ -82,6 +103,9 @@ class OnboardingFragTwo : Fragment(), MorePublicationsAdapter.AdapterOnClickHand
         _binding = null
     }
 
+    /**
+     * Detects and notifies when a user follows/unfollows through a callback with {@link MorePublicationsAdapter}.
+     */
     override fun onFollowClick(wasFollowed: Boolean) {
         if (wasFollowed) {
             followCounter++

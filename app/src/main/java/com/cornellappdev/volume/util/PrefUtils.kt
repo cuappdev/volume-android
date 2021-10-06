@@ -5,6 +5,10 @@ import android.content.Context
 import android.content.SharedPreferences
 import androidx.preference.PreferenceManager
 
+/**
+ * Class responsible for directly interacting with the SharedPreferences, where device-persistant
+ * information is stored.
+ */
 class PrefUtils {
 
     companion object {
