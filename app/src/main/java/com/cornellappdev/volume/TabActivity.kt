@@ -9,6 +9,9 @@ import com.cornellappdev.volume.databinding.ActivityTabBinding
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 
+/**
+ * This activity holds the tabs for our three pages: HomeFragment, PublicationsFragment, and SavedArticlesFragment.
+ */
 class TabActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityTabBinding
@@ -25,11 +28,14 @@ class TabActivity : AppCompatActivity() {
         binding.vpFragments.reduceDragSensitivity()
         binding.vpFragments.isUserInputEnabled = true
         binding.vpFragments.adapter = CustomPagerAdapter(this, binding.tlTabs.tabCount)
-        TabLayoutMediator(binding.tlTabs, binding.vpFragments) { _, _ ->
-        }.attach()
+        TabLayoutMediator(binding.tlTabs, binding.vpFragments) { _, _ -> }.attach()
+
+        // Initially we are at the HomeFragment
         binding.tlTabs.getTabAt(0)?.setIcon(R.drawable.ic_volume_bars_orange_tab)
         binding.tlTabs.getTabAt(1)?.setIcon(R.drawable.ic_book_gray)
         binding.tlTabs.getTabAt(2)?.setIcon(R.drawable.ic_bookmark_gray)
+
+        // Highlights which tab is selected by making that icon orange.
         binding.tlTabs.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
                 when (tab?.position) {
@@ -59,6 +65,9 @@ class TabActivity : AppCompatActivity() {
         })
     }
 
+    /**
+     * Reduces drag sensitivity of [ViewPager2] widget
+     */
     private fun ViewPager2.reduceDragSensitivity() {
         val recyclerViewField = ViewPager2::class.java.getDeclaredField("mRecyclerView")
         recyclerViewField.isAccessible = true
@@ -66,6 +75,9 @@ class TabActivity : AppCompatActivity() {
         val touchSlopField = RecyclerView::class.java.getDeclaredField("mTouchSlop")
         touchSlopField.isAccessible = true
         val touchSlop = touchSlopField.get(recyclerView) as Int
-        touchSlopField.set(recyclerView, touchSlop * VIEWPAGER_SENSITIVITY)  // multiplier effects sensitivity of scroll
+        touchSlopField.set(
+            recyclerView,
+            touchSlop * VIEWPAGER_SENSITIVITY
+        )  // multiplier effects sensitivity of scroll
     }
 }

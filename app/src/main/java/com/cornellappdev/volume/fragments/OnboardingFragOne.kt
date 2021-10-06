@@ -7,6 +7,11 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.cornellappdev.volume.databinding.FragmentOnboardingOneBinding
 
+/**
+ * Page one of Onboarding.
+ *
+ * @see {@link com.cornellappdev.volume.R.layout#fragment_onboarding_one}
+ */
 class OnboardingFragOne : Fragment() {
 
     private var _binding: FragmentOnboardingOneBinding? = null

@@ -72,10 +72,17 @@
                     app:layout_constraintTop_toBottomOf="@id/iv_following_header" />
 
                 <androidx.constraintlayout.widget.Group
-                    android:id="@+id/group_not_following"
+                    android:id="@+id/group_following"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:visibility="visible"
+                    app:constraint_referenced_ids="rv_following, iv_following_header" />
+
+                <androidx.constraintlayout.widget.Group
+                    android:id="@+id/group_not_following"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
                     app:constraint_referenced_ids="more_articles_message_nothing,
                 more_articles_message_long_nothing" />
 
@@ -121,6 +128,14 @@
                     android:layout_height="wrap_content"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/iv_more_publications_header" />
+
+                <androidx.constraintlayout.widget.Group
+                    android:id="@+id/group_more_publications"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:visibility="visible"
+                    app:constraint_referenced_ids="rv_more_publications, iv_more_publications_header" />
+
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>

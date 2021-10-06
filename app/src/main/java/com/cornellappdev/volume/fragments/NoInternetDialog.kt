@@ -7,7 +7,11 @@ import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import com.cornellappdev.volume.databinding.FragmentNoInternetBinding
 
-
+/**
+ * Dialog for displaying that the user has no internet.
+ *
+ * @see {@link com.cornellappdev.volume.R.layout#no_internet}
+ */
 class NoInternetDialog : DialogFragment() {
 
     private var _binding: FragmentNoInternetBinding? = null

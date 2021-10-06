@@ -13,21 +13,24 @@ import com.cornellappdev.volume.models.Publication
 import com.cornellappdev.volume.util.PrefUtils
 import com.squareup.picasso.Picasso
 
-class MorePublicationsAdapter(private val publicationList: List<Publication>,
-                              private val prefUtils: PrefUtils,
-                              private val mAdapterOnClickHandler: AdapterOnClickHandler?) :
-        RecyclerView.Adapter<MorePublicationsAdapter.MorePublicationVH>() {
+class MorePublicationsAdapter(
+    private val publicationList: MutableList<Publication>,
+    private val prefUtils: PrefUtils,
+    private val mAdapterOnClickHandler: AdapterOnClickHandler?
+) :
+    RecyclerView.Adapter<MorePublicationsAdapter.MorePublicationVH>() {
 
     interface AdapterOnClickHandler {
         fun onFollowClick(wasFollowed: Boolean)
     }
 
     class MorePublicationVH(
-            val binding: ItemMorePublicationBinding) : RecyclerView.ViewHolder(binding.root)
+        val binding: ItemMorePublicationBinding
+    ) : RecyclerView.ViewHolder(binding.root)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MorePublicationVH {
         val binding = ItemMorePublicationBinding
-                .inflate(LayoutInflater.from(parent.context), parent, false)
+            .inflate(LayoutInflater.from(parent.context), parent, false)
         return MorePublicationVH(binding)
     }
 
@@ -48,7 +51,7 @@ class MorePublicationsAdapter(private val publicationList: List<Publication>,
         holder.binding.tvRecentArticleTitle.text = currentItem.mostRecentArticle?.title
 
         val currentFollowingSet =
-                prefUtils.getStringSet(PrefUtils.FOLLOWING_KEY, mutableSetOf())
+            prefUtils.getStringSet(PrefUtils.FOLLOWING_KEY, mutableSetOf())
 
         if (currentFollowingSet?.contains(currentItem.id) == true) {
             holder.binding.btnFollow.setImageResource(R.drawable.ic_followchecksvg)
@@ -57,11 +60,14 @@ class MorePublicationsAdapter(private val publicationList: List<Publication>,
         }
 
         holder.binding.btnFollow.setOnClickListener {
-            if (holder.binding.btnFollow.drawable.constantState == ContextCompat.getDrawable(it.context,
-                            R.drawable.ic_followplussvg)!!.constantState) {
+            if (holder.binding.btnFollow.drawable.constantState == ContextCompat.getDrawable(
+                    it.context,
+                    R.drawable.ic_followplussvg
+                )!!.constantState
+            ) {
                 holder.binding.btnFollow.setImageResource(R.drawable.ic_followchecksvg)
                 val tempSet =
-                        prefUtils.getStringSet(PrefUtils.FOLLOWING_KEY, mutableSetOf())?.toMutableSet()
+                    prefUtils.getStringSet(PrefUtils.FOLLOWING_KEY, mutableSetOf())?.toMutableSet()
                 if (tempSet != null) {
                     tempSet.add(currentItem.id)
                     prefUtils.save(PrefUtils.FOLLOWING_KEY, tempSet)
@@ -70,7 +76,7 @@ class MorePublicationsAdapter(private val publicationList: List<Publication>,
             } else {
                 holder.binding.btnFollow.setImageResource(R.drawable.ic_followplussvg)
                 val tempSet =
-                        prefUtils.getStringSet(PrefUtils.FOLLOWING_KEY, mutableSetOf())?.toMutableSet()
+                    prefUtils.getStringSet(PrefUtils.FOLLOWING_KEY, mutableSetOf())?.toMutableSet()
                 if (tempSet != null) {
                     tempSet.remove(currentItem.id)
                     prefUtils.save(PrefUtils.FOLLOWING_KEY, tempSet)
@@ -84,5 +90,15 @@ class MorePublicationsAdapter(private val publicationList: List<Publication>,
             intent.putExtra(Publication.INTENT_KEY, currentItem)
             view.context.startActivity(intent)
         }
+    }
+
+    fun clear() {
+        publicationList.clear()
+        notifyDataSetChanged()
+    }
+
+    fun addAll(list: List<Publication>) {
+        publicationList.addAll(list)
+        notifyDataSetChanged()
     }
 }

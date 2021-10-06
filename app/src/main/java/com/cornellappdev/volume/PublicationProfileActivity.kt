@@ -8,6 +8,7 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.apollographql.apollo.api.Response
 import com.cornellappdev.volume.adapters.ArticleAdapter
 import com.cornellappdev.volume.databinding.ActivityPublicationProfileBinding
 import com.cornellappdev.volume.models.Article
@@ -15,11 +16,18 @@ import com.cornellappdev.volume.models.Publication
 import com.cornellappdev.volume.models.Social
 import com.cornellappdev.volume.util.GraphQlUtil
 import com.cornellappdev.volume.util.PrefUtils
+import com.kotlin.graphql.ArticlesByPublicationIDQuery
 import com.squareup.picasso.Picasso
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 
+/**
+ * This activity is responsible for showing information about a publication. Users are redirected here
+ * when they click on a publication.
+ *
+ * @see {@link com.cornellappdev.volume.R.layout#activity_publication_profile}
+ */
 class PublicationProfileActivity : AppCompatActivity() {
 
     private lateinit var publication: Publication
@@ -34,19 +42,30 @@ class PublicationProfileActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         val currentFollowingSet =
-                prefUtils.getStringSet(PrefUtils.FOLLOWING_KEY, mutableSetOf())?.toMutableSet()
+            prefUtils.getStringSet(PrefUtils.FOLLOWING_KEY, mutableSetOf())?.toMutableSet()
 
         publication = intent.getParcelableExtra("publication")!!
-        getPublication(publication)
+        setupPublication(publication)
 
         val volumeOrange = ContextCompat.getColor(this, R.color.volumeOrange)
         binding.srlQuery.setColorSchemeColors(volumeOrange, volumeOrange, volumeOrange)
 
+        // The article RecyclerView attempts to re-populate on refresh,
+        // useful if user regains internet again and wants to re-query.
         binding.srlQuery.setOnRefreshListener {
-            setUpArticleRV()
+            setupArticleRV()
             binding.srlQuery.isRefreshing = false
         }
 
+        setupFollowButton(currentFollowingSet)
+        setupArticleRV()
+    }
+
+    /**
+     * Sets up interactions with the follow button.
+     */
+    private fun setupFollowButton(currentFollowingSet: MutableSet<String>?) {
+        // Updates follow button given whether or not user follows publication.
         if (currentFollowingSet!!.contains(publication.id)) {
             binding.btnFollow.apply {
                 text = this@PublicationProfileActivity.getString(R.string.following)
@@ -60,9 +79,12 @@ class PublicationProfileActivity : AppCompatActivity() {
             }
         }
 
+        // Updates the SharedPreferences for who the user is following when they
+        // click on the follow button.
         binding.btnFollow.setOnClickListener {
             if (binding.btnFollow.text.equals("Following")) {
                 binding.btnFollow.apply {
+                    // Removes and updates UI.
                     text = this@PublicationProfileActivity.getString(R.string.follow)
                     setBackgroundResource(R.drawable.rounded_rectangle_button)
                     setTextColor(ContextCompat.getColor(this.context, R.color.volumeOrange))
@@ -71,6 +93,7 @@ class PublicationProfileActivity : AppCompatActivity() {
                 }
             } else {
                 binding.btnFollow.apply {
+                    // Adds and updates UI.
                     text = this@PublicationProfileActivity.getString(R.string.following)
                     setTextColor(ContextCompat.getColor(this.context, R.color.ligthgray))
                     setBackgroundResource(R.drawable.rounded_rectange_button_orange)
@@ -79,44 +102,24 @@ class PublicationProfileActivity : AppCompatActivity() {
                 }
             }
         }
-        setUpArticleRV()
     }
 
-    private fun setUpArticleRV() {
-        var articles = mutableListOf<Article>()
-        val followingObs = graphQlUtil
-                .getArticleByPublicationID(publication.id)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
+    /**
+     * Sets up the RecyclerView showcasing the recent articles published by the publisher.
+     */
+    private fun setupArticleRV() {
+        val articleByPublicationObservable = graphQlUtil
+            .getArticleByPublicationID(publication.id)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
         disposables.add(GraphQlUtil.hasInternetConnection().subscribe { hasInternet ->
+            // Only retrieves the articles given there's internet.
             if (hasInternet) {
-                disposables.add(followingObs.subscribe { response ->
+                disposables.add(articleByPublicationObservable.subscribe { response ->
                     binding.mShimmerViewContainer.stopShimmer()
                     binding.mShimmerViewContainer.visibility = View.GONE
-                    response.data?.getArticlesByPublicationID?.mapTo(articles, { article ->
-                        val publication = article.publication
-                        Article(
-                                title = article.title,
-                                articleURL = article.articleURL,
-                                date = article.date.toString(),
-                                id = article.id,
-                                imageURL = article.imageURL,
-                                publication = Publication(
-                                        id = publication.id,
-                                        backgroundImageURL = publication.backgroundImageURL,
-                                        bio = publication.bio,
-                                        name = publication.name,
-                                        profileImageURL = publication.profileImageURL,
-                                        rssName = publication.rssName,
-                                        rssURL = publication.rssURL,
-                                        slug = publication.slug,
-                                        shoutouts = publication.shoutouts,
-                                        websiteURL = publication.websiteURL,
-                                        socials = publication.socials.toList().map { Social(it.social, it.uRL) }),
-                                shoutouts = article.shoutouts,
-                                nsfw = article.nsfw)
-                    })
-                    articles = Article.sortByDate(articles)
+                    val articles = getArticlesFromResponse(response)
+                    // Initializes many of the properties of the Article RecyclerView.
                     with(binding.rvArticles) {
                         adapter = ArticleAdapter(articles)
                         visibility = View.VISIBLE
@@ -133,18 +136,85 @@ class PublicationProfileActivity : AppCompatActivity() {
         })
     }
 
-    private fun getPublication(publication: Publication) {
-        var instaURL = ""
-        var facebookURL = ""
+    /**
+     * Returns a list of all the articles specified by the response.
+     *
+     * Parses the raw articles from our ArticlesByPublicationID query, turning them into our Article
+     * model. The articles returned are sorted descending by the date published.
+     */
+    private fun getArticlesFromResponse(response: Response<ArticlesByPublicationIDQuery.Data>?): MutableList<Article> {
+        val articles = mutableListOf<Article>()
+        response?.data?.getArticlesByPublicationID?.mapTo(articles, { article ->
+            val publication = article.publication
+            Article(
+                title = article.title,
+                articleURL = article.articleURL,
+                date = article.date.toString(),
+                id = article.id,
+                imageURL = article.imageURL,
+                publication = Publication(
+                    id = publication.id,
+                    backgroundImageURL = publication.backgroundImageURL,
+                    bio = publication.bio,
+                    name = publication.name,
+                    profileImageURL = publication.profileImageURL,
+                    rssName = publication.rssName,
+                    rssURL = publication.rssURL,
+                    slug = publication.slug,
+                    shoutouts = publication.shoutouts,
+                    websiteURL = publication.websiteURL,
+                    socials = publication.socials.toList().map { Social(it.social, it.uRL) }),
+                shoutouts = article.shoutouts,
+                nsfw = article.nsfw
+            )
+        })
+        Article.sortByDate(articles)
+        return articles
+    }
+
+    /**
+     * Sets up various UI on the activity with the given publication.
+     */
+    private fun setupPublication(publication: Publication) {
+        binding.tvName.text = publication.name
+        binding.tvShoutoutCount.text =
+            this.getString(R.string.shoutout_count, publication.shoutouts.toInt())
+        binding.tvDescription.text = publication.bio
+        Picasso.get().load(publication.backgroundImageURL).fit().centerCrop().into(binding.ivBanner)
+        Picasso.get().load(publication.profileImageURL).into(binding.ivLogo)
+
+        setupMedia(publication)
+    }
+
+    /**
+     * Sets up the media links for the given publication.
+     */
+    private fun setupMedia(publication: Publication) {
+        var hasInstaURL = false
+        var hasFacebookURL = false
         if (publication.socials != null) {
             for (social in publication.socials) {
                 if (social.social == "insta") {
-                    instaURL = social.URL
+                    hasInstaURL = true
+                    setupInstaOnClick(social.URL)
                 } else if (social.social == "facebook") {
-                    facebookURL = social.URL
+                    hasFacebookURL = true
+                    binding.clFbHolder.setOnClickListener {
+                        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(social.URL))
+                        startActivity(intent)
+                    }
                 }
             }
         }
+
+        if (!hasInstaURL) {
+            binding.clInstaHolder.visibility = View.GONE
+        }
+
+        if (!hasFacebookURL) {
+            binding.clFbHolder.visibility = View.GONE
+        }
+
         if (publication.websiteURL.isNotEmpty()) {
             binding.tvWebsiteLink.text = publication.websiteURL
             binding.clWebsiteHolder.setOnClickListener {
@@ -153,30 +223,18 @@ class PublicationProfileActivity : AppCompatActivity() {
         } else {
             binding.clWebsiteHolder.visibility = View.GONE
         }
-        if (instaURL.isNotEmpty()) {
-            setUpInstaOnClick(instaURL)
-        } else {
-            binding.clInstaHolder.visibility = View.GONE
-        }
-        if (facebookURL.isNotEmpty()) {
-            binding.clFbHolder.setOnClickListener {
-                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(facebookURL))
-                startActivity(intent)
-            }
-        } else {
-            binding.clFbHolder.visibility = View.GONE
-        }
-        binding.tvName.text = publication.name
-        binding.tvShoutoutCount.text =
-                this.getString(R.string.shoutout_count, publication.shoutouts.toInt())
-        binding.tvDescription.text = publication.bio
-        Picasso.get().load(publication.backgroundImageURL).fit().centerCrop().into(binding.ivBanner)
-        Picasso.get().load(publication.profileImageURL).into(binding.ivLogo)
     }
 
-    private fun setUpInstaOnClick(url: String) {
+    /**
+     * Sets up the intent to the Instagram app for the specific profile if the user has it installed.
+     *
+     * Defaults to Instagram on the web.
+     */
+    private fun setupInstaOnClick(url: String) {
+        // The redirect to instagram has a specific format which is built below.
         val inAppURL =
-                StringBuilder(url).insert(url.indexOf("com") + 4, "_u/").toString()
+            StringBuilder(url).insert(url.indexOf("com") + 4, "_u/").toString()
+
         binding.clInstaHolder.setOnClickListener {
             val uri: Uri = Uri.parse(inAppURL)
             val instaIntent = Intent(Intent.ACTION_VIEW, uri)

@@ -15,15 +15,28 @@ import okhttp3.logging.HttpLoggingInterceptor
 import java.io.IOException
 import java.net.*
 
-
+/**
+ * Holds the various API calls to our backend.
+ *
+ * The API specifications for these calls are on Playground, the GraphQL IDE.
+ */
 class GraphQlUtil {
 
+    // "https://volume-backend.cornellappdev.com/graphql" is our deployment endpoint
+    // "https://volume-dev.cornellappdev.com/graphql" is our development endpoint
+
+    // When developing anything, make sure to use the development endpoint. When deploying, make sure
+    // the endpoint is set to deployment.
     private val baseURL = "https://volume-backend.cornellappdev.com/graphql"
-    private var client: ApolloClient
+    private var client: ApolloClient = setUpApolloClient()
 
     companion object {
         private const val PING_URL: String = "volume-backend.cornellappdev.com"
 
+        /**
+         * Hits the deployment endpoint to make sure that 1.) the user has internet and 2.) that
+         * the server is up.
+         */
         fun hasInternetConnection(): Single<Boolean> {
             return Single.fromCallable {
                 try {
@@ -36,20 +49,16 @@ class GraphQlUtil {
         }
     }
 
-    init {
-        client = setUpApolloClient()
-    }
-
     private fun setUpApolloClient(): ApolloClient {
         val logging = HttpLoggingInterceptor()
         logging.level = HttpLoggingInterceptor.Level.BODY
         val okHttp = OkHttpClient
-                .Builder()
-                .addInterceptor(logging)
+            .Builder()
+            .addInterceptor(logging)
         return ApolloClient.builder()
-                .serverUrl(baseURL)
-                .okHttpClient(okHttp.build())
-                .build()
+            .serverUrl(baseURL)
+            .okHttpClient(okHttp.build())
+            .build()
     }
 
     fun getAllArticles(): Observable<Response<AllArticlesQuery.Data>> {
@@ -106,8 +115,4 @@ class GraphQlUtil {
         val query = ArticlesAfterDateQuery(since)
         return client.rxQuery(query)
     }
-
-
 }
-
-

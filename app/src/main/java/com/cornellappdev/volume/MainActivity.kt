@@ -10,6 +10,9 @@ import com.cornellappdev.volume.models.Article
 import com.cornellappdev.volume.util.GraphQlUtil
 import io.reactivex.disposables.CompositeDisposable
 
+/**
+ * This activity is primarily used for viewing article pages.
+ */
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
@@ -21,27 +24,35 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
         disposables = CompositeDisposable()
 
-        // Grab Article
+        // Grabs Article from the intent passed in.
         val article = intent.getParcelableExtra<Article>("article")
 
+        setupWebView(article)
+
+        // Code to prevent from launching in external browser, but instead within the Volume app.
+        binding.wvArticle.webViewClient = object : WebViewClient() {
+            override fun shouldOverrideUrlLoading(
+                view: WebView?,
+                request: WebResourceRequest?
+            ): Boolean {
+                return false
+            }
+        }
+    }
+
+    /**
+     * Sets up the webview using the article passed in.
+     */
+    private fun setupWebView(article: Article?) {
+        // Makes sure the user has internet before attempting to load the url or else the app crashes.
         disposables.add(GraphQlUtil.hasInternetConnection().subscribe { hasInternet ->
             if (article?.articleURL != null) {
                 binding.wvTop.setName(article)
                 binding.wvBottom.setArticle(article)
                 binding.wvBottom.setUpView()
-                binding.wvArticle.setTopBot(binding.wvTop, binding.wvBottom)
+                binding.wvArticle.setWebViews(binding.wvTop, binding.wvBottom)
                 if (hasInternet) binding.wvArticle.loadUrl(article.articleURL)
             }
         })
-
-        // Code to prevent from launching in external browser
-        binding.wvArticle.webViewClient = object : WebViewClient() {
-            override fun shouldOverrideUrlLoading(
-                    view: WebView?,
-                    request: WebResourceRequest?
-            ): Boolean {
-                return false
-            }
-        }
     }
 }
