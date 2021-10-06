@@ -133,6 +133,7 @@ class HomeFragment : Fragment() {
                     NoInternetDialog.TAG
                 ).commit()
             } else {
+                //shimmer on
                 childFragmentManager.findFragmentByTag(NoInternetDialog.TAG).let { dialogFrag ->
                     (dialogFrag as? DialogFragment)?.dismiss()
                 }
@@ -296,6 +297,8 @@ class HomeFragment : Fragment() {
                 adapter.clear()
                 adapter.addAll(trendingArticles)
             }
+
+            //shimmer off
         })
     }
 
