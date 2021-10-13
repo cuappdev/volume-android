@@ -18,9 +18,7 @@ import java.io.InputStream
 import java.net.HttpURLConnection
 import java.net.URL
 
-
 class NotificationService : FirebaseMessagingService() {
-
 
     /**
      * Called when message is received.
@@ -45,7 +43,6 @@ class NotificationService : FirebaseMessagingService() {
                 Log.d(TAG, "Installation ID: $id")
             }
         }
-
 
         // Not getting messages here? See why this may be: https://goo.gl/39bRNJ
         Log.d(TAG, "From: ${remoteMessage.from}")
