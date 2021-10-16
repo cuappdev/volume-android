@@ -242,6 +242,7 @@ class PublicationsFragment : Fragment() {
 
                 binding.groupNotFollowing.visibility = View.GONE
                 binding.groupFollowing.visibility = View.VISIBLE
+                binding.shimmerFollowingPublication.visibility=View.INVISIBLE
             })
         }
     }
@@ -289,6 +290,7 @@ class PublicationsFragment : Fragment() {
                     adapter.addAll(morePublications)
                 }
             }
+            binding.shimmerMorePublication.visibility=View.INVISIBLE
         })
     }
 
