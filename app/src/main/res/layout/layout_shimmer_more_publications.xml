@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="15dp"
+    app:cardBackgroundColor="@color/creamy_white"
+    app:cardCornerRadius="0dp"
+    app:cardElevation="0dp"
+    app:cardMaxElevation="0dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_publication_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="5dp">
+
+        <View
+            android:id="@+id/iv_logo"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="5dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:background="@color/placeholder"/>
+
+        <View
+            android:id="@+id/tv_name"
+            android:layout_width="300dp"
+            android:layout_height="26dp"
+            android:layout_marginStart="10dp"
+            app:layout_constraintStart_toEndOf="@id/iv_logo"
+            app:layout_constraintTop_toTopOf="@id/iv_logo"
+            android:background="@color/placeholder"/>
+
+        <View
+            android:id="@+id/tv_description"
+            android:layout_width="300dp"
+            android:layout_height="18dp"
+            android:layout_marginTop="5dp"
+            app:layout_constraintStart_toStartOf="@id/tv_name"
+            app:layout_constraintTop_toBottomOf="@id/tv_name"
+            android:background="@color/placeholder"/>
+
+        <ImageView
+            android:id="@+id/iv_small_line"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:contentDescription="@string/description_line_divider"
+            android:src="@drawable/ic_smalllinesvg"
+            app:layout_constraintStart_toStartOf="@id/tv_description"
+            app:layout_constraintTop_toBottomOf="@id/tv_description" />
+
+        <View
+            android:id="@+id/tv_recent_article_title"
+            android:layout_width="300dp"
+            android:layout_height="12dp"
+            android:layout_marginStart="5dp"
+            app:layout_constraintBottom_toBottomOf="@id/iv_small_line"
+            app:layout_constraintStart_toEndOf="@id/iv_small_line"
+            app:layout_constraintTop_toTopOf="@id/iv_small_line"
+            android:background="@color/placeholder"/>
+
+        <View
+            android:id="@+id/btn_follow"
+            android:layout_width="14dp"
+            android:layout_height="14dp"
+            android:layout_marginEnd="10dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/tv_name"
+            android:background="@color/placeholder"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.cardview.widget.CardView>
