@@ -27,7 +27,7 @@ class GraphQlUtil {
 
     // When developing anything, make sure to use the development endpoint. When deploying, make sure
     // the endpoint is set to deployment.
-    private val baseURL = "https://volume-dev.cornellappdev.com/graphql"
+    private val baseURL = "https://volume-backend.cornellappdev.com/graphql"
     private var client: ApolloClient = setUpApolloClient()
 
     companion object {
