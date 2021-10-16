@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
@@ -52,9 +53,9 @@ class HomeFragment : Fragment() {
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?
     ): View {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         return binding.root
@@ -77,10 +78,10 @@ class HomeFragment : Fragment() {
             // initialized.
             setOnRefreshListener {
                 setUpHomeView(
-                    binding, isRefreshing = (
-                            this@HomeFragment::bigRedRV.isInitialized &&
-                                    this@HomeFragment::followingRV.isInitialized &&
-                                    this@HomeFragment::otherRV.isInitialized)
+                        binding, isRefreshing = (
+                        this@HomeFragment::bigRedRV.isInitialized &&
+                                this@HomeFragment::followingRV.isInitialized &&
+                                this@HomeFragment::otherRV.isInitialized)
                 )
                 // After repopulating, can stop signifying the refresh animation.
                 binding.srlQuery.isRefreshing = false
@@ -94,7 +95,7 @@ class HomeFragment : Fragment() {
      */
     private fun setUpHomeView(binding: FragmentHomeBinding, isRefreshing: Boolean) {
         val followingPublications =
-            prefUtils.getStringSet(PrefUtils.FOLLOWING_KEY, mutableSetOf())?.toMutableList()
+                prefUtils.getStringSet(PrefUtils.FOLLOWING_KEY, mutableSetOf())?.toMutableList()
 
         val trendingArticles = mutableListOf<Article>()
         val trendingArticlesId = hashSetOf<String>()
@@ -104,23 +105,23 @@ class HomeFragment : Fragment() {
 
         // Creates API call observation for retrieving trending articles.
         val trendingObs =
-            graphQlUtil.getTrendingArticles(NUMBER_OF_TRENDING_ARTICLES)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
+                graphQlUtil.getTrendingArticles(NUMBER_OF_TRENDING_ARTICLES)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
 
         // Creates API call observation for retrieving articles from publications the user follows.
         val followingObs =
-            followingPublications?.let {
-                graphQlUtil.getArticleByPublicationIDs(it)
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-            }
+                followingPublications?.let {
+                    graphQlUtil.getArticleByPublicationIDs(it)
+                            .subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread())
+                }
 
         // Creates API call observation for retrieving all publications in the Volume database.
         val allPublicationsObs =
-            graphQlUtil.getAllPublications()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
+                graphQlUtil.getAllPublications()
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
 
         disposables.add(hasInternetConnection().subscribe { hasInternet ->
             if (!hasInternet) {
@@ -128,12 +129,11 @@ class HomeFragment : Fragment() {
                 val ft = childFragmentManager.beginTransaction()
                 val dialog = NoInternetDialog()
                 ft.replace(
-                    binding.fragmentContainer.id,
-                    dialog,
-                    NoInternetDialog.TAG
+                        binding.fragmentContainer.id,
+                        dialog,
+                        NoInternetDialog.TAG
                 ).commit()
             } else {
-                //shimmer on
                 childFragmentManager.findFragmentByTag(NoInternetDialog.TAG).let { dialogFrag ->
                     (dialogFrag as? DialogFragment)?.dismiss()
                 }
@@ -141,37 +141,40 @@ class HomeFragment : Fragment() {
                 binding.clHomePage.visibility = View.VISIBLE
 
                 handleTrendingObservable(
-                    trendingObs,
-                    isRefreshing,
-                    trendingArticles,
-                    trendingArticlesId
+                        trendingObs,
+                        isRefreshing,
+                        trendingArticles,
+                        trendingArticlesId
                 )
 
                 if (!followingPublications.isNullOrEmpty()) {
                     handleFollowingObservable(
-                        followingObs,
-                        isRefreshing,
-                        followingArticles,
-                        trendingArticlesId
+                            followingObs,
+                            isRefreshing,
+                            followingArticles,
+                            trendingArticlesId
                     )
                 } else if (isRefreshing) {
                     // Can simply just clear adapter, since there's no following article data
                     // to populate from (the user doesn't follow any publications).
                     val adapter = followingRV.adapter as HomeArticlesAdapter
                     adapter.clear()
+                } else {
+                    //shimmer off
+                    binding.shimmerFollowing.visibility = View.GONE
                 }
 
                 // Get the articles for the other section, first taken from
                 // publications the user doesn't follow and then taken from publications the user does follow
                 // to make up the difference of the amount needed.
                 handleOtherSection(
-                    allPublicationsObs,
-                    isRefreshing,
-                    followingPublications,
-                    followingArticles,
-                    allPublicationIdsExcludingFollowing,
-                    otherArticles,
-                    trendingArticlesId
+                        allPublicationsObs,
+                        isRefreshing,
+                        followingPublications,
+                        followingArticles,
+                        allPublicationIdsExcludingFollowing,
+                        otherArticles,
+                        trendingArticlesId
                 )
             }
         })
@@ -181,69 +184,28 @@ class HomeFragment : Fragment() {
             binding.groupNotFollowing.visibility = View.VISIBLE
         } else {
             binding.groupFollowing.visibility = View.VISIBLE
-            binding.groupNotFollowing.visibility = View.GONE
+            binding.groupNotFollowing.visibility = View.INVISIBLE
         }
     }
 
     /**
      * Parses the raw articles from our ArticlesByPublicationIDs query, turning them into our Article
-     * model, adding said articles to the list passed in.
+     * model, adding said articles to the list passed in.l
      */
     private fun retrieveArticlesFromResponse(
-        response: Response<ArticlesByPublicationIDsQuery.Data>?,
-        articles: MutableList<Article>,
+            response: Response<ArticlesByPublicationIDsQuery.Data>?,
+            articles: MutableList<Article>,
     ) {
         response?.data?.getArticlesByPublicationIDs?.mapTo(
-            articles, { article ->
-                val publication = article.publication
-                Article(
+                articles, { article ->
+            val publication = article.publication
+            Article(
                     title = article.title,
                     articleURL = article.articleURL,
                     date = article.date.toString(),
                     id = article.id,
                     imageURL = article.imageURL,
                     publication = Publication(
-                        id = publication.id,
-                        backgroundImageURL = publication.backgroundImageURL,
-                        bio = publication.bio,
-                        name = publication.name,
-                        profileImageURL = publication.profileImageURL,
-                        rssName = publication.rssName,
-                        rssURL = publication.rssURL,
-                        slug = publication.slug,
-                        shoutouts = publication.shoutouts,
-                        websiteURL = publication.websiteURL,
-                        socials = publication.socials.toList()
-                            .map { Social(it.social, it.uRL) }),
-                    shoutouts = article.shoutouts,
-                    nsfw = article.nsfw
-                )
-            })
-    }
-
-    /**
-     * Parses the raw articles from our TrendingArticles query, turning them into our Article
-     * model, adding said articles to trendingArticles.
-     *
-     * Also adds the trending article ids to trendingArticlesId.
-     */
-    private fun retrieveTrendingArticlesFromResponse(
-        response: Response<TrendingArticlesQuery.Data>,
-        trendingArticles: MutableList<Article>,
-        trendingArticlesId: HashSet<String>
-    ) {
-        val rawTrendingArticles = response.data?.getTrendingArticles
-        if (rawTrendingArticles != null) {
-            for (trendingArticle in rawTrendingArticles) {
-                val publication = trendingArticle.publication
-                trendingArticles.add(
-                    Article(
-                        title = trendingArticle.title,
-                        articleURL = trendingArticle.articleURL,
-                        date = trendingArticle.date.toString(),
-                        id = trendingArticle.id,
-                        imageURL = trendingArticle.imageURL,
-                        publication = Publication(
                             id = publication.id,
                             backgroundImageURL = publication.backgroundImageURL,
                             bio = publication.bio,
@@ -255,10 +217,51 @@ class HomeFragment : Fragment() {
                             shoutouts = publication.shoutouts,
                             websiteURL = publication.websiteURL,
                             socials = publication.socials.toList()
-                                .map { Social(it.social, it.uRL) }),
-                        shoutouts = trendingArticle.shoutouts,
-                        nsfw = trendingArticle.nsfw
-                    )
+                                    .map { Social(it.social, it.uRL) }),
+                    shoutouts = article.shoutouts,
+                    nsfw = article.nsfw
+            )
+        })
+    }
+
+    /**
+     * Parses the raw articles from our TrendingArticles query, turning them into our Article
+     * model, adding said articles to trendingArticles.
+     *
+     * Also adds the trending article ids to trendingArticlesId.
+     */
+    private fun retrieveTrendingArticlesFromResponse(
+            response: Response<TrendingArticlesQuery.Data>,
+            trendingArticles: MutableList<Article>,
+            trendingArticlesId: HashSet<String>
+    ) {
+        val rawTrendingArticles = response.data?.getTrendingArticles
+        if (rawTrendingArticles != null) {
+            for (trendingArticle in rawTrendingArticles) {
+                val publication = trendingArticle.publication
+                trendingArticles.add(
+                        Article(
+                                title = trendingArticle.title,
+                                articleURL = trendingArticle.articleURL,
+                                date = trendingArticle.date.toString(),
+                                id = trendingArticle.id,
+                                imageURL = trendingArticle.imageURL,
+                                publication = Publication(
+                                        id = publication.id,
+                                        backgroundImageURL = publication.backgroundImageURL,
+                                        bio = publication.bio,
+                                        name = publication.name,
+                                        profileImageURL = publication.profileImageURL,
+                                        rssName = publication.rssName,
+                                        rssURL = publication.rssURL,
+                                        slug = publication.slug,
+                                        shoutouts = publication.shoutouts,
+                                        websiteURL = publication.websiteURL,
+                                        socials = publication.socials.toList()
+                                                .map { Social(it.social, it.uRL) }),
+                                shoutouts = trendingArticle.shoutouts,
+                                nsfw = trendingArticle.nsfw
+                        )
                 )
                 trendingArticlesId.add(trendingArticle.id)
             }
@@ -270,16 +273,16 @@ class HomeFragment : Fragment() {
      * RecyclerView.
      */
     private fun handleTrendingObservable(
-        trendingObs: Observable<Response<TrendingArticlesQuery.Data>>,
-        isRefreshing: Boolean,
-        trendingArticles: MutableList<Article>,
-        trendingArticlesId: HashSet<String>
+            trendingObs: Observable<Response<TrendingArticlesQuery.Data>>,
+            isRefreshing: Boolean,
+            trendingArticles: MutableList<Article>,
+            trendingArticlesId: HashSet<String>
     ) {
         disposables.add(trendingObs.subscribe { response ->
             retrieveTrendingArticlesFromResponse(
-                response,
-                trendingArticles,
-                trendingArticlesId
+                    response,
+                    trendingArticles,
+                    trendingArticlesId
             )
 
             // If not refreshing, must initialize bigRedRV.
@@ -289,7 +292,7 @@ class HomeFragment : Fragment() {
                     adapter = BigReadHomeAdapter(trendingArticles)
                     layoutManager = LinearLayoutManager(context)
                     (layoutManager as LinearLayoutManager).orientation =
-                        LinearLayoutManager.HORIZONTAL
+                            LinearLayoutManager.HORIZONTAL
                 }
             } else {
                 // bigRedRV is already created if initialized, only need to repopulate adapter data.
@@ -299,6 +302,10 @@ class HomeFragment : Fragment() {
             }
 
             //shimmer off
+            binding.shimmerBigRead.visibility = View.GONE
+            bigRedRV.visibility = View.VISIBLE
+            val params = binding.ivFollowingHeader.layoutParams as ConstraintLayout.LayoutParams
+            params.topToBottom = bigRedRV.id
         })
     }
 
@@ -310,10 +317,10 @@ class HomeFragment : Fragment() {
      * articles. Following articles do not contain any of the articles from the Big Red Read.
      */
     private fun handleFollowingObservable(
-        followingObs: Observable<Response<ArticlesByPublicationIDsQuery.Data>>?,
-        isRefreshing: Boolean,
-        followingArticles: MutableList<Article>,
-        trendingArticlesId: HashSet<String>
+            followingObs: Observable<Response<ArticlesByPublicationIDsQuery.Data>>?,
+            isRefreshing: Boolean,
+            followingArticles: MutableList<Article>,
+            trendingArticlesId: HashSet<String>
     ) {
         if (followingObs != null) {
             disposables.add(followingObs.subscribe { response ->
@@ -332,8 +339,8 @@ class HomeFragment : Fragment() {
                         followingRV = binding.rvFollowing
                         with(followingRV) {
                             adapter = HomeArticlesAdapter(
-                                followingArticles.take(NUMBER_OF_FOLLOWING_ARTICLES)
-                                        as MutableList<Article>
+                                    followingArticles.take(NUMBER_OF_FOLLOWING_ARTICLES)
+                                            as MutableList<Article>
                             )
                             layoutManager = LinearLayoutManager(context)
                         }
@@ -345,7 +352,7 @@ class HomeFragment : Fragment() {
                     }
 
                     if (followingArticles.size
-                        <= NUMBER_OF_FOLLOWING_ARTICLES
+                            <= NUMBER_OF_FOLLOWING_ARTICLES
                     ) {
                         // There would be nothing left if we dropped twenty, so we clear.
                         followingArticles.clear()
@@ -353,12 +360,16 @@ class HomeFragment : Fragment() {
                         // We took the first twenty articles, the remaining ones (after removing them)
                         // can be used for the other article section (see the description of handleOtherObservable).
                         followingArticles.removeAll(
-                            followingArticles.take(
-                                NUMBER_OF_FOLLOWING_ARTICLES
-                            )
+                                followingArticles.take(
+                                        NUMBER_OF_FOLLOWING_ARTICLES
+                                )
                         )
                     }
                 }
+                binding.shimmerFollowing.visibility = View.GONE
+                followingRV.visibility = View.VISIBLE
+                val params = binding.volumeLogoMoreArticles.layoutParams as ConstraintLayout.LayoutParams
+                params.topToBottom = followingRV.id
             })
         }
     }
@@ -367,13 +378,13 @@ class HomeFragment : Fragment() {
      * Populates the section that contains articles from other publications.
      */
     private fun handleOtherSection(
-        allPublicationsObs: Observable<Response<AllPublicationsQuery.Data>>,
-        isRefreshing: Boolean,
-        followingPublications: MutableList<String>?,
-        followingArticles: MutableList<Article>,
-        allPublicationIdsExcludingFollowing: MutableList<String>,
-        otherArticles: MutableList<Article>,
-        trendingArticlesId: HashSet<String>
+            allPublicationsObs: Observable<Response<AllPublicationsQuery.Data>>,
+            isRefreshing: Boolean,
+            followingPublications: MutableList<String>?,
+            followingArticles: MutableList<Article>,
+            allPublicationIdsExcludingFollowing: MutableList<String>,
+            otherArticles: MutableList<Article>,
+            trendingArticlesId: HashSet<String>
     ) {
         disposables.add(allPublicationsObs.subscribe { response ->
             val rawPublications = response.data?.getAllPublications
@@ -389,16 +400,16 @@ class HomeFragment : Fragment() {
             }
 
             val otherObs = graphQlUtil
-                .getArticleByPublicationIDs(allPublicationIdsExcludingFollowing)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
+                    .getArticleByPublicationIDs(allPublicationIdsExcludingFollowing)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
 
             handleOtherObservable(
-                otherObs,
-                isRefreshing,
-                followingArticles,
-                otherArticles,
-                trendingArticlesId
+                    otherObs,
+                    isRefreshing,
+                    followingArticles,
+                    otherArticles,
+                    trendingArticlesId
             )
         })
     }
@@ -412,11 +423,11 @@ class HomeFragment : Fragment() {
      * isn't enough to populate other reads.
      */
     private fun handleOtherObservable(
-        otherObs: Observable<Response<ArticlesByPublicationIDsQuery.Data>>?,
-        isRefreshing: Boolean,
-        followingArticles: MutableList<Article>,
-        otherArticles: MutableList<Article>,
-        trendingArticlesId: HashSet<String>
+            otherObs: Observable<Response<ArticlesByPublicationIDsQuery.Data>>?,
+            isRefreshing: Boolean,
+            followingArticles: MutableList<Article>,
+            otherArticles: MutableList<Article>,
+            trendingArticlesId: HashSet<String>
     ) {
         if (otherObs != null) {
             disposables.add(otherObs.subscribe { response ->
@@ -431,9 +442,9 @@ class HomeFragment : Fragment() {
                 if (otherArticles.size < NUMBER_OF_OTHER_ARTICLES && !followingArticles.isNullOrEmpty()
                 ) {
                     otherArticles.addAll(
-                        followingArticles.take(
-                            NUMBER_OF_OTHER_ARTICLES - otherArticles.size
-                        )
+                            followingArticles.take(
+                                    NUMBER_OF_OTHER_ARTICLES - otherArticles.size
+                            )
                     )
                 }
 
@@ -442,8 +453,8 @@ class HomeFragment : Fragment() {
                     otherRV = binding.rvOtherArticles
                     with(otherRV) {
                         adapter = HomeArticlesAdapter(
-                            otherArticles.shuffled()
-                                    as MutableList<Article>
+                                otherArticles.shuffled()
+                                        as MutableList<Article>
                         )
                         layoutManager = LinearLayoutManager(context)
                     }
@@ -453,6 +464,9 @@ class HomeFragment : Fragment() {
                     adapter.clear()
                     adapter.addAll(otherArticles.shuffled())
                 }
+                //shimmer off
+                binding.shimmerOtherArticles.visibility = View.GONE
+                otherRV.visibility = View.VISIBLE
             })
         }
     }
