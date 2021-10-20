@@ -160,7 +160,7 @@ class HomeFragment : Fragment() {
                     val adapter = followingRV.adapter as HomeArticlesAdapter
                     adapter.clear()
                 } else {
-                    //shimmer off
+                    // shimmer off
                     binding.shimmerFollowing.visibility = View.GONE
                 }
 
@@ -190,7 +190,7 @@ class HomeFragment : Fragment() {
 
     /**
      * Parses the raw articles from our ArticlesByPublicationIDs query, turning them into our Article
-     * model, adding said articles to the list passed in.l
+     * model, adding said articles to the list passed in.
      */
     private fun retrieveArticlesFromResponse(
             response: Response<ArticlesByPublicationIDsQuery.Data>?,
@@ -301,7 +301,7 @@ class HomeFragment : Fragment() {
                 adapter.addAll(trendingArticles)
             }
 
-            //shimmer off
+            // shimmer off
             binding.shimmerBigRead.visibility = View.GONE
             bigRedRV.visibility = View.VISIBLE
             val params = binding.ivFollowingHeader.layoutParams as ConstraintLayout.LayoutParams
@@ -464,7 +464,7 @@ class HomeFragment : Fragment() {
                     adapter.clear()
                     adapter.addAll(otherArticles.shuffled())
                 }
-                //shimmer off
+                // shimmer off
                 binding.shimmerOtherArticles.visibility = View.GONE
                 otherRV.visibility = View.VISIBLE
             })
