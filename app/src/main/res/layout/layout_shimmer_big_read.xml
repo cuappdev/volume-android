@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="180dp"
+    android:layout_height="wrap_content"
+    android:layout_margin="10dp"
+    android:layout_marginEnd="24dp"
+    app:cardBackgroundColor="#00FFFFFF"
+    app:cardElevation="0dp"
+    app:cardMaxElevation="0dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_shimmer_big_read_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <View
+            android:id="@+id/v_shimmer_article_image"
+            android:layout_width="180dp"
+            android:layout_height="180dp"
+            android:background="@color/placeholder"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <View
+            android:id="@+id/v_shimmer_publication_name"
+            android:layout_width="0dp"
+            android:layout_height="18dp"
+            android:layout_marginTop="17dp"
+            android:maxLines="1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/v_shimmer_article_image"
+            android:background="@color/placeholder"/>
+
+        <View
+            android:id="@+id/v_shimmer_article_title"
+            android:layout_width="0dp"
+            android:layout_height="45dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/v_shimmer_publication_name"
+            android:background="@color/placeholder"/>
+
+        <View
+            android:id="@+id/v_shimmer_bottom_line"
+            android:layout_width="0dp"
+            android:layout_height="18dp"
+            android:layout_marginTop="110dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/v_shimmer_article_image"
+            android:background="@color/placeholder"/>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.cardview.widget.CardView>
