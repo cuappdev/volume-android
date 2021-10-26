@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/cl_placeholder_article_layout"
+    style="@style/creamy_background"
+    android:layout_width="match_parent"
+    android:layout_height="100dp"
+    android:layout_margin="10dp">
+
+    <TextView
+        android:id="@+id/tv_placeholder_article_title"
+        style="@style/helvetica_bold"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="10dp"
+        android:background="@color/placeholder"
+        android:ellipsize="end"
+        android:minLines="3"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toStartOf="@id/iv_placeholder_article_image"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/iv_placeholder_article_image"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:background="@color/placeholder"
+        android:contentDescription="@string/description_article_image"
+        android:scaleType="fitXY"
+        android:visibility="visible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <TextView
+            android:id="@+id/tv_placeholder_time_posted"
+            style="@style/helvetica_gray"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/placeholder"
+            android:text="@string/x_h_ago"
+            android:textColor="@color/placeholder"
+            android:textSize="12sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_placeholder_dot"
+            style="@style/helvetica_gray"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/dot"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/tv_placeholder_time_posted"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_placeholder_shoutout_count"
+            style="@style/helvetica_gray"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/placeholder"
+            android:text="@string/shoutout_count"
+            android:textColor="@color/placeholder"
+            android:textSize="12sp"
+            app:layout_constraintStart_toEndOf="@+id/tv_placeholder_dot"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
