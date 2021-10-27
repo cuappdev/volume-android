@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "686490803994",
+    "project_id": "volume-37b22",
+    "storage_bucket": "volume-37b22.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:686490803994:android:3a60bc13d69a0d2a1d56a3",
+        "android_client_info": {
+          "package_name": "com.cornellappdev.volume"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "686490803994-d1p3vu5utiubm9e3crpicpv76h25tudj.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.cornellappdev.volume",
+            "certificate_hash": "ad325e9426904ec75ed085ef1d255ac12ae50b59"
+          }
+        },
+        {
+          "client_id": "686490803994-j2nc685bsbpv3tva1krcilufqldfed9r.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAoQsSe0MfMYzrE2ZPcgTeBugaa2u6dLKw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "686490803994-j2nc685bsbpv3tva1krcilufqldfed9r.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "686490803994-jkn6nmo9h273o20tf1a7a6uov1iru70q.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.cornellappdev.volume"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
