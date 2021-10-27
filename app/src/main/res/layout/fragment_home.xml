@@ -42,7 +42,6 @@
                     app:layout_constraintTop_toTopOf="parent" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-
             <FrameLayout
                 android:id="@+id/fragmentContainer"
                 android:layout_width="match_parent"
@@ -96,8 +95,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal">
-                        <include layout="@layout/layout_shimmer_big_read"></include>
-                        <include layout="@layout/layout_shimmer_big_read"></include>
+                        <include layout="@layout/layout_shimmer_big_read" />
+                        <include layout="@layout/layout_shimmer_big_read" />
                     </LinearLayout>
                 </com.facebook.shimmer.ShimmerFrameLayout>
 
@@ -150,9 +149,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical">
-                        <include layout="@layout/layout_shimmer_basic_article"></include>
-                        <include layout="@layout/layout_shimmer_basic_article"></include>
-                        <include layout="@layout/layout_shimmer_basic_article"></include>
+                        <include layout="@layout/layout_shimmer_basic_article" />
+                        <include layout="@layout/layout_shimmer_basic_article" />
+                        <include layout="@layout/layout_shimmer_basic_article" />
                     </LinearLayout>
                 </com.facebook.shimmer.ShimmerFrameLayout>
 
@@ -257,9 +256,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical">
-                        <include layout="@layout/layout_shimmer_basic_article"></include>
-                        <include layout="@layout/layout_shimmer_basic_article"></include>
-                        <include layout="@layout/layout_shimmer_basic_article"></include>
+                        <include layout="@layout/layout_shimmer_basic_article" />
+                        <include layout="@layout/layout_shimmer_basic_article" />
+                        <include layout="@layout/layout_shimmer_basic_article" />
                     </LinearLayout>
                 </com.facebook.shimmer.ShimmerFrameLayout>
 
