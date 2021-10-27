@@ -91,7 +91,7 @@ class GraphQlUtil {
         return client.rxQuery(query)
     }
 
-    fun likeArticle(id: String): Single<Response<IncrementShoutoutMutation.Data>> {
+    fun shoutoutArticle(id: String): Single<Response<IncrementShoutoutMutation.Data>> {
         val mutation = (IncrementShoutoutMutation(id))
         return client.rxMutate(mutation)
     }

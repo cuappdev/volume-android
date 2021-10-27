@@ -174,11 +174,11 @@ class WebviewBottom @JvmOverloads constructor(
                     R.anim.shake
                 )
             )
-            val likeObs = graphQlUtil
-                .likeArticle(this.article.id)
+            val shoutoutObs = graphQlUtil
+                .shoutoutArticle(this.article.id)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-            disposables.add(likeObs.subscribe { response ->
+            disposables.add(shoutoutObs.subscribe { response ->
                 binding.tvShoutoutCount.text =
                     response.data!!.incrementShoutouts.shoutouts.toInt().toString()
             })
