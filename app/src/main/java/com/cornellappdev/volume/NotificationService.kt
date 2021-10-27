@@ -114,7 +114,7 @@ class NotificationService : FirebaseMessagingService() {
         if (expandedImage
         /** Boolean for if there's an expanded image to display */
         ) {
-            val bitmap: Bitmap? = getBitmapfromUrl("")
+            val bitmap: Bitmap? = getBitmapFromUrl("")
             notificationBuilder.setStyle(
                 NotificationCompat.BigPictureStyle()
                     .bigPicture(bitmap)
@@ -137,7 +137,7 @@ class NotificationService : FirebaseMessagingService() {
         notificationManager.notify(0 /* ID of notification */, notificationBuilder.build())
     }
 
-    private fun getBitmapfromUrl(imageUrl: String?): Bitmap? {
+    private fun getBitmapFromUrl(imageUrl: String?): Bitmap? {
         return try {
             val url = URL(imageUrl)
             val connection: HttpURLConnection = url.openConnection() as HttpURLConnection
@@ -146,7 +146,7 @@ class NotificationService : FirebaseMessagingService() {
             val input: InputStream = connection.inputStream
             BitmapFactory.decodeStream(input)
         } catch (e: Exception) {
-            Log.e("awesome", "Error in getting notification image: " + e.localizedMessage)
+            Log.e(TAG, "Error in getting notification image: " + e.localizedMessage)
             null
         }
     }

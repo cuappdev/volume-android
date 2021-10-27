@@ -77,7 +77,6 @@ class HomeFragment : Fragment() {
             // Re-populates the RecyclerViews on refresh, is dependent on whether or not they are
             // initialized.
             setOnRefreshListener {
-                binding.cover.visibility = View.VISIBLE
                 setUpHomeView(
                         binding, isRefreshing = (
                         this@HomeFragment::bigRedRV.isInitialized &&
@@ -134,7 +133,6 @@ class HomeFragment : Fragment() {
                         dialog,
                         NoInternetDialog.TAG
                 ).commit()
-                binding.cover.visibility = View.GONE
             } else {
                 childFragmentManager.findFragmentByTag(NoInternetDialog.TAG).let { dialogFrag ->
                     (dialogFrag as? DialogFragment)?.dismiss()
@@ -469,7 +467,6 @@ class HomeFragment : Fragment() {
                 // shimmer off
                 binding.shimmerOtherArticles.visibility = View.GONE
                 otherRV.visibility = View.VISIBLE
-                binding.cover.visibility = View.GONE
             })
         }
     }
