@@ -107,18 +107,6 @@ class HomeFragment : Fragment() {
         val allPublicationIdsExcludingFollowing = mutableListOf<String>()
         val otherArticles = mutableListOf<Article>()
 
-//        FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
-//            if (!task.isSuccessful) {
-//                Log.w("NotificationService", "Fetching FCM registration token failed", task.exception)
-//                return@OnCompleteListener
-//            }
-//
-//            // Get new FCM registration token
-//            val token = task.result
-//
-//            Log.d("NotificationService", token.toString())
-//        })
-
         // Creates API call observation for retrieving trending articles.
         val trendingObs =
                 graphQlUtil.getTrendingArticles(NUMBER_OF_TRENDING_ARTICLES)
