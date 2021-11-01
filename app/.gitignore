@@ -58,5 +58,3 @@ local.properties
 .gradle
 build/
 
-google-services.json
-
