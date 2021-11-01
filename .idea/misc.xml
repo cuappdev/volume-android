@@ -1,18 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="DesignSurface">
-    <option name="filePathToZoomLevelMap">
-      <map>
-        <entry key="..\:/Users/chris/OneDrive/Desktop/AppDev Projects/Volume/app/src/main/res/drawable/orange_shoutout_svg.xml" value="0.31296296296296294" />
-        <entry key="..\:/Users/chris/OneDrive/Desktop/AppDev Projects/Volume/app/src/main/res/layout/activity_about_us.xml" value="0.13518518518518519" />
-        <entry key="..\:/Users/chris/OneDrive/Desktop/AppDev Projects/Volume/app/src/main/res/layout/activity_main.xml" value="0.17831813576494426" />
-        <entry key="..\:/Users/chris/OneDrive/Desktop/AppDev Projects/Volume/app/src/main/res/layout/fragment_home.xml" value="0.13518518518518519" />
-        <entry key="..\:/Users/chris/OneDrive/Desktop/AppDev Projects/Volume/app/src/main/res/layout/fragment_no_internet.xml" value="0.17831813576494426" />
-        <entry key="..\:/Users/chris/OneDrive/Desktop/AppDev Projects/Volume/app/src/main/res/layout/fragment_onboarding_one.xml" value="0.17831813576494426" />
-        <entry key="..\:/Users/chris/OneDrive/Desktop/AppDev Projects/Volume/app/src/main/res/layout/fragment_publications.xml" value="0.17831813576494426" />
-      </map>
-    </option>
-  </component>
   <component name="ProjectRootManager" version="2" languageLevel="JDK_1_8" default="true" project-jdk-name="1.8" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>
