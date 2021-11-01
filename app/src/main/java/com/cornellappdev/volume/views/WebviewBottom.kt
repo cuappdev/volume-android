@@ -78,6 +78,7 @@ class WebviewBottom @JvmOverloads constructor(
         binding.ivBookmarkIcon.setOnClickListener { bookmarkArticle() }
         binding.btnSeeMore.setOnClickListener { publicationIntent() }
         binding.ivShare.setOnClickListener { shareArticle() }
+        binding.iconGroup.visibility = View.VISIBLE
     }
 
     fun minimize(isMinimized: Boolean) {
