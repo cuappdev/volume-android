@@ -1,9 +1,11 @@
 package com.cornellappdev.volume.fragments
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
@@ -21,6 +23,8 @@ import com.cornellappdev.volume.models.Social
 import com.cornellappdev.volume.util.GraphQlUtil
 import com.cornellappdev.volume.util.GraphQlUtil.Companion.hasInternetConnection
 import com.cornellappdev.volume.util.PrefUtils
+import com.google.android.gms.tasks.OnCompleteListener
+import com.google.firebase.messaging.FirebaseMessaging
 import com.kotlin.graphql.AllPublicationsQuery
 import com.kotlin.graphql.ArticlesByPublicationIDsQuery
 import com.kotlin.graphql.TrendingArticlesQuery
@@ -102,6 +106,18 @@ class HomeFragment : Fragment() {
         val followingArticles = mutableListOf<Article>()
         val allPublicationIdsExcludingFollowing = mutableListOf<String>()
         val otherArticles = mutableListOf<Article>()
+
+//        FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
+//            if (!task.isSuccessful) {
+//                Log.w("NotificationService", "Fetching FCM registration token failed", task.exception)
+//                return@OnCompleteListener
+//            }
+//
+//            // Get new FCM registration token
+//            val token = task.result
+//
+//            Log.d("NotificationService", token.toString())
+//        })
 
         // Creates API call observation for retrieving trending articles.
         val trendingObs =
