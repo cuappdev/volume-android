@@ -20,6 +20,10 @@ import java.net.URL
 
 class NotificationService : FirebaseMessagingService() {
 
+    enum class NotificationIntentKeys(val key: String) {
+        ARTICLE("article")
+    }
+
     /**
      * Called when message is received.
      *
@@ -50,16 +54,13 @@ class NotificationService : FirebaseMessagingService() {
         // Check if message contains a data payload.
         if (remoteMessage.data.isNotEmpty()) {
             Log.d(TAG, "Message data payload: ${remoteMessage.data}")
-            sendNotification("something", true)
         }
 
         // Check if message contains a notification payload.
         remoteMessage.notification?.let {
+            sendNotification(it, remoteMessage.data)
             Log.d(TAG, "Message Notification Body: ${it.body}")
         }
-
-        // Also if you intend on generating your own notifications as a result of a received FCM
-        // message, here is where that should be initiated. See sendNotification method below.
     }
     // [END receive_message]
 
@@ -88,7 +89,6 @@ class NotificationService : FirebaseMessagingService() {
      * @param token The new token.
      */
     private fun sendRegistrationToServer(token: String?) {
-        // TODO: Implement this method to send token to your app server.
         Log.d(TAG, "sendRegistrationTokenToServer($token)")
     }
 
@@ -97,28 +97,34 @@ class NotificationService : FirebaseMessagingService() {
      *
      * @param messageBody FCM message body received.
      */
-    private fun sendNotification(messageBody: String, expandedImage: Boolean) {
-        val intent = Intent(this, TabActivity::class.java)
+    private fun sendNotification(
+        notification: RemoteMessage.Notification,
+        data: MutableMap<String, String>
+    ) {
+        val intent = Intent(this, OnboardingActivity::class.java)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-        val pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_ONE_SHOT)
+        val pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_IMMUTABLE)
+        intent.putExtra(NotificationIntentKeys.ARTICLE.key,
+            data[NotificationIntentKeys.ARTICLE.key]
+        )
 
         val channelId = getString((R.string.default_notification_channel_id))
         val notificationBuilder = NotificationCompat.Builder(this, channelId)
             .setSmallIcon(R.drawable.volume_icon)
-            .setContentTitle("Your Weekly Debrief is Ready")
-            .setContentText(messageBody)
+            .setLargeIcon(BitmapFactory.decodeResource(resources,
+                R.drawable.volume_icon))
+            .setContentTitle(notification.title)
+            .setContentText(notification.body)
             .setAutoCancel(true)
             .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
             .setContentIntent(pendingIntent)
 
-        if (expandedImage
-        /** Boolean for if there's an expanded image to display */
-        ) {
-            val bitmap: Bitmap? = getBitmapFromUrl("")
+        if (notification.imageUrl != null) {
+            val bitmap: Bitmap? = getBitmapFromUrl(notification.imageUrl.toString())
             notificationBuilder.setStyle(
                 NotificationCompat.BigPictureStyle()
                     .bigPicture(bitmap)
-            ).setLargeIcon(bitmap)
+            )
         }
 
         val notificationManager =
@@ -137,7 +143,7 @@ class NotificationService : FirebaseMessagingService() {
         notificationManager.notify(0 /* ID of notification */, notificationBuilder.build())
     }
 
-    private fun getBitmapFromUrl(imageUrl: String?): Bitmap? {
+    private fun getBitmapFromUrl(imageUrl: String): Bitmap? {
         return try {
             val url = URL(imageUrl)
             val connection: HttpURLConnection = url.openConnection() as HttpURLConnection
