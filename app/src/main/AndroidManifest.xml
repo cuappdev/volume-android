@@ -34,6 +34,10 @@
             android:name="com.google.firebase.messaging.default_notification_color"
             android:resource="@color/creamy_white" />
 
+        <meta-data
+            android:name="firebase_analytics_collection_deactivated"
+            android:value="@bool/FIREBASE_ANALYTICS_DEACTIVATED"/>
+
         <activity android:name=".MainActivity" />
         <activity android:name=".PublicationProfileActivity" />
         <activity android:name=".TabActivity" />

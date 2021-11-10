@@ -55,14 +55,6 @@ class NotificationService : FirebaseMessagingService() {
             }
         }
 
-        // Not getting messages here? See why this may be: https://goo.gl/39bRNJ
-        Log.d(TAG, "From: ${remoteMessage.from}")
-
-        // Check if message contains a data payload.
-        if (remoteMessage.data.isNotEmpty()) {
-            Log.d(TAG, "Message data payload: ${remoteMessage.data}")
-        }
-
         // Check if message contains a notification payload.
         remoteMessage.notification?.let {
             sendNotification(it, remoteMessage.data)
