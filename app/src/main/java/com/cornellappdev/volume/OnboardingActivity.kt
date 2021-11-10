@@ -16,7 +16,13 @@ import com.cornellappdev.volume.analytics.EventType
 import com.cornellappdev.volume.analytics.VolumeEvent
 import com.cornellappdev.volume.databinding.ActivityOnboardingBinding
 import com.cornellappdev.volume.fragments.OnboardingFragTwo
+import com.cornellappdev.volume.util.GraphQlUtil
 import com.cornellappdev.volume.util.PrefUtils
+import com.google.android.gms.tasks.OnCompleteListener
+import com.google.firebase.messaging.FirebaseMessaging
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.schedulers.Schedulers
 
 /**
  * This activity is responsible for Onboarding, what the users first see when they install the app.
@@ -36,6 +42,8 @@ class OnboardingActivity : AppCompatActivity(), OnboardingFragTwo.DataPassListen
 
     private lateinit var prefUtils: PrefUtils
     private lateinit var binding: ActivityOnboardingBinding
+    private lateinit var disposables: CompositeDisposable
+    private val graphQlUtil = GraphQlUtil()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,12 +61,12 @@ class OnboardingActivity : AppCompatActivity(), OnboardingFragTwo.DataPassListen
             // swipe back to this activity.
             finish()
         }
+        disposables = CompositeDisposable()
 
+        prefUtils.save(PrefUtils.FOLLOWING_KEY, mutableSetOf())
         setupViewPager()
         setupNextButton()
         setupAnimations()
-
-        prefUtils.save(PrefUtils.FIRST_START_KEY, false)
     }
 
     /**
@@ -108,6 +116,27 @@ class OnboardingActivity : AppCompatActivity(), OnboardingFragTwo.DataPassListen
                     // transition to the home page.
                     val intent = Intent(context, TabActivity::class.java)
                     context.startActivity(intent)
+
+                    FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
+                        if (!task.isSuccessful) {
+                            return@OnCompleteListener
+                        }
+
+                        // Get new FCM registration token
+                        val token = task.result
+
+                        // Create user.
+                        val createUserObservable = graphQlUtil
+                            .createUser(prefUtils.getStringSet(PrefUtils.FOLLOWING_KEY, mutableSetOf()).toList(), token)
+                            .subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread())
+
+                        disposables.add(createUserObservable.subscribe { response ->
+                            response.data?.createUser?.let { user -> prefUtils.save(PrefUtils.UUID, user.uuid) }
+                        })
+                    })
+
+                    prefUtils.save(PrefUtils.FIRST_START_KEY, false)
 
                     // It's important that this activity is closed, so the user can't accidentally
                     // swipe back to this activity.
@@ -209,11 +238,10 @@ class OnboardingActivity : AppCompatActivity(), OnboardingFragTwo.DataPassListen
         // When the user returns to the OnboardingActivity, e.g., in the case that they click
         // on a publication, we must check to see if the following list is non-empty as there's no
         // callback from other activities to check for a new follow.
-        if (followingPublications?.isEmpty() == false && this::binding.isInitialized) {
+        if (followingPublications.isNotEmpty() && this::binding.isInitialized) {
             binding.btnNext.isClickable = true
-            binding.btnNext.setTextColor(
-                ContextCompat.getColor(
-                        this@OnboardingActivity, R.color.volume_orange))
+            ContextCompat.getColor(this@OnboardingActivity, R.color.volume_orange)
+
         }
     }
 }
