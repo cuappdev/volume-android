@@ -25,7 +25,6 @@
             android:name="com.google.firebase.messaging.default_notification_icon"
             android:resource="@drawable/volume_icon" />
 
-        <meta-data android:name="firebase_analytics_collection_deactivated" android:value="true" />
         <!--
  Set color used with incoming notification messages. This is used when no color is set for the incoming
              By default, the color is white.
