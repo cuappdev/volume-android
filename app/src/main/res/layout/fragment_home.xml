@@ -109,7 +109,9 @@
                     android:layout_marginTop="24dp"
                     android:layout_marginRight="19dp"
                     android:layout_marginBottom="24dp"
-                    android:background="#F6E5D0"
+                    android:background="#FFEFDC"
+                    android:alpha="0.6"
+                    android:elevation="6dp"
                     android:visibility="visible"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/shimmer_big_read">
