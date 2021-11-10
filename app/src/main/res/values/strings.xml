@@ -31,6 +31,7 @@
     <string name="caught_up">You\'ve seen all the new articles from the publications you have been following.</string>
     <string name="nothing_to_see">Nothing to see here!</string>
     <string name="follow_some">Follow some student publications that you are interested in.</string>
+    <string name="your_weekly_debrief">Your \nWeekly \nDebrief</string>
 
     <!-- Publication Fragment -->
     <string name="follow_below">Follow some below and we’ll show them up here.</string>
