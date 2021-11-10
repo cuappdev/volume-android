@@ -6,10 +6,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.apollographql.apollo.api.Response
+import com.cornellappdev.volume.NoInternetActivity
 import com.cornellappdev.volume.R
 import com.cornellappdev.volume.SettingsActivity
 import com.cornellappdev.volume.adapters.SavedArticlesAdapter
@@ -49,27 +49,42 @@ class SavedArticlesFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        loadSavedArticles()
+        setupSavedArticlesFragment()
+    }
 
-        val volumeOrange: Int? = context?.let { ContextCompat.getColor(it, R.color.volume_orange) }
-        with(binding.srlQuery) {
-            if (volumeOrange != null) {
-                setColorSchemeColors(volumeOrange)
-            }
-
-            // Re-populates the RecyclerViews on refresh, is dependent on whether or not they are
-            // initialized.
-            setOnRefreshListener {
+    /**
+     * Sets up the entirety of the saved articles fragment, adds onClicks, checks for internet, and sets up
+     * the saved articles.
+     */
+    private fun setupSavedArticlesFragment() {
+        disposables.add(GraphQlUtil.hasInternetConnection().subscribe { hasInternet ->
+            if (!hasInternet) {
+                startActivity(Intent(context, NoInternetActivity::class.java))
+            } else {
                 loadSavedArticles()
-                // After repopulating, can stop signifying the refresh animation.
-                binding.srlQuery.isRefreshing = false
-            }
-        }
 
-        binding.ivSettings.setOnClickListener {
-            val intent = Intent(requireActivity(), SettingsActivity::class.java)
-            requireActivity().startActivity(intent)
-        }
+                val volumeOrange: Int? =
+                    context?.let { ContextCompat.getColor(it, R.color.volume_orange) }
+                with(binding.srlQuery) {
+                    if (volumeOrange != null) {
+                        setColorSchemeColors(volumeOrange)
+                    }
+
+                    // Re-populates the RecyclerViews on refresh, is dependent on whether or not they are
+                    // initialized.
+                    setOnRefreshListener {
+                        loadSavedArticles()
+                        // After repopulating, can stop signifying the refresh animation.
+                        binding.srlQuery.isRefreshing = false
+                    }
+                }
+
+                binding.ivSettings.setOnClickListener {
+                    val intent = Intent(requireActivity(), SettingsActivity::class.java)
+                    requireActivity().startActivity(intent)
+                }
+            }
+        })
     }
 
     /**
@@ -79,33 +94,13 @@ class SavedArticlesFragment : Fragment() {
         val savedArticleIds = prefUtils.getStringSet(PrefUtils.SAVED_ARTICLES_KEY, mutableSetOf())
 
         // Creates API call observation for retrieving all articles the user saved.
-        val savedArticlesObs = savedArticleIds?.let {
-            graphQlUtil.getArticlesByIDs(it as MutableSet<String>).subscribeOn(Schedulers.io())
+        val savedArticlesObs =
+            graphQlUtil.getArticlesByIDs(savedArticleIds as MutableSet<String>).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-        }
 
-        disposables.add(GraphQlUtil.hasInternetConnection().subscribe { hasInternet ->
-            if (!hasInternet) {
-                binding.clBookmarkPage.visibility = View.GONE
-                binding.noSavedArticlesGroup.visibility = View.GONE
-
-                binding.fragmentContainer.visibility = View.VISIBLE
-                val ft = childFragmentManager.beginTransaction()
-                val dialog = NoInternetDialog()
-                ft.replace(binding.fragmentContainer.id, dialog, NoInternetDialog.TAG).commit()
-            } else {
-                childFragmentManager.findFragmentByTag(NoInternetDialog.TAG).let { dialogFrag ->
-                    (dialogFrag as? DialogFragment)?.dismiss()
-                }
-
-                if (savedArticleIds?.isNotEmpty() == true) {
-                    handleSavedArticleObservable(savedArticlesObs)
-                }
-            }
-        })
-
-        // Updates the UI if the user hasn't saved any articles.
-        if (savedArticleIds?.isEmpty() == true) {
+        if (savedArticleIds.isNotEmpty()) {
+            handleSavedArticleObservable(savedArticlesObs)
+        } else {
             binding.noSavedArticlesGroup.visibility = View.VISIBLE
             binding.clBookmarkPage.visibility = View.GONE
             binding.fragmentContainer.visibility = View.GONE
@@ -170,7 +165,12 @@ class SavedArticlesFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        loadSavedArticles()
+        setupSavedArticlesFragment()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        disposables.clear()
     }
 
     override fun onDestroyView() {
