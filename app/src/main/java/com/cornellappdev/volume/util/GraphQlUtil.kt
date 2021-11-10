@@ -22,16 +22,23 @@ import java.net.*
  */
 class GraphQlUtil {
 
-    // "https://volume-backend.cornellappdev.com/graphql" is our deployment endpoint
-    // "https://volume-dev.cornellappdev.com/graphql" is our development endpoint
+    enum class Endpoints(val endpoint: String){
+        DEV("https://volume-dev.cornellappdev.com/graphql"), // Our development endpoint
+        PROD("https://volume-backend.cornellappdev.com/graphql"), // Our deployment endpoint
+        DEV_PING("volume-dev.cornellappdev.com"),
+        PROD_PING("volume-backend.cornellappdev.com")
+    }
 
-    // When developing anything, make sure to use the development endpoint. When deploying, make sure
-    // the endpoint is set to deployment.
-    private val baseURL = "https://volume-backend.cornellappdev.com/graphql"
     private var client: ApolloClient = setUpApolloClient()
 
     companion object {
-        private const val PING_URL: String = "volume-backend.cornellappdev.com"
+        // When developing anything, make sure to use the development endpoint. When deploying, make sure
+        // the endpoint is set to deployment.
+        private const val IS_USING_DEV_ENDPOINT = true
+
+        private val BASE_URL = if (IS_USING_DEV_ENDPOINT) Endpoints.DEV.endpoint else Endpoints.PROD.endpoint
+        private val PING_URL: String = if (IS_USING_DEV_ENDPOINT) Endpoints.DEV_PING.endpoint else Endpoints.PROD_PING.endpoint
+        private const val DEVICE_TYPE: String = "ANDROID"
 
         /**
          * Hits the deployment endpoint to make sure that 1.) the user has internet and 2.) that
@@ -56,7 +63,7 @@ class GraphQlUtil {
             .Builder()
             .addInterceptor(logging)
         return ApolloClient.builder()
-            .serverUrl(baseURL)
+            .serverUrl(BASE_URL)
             .okHttpClient(okHttp.build())
             .build()
     }
@@ -91,13 +98,28 @@ class GraphQlUtil {
         return client.rxQuery(query)
     }
 
+    fun getArticlesAfterDate(since: String): Observable<Response<ArticlesAfterDateQuery.Data>> {
+        val query = ArticlesAfterDateQuery(since)
+        return client.rxQuery(query)
+    }
+
     fun shoutoutArticle(id: String): Single<Response<IncrementShoutoutMutation.Data>> {
         val mutation = (IncrementShoutoutMutation(id))
         return client.rxMutate(mutation)
     }
 
-    fun getArticlesAfterDate(since: String): Observable<Response<ArticlesAfterDateQuery.Data>> {
-        val query = ArticlesAfterDateQuery(since)
-        return client.rxQuery(query)
+    fun createUser(followedPublications: List<String>, deviceToken: String): Single<Response<CreateUserMutation.Data>> {
+        val mutation = CreateUserMutation(DEVICE_TYPE, followedPublications, deviceToken)
+        return client.rxMutate(mutation)
+    }
+
+    fun followPublication(pubID: String, uuid: String): Single<Response<FollowPublicationMutation.Data>> {
+        val mutation = FollowPublicationMutation(pubID, uuid)
+        return client.rxMutate(mutation)
+    }
+
+    fun unfollowPublication(pubID: String, uuid: String): Single<Response<UnfollowPublicationMutation.Data>> {
+        val mutation = UnfollowPublicationMutation(pubID, uuid)
+        return client.rxMutate(mutation)
     }
 }
