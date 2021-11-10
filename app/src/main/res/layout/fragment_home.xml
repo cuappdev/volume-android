@@ -27,15 +27,14 @@
 
             <ImageView
                 android:id="@+id/iv_volume_logo"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="160dp"
+                android:layout_height="50dp"
                 android:layout_marginLeft="6dp"
-                android:layout_marginTop="80dp"
+                android:layout_marginTop="40dp"
                 android:contentDescription="@string/description_main_volume_logo"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/volume_title"
-                tools:srcCompat="@drawable/volume_title" />
+                android:src="@drawable/volume_title" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/cl_home_page"
