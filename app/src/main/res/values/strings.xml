@@ -82,6 +82,7 @@
     <!-- No internet -->
     <string name="no_connection">No connection</string>
     <string name="please_try_again_later">Please try again later</string>
+    <string name="back_arrow">Back arrow</string>
 
     <!-- Content descriptions -->
     <string name="description_main_volume_logo">Main Volume logo</string>
@@ -111,5 +112,4 @@
     <string name="description_compass">Compass</string>
 
     <string name="default_notification_channel_id" translatable="false">fcm_default_channel</string>
-
 </resources>

@@ -127,12 +127,22 @@ class OnboardingActivity : AppCompatActivity(), OnboardingFragTwo.DataPassListen
 
                         // Create user.
                         val createUserObservable = graphQlUtil
-                            .createUser(prefUtils.getStringSet(PrefUtils.FOLLOWING_KEY, mutableSetOf()).toList(), token)
+                            .createUser(
+                                prefUtils.getStringSet(
+                                    PrefUtils.FOLLOWING_KEY,
+                                    mutableSetOf()
+                                ).toList(), token
+                            )
                             .subscribeOn(Schedulers.io())
                             .observeOn(AndroidSchedulers.mainThread())
 
                         disposables.add(createUserObservable.subscribe { response ->
-                            response.data?.createUser?.let { user -> prefUtils.save(PrefUtils.UUID, user.uuid) }
+                            response.data?.createUser?.let { user ->
+                                prefUtils.save(
+                                    PrefUtils.UUID,
+                                    user.uuid
+                                )
+                            }
                         })
                     })
 
@@ -243,5 +253,10 @@ class OnboardingActivity : AppCompatActivity(), OnboardingFragTwo.DataPassListen
             ContextCompat.getColor(this@OnboardingActivity, R.color.volume_orange)
 
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        disposables.clear()
     }
 }
