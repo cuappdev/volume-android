@@ -52,7 +52,12 @@ class PublicationProfileActivity : AppCompatActivity() {
         publication = intent.getParcelableExtra("publication")!!
         setupPublication(publication)
         navigationSource = intent.getParcelableExtra(NavigationSource.INTENT_KEY)!!
-        VolumeEvent.logEvent(EventType.PUBLICATION, VolumeEvent.OPEN_PUBLICATION, navigationSource, publication.id)
+        VolumeEvent.logEvent(
+            EventType.PUBLICATION,
+            VolumeEvent.OPEN_PUBLICATION,
+            navigationSource,
+            publication.id
+        )
 
         val volumeOrange = ContextCompat.getColor(this, R.color.volume_orange)
         binding.srlQuery.setColorSchemeColors(volumeOrange, volumeOrange, volumeOrange)
@@ -97,7 +102,11 @@ class PublicationProfileActivity : AppCompatActivity() {
                     setTextColor(ContextCompat.getColor(this.context, R.color.volume_orange))
                     currentFollowingSet.remove(publication.id)
                     prefUtils.save(PrefUtils.FOLLOWING_KEY, currentFollowingSet)
-                    VolumeEvent.logEvent(EventType.PUBLICATION, VolumeEvent.UNFOLLOW_PUBLICATION, id = publication.id)
+                    VolumeEvent.logEvent(
+                        EventType.PUBLICATION,
+                        VolumeEvent.UNFOLLOW_PUBLICATION,
+                        id = publication.id
+                    )
 
 
                     // Unfollow by user.
@@ -121,10 +130,12 @@ class PublicationProfileActivity : AppCompatActivity() {
                     setBackgroundResource(R.drawable.rounded_rectange_button_orange)
                     currentFollowingSet.add(publication.id)
                     prefUtils.save(PrefUtils.FOLLOWING_KEY, currentFollowingSet)
-                    VolumeEvent.logEvent(EventType.PUBLICATION,
+                    VolumeEvent.logEvent(
+                        EventType.PUBLICATION,
                         VolumeEvent.FOLLOW_PUBLICATION,
                         NavigationSource.PUBLICATION_DETAIL,
-                        publication.id)
+                        publication.id
+                    )
 
                     // Follow by user.
                     val followObservable = UUID?.let { uuid ->
@@ -181,7 +192,10 @@ class PublicationProfileActivity : AppCompatActivity() {
      * Parses the raw articles from our ArticlesByPublicationID query, turning them into our Article
      * model. The articles returned are sorted descending by the date published.
      */
-    private fun getArticlesFromResponse(response: Response<ArticlesByPublicationIDQuery.Data>, publication: Publication): MutableList<Article> {
+    private fun getArticlesFromResponse(
+        response: Response<ArticlesByPublicationIDQuery.Data>,
+        publication: Publication
+    ): MutableList<Article> {
         val articles = mutableListOf<Article>()
         response.data?.getArticlesByPublicationID?.mapTo(articles) { article ->
             Article(
@@ -287,6 +301,11 @@ class PublicationProfileActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        VolumeEvent.logEvent(EventType.PUBLICATION, VolumeEvent.CLOSE_PUBLICATION, id = publication.id)
+        VolumeEvent.logEvent(
+            EventType.PUBLICATION,
+            VolumeEvent.CLOSE_PUBLICATION,
+            id = publication.id
+        )
+        disposables.clear()
     }
 }
