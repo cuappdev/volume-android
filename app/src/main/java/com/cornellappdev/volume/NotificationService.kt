@@ -11,9 +11,16 @@ import android.media.RingtoneManager
 import android.os.Build
 import android.util.Log
 import androidx.core.app.NotificationCompat
+import com.cornellappdev.volume.util.GraphQlUtil
+import com.cornellappdev.volume.util.PrefUtils
+import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.installations.FirebaseInstallations
+import com.google.firebase.messaging.FirebaseMessaging
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.schedulers.Schedulers
 import java.io.InputStream
 import java.net.HttpURLConnection
 import java.net.URL
@@ -89,7 +96,23 @@ class NotificationService : FirebaseMessagingService() {
      * @param token The new token.
      */
     private fun sendRegistrationToServer(token: String?) {
-        Log.d(TAG, "sendRegistrationTokenToServer($token)")
+        val prefUtils = PrefUtils(this)
+        val graphQlUtil = GraphQlUtil()
+        val disposables = CompositeDisposable()
+
+        // Create user.
+        val createUserObservable = token?.let {
+            graphQlUtil
+                .createUser(prefUtils.getStringSet(PrefUtils.FOLLOWING_KEY, mutableSetOf()).toList(),
+                    it
+                )
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+        }
+
+        createUserObservable?.subscribe { response ->
+            response.data?.createUser?.let { user -> prefUtils.save(PrefUtils.UUID, user.uuid) }
+        }?.let { disposables.add(it) }
     }
 
     /**
