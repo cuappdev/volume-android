@@ -96,8 +96,4 @@ class GraphQlUtil {
         return client.rxMutate(mutation)
     }
 
-    fun getArticlesAfterDate(since: String): Observable<Response<ArticlesAfterDateQuery.Data>> {
-        val query = ArticlesAfterDateQuery(since)
-        return client.rxQuery(query)
-    }
 }

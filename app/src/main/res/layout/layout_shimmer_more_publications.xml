@@ -10,7 +10,6 @@
     app:cardMaxElevation="0dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/cl_publication_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="5dp">
@@ -54,7 +53,6 @@
             app:layout_constraintTop_toBottomOf="@id/tv_description" />
 
         <View
-            android:id="@+id/tv_recent_article_title"
             android:layout_width="300dp"
             android:layout_height="12dp"
             android:layout_marginStart="5dp"

@@ -7,18 +7,15 @@
     tools:context=".MainActivity">
 
     <com.cornellappdev.volume.views.ObservableWebView
-        android:id="@+id/wv_article"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
     <com.cornellappdev.volume.views.WebviewTop
-        android:id="@+id/wv_top"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent" />
 
     <com.cornellappdev.volume.views.WebviewBottom
-        android:id="@+id/wv_bottom"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent" />

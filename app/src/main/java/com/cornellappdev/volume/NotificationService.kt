@@ -58,8 +58,6 @@ class NotificationService : FirebaseMessagingService() {
 
     /**
      * Create and show a simple notification containing the received FCM message.
-     *
-     * @param messageBody FCM message body received.
      */
     private fun sendNotification(
         notification: RemoteMessage.Notification,
@@ -68,15 +66,20 @@ class NotificationService : FirebaseMessagingService() {
         val intent = Intent(this, OnboardingActivity::class.java)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
         val pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_IMMUTABLE)
-        intent.putExtra(NotificationIntentKeys.ARTICLE.key,
+        intent.putExtra(
+            NotificationIntentKeys.ARTICLE.key,
             data[NotificationIntentKeys.ARTICLE.key]
         )
 
         val channelId = getString((R.string.default_notification_channel_id))
         val notificationBuilder = NotificationCompat.Builder(this, channelId)
             .setSmallIcon(R.drawable.volume_icon)
-            .setLargeIcon(BitmapFactory.decodeResource(resources,
-                R.drawable.volume_icon))
+            .setLargeIcon(
+                BitmapFactory.decodeResource(
+                    resources,
+                    R.drawable.volume_icon
+                )
+            )
             .setContentTitle(notification.title)
             .setContentText(notification.body)
             .setAutoCancel(true)

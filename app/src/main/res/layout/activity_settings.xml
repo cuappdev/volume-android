@@ -42,7 +42,6 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/tv_send_feedback"
             style="@style/lato_regular"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -87,7 +86,6 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/tv_visit_our_website"
             style="@style/lato_regular"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -111,7 +109,6 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/cl_about_us"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
