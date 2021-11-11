@@ -18,7 +18,6 @@ import com.cornellappdev.volume.analytics.EventType
 import com.cornellappdev.volume.analytics.VolumeEvent
 import com.cornellappdev.volume.databinding.ActivityOnboardingBinding
 import com.cornellappdev.volume.fragments.OnboardingFragTwo
-import com.cornellappdev.volume.util.GraphQlUtil
 import com.cornellappdev.volume.util.GraphQlUtil.Companion.hasInternetConnection
 import com.cornellappdev.volume.util.PrefUtils
 import io.reactivex.disposables.CompositeDisposable
@@ -48,12 +47,15 @@ class OnboardingActivity : AppCompatActivity(), OnboardingFragTwo.DataPassListen
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityOnboardingBinding.inflate(layoutInflater)
-        resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            if (result.resultCode == RESULT_OK && !isOnboarding) {
-                initializeOnboarding()
-            }
-        }
         setContentView(binding.root)
+        resultLauncher =
+            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+                if (result.resultCode == RESULT_OK && !isOnboarding) {
+                    initializeOnboarding()
+                }
+            }
+
+        initializeOnboarding()
     }
 
     private fun initializeOnboarding() {
