@@ -90,6 +90,9 @@
                     android:id="@+id/shimmer_following_publication"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
                     app:shimmer_repeat_mode="restart"
                     app:layout_constraintTop_toBottomOf="@id/iv_following_header"
                     app:shimmer_shape="linear">
