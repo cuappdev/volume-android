@@ -15,16 +15,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <FrameLayout
-                android:id="@+id/fragmentContainer"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:translationZ="100dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
             <ImageView
                 android:id="@+id/iv_volume_logo"
                 android:layout_width="wrap_content"
@@ -61,25 +51,28 @@
                     android:id="@+id/shimmer_big_read"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:shimmer_repeat_mode="restart"
                     app:layout_constraintTop_toBottomOf="@id/iv_big_read_header"
+                    app:shimmer_repeat_mode="restart"
                     app:shimmer_shape="linear">
+
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal">
+
                         <include layout="@layout/layout_shimmer_big_read" />
+
                         <include layout="@layout/layout_shimmer_big_read" />
                     </LinearLayout>
                 </com.facebook.shimmer.ShimmerFrameLayout>
 
                 <androidx.recyclerview.widget.RecyclerView
-                    android:visibility="gone"
                     android:id="@+id/rv_big_read"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="6dp"
                     android:nestedScrollingEnabled="false"
+                    android:visibility="gone"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/iv_big_read_header" />
 
@@ -115,15 +108,19 @@
                     android:id="@+id/shimmer_following"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:shimmer_repeat_mode="restart"
                     app:layout_constraintTop_toBottomOf="@id/iv_following_header"
+                    app:shimmer_repeat_mode="restart"
                     app:shimmer_shape="linear">
+
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical">
+
                         <include layout="@layout/layout_shimmer_basic_article" />
+
                         <include layout="@layout/layout_shimmer_basic_article" />
+
                         <include layout="@layout/layout_shimmer_basic_article" />
                     </LinearLayout>
                 </com.facebook.shimmer.ShimmerFrameLayout>
@@ -134,9 +131,9 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="6dp"
                     android:nestedScrollingEnabled="false"
+                    android:visibility="gone"
                     app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/iv_following_header"
-                    android:visibility="gone"/>
+                    app:layout_constraintTop_toBottomOf="@id/iv_following_header" />
 
                 <ImageView
                     android:id="@+id/volume_logo_more_articles"
@@ -145,8 +142,8 @@
                     android:layout_marginTop="30dp"
                     android:layout_marginBottom="7dp"
                     android:contentDescription="@string/description_volume_bars_logo"
-                    app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/shimmer_following"
                     app:srcCompat="@drawable/ic_volume_bars" />
 
@@ -157,8 +154,8 @@
                     android:layout_height="wrap_content"
                     android:text="@string/up_to_date"
                     android:textSize="12sp"
-                    app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/volume_logo_more_articles" />
 
                 <ImageView
@@ -166,8 +163,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:contentDescription="@string/description_line_divider"
-                    app:layout_constraintRight_toRightOf="@id/more_articles_message"
                     app:layout_constraintLeft_toLeftOf="@id/more_articles_message"
+                    app:layout_constraintRight_toRightOf="@id/more_articles_message"
                     app:layout_constraintTop_toBottomOf="@id/more_articles_message"
                     app:srcCompat="@drawable/ic_line" />
 
@@ -179,8 +176,8 @@
                     android:text="@string/caught_up"
                     android:textAlignment="center"
                     android:textSize="12sp"
-                    app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/up_to_date_line" />
 
                 <TextView
@@ -190,8 +187,8 @@
                     android:layout_height="wrap_content"
                     android:text="@string/nothing_to_see"
                     android:textSize="16sp"
-                    app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/volume_logo_more_articles" />
 
                 <TextView
@@ -202,8 +199,8 @@
                     android:text="@string/follow_some"
                     android:textAlignment="center"
                     android:textSize="12sp"
-                    app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/more_articles_message_nothing" />
 
                 <ImageView
@@ -222,15 +219,19 @@
                     android:id="@+id/shimmer_other_articles"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:shimmer_repeat_mode="restart"
                     app:layout_constraintTop_toBottomOf="@id/iv_other_articles_header"
+                    app:shimmer_repeat_mode="restart"
                     app:shimmer_shape="linear">
+
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical">
+
                         <include layout="@layout/layout_shimmer_basic_article" />
+
                         <include layout="@layout/layout_shimmer_basic_article" />
+
                         <include layout="@layout/layout_shimmer_basic_article" />
                     </LinearLayout>
                 </com.facebook.shimmer.ShimmerFrameLayout>
@@ -241,9 +242,9 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="6dp"
                     android:nestedScrollingEnabled="false"
+                    android:visibility="gone"
                     app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/iv_other_articles_header"
-                    android:visibility="gone"/>
+                    app:layout_constraintTop_toBottomOf="@id/iv_other_articles_header" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>

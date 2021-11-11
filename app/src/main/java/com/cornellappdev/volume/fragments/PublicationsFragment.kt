@@ -9,7 +9,6 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -136,11 +135,6 @@ class PublicationsFragment : Fragment() {
             graphQlUtil.getAllPublications()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-
-
-        childFragmentManager.findFragmentByTag(NoInternetDialog.TAG).let { dialogFrag ->
-            (dialogFrag as? DialogFragment)?.dismiss()
-        }
 
         binding.clPublicationPage.visibility = View.VISIBLE
 
