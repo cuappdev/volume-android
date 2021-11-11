@@ -17,11 +17,13 @@ import com.cornellappdev.volume.models.Publication
 import com.cornellappdev.volume.util.PrefUtils
 import com.squareup.picasso.Picasso
 
-class MorePublicationsAdapter(private val publicationList: MutableList<Publication>,
-                              private val prefUtils: PrefUtils,
-                              private val mAdapterOnClickHandler: AdapterOnClickHandler?,
-                              private val isOnboarding: Boolean = false) :
-        RecyclerView.Adapter<MorePublicationsAdapter.MorePublicationVH>() {
+class MorePublicationsAdapter(
+    private val publicationList: MutableList<Publication>,
+    private val prefUtils: PrefUtils,
+    private val mAdapterOnClickHandler: AdapterOnClickHandler?,
+    private val isOnboarding: Boolean = false
+) :
+    RecyclerView.Adapter<MorePublicationsAdapter.MorePublicationVH>() {
 
     interface AdapterOnClickHandler {
         fun onFollowClick(wasFollowed: Boolean)
@@ -56,7 +58,7 @@ class MorePublicationsAdapter(private val publicationList: MutableList<Publicati
         val currentFollowingSet =
             prefUtils.getStringSet(PrefUtils.FOLLOWING_KEY, mutableSetOf())
 
-        if (currentFollowingSet?.contains(currentItem.id) == true) {
+        if (currentFollowingSet.contains(currentItem.id)) {
             holder.binding.btnFollow.setImageResource(R.drawable.ic_followchecksvg)
         } else {
             holder.binding.btnFollow.setImageResource(R.drawable.ic_followplussvg)
@@ -70,39 +72,43 @@ class MorePublicationsAdapter(private val publicationList: MutableList<Publicati
             ) {
                 holder.binding.btnFollow.setImageResource(R.drawable.ic_followchecksvg)
                 val tempSet =
-                    prefUtils.getStringSet(PrefUtils.FOLLOWING_KEY, mutableSetOf())?.toMutableSet()
-                if (tempSet != null) {
-                    VolumeEvent.logEvent(EventType.PUBLICATION, VolumeEvent.FOLLOW_PUBLICATION, if (isOnboarding) {
+                    prefUtils.getStringSet(PrefUtils.FOLLOWING_KEY, mutableSetOf()).toMutableSet()
+                VolumeEvent.logEvent(
+                    EventType.PUBLICATION, VolumeEvent.FOLLOW_PUBLICATION, if (isOnboarding) {
                         NavigationSource.ONBOARDING
                     } else {
                         NavigationSource.MORE_PUBLICATIONS
                     },
-                            currentItem.id)
-                    tempSet.add(currentItem.id)
-                    prefUtils.save(PrefUtils.FOLLOWING_KEY, tempSet)
-                    mAdapterOnClickHandler?.onFollowClick(wasFollowed = true)
-                }
+                    currentItem.id
+                )
+                tempSet.add(currentItem.id)
+                prefUtils.save(PrefUtils.FOLLOWING_KEY, tempSet)
+                mAdapterOnClickHandler?.onFollowClick(wasFollowed = true)
             } else {
                 holder.binding.btnFollow.setImageResource(R.drawable.ic_followplussvg)
                 val tempSet =
-                    prefUtils.getStringSet(PrefUtils.FOLLOWING_KEY, mutableSetOf())?.toMutableSet()
-                if (tempSet != null) {
-                    VolumeEvent.logEvent(EventType.PUBLICATION, VolumeEvent.UNFOLLOW_PUBLICATION, id = currentItem.id)
-                    tempSet.remove(currentItem.id)
-                    prefUtils.save(PrefUtils.FOLLOWING_KEY, tempSet)
-                    mAdapterOnClickHandler?.onFollowClick(wasFollowed = false)
-                }
+                    prefUtils.getStringSet(PrefUtils.FOLLOWING_KEY, mutableSetOf()).toMutableSet()
+                VolumeEvent.logEvent(
+                    EventType.PUBLICATION,
+                    VolumeEvent.UNFOLLOW_PUBLICATION,
+                    id = currentItem.id
+                )
+                tempSet.remove(currentItem.id)
+                prefUtils.save(PrefUtils.FOLLOWING_KEY, tempSet)
+                mAdapterOnClickHandler?.onFollowClick(wasFollowed = false)
             }
         }
 
         holder.binding.clPublicationLayout.setOnClickListener { view ->
             val intent = Intent(view.context, PublicationProfileActivity::class.java)
             intent.putExtra(Publication.INTENT_KEY, currentItem)
-            intent.putParcelableExtra(NavigationSource.INTENT_KEY, if (isOnboarding) {
-                NavigationSource.ONBOARDING
-            } else {
-                NavigationSource.MORE_PUBLICATIONS
-            })
+            intent.putParcelableExtra(
+                NavigationSource.INTENT_KEY, if (isOnboarding) {
+                    NavigationSource.ONBOARDING
+                } else {
+                    NavigationSource.MORE_PUBLICATIONS
+                }
+            )
             view.context.startActivity(intent)
         }
     }

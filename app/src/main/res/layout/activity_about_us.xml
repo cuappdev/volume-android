@@ -36,7 +36,6 @@
             app:layout_constraintTop_toBottomOf="@+id/tv_about_us">
 
             <TextView
-                android:id="@+id/tv_our_mission_header"
                 style="@style/begum_black_medium"
                 android:layout_width="wrap_content"
                 android:layout_height="24dp"
@@ -76,7 +75,6 @@
             app:layout_constraintTop_toBottomOf="@+id/tv_our_mission">
 
             <TextView
-                android:id="@+id/tv_the_team"
                 style="@style/begum_black_medium"
                 android:layout_width="wrap_content"
                 android:layout_height="24dp"

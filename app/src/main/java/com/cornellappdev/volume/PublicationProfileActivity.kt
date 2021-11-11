@@ -223,8 +223,11 @@ class PublicationProfileActivity : AppCompatActivity() {
      */
     private fun setupPublication(publication: Publication) {
         binding.tvName.text = publication.name
-        binding.tvShoutoutCount.text =
-            this.getString(R.string.shoutout_count, publication.shoutouts.toInt())
+        binding.tvShoutoutCount.text = this.resources.getQuantityString(
+            R.plurals.shoutout_count,
+            publication.shoutouts.toInt(),
+            publication.shoutouts.toInt()
+        )
         binding.tvDescription.text = publication.bio
         Picasso.get().load(publication.backgroundImageURL).fit().centerCrop()
             .into(binding.ivBanner)

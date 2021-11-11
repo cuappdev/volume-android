@@ -2,7 +2,6 @@
 <androidx.swiperefreshlayout.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/srl_query"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -146,7 +145,6 @@
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
-                        android:id="@+id/tv_insta"
                         style="@style/lato_regular_orange"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -178,7 +176,6 @@
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
-                        android:id="@+id/tv_fb"
                         style="@style/lato_regular_orange"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -191,7 +188,6 @@
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/cl_website_holder"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="20dp"
@@ -210,7 +206,6 @@
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
-                        android:id="@+id/tv_website_link"
                         style="@style/lato_regular_orange"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -248,7 +243,6 @@
                 app:layout_constraintTop_toBottomOf="@id/iv_divider" />
 
             <com.facebook.shimmer.ShimmerFrameLayout
-                android:id="@+id/mShimmerViewContainer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
@@ -273,7 +267,6 @@
             </com.facebook.shimmer.ShimmerFrameLayout>
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rv_articles"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"

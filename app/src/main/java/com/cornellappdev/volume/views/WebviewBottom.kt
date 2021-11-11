@@ -34,7 +34,7 @@ class WebviewBottom @JvmOverloads constructor(
     private var disposables = CompositeDisposable()
     private lateinit var article: Article
     private val currentBookmarks =
-        prefUtils.getStringSet(PrefUtils.SAVED_ARTICLES_KEY, mutableSetOf())?.toMutableSet()
+        prefUtils.getStringSet(PrefUtils.SAVED_ARTICLES_KEY, mutableSetOf()).toMutableSet()
 
     private val binding: LayoutWebviewBottomBinding =
         LayoutWebviewBottomBinding.inflate(
@@ -67,14 +67,12 @@ class WebviewBottom @JvmOverloads constructor(
         })
 
         binding.tvShoutoutCount.text = article.shoutouts.toInt().toString()
-        if (currentBookmarks != null) {
-            if (currentBookmarks.contains(article.id)) {
-                binding.ivBookmarkIcon.setImageResource(R.drawable.orange_bookmark_svg)
-            } else {
-                binding.ivBookmarkIcon.setImageResource(R.drawable.ic_black_bookmarksvg)
-            }
-            prefUtils.save(PrefUtils.SAVED_ARTICLES_KEY, currentBookmarks)
+        if (currentBookmarks.contains(article.id)) {
+            binding.ivBookmarkIcon.setImageResource(R.drawable.orange_bookmark_svg)
+        } else {
+            binding.ivBookmarkIcon.setImageResource(R.drawable.ic_black_bookmarksvg)
         }
+        prefUtils.save(PrefUtils.SAVED_ARTICLES_KEY, currentBookmarks)
         binding.ivBookmarkIcon.setOnClickListener { bookmarkArticle() }
         binding.btnSeeMore.setOnClickListener { publicationIntent() }
         binding.ivShare.setOnClickListener { shareArticle() }
@@ -103,39 +101,37 @@ class WebviewBottom @JvmOverloads constructor(
      * Adds/removes the respective article to/from the user's bookmarks, updating UI as needed.
      */
     private fun bookmarkArticle() {
-        if (currentBookmarks != null) {
-            if (!currentBookmarks.contains(article.id)) {
-                VolumeEvent.logEvent(
-                    EventType.ARTICLE,
-                    VolumeEvent.BOOKMARK_ARTICLE,
-                    id = article.id
+        if (!currentBookmarks.contains(article.id)) {
+            VolumeEvent.logEvent(
+                EventType.ARTICLE,
+                VolumeEvent.BOOKMARK_ARTICLE,
+                id = article.id
+            )
+            currentBookmarks.add(article.id)
+            binding.ivBookmarkIcon.startAnimation(
+                AnimationUtils.loadAnimation(
+                    context,
+                    R.anim.shake
                 )
-                currentBookmarks.add(article.id)
-                binding.ivBookmarkIcon.startAnimation(
-                    AnimationUtils.loadAnimation(
-                        context,
-                        R.anim.shake
-                    )
-                )
+            )
 
-                binding.ivBookmarkIcon.setImageResource(R.drawable.orange_bookmark_svg)
-            } else {
-                VolumeEvent.logEvent(
-                    EventType.ARTICLE,
-                    VolumeEvent.UNBOOKMARK_ARTICLE,
-                    id = article.id
+            binding.ivBookmarkIcon.setImageResource(R.drawable.orange_bookmark_svg)
+        } else {
+            VolumeEvent.logEvent(
+                EventType.ARTICLE,
+                VolumeEvent.UNBOOKMARK_ARTICLE,
+                id = article.id
+            )
+            currentBookmarks.remove(article.id)
+            binding.ivBookmarkIcon.startAnimation(
+                AnimationUtils.loadAnimation(
+                    context,
+                    R.anim.shake
                 )
-                currentBookmarks.remove(article.id)
-                binding.ivBookmarkIcon.startAnimation(
-                    AnimationUtils.loadAnimation(
-                        context,
-                        R.anim.shake
-                    )
-                )
-                binding.ivBookmarkIcon.setImageResource(R.drawable.ic_black_bookmarksvg)
-            }
-            prefUtils.save(PrefUtils.SAVED_ARTICLES_KEY, currentBookmarks)
+            )
+            binding.ivBookmarkIcon.setImageResource(R.drawable.ic_black_bookmarksvg)
         }
+        prefUtils.save(PrefUtils.SAVED_ARTICLES_KEY, currentBookmarks)
     }
 
     /**
