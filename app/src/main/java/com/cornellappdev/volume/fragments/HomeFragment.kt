@@ -1,13 +1,21 @@
 package com.cornellappdev.volume.fragments
 
+import MyDiffCallback
+import android.app.Activity
+import android.app.Activity.RESULT_OK
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
+import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.apollographql.apollo.api.Response
@@ -41,11 +49,12 @@ class HomeFragment : Fragment() {
     private lateinit var bigRedRV: RecyclerView
     private lateinit var followingRV: RecyclerView
     private lateinit var otherRV: RecyclerView
-    private val graphQlUtil = GraphQlUtil()
-    private val disposables = CompositeDisposable()
-    private val prefUtils = PrefUtils()
+    private lateinit var resultLauncher: ActivityResultLauncher<Intent>
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
+    private val prefUtils = PrefUtils()
+    private val disposables = CompositeDisposable()
+    private val graphQlUtil = GraphQlUtil()
 
     companion object {
         private const val NUMBER_OF_TRENDING_ARTICLES = 7.0
@@ -59,6 +68,11 @@ class HomeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
+        resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == RESULT_OK) {
+                setupHomeFragment()
+            }
+        }
         return binding.root
     }
 
@@ -74,7 +88,7 @@ class HomeFragment : Fragment() {
     private fun setupHomeFragment() {
         disposables.add(hasInternetConnection().subscribe { hasInternet ->
             if (!hasInternet) {
-                startActivity(Intent(context, NoInternetActivity::class.java))
+                resultLauncher.launch(Intent(context, NoInternetActivity::class.java))
             } else {
                 setUpArticles(binding, isRefreshing = false)
 
@@ -108,9 +122,8 @@ class HomeFragment : Fragment() {
         })
     }
 
-
     /**
-     * Sets up the home view and all three article sections on the home page.
+     * Sets up the home view and all three sections on the home page.
      */
     private fun setUpArticles(binding: FragmentHomeBinding, isRefreshing: Boolean) {
         val followingPublications =
@@ -162,7 +175,10 @@ class HomeFragment : Fragment() {
             // Can simply just clear adapter, since there's no following article data
             // to populate from (the user doesn't follow any publications).
             val adapter = followingRV.adapter as HomeArticlesAdapter
-            adapter.clear()
+            val newArticles = mutableListOf<Article>()
+            val result = DiffUtil.calculateDiff(MyDiffCallback(adapter.articles, newArticles))
+            adapter.articles = newArticles
+            result.dispatchUpdatesTo(adapter)
         } else {
             // shimmer off
             binding.shimmerFollowing.visibility = View.GONE
@@ -298,9 +314,10 @@ class HomeFragment : Fragment() {
                 }
             } else {
                 // bigRedRV is already created if initialized, only need to repopulate adapter data.
-                val adapter = bigRedRV.adapter as BigReadHomeAdapter
-                adapter.clear()
-                adapter.addAll(trendingArticles)
+                val adapter = bigRedRV.adapter as HomeArticlesAdapter
+                val result = DiffUtil.calculateDiff(MyDiffCallback(adapter.articles, trendingArticles))
+                adapter.articles = trendingArticles
+                result.dispatchUpdatesTo(adapter)
             }
 
             // shimmer off
@@ -349,8 +366,10 @@ class HomeFragment : Fragment() {
                     } else {
                         // followingRV is already created if initialized, only need to repopulate adapter data.
                         val adapter = followingRV.adapter as HomeArticlesAdapter
-                        adapter.clear()
-                        adapter.addAll(followingArticles.take(NUMBER_OF_FOLLOWING_ARTICLES))
+                        val newArticles = followingArticles.take(NUMBER_OF_FOLLOWING_ARTICLES) as MutableList<Article>
+                        val result = DiffUtil.calculateDiff(MyDiffCallback(adapter.articles, newArticles))
+                        adapter.articles = newArticles
+                        result.dispatchUpdatesTo(adapter)
                     }
 
                     if (followingArticles.size
@@ -456,7 +475,7 @@ class HomeFragment : Fragment() {
                     otherRV = binding.rvOtherArticles
                     with(otherRV) {
                         adapter = HomeArticlesAdapter(
-                            otherArticles.shuffled()
+                            otherArticles.shuffled().take(NUMBER_OF_OTHER_ARTICLES)
                                     as MutableList<Article>, true
                         )
                         layoutManager = LinearLayoutManager(context)
@@ -464,19 +483,16 @@ class HomeFragment : Fragment() {
                 } else {
                     // otherRV is already created if initialized, only need to repopulate adapter data.
                     val adapter = otherRV.adapter as HomeArticlesAdapter
-                    adapter.clear()
-                    adapter.addAll(otherArticles.shuffled())
+                    val newArticles = otherArticles.shuffled().take(NUMBER_OF_OTHER_ARTICLES) as MutableList<Article>
+                    val result = DiffUtil.calculateDiff(MyDiffCallback(adapter.articles, newArticles))
+                    adapter.articles = newArticles
+                    result.dispatchUpdatesTo(adapter)
                 }
                 // shimmer off
                 binding.shimmerOtherArticles.visibility = View.GONE
                 otherRV.visibility = View.VISIBLE
             })
         }
-    }
-
-    override fun onResume() {
-        super.onResume()
-        setupHomeFragment()
     }
 
     override fun onDestroy() {

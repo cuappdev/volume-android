@@ -5,6 +5,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
@@ -39,6 +42,7 @@ class PublicationsFragment : Fragment() {
 
     private lateinit var followingPublicationsRV: RecyclerView
     private lateinit var morePublicationsRV: RecyclerView
+    private lateinit var resultLauncher: ActivityResultLauncher<Intent>
     private val graphQlUtil = GraphQlUtil()
     private val disposables = CompositeDisposable()
     private val prefUtils = PrefUtils()
@@ -52,6 +56,12 @@ class PublicationsFragment : Fragment() {
     ): View {
         super.onCreateView(inflater, container, savedInstanceState)
         _binding = FragmentPublicationsBinding.inflate(inflater, container, false)
+        resultLauncher =
+            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+                if (result.resultCode == AppCompatActivity.RESULT_OK) {
+                    setupPublicationFragment()
+                }
+            }
         return binding.root
     }
 
@@ -67,7 +77,7 @@ class PublicationsFragment : Fragment() {
     private fun setupPublicationFragment() {
         disposables.add(hasInternetConnection().subscribe { hasInternet ->
             if (!hasInternet) {
-                startActivity(Intent(context, NoInternetActivity::class.java))
+                resultLauncher.launch(Intent(context, NoInternetActivity::class.java))
             } else {
                 setupPublicationsView(
                     binding,
@@ -342,11 +352,6 @@ class PublicationsFragment : Fragment() {
             }
             binding.shimmerMorePublication.visibility = View.INVISIBLE
         })
-    }
-
-    override fun onResume() {
-        super.onResume()
-        setupPublicationFragment()
     }
 
     override fun onDestroy() {

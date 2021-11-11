@@ -8,6 +8,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.animation.Animation
 import android.view.animation.Transformation
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.viewpager2.widget.ViewPager2
@@ -16,6 +18,7 @@ import com.cornellappdev.volume.analytics.EventType
 import com.cornellappdev.volume.analytics.VolumeEvent
 import com.cornellappdev.volume.databinding.ActivityOnboardingBinding
 import com.cornellappdev.volume.fragments.OnboardingFragTwo
+import com.cornellappdev.volume.util.GraphQlUtil
 import com.cornellappdev.volume.util.GraphQlUtil.Companion.hasInternetConnection
 import com.cornellappdev.volume.util.PrefUtils
 import io.reactivex.disposables.CompositeDisposable
@@ -36,21 +39,27 @@ class OnboardingActivity : AppCompatActivity(), OnboardingFragTwo.DataPassListen
         private const val VOLUME_LOGO_MARGIN_TOP = 100
     }
 
-    private val prefUtils = PrefUtils(this)
-    private var isOnboarding = false
     private lateinit var binding: ActivityOnboardingBinding
-    private lateinit var disposables: CompositeDisposable
+    private lateinit var resultLauncher: ActivityResultLauncher<Intent>
+    private var isOnboarding = false
+    private val prefUtils = PrefUtils()
+    private val disposables = CompositeDisposable()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityOnboardingBinding.inflate(layoutInflater)
+        resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == RESULT_OK && !isOnboarding) {
+                initializeOnboarding()
+            }
+        }
         setContentView(binding.root)
     }
 
     private fun initializeOnboarding() {
         disposables.add(hasInternetConnection().subscribe { hasInternet ->
             if (!hasInternet) {
-                startActivity(Intent(this, NoInternetActivity::class.java))
+                resultLauncher.launch(Intent(this, NoInternetActivity::class.java))
             } else {
                 // If this isn't the first launch of this app, redirects to the home page.
                 val firstStart = prefUtils.getBoolean(PrefUtils.FIRST_START_KEY, true)
@@ -230,7 +239,6 @@ class OnboardingActivity : AppCompatActivity(), OnboardingFragTwo.DataPassListen
                 )
             )
         }
-        if (!isOnboarding) initializeOnboarding()
     }
 
     override fun onDestroy() {

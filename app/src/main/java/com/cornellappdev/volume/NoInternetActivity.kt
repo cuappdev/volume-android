@@ -13,4 +13,9 @@ class NoInternetActivity : AppCompatActivity() {
         binding = ActivityNoInternetBinding.inflate(layoutInflater)
         setContentView(binding.root)
     }
+
+    override fun onBackPressed() {
+        setResult(RESULT_OK)
+        super.onBackPressed()
+    }
 }

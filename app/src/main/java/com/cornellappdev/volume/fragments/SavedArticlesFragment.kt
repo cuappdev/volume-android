@@ -1,10 +1,13 @@
 package com.cornellappdev.volume.fragments
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -32,6 +35,7 @@ import io.reactivex.schedulers.Schedulers
  */
 class SavedArticlesFragment : Fragment() {
 
+    private lateinit var resultLauncher: ActivityResultLauncher<Intent>
     private val prefUtils = PrefUtils()
     private var disposables = CompositeDisposable()
     private val graphQlUtil = GraphQlUtil()
@@ -44,6 +48,11 @@ class SavedArticlesFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentSavedArticlesBinding.inflate(inflater, container, false)
+        resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                setupSavedArticlesFragment()
+            }
+        }
         return binding.root
     }
 
@@ -59,7 +68,7 @@ class SavedArticlesFragment : Fragment() {
     private fun setupSavedArticlesFragment() {
         disposables.add(GraphQlUtil.hasInternetConnection().subscribe { hasInternet ->
             if (!hasInternet) {
-                startActivity(Intent(context, NoInternetActivity::class.java))
+                resultLauncher.launch(Intent(context, NoInternetActivity::class.java))
             } else {
                 loadSavedArticles()
 
@@ -161,11 +170,6 @@ class SavedArticlesFragment : Fragment() {
                 }
             })
         }
-    }
-
-    override fun onResume() {
-        super.onResume()
-        setupSavedArticlesFragment()
     }
 
     override fun onDestroy() {
