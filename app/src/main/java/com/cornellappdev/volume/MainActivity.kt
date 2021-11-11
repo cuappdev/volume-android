@@ -1,9 +1,12 @@
 package com.cornellappdev.volume
 
+import android.content.Intent
 import android.os.Bundle
 import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import com.cornellappdev.volume.analytics.EventType
 import com.cornellappdev.volume.analytics.NavigationSource
@@ -22,60 +25,70 @@ import io.reactivex.disposables.CompositeDisposable
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
-    private lateinit var disposables: CompositeDisposable
     private lateinit var firebaseAnalytics: FirebaseAnalytics
+    private lateinit var resultLauncher: ActivityResultLauncher<Intent>
     private lateinit var article: Article
+    private val disposables = CompositeDisposable()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        disposables = CompositeDisposable()
-        firebaseAnalytics = Firebase.analytics
 
-        // Grabs Article from the intent passed in.
-        article = intent.getParcelableExtra(Article.INTENT_KEY)!!
-        val navigationSource = intent.getParcelableExtra<NavigationSource>(NavigationSource.INTENT_KEY)!!
-
-        setupWebView(article, navigationSource)
-
-        // Code to prevent from launching in external browser, but instead within the Volume app.
-        binding.wvArticle.webViewClient = object : WebViewClient() {
-            override fun shouldOverrideUrlLoading(
-                view: WebView?,
-                request: WebResourceRequest?
-            ): Boolean {
-                return false
+        resultLauncher =
+            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+                if (result.resultCode == RESULT_OK) {
+                    initializeMainActivity()
+                }
             }
-        }
+
+        firebaseAnalytics = Firebase.analytics
+        initializeMainActivity()
     }
 
-    /**
-     * Sets up the webview using the article passed in.
-     */
-    private fun setupWebView(article: Article?, navigationSource: NavigationSource) {
+    private fun initializeMainActivity() {
         // Makes sure the user has internet before attempting to load the url or else the app crashes.
         disposables.add(GraphQlUtil.hasInternetConnection().subscribe { hasInternet ->
-            if (article?.articleURL != null) {
+            if (!hasInternet) {
+                resultLauncher.launch(Intent(this, NoInternetActivity::class.java))
+            } else {
+                // Grabs Article from the intent passed in.
+                article = intent.getParcelableExtra(Article.INTENT_KEY)!!
+                val navigationSource =
+                    intent.getParcelableExtra<NavigationSource>(NavigationSource.INTENT_KEY)!!
+
+                // Sets up the webview using the article passed in.
                 binding.wvTop.setName(article)
                 binding.wvBottom.setArticle(article)
                 binding.wvBottom.setUpView()
-                binding.wvArticle.setWebViews(binding.wvTop, binding.wvBottom)
-                if (hasInternet) {
-                    binding.wvArticle.loadUrl(article.articleURL)
-                    VolumeEvent.logEvent(
-                        EventType.ARTICLE,
-                        VolumeEvent.OPEN_ARTICLE,
-                        navigationSource,
-                        article.id
-                    )
+                with(binding.wvArticle) {
+                    setWebViews(binding.wvTop, binding.wvBottom)
+                    // Code to prevent from launching in external browser, but instead within the Volume app.
+                    webViewClient = object : WebViewClient() {
+                        override fun shouldOverrideUrlLoading(
+                            view: WebView?,
+                            request: WebResourceRequest?
+                        ): Boolean {
+                            return false
+                        }
+                    }
+                    loadUrl(article.articleURL)
                 }
+                VolumeEvent.logEvent(
+                    EventType.ARTICLE,
+                    VolumeEvent.OPEN_ARTICLE,
+                    navigationSource,
+                    article.id
+                )
+
             }
         })
+
     }
 
     override fun onDestroy() {
         super.onDestroy()
         VolumeEvent.logEvent(EventType.ARTICLE, VolumeEvent.CLOSE_ARTICLE, id = article.id)
+        disposables.clear()
     }
 }
