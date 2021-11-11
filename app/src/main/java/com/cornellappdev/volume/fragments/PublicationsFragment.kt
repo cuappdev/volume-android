@@ -155,7 +155,7 @@ class PublicationsFragment : Fragment() {
         )
 
         // Updates the UI if the user doesn't follow any publications.
-        if (followingPublicationsIDs?.isEmpty() == true) {
+        if (followingPublicationsIDs.isEmpty()) {
             binding.groupFollowing.visibility = View.GONE
             binding.groupNotFollowing.visibility = View.VISIBLE
         }
