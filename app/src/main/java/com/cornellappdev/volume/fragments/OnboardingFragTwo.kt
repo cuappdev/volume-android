@@ -1,11 +1,14 @@
 package com.cornellappdev.volume.fragments
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.cornellappdev.volume.NoInternetActivity
 import com.cornellappdev.volume.adapters.MorePublicationsAdapter
 import com.cornellappdev.volume.databinding.FragmentOnboardingTwoBinding
 import com.cornellappdev.volume.models.Article
@@ -28,10 +31,11 @@ class OnboardingFragTwo : Fragment(), MorePublicationsAdapter.AdapterOnClickHand
         fun onPublicationFollowed(numFollowed: Int)
     }
 
-    private lateinit var disposables: CompositeDisposable
+    private lateinit var mCallback: DataPassListener
+    private lateinit var publicationRV: RecyclerView
+    private val disposables = CompositeDisposable()
     private val graphQlUtil = GraphQlUtil()
     private val prefUtils = PrefUtils()
-    private lateinit var mCallback: DataPassListener
     private var _binding: FragmentOnboardingTwoBinding? = null
     private val binding get() = _binding!!
     private var followCounter = 0
@@ -41,13 +45,29 @@ class OnboardingFragTwo : Fragment(), MorePublicationsAdapter.AdapterOnClickHand
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        disposables = CompositeDisposable()
+        super.onCreateView(inflater, container, savedInstanceState)
         mCallback = activity as DataPassListener
         _binding = FragmentOnboardingTwoBinding.inflate(inflater, container, false)
-        setupPublicationRV(binding)
-        // Notifies that no one has been followed.
-        mCallback.onPublicationFollowed(0)
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        setupOnboardingFragment()
+    }
+
+    private fun setupOnboardingFragment() {
+        disposables.add(GraphQlUtil.hasInternetConnection().subscribe { hasInternet ->
+            if (!hasInternet) {
+                startActivity(Intent(context, NoInternetActivity::class.java))
+            } else {
+                if (!this@OnboardingFragTwo::publicationRV.isInitialized) {
+                    setupPublicationRV(binding)
+                    // Notifies that no one has been followed.
+                    mCallback.onPublicationFollowed(0)
+                }
+            }
+        })
     }
 
     /**
@@ -104,18 +124,14 @@ class OnboardingFragTwo : Fragment(), MorePublicationsAdapter.AdapterOnClickHand
                         .map { social -> Social(social.social, social.uRL) })
             })
 
-            if (this.context != null) {
-                onboardingBinding.rvPublications.adapter =
-                    MorePublicationsAdapter(allPublicationsList, prefUtils, this)
-                onboardingBinding.rvPublications.layoutManager = LinearLayoutManager(context)
-                onboardingBinding.rvPublications.setHasFixedSize(true)
+            publicationRV = onboardingBinding.rvPublications
+            with(publicationRV) {
+                adapter =
+                    MorePublicationsAdapter(allPublicationsList, prefUtils, this@OnboardingFragTwo)
+                layoutManager = LinearLayoutManager(context)
+                setHasFixedSize(true)
             }
         })
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
     }
 
     /**
@@ -128,5 +144,20 @@ class OnboardingFragTwo : Fragment(), MorePublicationsAdapter.AdapterOnClickHand
             followCounter = (followCounter - 1).coerceAtLeast(0)
         }
         mCallback.onPublicationFollowed(followCounter)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        setupOnboardingFragment()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        disposables.clear()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

@@ -16,7 +16,9 @@ import com.cornellappdev.volume.analytics.EventType
 import com.cornellappdev.volume.analytics.VolumeEvent
 import com.cornellappdev.volume.databinding.ActivityOnboardingBinding
 import com.cornellappdev.volume.fragments.OnboardingFragTwo
+import com.cornellappdev.volume.util.GraphQlUtil.Companion.hasInternetConnection
 import com.cornellappdev.volume.util.PrefUtils
+import io.reactivex.disposables.CompositeDisposable
 
 /**
  * This activity is responsible for Onboarding, what the users first see when they install the app.
@@ -34,31 +36,40 @@ class OnboardingActivity : AppCompatActivity(), OnboardingFragTwo.DataPassListen
         private const val VOLUME_LOGO_MARGIN_TOP = 100
     }
 
-    private lateinit var prefUtils: PrefUtils
+    private val prefUtils = PrefUtils(this)
+    private var isOnboarding = false
     private lateinit var binding: ActivityOnboardingBinding
+    private lateinit var disposables: CompositeDisposable
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityOnboardingBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        prefUtils = PrefUtils(this)
+    }
 
-        // If this isn't the first launch of this app, redirects to the home page.
-        val firstStart = prefUtils.getBoolean(PrefUtils.FIRST_START_KEY, true)
-        if (!firstStart) {
-            val intent = Intent(this, TabActivity::class.java)
-            this.startActivity(intent)
+    private fun initializeOnboarding() {
+        disposables.add(hasInternetConnection().subscribe { hasInternet ->
+            if (!hasInternet) {
+                startActivity(Intent(this, NoInternetActivity::class.java))
+            } else {
+                // If this isn't the first launch of this app, redirects to the home page.
+                val firstStart = prefUtils.getBoolean(PrefUtils.FIRST_START_KEY, true)
+                if (!firstStart) {
+                    val intent = Intent(this, TabActivity::class.java)
+                    this.startActivity(intent)
 
-            // It's important that this activity is closed, so the user can't accidentally
-            // swipe back to this activity.
-            finish()
-        }
+                    // It's important that this activity is closed, so the user can't accidentally
+                    // swipe back to this activity.
+                    finish()
+                }
 
-        setupViewPager()
-        setupNextButton()
-        setupAnimations()
-
-        prefUtils.save(PrefUtils.FIRST_START_KEY, false)
+                isOnboarding = true
+                prefUtils.save(PrefUtils.FOLLOWING_KEY, mutableSetOf())
+                setupViewPager()
+                setupNextButton()
+                setupAnimations()
+            }
+        })
     }
 
     /**
@@ -108,6 +119,7 @@ class OnboardingActivity : AppCompatActivity(), OnboardingFragTwo.DataPassListen
                     // transition to the home page.
                     val intent = Intent(context, TabActivity::class.java)
                     context.startActivity(intent)
+                    prefUtils.save(PrefUtils.FIRST_START_KEY, false)
 
                     // It's important that this activity is closed, so the user can't accidentally
                     // swipe back to this activity.
@@ -205,15 +217,24 @@ class OnboardingActivity : AppCompatActivity(), OnboardingFragTwo.DataPassListen
     override fun onResume() {
         super.onResume()
 
-        val followingPublications = prefUtils.getStringSet(PrefUtils.FOLLOWING_KEY, mutableSetOf())
+        val followingPublications =
+            prefUtils.getStringSet(PrefUtils.FOLLOWING_KEY, mutableSetOf())
         // When the user returns to the OnboardingActivity, e.g., in the case that they click
         // on a publication, we must check to see if the following list is non-empty as there's no
         // callback from other activities to check for a new follow.
-        if (followingPublications?.isEmpty() == false && this::binding.isInitialized) {
+        if (followingPublications.isNotEmpty() && this::binding.isInitialized) {
             binding.btnNext.isClickable = true
             binding.btnNext.setTextColor(
                 ContextCompat.getColor(
-                        this@OnboardingActivity, R.color.volume_orange))
+                    this@OnboardingActivity, R.color.volume_orange
+                )
+            )
         }
+        if (!isOnboarding) initializeOnboarding()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        disposables.clear()
     }
 }
