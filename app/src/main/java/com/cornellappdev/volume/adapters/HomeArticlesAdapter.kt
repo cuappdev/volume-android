@@ -16,8 +16,9 @@ import com.cornellappdev.volume.databinding.ItemHomeArticleBinding
 import com.cornellappdev.volume.models.Article
 import com.squareup.picasso.Picasso
 
-class HomeArticlesAdapter(private val articles: MutableList<Article>,
-                          private val isOtherArticles: Boolean = false) :
+class HomeArticlesAdapter(
+    var articles: MutableList<Article>,
+    private val isOtherArticles: Boolean = false) :
         RecyclerView.Adapter<HomeArticlesAdapter.HomeArticleVH>() {
 
     private lateinit var context: Context
@@ -59,15 +60,5 @@ class HomeArticlesAdapter(private val articles: MutableList<Article>,
 
     override fun getItemCount(): Int {
         return articles.size
-    }
-
-    fun clear() {
-        articles.clear()
-        notifyDataSetChanged()
-    }
-
-    fun addAll(list: List<Article>) {
-        articles.addAll(list)
-        notifyDataSetChanged()
     }
 }

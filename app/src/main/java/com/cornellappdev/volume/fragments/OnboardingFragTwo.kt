@@ -1,10 +1,13 @@
 package com.cornellappdev.volume.fragments
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -33,6 +36,7 @@ class OnboardingFragTwo : Fragment(), MorePublicationsAdapter.AdapterOnClickHand
 
     private lateinit var mCallback: DataPassListener
     private lateinit var publicationRV: RecyclerView
+    private lateinit var resultLauncher: ActivityResultLauncher<Intent>
     private val disposables = CompositeDisposable()
     private val graphQlUtil = GraphQlUtil()
     private val prefUtils = PrefUtils()
@@ -48,6 +52,11 @@ class OnboardingFragTwo : Fragment(), MorePublicationsAdapter.AdapterOnClickHand
         super.onCreateView(inflater, container, savedInstanceState)
         mCallback = activity as DataPassListener
         _binding = FragmentOnboardingTwoBinding.inflate(inflater, container, false)
+        resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                setupOnboardingFragment()
+            }
+        }
         return binding.root
     }
 
@@ -59,7 +68,7 @@ class OnboardingFragTwo : Fragment(), MorePublicationsAdapter.AdapterOnClickHand
     private fun setupOnboardingFragment() {
         disposables.add(GraphQlUtil.hasInternetConnection().subscribe { hasInternet ->
             if (!hasInternet) {
-                startActivity(Intent(context, NoInternetActivity::class.java))
+                resultLauncher.launch(Intent(context, NoInternetActivity::class.java))
             } else {
                 if (!this@OnboardingFragTwo::publicationRV.isInitialized) {
                     setupPublicationRV(binding)
