@@ -5,6 +5,8 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.view.View
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -36,6 +38,7 @@ class PublicationProfileActivity : AppCompatActivity() {
     private lateinit var publication: Publication
     private lateinit var navigationSource: NavigationSource
     private lateinit var binding: ActivityPublicationProfileBinding
+    private lateinit var resultLauncher: ActivityResultLauncher<Intent>
     private val disposables = CompositeDisposable()
     private val graphQlUtil = GraphQlUtil()
     private val prefUtils = PrefUtils()
@@ -44,27 +47,48 @@ class PublicationProfileActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityPublicationProfileBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        resultLauncher =
+            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+                if (result.resultCode == RESULT_OK) {
+                    initializePublicationProfileActivity()
+                }
+            }
 
-        val currentFollowingSet =
-            prefUtils.getStringSet(PrefUtils.FOLLOWING_KEY, mutableSetOf())?.toMutableSet()
+        initializePublicationProfileActivity()
+    }
 
-        publication = intent.getParcelableExtra("publication")!!
-        setupPublication(publication)
-        navigationSource = intent.getParcelableExtra(NavigationSource.INTENT_KEY)!!
-        VolumeEvent.logEvent(EventType.PUBLICATION, VolumeEvent.OPEN_PUBLICATION, navigationSource, publication.id)
+    private fun initializePublicationProfileActivity() {
+        disposables.add(GraphQlUtil.hasInternetConnection().subscribe { hasInternet ->
+            if (!hasInternet) {
+                resultLauncher.launch(Intent(this, NoInternetActivity::class.java))
+            } else {
+                val currentFollowingSet =
+                    prefUtils.getStringSet(PrefUtils.FOLLOWING_KEY, mutableSetOf()).toMutableSet()
 
-        val volumeOrange = ContextCompat.getColor(this, R.color.volume_orange)
-        binding.srlQuery.setColorSchemeColors(volumeOrange, volumeOrange, volumeOrange)
+                publication = intent.getParcelableExtra("publication")!!
+                setupPublication(publication)
+                navigationSource = intent.getParcelableExtra(NavigationSource.INTENT_KEY)!!
+                VolumeEvent.logEvent(
+                    EventType.PUBLICATION,
+                    VolumeEvent.OPEN_PUBLICATION,
+                    navigationSource,
+                    publication.id
+                )
 
-        // The article RecyclerView attempts to re-populate on refresh,
-        // useful if user regains internet again and wants to re-query.
-        binding.srlQuery.setOnRefreshListener {
-            setupArticleRV()
-            binding.srlQuery.isRefreshing = false
-        }
+                val volumeOrange = ContextCompat.getColor(this, R.color.volume_orange)
+                binding.srlQuery.setColorSchemeColors(volumeOrange, volumeOrange, volumeOrange)
 
-        setupFollowButton(currentFollowingSet)
-        setupArticleRV()
+                // The article RecyclerView attempts to re-populate on refresh,
+                // useful if user regains internet again and wants to re-query.
+                binding.srlQuery.setOnRefreshListener {
+                    setupArticleRV()
+                    binding.srlQuery.isRefreshing = false
+                }
+
+                setupFollowButton(currentFollowingSet)
+                setupArticleRV()
+            }
+        })
     }
 
     /**
@@ -93,10 +117,19 @@ class PublicationProfileActivity : AppCompatActivity() {
                     // Removes and updates UI.
                     text = this@PublicationProfileActivity.getString(R.string.follow)
                     setBackgroundResource(R.drawable.rounded_rectangle_button)
-                    setTextColor(ContextCompat.getColor(this.context, R.color.volume_orange))
+                    setTextColor(
+                        ContextCompat.getColor(
+                            this.context,
+                            R.color.volume_orange
+                        )
+                    )
                     currentFollowingSet.remove(publication.id)
                     prefUtils.save(PrefUtils.FOLLOWING_KEY, currentFollowingSet)
-                    VolumeEvent.logEvent(EventType.PUBLICATION, VolumeEvent.UNFOLLOW_PUBLICATION, id = publication.id)
+                    VolumeEvent.logEvent(
+                        EventType.PUBLICATION,
+                        VolumeEvent.UNFOLLOW_PUBLICATION,
+                        id = publication.id
+                    )
                 }
             } else {
                 binding.btnFollow.apply {
@@ -106,10 +139,12 @@ class PublicationProfileActivity : AppCompatActivity() {
                     setBackgroundResource(R.drawable.rounded_rectange_button_orange)
                     currentFollowingSet.add(publication.id)
                     prefUtils.save(PrefUtils.FOLLOWING_KEY, currentFollowingSet)
-                    VolumeEvent.logEvent(EventType.PUBLICATION,
-                            VolumeEvent.FOLLOW_PUBLICATION,
-                            NavigationSource.PUBLICATION_DETAIL,
-                            publication.id)
+                    VolumeEvent.logEvent(
+                        EventType.PUBLICATION,
+                        VolumeEvent.FOLLOW_PUBLICATION,
+                        NavigationSource.PUBLICATION_DETAIL,
+                        publication.id
+                    )
                 }
             }
         }
@@ -191,7 +226,8 @@ class PublicationProfileActivity : AppCompatActivity() {
         binding.tvShoutoutCount.text =
             this.getString(R.string.shoutout_count, publication.shoutouts.toInt())
         binding.tvDescription.text = publication.bio
-        Picasso.get().load(publication.backgroundImageURL).fit().centerCrop().into(binding.ivBanner)
+        Picasso.get().load(publication.backgroundImageURL).fit().centerCrop()
+            .into(binding.ivBanner)
         Picasso.get().load(publication.profileImageURL).into(binding.ivLogo)
 
         setupMedia(publication)
@@ -260,6 +296,11 @@ class PublicationProfileActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        VolumeEvent.logEvent(EventType.PUBLICATION, VolumeEvent.CLOSE_PUBLICATION, id = publication.id)
+        VolumeEvent.logEvent(
+            EventType.PUBLICATION,
+            VolumeEvent.CLOSE_PUBLICATION,
+            id = publication.id
+        )
+        disposables.clear()
     }
 }
