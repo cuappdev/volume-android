@@ -125,6 +125,10 @@ class PublicationsFragment : Fragment() {
                     val adapter = followingPublicationsRV.adapter as FollowingHorizontalAdapter
                     adapter.clear()
                 }
+                if (followingPublicationsIDs.isNullOrEmpty()) {
+                    binding.shimmerFollowingPublication.visibility = View.GONE
+                }
+
 
                 // It's important that handleMorePublicationObservable comes after handleFollowingObservable
                 // since we filter what other publications to display based on what publications the user follows.
