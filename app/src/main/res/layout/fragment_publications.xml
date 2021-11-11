@@ -15,16 +15,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <FrameLayout
-                android:id="@+id/fragmentContainer"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:translationZ="100dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
             <ImageView
                 android:id="@+id/iv_publication_header"
                 android:layout_width="wrap_content"
@@ -44,8 +34,8 @@
                 android:layout_height="0dp"
                 android:visibility="visible"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/iv_publication_header">
 
                 <ImageView
@@ -90,16 +80,21 @@
                     android:id="@+id/shimmer_following_publication"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:shimmer_repeat_mode="restart"
                     app:layout_constraintTop_toBottomOf="@id/iv_following_header"
+                    app:shimmer_repeat_mode="restart"
                     app:shimmer_shape="linear">
+
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal">
+
                         <include layout="@layout/layout_shimmer_followed_publication" />
+
                         <include layout="@layout/layout_shimmer_followed_publication" />
+
                         <include layout="@layout/layout_shimmer_followed_publication" />
+
                         <include layout="@layout/layout_shimmer_followed_publication" />
                     </LinearLayout>
                 </com.facebook.shimmer.ShimmerFrameLayout>
@@ -112,8 +107,8 @@
                     android:layout_marginTop="30dp"
                     android:text="@string/no_followed"
                     android:textSize="18sp"
-                    app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/shimmer_following_publication" />
 
                 <TextView
@@ -124,8 +119,8 @@
                     android:text="@string/follow_below"
                     android:textAlignment="center"
                     android:textSize="12sp"
-                    app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/more_articles_message_nothing" />
 
                 <ImageView
@@ -151,16 +146,21 @@
                     android:id="@+id/shimmer_more_publication"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:shimmer_repeat_mode="restart"
                     app:layout_constraintTop_toBottomOf="@id/iv_more_publications_header"
+                    app:shimmer_repeat_mode="restart"
                     app:shimmer_shape="linear">
+
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical">
+
                         <include layout="@layout/layout_shimmer_more_publications" />
+
                         <include layout="@layout/layout_shimmer_more_publications" />
+
                         <include layout="@layout/layout_shimmer_more_publications" />
+
                         <include layout="@layout/layout_shimmer_more_publications" />
                     </LinearLayout>
                 </com.facebook.shimmer.ShimmerFrameLayout>
