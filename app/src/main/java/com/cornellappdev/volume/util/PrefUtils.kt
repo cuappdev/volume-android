@@ -63,8 +63,9 @@ class PrefUtils {
         return preferences.contains(key)
     }
 
-    fun getStringSet(key: String, defValue: Set<String>): Set<String>? {
-        return preferences.getStringSet(key, defValue)
+    fun getStringSet(key: String, defValue: Set<String>): Set<String> {
+        val stringSet = preferences.getStringSet(key, defValue)
+        return stringSet ?: setOf()
     }
 
     fun remove(key: String) {

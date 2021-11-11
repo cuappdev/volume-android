@@ -1,5 +1,6 @@
 package com.cornellappdev.volume.fragments
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,6 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.apollographql.apollo.api.Response
+import com.cornellappdev.volume.NoInternetActivity
 import com.cornellappdev.volume.R
 import com.cornellappdev.volume.adapters.FollowingHorizontalAdapter
 import com.cornellappdev.volume.adapters.MorePublicationsAdapter
@@ -55,28 +57,52 @@ class PublicationsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setupPublicationFragment()
+    }
 
-        setupPublicationsView(binding, isRefreshing = false)
-
-        val volumeOrange: Int? = context?.let { ContextCompat.getColor(it, R.color.volume_orange) }
-        with(binding.srlQuery) {
-            if (volumeOrange != null) {
-                setColorSchemeColors(volumeOrange)
-            }
-
-            // Re-populates the RecyclerViews on refresh, is dependent on whether or not they are
-            // initialized.
-            setOnRefreshListener {
+    /**
+     * Sets up the entirety of the publication fragment, adds onClicks, checks for internet, and sets up
+     * the articles.
+     */
+    private fun setupPublicationFragment() {
+        disposables.add(hasInternetConnection().subscribe { hasInternet ->
+            if (!hasInternet) {
+                startActivity(Intent(context, NoInternetActivity::class.java))
+            } else {
                 setupPublicationsView(
                     binding,
-                    isRefreshing = (this@PublicationsFragment::followingPublicationsRV.isInitialized &&
-                            this@PublicationsFragment::morePublicationsRV.isInitialized)
-
+                    isRefreshing = this@PublicationsFragment::followingPublicationsRV.isInitialized &&
+                            this@PublicationsFragment::morePublicationsRV.isInitialized
                 )
-                // After repopulating, can stop signifying the refresh animation.
-                binding.srlQuery.isRefreshing = false
+
+                val volumeOrange: Int? =
+                    context?.let { ContextCompat.getColor(it, R.color.volume_orange) }
+                with(binding.srlQuery) {
+                    if (volumeOrange != null) {
+                        setColorSchemeColors(volumeOrange)
+                    }
+
+                    // Re-populates the RecyclerViews on refresh, is dependent on whether or not they are
+                    // initialized.
+                    setOnRefreshListener {
+                        disposables.add(hasInternetConnection().subscribe { hasInternet ->
+                            if (!hasInternet) {
+                                startActivity(Intent(context, NoInternetActivity::class.java))
+                            } else {
+                                setupPublicationsView(
+                                    binding,
+                                    isRefreshing = (this@PublicationsFragment::followingPublicationsRV.isInitialized &&
+                                            this@PublicationsFragment::morePublicationsRV.isInitialized)
+
+                                )
+                            }
+                            // After repopulating, can stop signifying the refresh animation.
+                            binding.srlQuery.isRefreshing = false
+                        })
+                    }
+                }
             }
-        }
+        })
     }
 
     /**
@@ -88,7 +114,7 @@ class PublicationsFragment : Fragment() {
 
         // Creates API call observation for retrieving all publications the user follows.
         val followingObs =
-            followingPublicationsIDs?.let {
+            followingPublicationsIDs.let {
                 graphQlUtil
                     .getPublicationsByIDs(it.toMutableList())
                     .subscribeOn(Schedulers.io())
@@ -101,40 +127,32 @@ class PublicationsFragment : Fragment() {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
 
-        disposables.add(hasInternetConnection().subscribe { hasInternet ->
-            if (!hasInternet) {
-                binding.clPublicationPage.visibility = View.GONE
-                val ft = childFragmentManager.beginTransaction()
-                val dialog = NoInternetDialog()
-                ft.replace(binding.fragmentContainer.id, dialog, NoInternetDialog.TAG).commit()
-            } else {
-                childFragmentManager.findFragmentByTag(NoInternetDialog.TAG).let { dialogFrag ->
-                    (dialogFrag as? DialogFragment)?.dismiss()
-                }
 
-                binding.clPublicationPage.visibility = View.VISIBLE
+        childFragmentManager.findFragmentByTag(NoInternetDialog.TAG).let { dialogFrag ->
+            (dialogFrag as? DialogFragment)?.dismiss()
+        }
 
-                if (!followingPublicationsIDs.isNullOrEmpty()) {
-                    handleFollowingObservable(
-                        followingObs,
-                        isRefreshing
-                    )
-                } else if (isRefreshing) {
-                    // Can simply just clear adapter, since there's no following article data
-                    // to populate from (the user doesn't follow any publications).
-                    val adapter = followingPublicationsRV.adapter as FollowingHorizontalAdapter
-                    adapter.clear()
-                }
+        binding.clPublicationPage.visibility = View.VISIBLE
 
-                // It's important that handleMorePublicationObservable comes after handleFollowingObservable
-                // since we filter what other publications to display based on what publications the user follows.
-                handleMorePublicationObservable(
-                    allPublicationsObs,
-                    isRefreshing,
-                    followingPublicationsIDs as HashSet<String>?
-                )
-            }
-        })
+        if (!followingPublicationsIDs.isNullOrEmpty()) {
+            handleFollowingObservable(
+                followingObs,
+                isRefreshing
+            )
+        } else if (isRefreshing) {
+            // Can simply just clear adapter, since there's no following article data
+            // to populate from (the user doesn't follow any publications).
+            val adapter = followingPublicationsRV.adapter as FollowingHorizontalAdapter
+            adapter.clear()
+        }
+
+        // It's important that handleMorePublicationObservable comes after handleFollowingObservable
+        // since we filter what other publications to display based on what publications the user follows.
+        handleMorePublicationObservable(
+            allPublicationsObs,
+            isRefreshing,
+            followingPublicationsIDs as HashSet<String>?
+        )
 
         // Updates the UI if the user doesn't follow any publications.
         if (followingPublicationsIDs?.isEmpty() == true) {
@@ -274,7 +292,7 @@ class PublicationsFragment : Fragment() {
 
                 binding.groupNotFollowing.visibility = View.GONE
                 binding.groupFollowing.visibility = View.VISIBLE
-                binding.shimmerFollowingPublication.visibility=View.INVISIBLE
+                binding.shimmerFollowingPublication.visibility = View.INVISIBLE
             })
         }
     }
@@ -328,12 +346,12 @@ class PublicationsFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        setupPublicationsView(
-            binding,
-            isRefreshing = (this@PublicationsFragment::followingPublicationsRV.isInitialized &&
-                    this@PublicationsFragment::morePublicationsRV.isInitialized)
+        setupPublicationFragment()
+    }
 
-        )
+    override fun onDestroy() {
+        super.onDestroy()
+        disposables.clear()
     }
 
     override fun onDestroyView() {
