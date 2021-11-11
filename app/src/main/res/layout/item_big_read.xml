@@ -11,6 +11,7 @@
     app:cardMaxElevation="0dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_big_read_layout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
 

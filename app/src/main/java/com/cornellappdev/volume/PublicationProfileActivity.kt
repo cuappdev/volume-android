@@ -39,9 +39,9 @@ class PublicationProfileActivity : AppCompatActivity() {
     private lateinit var navigationSource: NavigationSource
     private lateinit var binding: ActivityPublicationProfileBinding
     private lateinit var resultLauncher: ActivityResultLauncher<Intent>
-    private val disposables = CompositeDisposable()
-    private val graphQlUtil = GraphQlUtil()
-    private val prefUtils = PrefUtils()
+    private lateinit var prefUtils: PrefUtils
+    private lateinit var disposables: CompositeDisposable
+    private lateinit var graphQlUtil: GraphQlUtil
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,7 +53,9 @@ class PublicationProfileActivity : AppCompatActivity() {
                     initializePublicationProfileActivity()
                 }
             }
-
+        disposables = CompositeDisposable()
+        graphQlUtil = GraphQlUtil()
+        prefUtils = PrefUtils()
         initializePublicationProfileActivity()
     }
 

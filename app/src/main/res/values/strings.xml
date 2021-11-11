@@ -1,4 +1,4 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <string name="app_name">Volume - Cornell Publications</string>
     <string name="follow_button">Follow Button</string>
 
@@ -7,7 +7,7 @@
         <item quantity="one">%1$d shout-out</item>
         <item quantity="other">%1$d shout-outs</item>
     </plurals>
-    <string name="shoutout_count" tools:ignore="PluralsCandidate">%1$d shout-outs</string>
+    <string name="shoutout_count">%1$d shout-outs</string>
     <string name="dot">&#160;•&#160;</string>
     <string name="title_example">Top 6 Ice Cream Places in Ithaca: Ranked</string>
     <string name="publication_example">Creme de Cornell</string>

@@ -47,11 +47,11 @@ class HomeFragment : Fragment() {
     private lateinit var followingRV: RecyclerView
     private lateinit var otherRV: RecyclerView
     private lateinit var resultLauncher: ActivityResultLauncher<Intent>
+    private lateinit var prefUtils: PrefUtils
+    private lateinit var disposables: CompositeDisposable
+    private lateinit var graphQlUtil: GraphQlUtil
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
-    private val prefUtils = PrefUtils()
-    private val disposables = CompositeDisposable()
-    private val graphQlUtil = GraphQlUtil()
 
     companion object {
         private const val NUMBER_OF_TRENDING_ARTICLES = 7.0
@@ -70,6 +70,9 @@ class HomeFragment : Fragment() {
                 setupHomeFragment()
             }
         }
+        disposables = CompositeDisposable()
+        graphQlUtil = GraphQlUtil()
+        prefUtils = PrefUtils()
         return binding.root
     }
 

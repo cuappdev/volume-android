@@ -14,6 +14,7 @@ import com.cornellappdev.volume.analytics.VolumeEvent
 import com.cornellappdev.volume.databinding.ActivityMainBinding
 import com.cornellappdev.volume.models.Article
 import com.cornellappdev.volume.util.GraphQlUtil
+import com.cornellappdev.volume.util.PrefUtils
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.analytics
 import com.google.firebase.ktx.Firebase
@@ -28,7 +29,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var firebaseAnalytics: FirebaseAnalytics
     private lateinit var resultLauncher: ActivityResultLauncher<Intent>
     private lateinit var article: Article
-    private val disposables = CompositeDisposable()
+    private lateinit var disposables: CompositeDisposable
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,6 +43,7 @@ class MainActivity : AppCompatActivity() {
                 }
             }
 
+        disposables = CompositeDisposable()
         firebaseAnalytics = Firebase.analytics
         initializeMainActivity()
     }
