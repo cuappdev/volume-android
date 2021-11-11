@@ -1,9 +1,14 @@
+package com.cornellappdev.volume
 
 import androidx.annotation.Nullable
 import androidx.recyclerview.widget.DiffUtil
 import com.cornellappdev.volume.models.Article
 
-
+/**
+ * DiffUtil makes the replacement of articles in RecyclerViews faster
+ * by comparing the strict difference between oldArticles and newArticles
+ * and calling notifyDataSetChanged for the items accordingly.
+ */
 class MyDiffCallback(private val oldArticles: List<Article>, private val newArticles: List<Article>) :
     DiffUtil.Callback() {
 
@@ -25,7 +30,6 @@ class MyDiffCallback(private val oldArticles: List<Article>, private val newArti
 
     @Nullable
     override fun getChangePayload(oldItemPosition: Int, newItemPosition: Int): Any? {
-        //you can return particular field for changed item.
         return super.getChangePayload(oldItemPosition, newItemPosition)
     }
 }
