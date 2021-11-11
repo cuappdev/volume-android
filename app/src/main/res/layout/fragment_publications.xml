@@ -2,6 +2,7 @@
 <androidx.swiperefreshlayout.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/srl_query"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -28,6 +29,7 @@
                 tools:srcCompat="@drawable/ic_publications_title_text" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/cl_publication_page"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:visibility="visible"
@@ -60,12 +62,14 @@
                     app:layout_constraintTop_toBottomOf="@id/iv_following_header" />
 
                 <androidx.constraintlayout.widget.Group
+                    android:id="@+id/group_following"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:visibility="visible"
                     app:constraint_referenced_ids="rv_following, iv_following_header" />
 
                 <androidx.constraintlayout.widget.Group
+                    android:id="@+id/group_not_following"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:visibility="gone"
@@ -139,6 +143,7 @@
                     app:layout_constraintTop_toBottomOf="@id/iv_more_publications_header" />
 
                 <com.facebook.shimmer.ShimmerFrameLayout
+                    android:id="@+id/shimmer_more_publication"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:layout_constraintTop_toBottomOf="@id/iv_more_publications_header"
@@ -161,6 +166,7 @@
                 </com.facebook.shimmer.ShimmerFrameLayout>
 
                 <androidx.constraintlayout.widget.Group
+                    android:id="@+id/group_more_publications"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:visibility="visible"

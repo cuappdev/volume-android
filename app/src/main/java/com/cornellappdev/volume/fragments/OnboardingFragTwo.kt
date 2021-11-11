@@ -37,9 +37,9 @@ class OnboardingFragTwo : Fragment(), MorePublicationsAdapter.AdapterOnClickHand
     private lateinit var mCallback: DataPassListener
     private lateinit var publicationRV: RecyclerView
     private lateinit var resultLauncher: ActivityResultLauncher<Intent>
-    private val disposables = CompositeDisposable()
-    private val graphQlUtil = GraphQlUtil()
-    private val prefUtils = PrefUtils()
+    private lateinit var prefUtils: PrefUtils
+    private lateinit var disposables: CompositeDisposable
+    private lateinit var graphQlUtil: GraphQlUtil
     private var _binding: FragmentOnboardingTwoBinding? = null
     private val binding get() = _binding!!
     private var followCounter = 0
@@ -57,6 +57,9 @@ class OnboardingFragTwo : Fragment(), MorePublicationsAdapter.AdapterOnClickHand
                 setupOnboardingFragment()
             }
         }
+        disposables = CompositeDisposable()
+        graphQlUtil = GraphQlUtil()
+        prefUtils = PrefUtils()
         return binding.root
     }
 

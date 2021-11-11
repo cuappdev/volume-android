@@ -42,9 +42,9 @@ class PublicationsFragment : Fragment() {
     private lateinit var followingPublicationsRV: RecyclerView
     private lateinit var morePublicationsRV: RecyclerView
     private lateinit var resultLauncher: ActivityResultLauncher<Intent>
-    private val graphQlUtil = GraphQlUtil()
-    private val disposables = CompositeDisposable()
-    private val prefUtils = PrefUtils()
+    private lateinit var prefUtils: PrefUtils
+    private lateinit var disposables: CompositeDisposable
+    private lateinit var graphQlUtil: GraphQlUtil
     private var _binding: FragmentPublicationsBinding? = null
     private val binding get() = _binding!!
 
@@ -61,6 +61,9 @@ class PublicationsFragment : Fragment() {
                     setupPublicationFragment()
                 }
             }
+        disposables = CompositeDisposable()
+        graphQlUtil = GraphQlUtil()
+        prefUtils = PrefUtils()
         return binding.root
     }
 

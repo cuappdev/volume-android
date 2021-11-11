@@ -40,9 +40,9 @@ class OnboardingActivity : AppCompatActivity(), OnboardingFragTwo.DataPassListen
 
     private lateinit var binding: ActivityOnboardingBinding
     private lateinit var resultLauncher: ActivityResultLauncher<Intent>
+    private lateinit var prefUtils: PrefUtils
+    private lateinit var disposables: CompositeDisposable
     private var isOnboarding = false
-    private val prefUtils = PrefUtils()
-    private val disposables = CompositeDisposable()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,7 +54,8 @@ class OnboardingActivity : AppCompatActivity(), OnboardingFragTwo.DataPassListen
                     initializeOnboarding()
                 }
             }
-
+        prefUtils = PrefUtils(this)
+        disposables = CompositeDisposable()
         initializeOnboarding()
     }
 

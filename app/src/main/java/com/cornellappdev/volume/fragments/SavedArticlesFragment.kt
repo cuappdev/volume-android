@@ -36,9 +36,9 @@ import io.reactivex.schedulers.Schedulers
 class SavedArticlesFragment : Fragment() {
 
     private lateinit var resultLauncher: ActivityResultLauncher<Intent>
-    private val prefUtils = PrefUtils()
-    private var disposables = CompositeDisposable()
-    private val graphQlUtil = GraphQlUtil()
+    private lateinit var prefUtils: PrefUtils
+    private lateinit var disposables: CompositeDisposable
+    private lateinit var graphQlUtil: GraphQlUtil
     private var _binding: FragmentSavedArticlesBinding? = null
     private val binding get() = _binding!!
 
@@ -53,6 +53,9 @@ class SavedArticlesFragment : Fragment() {
                 setupSavedArticlesFragment()
             }
         }
+        disposables = CompositeDisposable()
+        graphQlUtil = GraphQlUtil()
+        prefUtils = PrefUtils()
         return binding.root
     }
 
@@ -112,7 +115,6 @@ class SavedArticlesFragment : Fragment() {
         } else {
             binding.noSavedArticlesGroup.visibility = View.VISIBLE
             binding.clBookmarkPage.visibility = View.GONE
-            binding.fragmentContainer.visibility = View.GONE
         }
     }
 
@@ -163,7 +165,6 @@ class SavedArticlesFragment : Fragment() {
                 retrieveArticlesByIDFromResponse(response, savedArticles)
                 binding.noSavedArticlesGroup.visibility = View.GONE
                 binding.clBookmarkPage.visibility = View.VISIBLE
-                binding.fragmentContainer.visibility = View.VISIBLE
                 with(binding.rvSavedArticles) {
                     adapter = SavedArticlesAdapter(savedArticles)
                     layoutManager = LinearLayoutManager(context)
