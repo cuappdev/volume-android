@@ -6,14 +6,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <androidx.core.widget.NestedScrollView
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fillViewport="true">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content">
 
             <ImageView
                 android:id="@+id/iv_volume_logo"
@@ -27,14 +27,6 @@
                 app:srcCompat="@drawable/volume_title"
                 tools:srcCompat="@drawable/volume_title" />
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/cl_home_page"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:visibility="visible"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/iv_volume_logo">
-
                 <ImageView
                     android:id="@+id/iv_big_read_header"
                     android:layout_width="wrap_content"
@@ -42,8 +34,8 @@
                     android:layout_marginLeft="12dp"
                     android:layout_marginTop="15dp"
                     android:contentDescription="@string/description_big_read_header"
+                    app:layout_constraintTop_toBottomOf="@id/iv_volume_logo"
                     app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
                     app:srcCompat="@drawable/ic_big_read_text"
                     tools:srcCompat="@drawable/ic_big_read_text" />
 
@@ -239,16 +231,15 @@
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rv_other_articles"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="400dp"
+                    app:layout_behavior="@string/appbar_scrolling_view_behavior"
                     android:layout_marginLeft="6dp"
-                    android:nestedScrollingEnabled="false"
+                    android:nestedScrollingEnabled="true"
                     android:visibility="gone"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/iv_other_articles_header" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-    </androidx.core.widget.NestedScrollView>
+    </ScrollView>
 
 </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

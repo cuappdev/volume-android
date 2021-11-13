@@ -3,7 +3,9 @@ package com.cornellappdev.volume.fragments
 import com.cornellappdev.volume.MyDiffCallback
 import android.app.Activity.RESULT_OK
 import android.content.Intent
+import android.os.AsyncTask
 import android.os.Bundle
+import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -34,6 +36,7 @@ import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
+import java.util.concurrent.Executors
 
 /**
  * Fragment for the home page, holds the Big Red Read, articles from publications users follows,
@@ -155,8 +158,6 @@ class HomeFragment : Fragment() {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
 
-        binding.clHomePage.visibility = View.VISIBLE
-
         handleTrendingObservable(
             trendingObs,
             isRefreshing,
@@ -172,6 +173,9 @@ class HomeFragment : Fragment() {
                 trendingArticlesId
             )
         } else if (isRefreshing) {
+            binding.rvFollowing.visibility = View.GONE
+            binding.shimmerFollowing.visibility = View.VISIBLE
+
             // Can simply just clear adapter, since there's no following article data
             // to populate from (the user doesn't follow any publications).
             val adapter = followingRV.adapter as HomeArticlesAdapter
@@ -179,6 +183,9 @@ class HomeFragment : Fragment() {
             val result = DiffUtil.calculateDiff(MyDiffCallback(adapter.articles, newArticles))
             adapter.articles = newArticles
             result.dispatchUpdatesTo(adapter)
+
+            binding.rvFollowing.visibility = View.VISIBLE
+            binding.shimmerFollowing.visibility = View.GONE
         } else {
             // shimmer off
             binding.shimmerFollowing.visibility = View.GONE
@@ -313,11 +320,17 @@ class HomeFragment : Fragment() {
                         LinearLayoutManager.HORIZONTAL
                 }
             } else {
+                binding.rvBigRead.visibility = View.GONE
+                binding.shimmerBigRead.visibility = View.VISIBLE
+
                 // bigRedRV is already created if initialized, only need to repopulate adapter data.
                 val adapter = bigRedRV.adapter as HomeArticlesAdapter
                 val result = DiffUtil.calculateDiff(MyDiffCallback(adapter.articles, trendingArticles))
                 adapter.articles = trendingArticles
                 result.dispatchUpdatesTo(adapter)
+
+                binding.rvBigRead.visibility = View.VISIBLE
+                binding.shimmerBigRead.visibility = View.GONE
             }
 
             // shimmer off
@@ -364,12 +377,18 @@ class HomeFragment : Fragment() {
                             layoutManager = LinearLayoutManager(context)
                         }
                     } else {
+                        binding.rvFollowing.visibility = View.VISIBLE
+                        binding.shimmerFollowing.visibility = View.GONE
+
                         // followingRV is already created if initialized, only need to repopulate adapter data.
                         val adapter = followingRV.adapter as HomeArticlesAdapter
                         val newArticles = followingArticles.take(NUMBER_OF_FOLLOWING_ARTICLES) as MutableList<Article>
                         val result = DiffUtil.calculateDiff(MyDiffCallback(adapter.articles, newArticles))
                         adapter.articles = newArticles
                         result.dispatchUpdatesTo(adapter)
+
+                        binding.rvFollowing.visibility = View.VISIBLE
+                        binding.shimmerFollowing.visibility = View.GONE
                     }
 
                     if (followingArticles.size
@@ -481,13 +500,20 @@ class HomeFragment : Fragment() {
                         layoutManager = LinearLayoutManager(context)
                     }
                 } else {
+                    binding.rvOtherArticles.visibility = View.VISIBLE
+                    binding.shimmerOtherArticles.visibility = View.GONE
+
                     // otherRV is already created if initialized, only need to repopulate adapter data.
                     val adapter = otherRV.adapter as HomeArticlesAdapter
                     val newArticles = otherArticles.shuffled().take(NUMBER_OF_OTHER_ARTICLES) as MutableList<Article>
                     val result = DiffUtil.calculateDiff(MyDiffCallback(adapter.articles, newArticles))
                     adapter.articles = newArticles
                     result.dispatchUpdatesTo(adapter)
+
+                    binding.rvOtherArticles.visibility = View.VISIBLE
+                    binding.shimmerBigRead.visibility = View.GONE
                 }
+
                 // shimmer off
                 binding.shimmerOtherArticles.visibility = View.GONE
                 otherRV.visibility = View.VISIBLE
