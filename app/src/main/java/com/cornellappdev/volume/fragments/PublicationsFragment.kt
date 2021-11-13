@@ -76,26 +76,6 @@ class PublicationsFragment : Fragment(), FollowingHorizontalAdapter.AdapterOnCli
             }
 
         setupPublicationsView(binding, isRefreshing = false)
-
-        val volumeOrange: Int? = context?.let { ContextCompat.getColor(it, R.color.volume_orange) }
-        with(binding.srlQuery) {
-            if (volumeOrange != null) {
-                setColorSchemeColors(volumeOrange)
-            }
-
-            // Re-populates the RecyclerViews on refresh, is dependent on whether or not they are
-            // initialized.
-            setOnRefreshListener {
-                setupPublicationsView(
-                    binding,
-                    isRefreshing = (this@PublicationsFragment::followingPublicationsRV.isInitialized &&
-                            this@PublicationsFragment::morePublicationsRV.isInitialized)
-
-                )
-                // After repopulating, can stop signifying the refresh animation.
-                binding.srlQuery.isRefreshing = false
-            }
-        }
     }
 
     /**
