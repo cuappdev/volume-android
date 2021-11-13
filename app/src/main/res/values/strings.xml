@@ -121,6 +121,8 @@
     <string name="description_shout_out_icon">Shout-out icon</string>
     <string name="description_share_icon">Share icon</string>
     <string name="description_compass">Compass</string>
+    <string name="description_share_what_you_read">Share what you read</string>
+    <string name="description_bookmarked">User bookmarked article</string>
 
     <string name="default_notification_channel_id" translatable="false">fcm_default_channel</string>
 
