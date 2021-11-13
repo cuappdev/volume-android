@@ -17,10 +17,11 @@ import com.cornellappdev.volume.models.Publication
 import com.cornellappdev.volume.util.PrefUtils
 import com.squareup.picasso.Picasso
 
-class MorePublicationsAdapter(private val publicationList: MutableList<Publication>,
-                              private val prefUtils: PrefUtils,
-                              private val mAdapterOnClickHandler: AdapterOnClickHandler?,
-                              private val isOnboarding: Boolean = false) :
+class MorePublicationsAdapter(
+    var publicationList: MutableList<Publication>,
+    private val prefUtils: PrefUtils,
+    private val mAdapterOnClickHandler: AdapterOnClickHandler?,
+    private val isOnboarding: Boolean = false) :
         RecyclerView.Adapter<MorePublicationsAdapter.MorePublicationVH>() {
 
     interface AdapterOnClickHandler {

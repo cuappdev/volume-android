@@ -27,11 +27,11 @@ class GraphQlUtil {
 
     // When developing anything, make sure to use the development endpoint. When deploying, make sure
     // the endpoint is set to deployment.
-    private val baseURL = "https://volume-backend.cornellappdev.com/graphql"
+    private val baseURL = "https://volume-dev.cornellappdev.com/graphql"
     private var client: ApolloClient = setUpApolloClient()
 
     companion object {
-        private const val PING_URL: String = "volume-backend.cornellappdev.com"
+        private const val PING_URL: String = "volume-dev.cornellappdev.com"
 
         /**
          * Hits the deployment endpoint to make sure that 1.) the user has internet and 2.) that

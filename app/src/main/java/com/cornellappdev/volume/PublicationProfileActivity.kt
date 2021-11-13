@@ -262,4 +262,9 @@ class PublicationProfileActivity : AppCompatActivity() {
         super.onDestroy()
         VolumeEvent.logEvent(EventType.PUBLICATION, VolumeEvent.CLOSE_PUBLICATION, id = publication.id)
     }
+
+    override fun onBackPressed() {
+        setResult(RESULT_OK)
+        super.onBackPressed()
+    }
 }
