@@ -3,22 +3,18 @@ package com.cornellappdev.volume.fragments
 import android.app.Activity.RESULT_OK
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.apollographql.apollo.api.Response
 import com.cornellappdev.volume.DiffUtilCallback
 import com.cornellappdev.volume.PublicationProfileActivity
-import com.cornellappdev.volume.R
 import com.cornellappdev.volume.adapters.FollowingHorizontalAdapter
 import com.cornellappdev.volume.adapters.MorePublicationsAdapter
 import com.cornellappdev.volume.analytics.NavigationSource
@@ -46,8 +42,6 @@ import io.reactivex.schedulers.Schedulers
 class PublicationsFragment : Fragment(), FollowingHorizontalAdapter.AdapterOnClickHandler,
     MorePublicationsAdapter.AdapterOnClickHandler {
 
-    private lateinit var followingPublicationsRV: RecyclerView
-    private lateinit var morePublicationsRV: RecyclerView
     private lateinit var resultLauncher: ActivityResultLauncher<Intent>
     private val graphQlUtil = GraphQlUtil()
     private val disposables = CompositeDisposable()
@@ -93,6 +87,7 @@ class PublicationsFragment : Fragment(), FollowingHorizontalAdapter.AdapterOnCli
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
             }
+
         // Creates API call observation for retrieving all publications in the Volume database.
         val allPublicationsObs =
             graphQlUtil.getAllPublications()
@@ -111,22 +106,10 @@ class PublicationsFragment : Fragment(), FollowingHorizontalAdapter.AdapterOnCli
                 }
 
                 binding.clPublicationPage.visibility = View.VISIBLE
-
-                if (!followingPublicationsIDs.isNullOrEmpty()) {
-                    handleFollowingObservable(
-                        followingObs,
-                        isRefreshing
-                    )
-                } else if (isRefreshing) {
-                    // Can simply just clear adapter, since there's no following article data
-                    // to populate from (the user doesn't follow any publications).
-                    val adapter = followingPublicationsRV.adapter as FollowingHorizontalAdapter
-                    adapter.clear()
-                }
-                if (followingPublicationsIDs.isNullOrEmpty()) {
-                    binding.shimmerFollowingPublication.visibility = View.GONE
-                }
-
+                handleFollowingObservable(
+                    followingObs,
+                    isRefreshing
+                )
 
                 // It's important that handleMorePublicationObservable comes after handleFollowingObservable
                 // since we filter what other publications to display based on what publications the user follows.
@@ -137,12 +120,6 @@ class PublicationsFragment : Fragment(), FollowingHorizontalAdapter.AdapterOnCli
                 )
             }
         })
-
-        // Updates the UI if the user doesn't follow any publications.
-        if (followingPublicationsIDs?.isEmpty() == true) {
-            binding.groupFollowing.visibility = View.GONE
-            binding.groupNotFollowing.visibility = View.VISIBLE
-        }
     }
 
     /**
@@ -258,8 +235,7 @@ class PublicationsFragment : Fragment(), FollowingHorizontalAdapter.AdapterOnCli
 
                 // If not refreshing, must initialize the followingPublicationsRV
                 if (!isRefreshing) {
-                    followingPublicationsRV = binding.rvFollowing
-                    with(followingPublicationsRV) {
+                    with(binding.rvFollowing) {
                         adapter = FollowingHorizontalAdapter(
                             followingPublications,
                             this@PublicationsFragment
@@ -272,7 +248,7 @@ class PublicationsFragment : Fragment(), FollowingHorizontalAdapter.AdapterOnCli
                 } else {
                     // followingPublicationsRV is already created if initialized, only need to repopulate adapter data.
                     val adapter =
-                        followingPublicationsRV.adapter as FollowingHorizontalAdapter
+                        binding.rvFollowing.adapter as FollowingHorizontalAdapter
                     val result = DiffUtil.calculateDiff(
                         DiffUtilCallback(
                             adapter.followedPublications,
@@ -283,8 +259,15 @@ class PublicationsFragment : Fragment(), FollowingHorizontalAdapter.AdapterOnCli
                     result.dispatchUpdatesTo(adapter)
                 }
 
-                binding.groupNotFollowing.visibility = View.GONE
-                binding.groupFollowing.visibility = View.VISIBLE
+                // Updates the UI if the user doesn't follow any publications.
+                if (followingPublications.isEmpty()) {
+                    binding.groupFollowing.visibility = View.GONE
+                    binding.groupNotFollowing.visibility = View.VISIBLE
+                } else {
+                    binding.groupNotFollowing.visibility = View.GONE
+                    binding.groupFollowing.visibility = View.VISIBLE
+                }
+
                 binding.shimmerFollowingPublication.visibility = View.INVISIBLE
             })
         }
@@ -318,17 +301,20 @@ class PublicationsFragment : Fragment(), FollowingHorizontalAdapter.AdapterOnCli
 
                 // If not refreshing, must initialize the morePublicationsRV.
                 if (!isRefreshing) {
-                    morePublicationsRV = binding.rvMorePublications
-                    with(morePublicationsRV) {
+                    with(binding.rvMorePublications) {
                         adapter =
-                            MorePublicationsAdapter(morePublications, prefUtils, this@PublicationsFragment)
+                            MorePublicationsAdapter(
+                                morePublications,
+                                prefUtils,
+                                this@PublicationsFragment
+                            )
                         layoutManager = LinearLayoutManager(context)
                         setHasFixedSize(true)
                     }
                 } else {
                     // morePublicationsRV is already created if initialized, only need to repopulate adapter data.
                     val adapter =
-                        morePublicationsRV.adapter as MorePublicationsAdapter
+                        binding.rvMorePublications.adapter as MorePublicationsAdapter
                     val result = DiffUtil.calculateDiff(
                         DiffUtilCallback(
                             adapter.publicationList,
@@ -343,14 +329,9 @@ class PublicationsFragment : Fragment(), FollowingHorizontalAdapter.AdapterOnCli
         })
     }
 
-    override fun onResume() {
-        super.onResume()
-        setupPublicationsView(
-            binding,
-            isRefreshing = (this@PublicationsFragment::followingPublicationsRV.isInitialized &&
-                    this@PublicationsFragment::morePublicationsRV.isInitialized)
-
-        )
+    override fun onDestroy() {
+        disposables.clear()
+        super.onDestroy()
     }
 
     override fun onDestroyView() {

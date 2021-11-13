@@ -71,15 +71,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:visibility="visible"
-                app:constraint_referenced_ids="rv_following, iv_following_header" />
-
-            <androidx.constraintlayout.widget.Group
-                android:id="@+id/group_not_following"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:visibility="gone"
-                app:constraint_referenced_ids="more_articles_message_nothing,
-                more_articles_message_long_nothing" />
+                app:constraint_referenced_ids="rv_following" />
 
             <com.facebook.shimmer.ShimmerFrameLayout
                 android:id="@+id/shimmer_following_publication"
@@ -107,29 +99,52 @@
                 </LinearLayout>
             </com.facebook.shimmer.ShimmerFrameLayout>
 
-            <TextView
-                android:id="@+id/more_articles_message_nothing"
-                style="@style/begum_black"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/group_not_following"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="30dp"
-                android:text="@string/no_followed"
-                android:textSize="18sp"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/shimmer_following_publication" />
+                android:visibility="visible"
+                app:layout_constraintBottom_toTopOf="@id/iv_more_publications_header"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/iv_following_header">
 
-            <TextView
-                android:id="@+id/more_articles_message_long_nothing"
-                style="@style/lato_regular"
-                android:layout_width="205dp"
-                android:layout_height="wrap_content"
-                android:text="@string/follow_below"
-                android:textAlignment="center"
-                android:textSize="12sp"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/more_articles_message_nothing" />
+                <ImageView
+                    android:id="@+id/volume_three_logo"
+                    android:layout_width="21dp"
+                    android:layout_height="28dp"
+                    android:layout_marginBottom="7dp"
+                    android:contentDescription="@string/description_volume_bars_logo"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@drawable/ic_volume_bars" />
+
+                <TextView
+                    android:id="@+id/follow_more_message_header"
+                    style="@style/begum_black"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/no_followed"
+                    android:textSize="18sp"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/volume_three_logo" />
+
+                <TextView
+                    android:id="@+id/follow_more_message"
+                    style="@style/lato_regular"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/follow_below"
+                    android:textAlignment="center"
+                    android:textSize="12sp"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/follow_more_message_header" />
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
             <ImageView
                 android:id="@+id/iv_more_publications_header"
@@ -139,7 +154,7 @@
                 android:layout_marginTop="43dp"
                 android:contentDescription="@string/description_more_publications_header"
                 app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/more_articles_message_long_nothing"
+                app:layout_constraintTop_toBottomOf="@+id/shimmer_following_publication"
                 app:srcCompat="@drawable/ic_more_publications_text"
                 tools:srcCompat="@drawable/ic_more_publications_text" />
 
