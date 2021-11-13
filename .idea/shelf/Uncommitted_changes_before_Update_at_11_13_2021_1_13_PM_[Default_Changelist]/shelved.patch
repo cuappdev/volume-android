@@ -1,0 +1,97 @@
+Index: app/src/main/res/values/strings.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><resources>\r\n    <string name=\"app_name\">Volume-Android</string>\r\n    <string name=\"follow_button\">Follow Button</string>\r\n\r\n    <!-- General -->\r\n    <string name=\"shoutout_count\">%1$d shout-outs</string>\r\n    <string name=\"dot\">&#160;•&#160;</string>\r\n    <string name=\"title_example\">Top 6 Ice Cream Places in Ithaca: Ranked</string>\r\n    <string name=\"publication_example\">Creme de Cornell</string>\r\n    <string name=\"website_example\">cremedecornell.net</string>\r\n\r\n    <!-- Onboarding -->\r\n    <string name=\"welcome_to_volume\">Welcome to Volume</string>\r\n    <string name=\"next\">Next</string>\r\n    <string name=\"start_reading\">Start Reading</string>\r\n\r\n    <!-- Publication Profile Activity -->\r\n    <string name=\"follow\">&#160;+&#160;&#160;Follow</string>\r\n    <string name=\"following\">Following</string>\r\n    <string name=\"article_count\">10 articles</string>\r\n    <string name=\"description\">We are a group of passionate food enthusiasts who come together to publish a diversity of recipes, articles and stories. Once each semester, we publish our magazine Crème de Cornell to highlight a theme in our submitted writings.</string>\r\n    <string name=\"instagram\">Instagram</string>\r\n    <string name=\"facebook\">Facebook</string>\r\n\r\n    <!-- WebView -->\r\n    <string name=\"see_more\">See More</string>\r\n    <string name=\"reading_in_volume\">Reading in Volume</string>\r\n\r\n    <!-- Home Fragment -->\r\n    <string name=\"up_to_date\">You\\'re up to date!</string>\r\n    <string name=\"caught_up\">You\\'ve seen all the new articles from the publications you have been following.</string>\r\n    <string name=\"nothing_to_see\">Nothing to see here!</string>\r\n    <string name=\"follow_some\">Follow some student publications that you are interested in.</string>\r\n\r\n    <!-- Publication Fragment -->\r\n    <string name=\"follow_below\">Follow some below and we’ll show them up here.</string>\r\n    <string name=\"no_followed\">No Followed Publications!</string>\r\n\r\n    <!-- Saved Fragment -->\r\n    <string name=\"no_saved_articles\">You have no saved articles.</string>\r\n\r\n    <!-- Article class -->\r\n    <string name=\"x_h_ago\">%1$d h ago</string>\r\n    <string name=\"one_day_ago\">1 day ago</string>\r\n    <string name=\"x_days_ago\">%1$d days ago</string>\r\n    <string name=\"one_week_ago\">1 week ago</string>\r\n    <string name=\"x_weeks_ago\">%1$d weeks ago</string>\r\n    <string name=\"one_month_ago\">1 month ago</string>\r\n    <string name=\"x_months_ago\">%1$d months ago</string>\r\n    <string name=\"one_year_ago\">1 year ago</string>\r\n    <string name=\"x_years_ago\">%1$d years ago</string>\r\n\r\n    <!-- Settings Activity -->\r\n    <string name=\"settings\">Settings</string>\r\n    <string name=\"send_feedback\">Send Feedback</string>\r\n    <string name=\"visit_our_website\">Visit Our Website</string>\r\n    <string name=\"about_us\">About Us</string>\r\n    <string name=\"our_mission_header\">Our Mission</string>\r\n    <string name=\"the_team\">The Team</string>\r\n    <string name=\"our_mission\">\r\n        Created by Cornell AppDev, Volume aims to better connect student publications with student\r\n        readers by making it easy and accessible to digest student created content. Volume believes\r\n        in the unique power that lies in the sharing and distribution of content by students and\r\n        for students to spark conversation, experiences, and connections that improve the\r\n        collegiate experience.\r\n    </string>\r\n    <string name=\"founding_members_intro\">\r\n        The founding members that together made Volume a reality ✨\r\n    </string>\r\n    <string name=\"megaphone\">\uD83D\uDCE3</string>\r\n    <string name=\"android\">Android</string>\r\n    <string name=\"iOS\">iOS</string>\r\n    <string name=\"backend\">Backend</string>\r\n    <string name=\"marketing\">Marketing</string>\r\n    <string name=\"design\">Design</string>\r\n    <string name=\"android_members\">Chris Desir, Justin Jiang, Aastha Shah</string>\r\n    <string name=\"backend_members\">Tedi Mitiku, Orko Sinha</string>\r\n    <string name=\"ios_members\">Sergio Diaz, Cameron Russell, Daniel Vebman</string>\r\n    <string name=\"marketing_members\">Jonna Chen, Monan Modi, Yi Hsin Wei</string>\r\n    <string name=\"design_members\">Amanda He, Zixian Jia, Maggie Ying</string>\r\n\r\n    <!-- No internet -->\r\n    <string name=\"no_connection\">No connection</string>\r\n    <string name=\"please_try_again_later\">Please try again later</string>\r\n\r\n    <!-- Content descriptions -->\r\n    <string name=\"description_main_volume_logo\">Main Volume logo</string>\r\n    <string name=\"description_line_divider\">A line divider</string>\r\n    <string name=\"description_logo\">Logo of the publication</string>\r\n    <string name=\"description_banner\">Banner of the publication</string>\r\n    <string name=\"description_instagram_logo\">Instagram Logo</string>\r\n    <string name=\"description_facebook_logo\">Facebook Logo</string>\r\n    <string name=\"description_website_image_link\">Website image/link</string>\r\n    <string name=\"description_header_for_articles\">Header for Articles section - holds articles created by publication</string>\r\n    <string name=\"description_right_arrow\">Right arrow - press to enter menu</string>\r\n    <string name=\"description_big_read_header\">Big read header</string>\r\n    <string name=\"description_following_header\">Following header</string>\r\n    <string name=\"description_volume_bars_logo\">Volume bars logo</string>\r\n    <string name=\"description_other_articles_header\">Other articles header</string>\r\n    <string name=\"description_no_wifi_symbol\">No wifi symbol</string>\r\n    <string name=\"description_onboarding_page\">Onboarding page</string>\r\n    <string name=\"description_publications_header\">Publications header</string>\r\n    <string name=\"description_more_publications_header\">More publications header</string>\r\n    <string name=\"description_bookmarks_header\">Bookmarks header</string>\r\n    <string name=\"description_settings_icon\">Settings icon</string>\r\n    <string name=\"description_saved_articles_header\">Saved articles header</string>\r\n    <string name=\"description_article_image\">Image of article / thumbnail</string>\r\n    <string name=\"description_bookmark_icon\">Bookmark icon</string>\r\n    <string name=\"description_shout_out_icon\">Shout-out icon</string>\r\n    <string name=\"description_share_icon\">Share icon</string>\r\n    <string name=\"description_compass\">Compass</string>\r\n\r\n</resources>\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/res/values/strings.xml	(revision 3ef53342df3e630da9c8d8bb58ce5bb7677f780f)
++++ app/src/main/res/values/strings.xml	(date 1636824542051)
+@@ -83,6 +83,10 @@
+     <string name="no_connection">No connection</string>
+     <string name="please_try_again_later">Please try again later</string>
+ 
++    <!-- Weekly Debrief -->
++    <string name="your_weekly_debrief">Your weekly debrief, %1$s- %2$s</string>
++    <string name="in_the_past_week">In the past week, you...</string>
++
+     <!-- Content descriptions -->
+     <string name="description_main_volume_logo">Main Volume logo</string>
+     <string name="description_line_divider">A line divider</string>
+Index: app/src/main/res/layout/fragment_debrief_main.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/res/layout/fragment_debrief_main.xml	(date 1636825675880)
++++ app/src/main/res/layout/fragment_debrief_main.xml	(date 1636825675880)
+@@ -0,0 +1,68 @@
++<?xml version="1.0" encoding="utf-8"?>
++<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
++    android:layout_width="match_parent"
++    android:layout_height="match_parent"
++    xmlns:app="http://schemas.android.com/apk/res-auto"
++    xmlns:tools="http://schemas.android.com/tools">
++
++    <ImageView
++        android:id="@+id/iv_volume_logo"
++        android:layout_width="244dp"
++        android:layout_height="76dp"
++        app:layout_constraintTop_toTopOf="parent"
++        android:layout_marginTop="36dp"
++        app:layout_constraintLeft_toLeftOf="parent"
++        app:layout_constraintRight_toRightOf="parent"
++        android:contentDescription="@string/description_main_volume_logo"
++        app:srcCompat="@drawable/volume_title"
++        tools:srcCompat="@drawable/volume_title"/>
++
++    <TextView
++        android:id="@+id/tv_your_debrief"
++        android:layout_width="wrap_content"
++        android:layout_height="wrap_content"
++        app:layout_constraintTop_toBottomOf="@+id/iv_volume_logo"
++        android:layout_marginTop="16dp"
++        app:layout_constraintLeft_toLeftOf="parent"
++        app:layout_constraintRight_toRightOf="parent"
++        style="@style/begum_black"
++        android:textSize="17sp"
++        android:text="@string/your_weekly_debrief"/>
++
++    <TextView
++        android:id="@+id/tv_in_the_past_week"
++        android:layout_width="wrap_content"
++        android:layout_height="wrap_content"
++        app:layout_constraintTop_toTopOf="@+id/tv_your_debrief"
++        app:layout_constraintLeft_toLeftOf="parent"
++        android:layout_marginTop="36dp"
++        android:layout_marginLeft="40dp"
++        style="@style/begum_black"
++        android:textSize="16sp"
++        android:text="@string/in_the_past_week"/>
++
++    <ImageView
++        android:id="@+id/iv_volume_bars"
++        android:layout_width="wrap_content"
++        android:layout_height="wrap_content"
++        app:layout_constraintTop_toBottomOf="@id/tv_in_the_past_week"
++        android:layout_marginTop="26dp"
++        app:layout_constraintLeft_toLeftOf="parent"
++        android:layout_marginLeft="44dp"
++        android:contentDescription="@string/description_volume_bars_logo"
++        app:srcCompat="@drawable/volume_logo"
++        tools:srcCompat="@drawable/volume_logo"/>
++
++    <ImageView
++        android:id="@+id/iv_shoutout"
++        android:layout_width="wrap_content"
++        android:layout_height="wrap_content"
++        app:layout_constraintTop_toBottomOf="@id/iv_volume_bars"
++        android:layout_marginTop="26dp"
++        app:layout_constraintLeft_toLeftOf="parent"
++        android:layout_marginLeft="44dp"
++        android:contentDescription="@string/description_shout_out_icon"
++        app:srcCompat="@drawable/orange_shoutout"
++        tools:srcCompat="@drawable/orange_shoutout"/>
++
++</androidx.constraintlayout.widget.ConstraintLayout>
+\ No newline at end of file
