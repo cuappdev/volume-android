@@ -1,18 +1,28 @@
 package com.cornellappdev.volume.fragments
 
+import android.app.Activity.RESULT_OK
+import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.apollographql.apollo.api.Response
+import com.cornellappdev.volume.DiffUtilCallback
+import com.cornellappdev.volume.PublicationProfileActivity
 import com.cornellappdev.volume.R
 import com.cornellappdev.volume.adapters.FollowingHorizontalAdapter
 import com.cornellappdev.volume.adapters.MorePublicationsAdapter
+import com.cornellappdev.volume.analytics.NavigationSource
+import com.cornellappdev.volume.analytics.NavigationSource.Companion.putParcelableExtra
 import com.cornellappdev.volume.databinding.FragmentPublicationsBinding
 import com.cornellappdev.volume.models.Article
 import com.cornellappdev.volume.models.Publication
@@ -33,10 +43,12 @@ import io.reactivex.schedulers.Schedulers
  *
  *  @see {@link com.cornellappdev.volume.R.layout#fragment_publications}
  */
-class PublicationsFragment : Fragment() {
+class PublicationsFragment : Fragment(), FollowingHorizontalAdapter.AdapterOnClickHandler,
+    MorePublicationsAdapter.AdapterOnClickHandler {
 
     private lateinit var followingPublicationsRV: RecyclerView
     private lateinit var morePublicationsRV: RecyclerView
+    private lateinit var resultLauncher: ActivityResultLauncher<Intent>
     private val graphQlUtil = GraphQlUtil()
     private val disposables = CompositeDisposable()
     private val prefUtils = PrefUtils()
@@ -55,6 +67,13 @@ class PublicationsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        resultLauncher =
+            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+                if (result.resultCode == RESULT_OK) {
+                    setupPublicationsView(binding, isRefreshing = true)
+                }
+            }
 
         setupPublicationsView(binding, isRefreshing = false)
 
@@ -94,7 +113,6 @@ class PublicationsFragment : Fragment() {
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
             }
-
         // Creates API call observation for retrieving all publications in the Volume database.
         val allPublicationsObs =
             graphQlUtil.getAllPublications()
@@ -262,7 +280,10 @@ class PublicationsFragment : Fragment() {
                 if (!isRefreshing) {
                     followingPublicationsRV = binding.rvFollowing
                     with(followingPublicationsRV) {
-                        adapter = FollowingHorizontalAdapter(followingPublications)
+                        adapter = FollowingHorizontalAdapter(
+                            followingPublications,
+                            this@PublicationsFragment
+                        )
                         layoutManager = LinearLayoutManager(context)
                         (layoutManager as LinearLayoutManager).orientation =
                             LinearLayoutManager.HORIZONTAL
@@ -272,13 +293,19 @@ class PublicationsFragment : Fragment() {
                     // followingPublicationsRV is already created if initialized, only need to repopulate adapter data.
                     val adapter =
                         followingPublicationsRV.adapter as FollowingHorizontalAdapter
-                    adapter.clear()
-                    adapter.addAll(followingPublications)
+                    val result = DiffUtil.calculateDiff(
+                        DiffUtilCallback(
+                            adapter.followedPublications,
+                            followingPublications
+                        )
+                    )
+                    adapter.followedPublications = followingPublications
+                    result.dispatchUpdatesTo(adapter)
                 }
 
                 binding.groupNotFollowing.visibility = View.GONE
                 binding.groupFollowing.visibility = View.VISIBLE
-                binding.shimmerFollowingPublication.visibility=View.INVISIBLE
+                binding.shimmerFollowingPublication.visibility = View.INVISIBLE
             })
         }
     }
@@ -314,7 +341,7 @@ class PublicationsFragment : Fragment() {
                     morePublicationsRV = binding.rvMorePublications
                     with(morePublicationsRV) {
                         adapter =
-                            MorePublicationsAdapter(morePublications, prefUtils, null)
+                            MorePublicationsAdapter(morePublications, prefUtils, this@PublicationsFragment)
                         layoutManager = LinearLayoutManager(context)
                         setHasFixedSize(true)
                     }
@@ -322,8 +349,14 @@ class PublicationsFragment : Fragment() {
                     // morePublicationsRV is already created if initialized, only need to repopulate adapter data.
                     val adapter =
                         morePublicationsRV.adapter as MorePublicationsAdapter
-                    adapter.clear()
-                    adapter.addAll(morePublications)
+                    val result = DiffUtil.calculateDiff(
+                        DiffUtilCallback(
+                            adapter.publicationList,
+                            morePublications
+                        )
+                    )
+                    adapter.publicationList = morePublications
+                    result.dispatchUpdatesTo(adapter)
                 }
             }
             binding.shimmerMorePublication.visibility = View.INVISIBLE
@@ -343,5 +376,19 @@ class PublicationsFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    override fun onPublicationClick(publication: Publication) {
+        val intent = Intent(context, PublicationProfileActivity::class.java)
+        intent.putExtra(Publication.INTENT_KEY, publication)
+        intent.putParcelableExtra(
+            NavigationSource.INTENT_KEY,
+            NavigationSource.FOLLOWING_PUBLICATIONS
+        )
+        resultLauncher.launch(intent)
+    }
+
+    override fun onFollowClick(wasFollowed: Boolean) {
+        setupPublicationsView(binding, isRefreshing = true)
     }
 }
