@@ -43,7 +43,7 @@
 
         <TextView
             android:id="@+id/tv_article_title"
-            style="@style/helvetica_bold"
+            style="@style/lato_bold"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
@@ -56,7 +56,7 @@
 
         <TextView
             android:id="@+id/tv_time_posted"
-            style="@style/helvetica_gray"
+            style="@style/lato_gray"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="110dp"
@@ -67,7 +67,7 @@
 
         <TextView
             android:id="@+id/tv_dot"
-            style="@style/helvetica_gray"
+            style="@style/lato_gray"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="110dp"
@@ -78,7 +78,7 @@
 
         <TextView
             android:id="@+id/tv_shoutout_count"
-            style="@style/helvetica_gray"
+            style="@style/lato_gray"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="110dp"

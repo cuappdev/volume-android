@@ -68,8 +68,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal">
-                        <include layout="@layout/layout_shimmer_big_read"></include>
-                        <include layout="@layout/layout_shimmer_big_read"></include>
+                        <include layout="@layout/layout_shimmer_big_read" />
+                        <include layout="@layout/layout_shimmer_big_read" />
                     </LinearLayout>
                 </com.facebook.shimmer.ShimmerFrameLayout>
 
@@ -122,9 +122,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical">
-                        <include layout="@layout/layout_shimmer_basic_article"></include>
-                        <include layout="@layout/layout_shimmer_basic_article"></include>
-                        <include layout="@layout/layout_shimmer_basic_article"></include>
+                        <include layout="@layout/layout_shimmer_basic_article" />
+                        <include layout="@layout/layout_shimmer_basic_article" />
+                        <include layout="@layout/layout_shimmer_basic_article" />
                     </LinearLayout>
                 </com.facebook.shimmer.ShimmerFrameLayout>
 
@@ -173,7 +173,7 @@
 
                 <TextView
                     android:id="@+id/more_articles_message_long"
-                    style="@style/helvetica_black"
+                    style="@style/lato_regular"
                     android:layout_width="291dp"
                     android:layout_height="wrap_content"
                     android:text="@string/caught_up"
@@ -196,7 +196,7 @@
 
                 <TextView
                     android:id="@+id/more_articles_message_long_nothing"
-                    style="@style/helvetica_black"
+                    style="@style/lato_regular"
                     android:layout_width="291dp"
                     android:layout_height="wrap_content"
                     android:text="@string/follow_some"
@@ -229,9 +229,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical">
-                        <include layout="@layout/layout_shimmer_basic_article"></include>
-                        <include layout="@layout/layout_shimmer_basic_article"></include>
-                        <include layout="@layout/layout_shimmer_basic_article"></include>
+                        <include layout="@layout/layout_shimmer_basic_article" />
+                        <include layout="@layout/layout_shimmer_basic_article" />
+                        <include layout="@layout/layout_shimmer_basic_article" />
                     </LinearLayout>
                 </com.facebook.shimmer.ShimmerFrameLayout>
 

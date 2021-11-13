@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Volume-Android</string>
+    <string name="app_name">Volume - Cornell Publications</string>
     <string name="follow_button">Follow Button</string>
 
     <!-- General -->
@@ -34,7 +34,7 @@
 
     <!-- Publication Fragment -->
     <string name="follow_below">Follow some below and we’ll show them up here.</string>
-    <string name="no_followed">No Followed Publications!</string>
+    <string name="no_followed">Nothing to see here!</string>
 
     <!-- Saved Fragment -->
     <string name="no_saved_articles">You have no saved articles.</string>
@@ -109,5 +109,7 @@
     <string name="description_shout_out_icon">Shout-out icon</string>
     <string name="description_share_icon">Share icon</string>
     <string name="description_compass">Compass</string>
+
+    <string name="default_notification_channel_id" translatable="false">fcm_default_channel</string>
 
 </resources>
