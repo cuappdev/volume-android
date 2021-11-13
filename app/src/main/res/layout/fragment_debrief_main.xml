@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <ImageView
+        android:id="@+id/iv_volume_logo"
+        android:layout_width="244dp"
+        android:layout_height="76dp"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="36dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:contentDescription="@string/description_main_volume_logo"
+        app:srcCompat="@drawable/volume_title"
+        tools:srcCompat="@drawable/volume_title"/>
+
+    <TextView
+        android:id="@+id/tv_your_debrief"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/iv_volume_logo"
+        android:layout_marginTop="16dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        style="@style/begum_black"
+        android:textSize="17sp"
+        android:text="@string/your_weekly_debrief"/>
+
+    <TextView
+        android:id="@+id/tv_in_the_past_week"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="@+id/tv_your_debrief"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginTop="36dp"
+        android:layout_marginLeft="40dp"
+        style="@style/begum_black"
+        android:textSize="16sp"
+        android:text="@string/in_the_past_week"/>
+
+    <ImageView
+        android:id="@+id/iv_volume_bars"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/tv_in_the_past_week"
+        android:layout_marginTop="26dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginLeft="44dp"
+        android:contentDescription="@string/description_volume_bars_logo"
+        app:srcCompat="@drawable/volume_three_bars"
+        tools:srcCompat="@drawable/volume_three_bars"/>
+
+    <TextView
+        android:id="@+id/tv_read"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="@id/iv_volume_bars"
+        app:layout_constraintBottom_toBottomOf="@id/iv_volume_bars"
+        app:layout_constraintLeft_toRightOf="@id/iv_volume_bars"
+        android:layout_marginLeft="26dp"
+        style="@style/begum_black"
+        android:textSize="17sp"
+        android:text="@string/read"/>
+
+    <TextView
+        android:id="@+id/tv_number_articles_read"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="@id/tv_read"
+        app:layout_constraintBottom_toBottomOf="@id/tv_read"
+        app:layout_constraintLeft_toRightOf="@id/tv_read"
+        android:layout_marginLeft="8dp"
+        style="@style/begum_black"
+        android:textColor="@color/volume_orange"
+        android:textSize="36sp"
+        android:text="@string/number_read_articles"/>
+
+    <TextView
+        android:id="@+id/read_articles"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="@id/tv_read"
+        app:layout_constraintBottom_toBottomOf="@id/tv_read"
+        app:layout_constraintLeft_toRightOf="@id/tv_number_articles_read"
+        android:layout_marginLeft="8dp"
+        style="@style/begum_black"
+        android:textSize="17sp"
+        android:text="@string/articles"/>
+
+    <ImageView
+        android:id="@+id/iv_shoutout"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        app:layout_constraintTop_toBottomOf="@id/iv_volume_bars"
+        android:layout_marginTop="26dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginLeft="44dp"
+        android:contentDescription="@string/description_shout_out_icon"
+        app:srcCompat="@drawable/orange_shoutout"
+        tools:srcCompat="@drawable/orange_shoutout"/>
+
+    <TextView
+        android:id="@+id/tv_gave"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="@id/iv_shoutout"
+        app:layout_constraintBottom_toBottomOf="@id/iv_shoutout"
+        app:layout_constraintLeft_toRightOf="@id/iv_shoutout"
+        android:layout_marginLeft="26dp"
+        style="@style/begum_black"
+        android:textSize="17sp"
+        android:text="@string/gave"/>
+
+    <TextView
+        android:id="@+id/tv_number_articles_shouted"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="@id/tv_gave"
+        app:layout_constraintBottom_toBottomOf="@id/tv_gave"
+        app:layout_constraintLeft_toRightOf="@id/tv_gave"
+        android:layout_marginLeft="8dp"
+        style="@style/begum_black"
+        android:textColor="@color/volume_orange"
+        android:textSize="36sp"
+        android:text="@string/number_shouted_articles"/>
+
+    <TextView
+        android:id="@+id/shouts"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="@id/tv_gave"
+        app:layout_constraintBottom_toBottomOf="@id/tv_gave"
+        app:layout_constraintLeft_toRightOf="@id/tv_number_articles_shouted"
+        android:layout_marginLeft="8dp"
+        style="@style/begum_black"
+        android:textSize="17sp"
+        android:text="@string/shouts"/>
+
+<!--    <ImageView-->
+<!--        android:id="@+id/iv_bookmark_icon"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        app:layout_constraintTop_toBottomOf="@id/iv_shoutout"-->
+<!--        android:layout_marginTop="26dp"-->
+<!--        app:layout_constraintLeft_toLeftOf="parent"-->
+<!--        android:layout_marginLeft="44dp"-->
+<!--        android:contentDescription="@string/description_bookmark_icon"-->
+<!--        app:srcCompat="@drawable/orange_bookmark_svg"-->
+<!--        tools:srcCompat="@drawable/orange_bookmark_svg"/>-->
+
+    <TextView
+        android:id="@+id/you_were_top"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/iv_shoutout"
+        android:layout_marginTop="76dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginLeft="40dp"
+        style="@style/begum_black"
+        android:textSize="17dp"
+        android:text="@string/you_were_top"/>
+
+    <TextView
+        android:id="@+id/tv_top_percent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="@id/you_were_top"
+        android:layout_marginTop="-18dp"
+        app:layout_constraintLeft_toRightOf="@id/you_were_top"
+        android:layout_marginLeft="8dp"
+        style="@style/begum_black"
+        android:textColor="@color/volume_orange"
+        android:textSize="36dp"
+        android:text="@string/top_percent"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
