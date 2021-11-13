@@ -98,6 +98,18 @@
     <string name="no_connection">No connection</string>
     <string name="please_try_again_later">Please try again later</string>
 
+    <!-- Weekly Debrief -->
+    <string name="your_weekly_debrief">Your weekly debrief, %1$s- %2$s</string>
+    <string name="in_the_past_week">In the past week, you…</string>
+    <string name="read">read</string>
+    <string name="number_read_articles">%1$d</string>
+    <string name="articles">articles</string>
+    <string name="gave">gave</string>
+    <string name="number_shouted_articles">%1$d</string>
+    <string name="shouts">shout-outs</string>
+    <string name="you_were_top">You were among the top <br/><br/>active readers last week! <br/><br/><br/>Keep up the volume! 📣</string>
+    <string name="top_percent">%1$s</string>
+
     <!-- Content descriptions -->
     <string name="description_main_volume_logo">Main Volume logo</string>
     <string name="description_line_divider">A line divider</string>
