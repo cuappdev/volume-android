@@ -16,13 +16,13 @@ import kotlin.math.abs
 
 @Parcelize
 class Article(
-        val id: String? = "",
-        val title: String? = "",
-        val articleURL: String? = "",
-        val imageURL: String? = "",
+        val id: String,
+        val title: String,
+        val articleURL: String,
+        val imageURL: String,
         val publication: Publication? = null,
-        val date: String? = "",
-        val shoutouts: Double? = 0.0,
+        val date: String,
+        val shoutouts: Double,
         val nsfw: Boolean = false
 ) : Parcelable {
 

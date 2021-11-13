@@ -1,9 +1,11 @@
 package com.cornellappdev.volume.fragments
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
@@ -21,6 +23,8 @@ import com.cornellappdev.volume.models.Social
 import com.cornellappdev.volume.util.GraphQlUtil
 import com.cornellappdev.volume.util.GraphQlUtil.Companion.hasInternetConnection
 import com.cornellappdev.volume.util.PrefUtils
+import com.google.android.gms.tasks.OnCompleteListener
+import com.google.firebase.messaging.FirebaseMessaging
 import com.kotlin.graphql.AllPublicationsQuery
 import com.kotlin.graphql.ArticlesByPublicationIDsQuery
 import com.kotlin.graphql.TrendingArticlesQuery
@@ -68,7 +72,7 @@ class HomeFragment : Fragment() {
 
         setUpHomeView(binding, isRefreshing = false)
 
-        val volumeOrange: Int? = context?.let { ContextCompat.getColor(it, R.color.volumeOrange) }
+        val volumeOrange: Int? = context?.let { ContextCompat.getColor(it, R.color.volume_orange) }
         with(binding.srlQuery) {
             if (volumeOrange != null) {
                 setColorSchemeColors(volumeOrange)
@@ -454,7 +458,7 @@ class HomeFragment : Fragment() {
                     with(otherRV) {
                         adapter = HomeArticlesAdapter(
                                 otherArticles.shuffled()
-                                        as MutableList<Article>
+                                        as MutableList<Article>, true
                         )
                         layoutManager = LinearLayoutManager(context)
                     }

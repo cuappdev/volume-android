@@ -82,7 +82,22 @@ class OnboardingFragTwo : Fragment(), MorePublicationsAdapter.AdapterOnClickHand
                             publication.mostRecentArticle.title,
                             publication.mostRecentArticle.articleURL,
                             publication.mostRecentArticle.imageURL,
-                            nsfw = isNSFW
+                            Publication(
+                                id = publication.id,
+                                backgroundImageURL = publication.backgroundImageURL,
+                                bio = publication.bio,
+                                name = publication.name,
+                                profileImageURL = publication.profileImageURL,
+                                rssName = publication.rssName,
+                                rssURL = publication.rssURL,
+                                slug = publication.slug,
+                                shoutouts = publication.shoutouts,
+                                websiteURL = publication.websiteURL,
+                                socials = publication.socials.toList()
+                                    .map { Social(it.social, it.uRL) }),
+                            publication.mostRecentArticle.date.toString(),
+                            publication.mostRecentArticle.shoutouts,
+                            isNSFW,
                         )
                     },
                     publication.socials.toList()

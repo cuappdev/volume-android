@@ -61,11 +61,6 @@ class GraphQlUtil {
             .build()
     }
 
-    fun getAllArticles(): Observable<Response<AllArticlesQuery.Data>> {
-        val query = AllArticlesQuery()
-        return client.rxQuery(query)
-    }
-
     fun getTrendingArticles(limit: Double): Observable<Response<TrendingArticlesQuery.Data>> {
         val query = (TrendingArticlesQuery(limit.toInput()))
         return client.rxQuery(query)
@@ -86,11 +81,6 @@ class GraphQlUtil {
         return client.rxQuery(query)
     }
 
-    fun getPublicationByID(pubID: String): Observable<Response<PublicationByIDQuery.Data>> {
-        val query = (PublicationByIDQuery(pubID))
-        return client.rxQuery(query)
-    }
-
     fun getPublicationsByIDs(pubIDs: MutableList<String>): Observable<Response<PublicationsByIDsQuery.Data>> {
         val query = (PublicationsByIDsQuery(pubIDs.toList()))
         return client.rxQuery(query)
@@ -101,12 +91,7 @@ class GraphQlUtil {
         return client.rxQuery(query)
     }
 
-    fun getArticleByID(id: String): Observable<Response<ArticleByIDQuery.Data>> {
-        val query = (ArticleByIDQuery(id))
-        return client.rxQuery(query)
-    }
-
-    fun likeArticle(id: String): Single<Response<IncrementShoutoutMutation.Data>> {
+    fun shoutoutArticle(id: String): Single<Response<IncrementShoutoutMutation.Data>> {
         val mutation = (IncrementShoutoutMutation(id))
         return client.rxMutate(mutation)
     }

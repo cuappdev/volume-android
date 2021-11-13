@@ -11,7 +11,6 @@
         android:layout_height="32dp"
         android:layout_marginStart="16dp"
         android:contentDescription="@string/description_logo"
-        android:src="@drawable/cremelogotrans"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -62,14 +61,20 @@
 
     <TextView
         android:id="@+id/tv_shoutout_count"
-        style="@style/helvetica_bold"
+        style="@style/lato_bold"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
-        android:text="@string/shoutout_count"
         android:textSize="12sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/icon_group"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:constraint_referenced_ids="btn_see_more, iv_bookmark_icon, iv_share, iv_shoutout" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
