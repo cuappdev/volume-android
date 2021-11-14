@@ -18,12 +18,11 @@ import com.cornellappdev.volume.util.PrefUtils
 import com.squareup.picasso.Picasso
 
 class MorePublicationsAdapter(
-    private val publicationList: MutableList<Publication>,
+    var publicationList: MutableList<Publication>,
     private val prefUtils: PrefUtils,
     private val mAdapterOnClickHandler: AdapterOnClickHandler?,
-    private val isOnboarding: Boolean = false
-) :
-    RecyclerView.Adapter<MorePublicationsAdapter.MorePublicationVH>() {
+    private val isOnboarding: Boolean = false) :
+        RecyclerView.Adapter<MorePublicationsAdapter.MorePublicationVH>() {
 
     interface AdapterOnClickHandler {
         fun onFollowClick(wasFollowed: Boolean)

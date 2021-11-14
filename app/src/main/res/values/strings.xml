@@ -37,7 +37,7 @@
     <string name="follow_some">Follow some student publications that you are interested in.</string>
 
     <!-- Publication Fragment -->
-    <string name="follow_below">Follow some below and we’ll show them up here.</string>
+    <string name="follow_below">Follow some student publications below and we’ll \n show them up here.</string>
     <string name="no_followed">Nothing to see here!</string>
 
     <!-- Saved Fragment -->

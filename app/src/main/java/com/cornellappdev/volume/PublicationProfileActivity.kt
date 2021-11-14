@@ -308,4 +308,9 @@ class PublicationProfileActivity : AppCompatActivity() {
         )
         disposables.clear()
     }
+
+    override fun onBackPressed() {
+        setResult(RESULT_OK)
+        super.onBackPressed()
+    }
 }

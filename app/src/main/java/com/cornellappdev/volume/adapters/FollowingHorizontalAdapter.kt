@@ -11,15 +11,23 @@ import com.cornellappdev.volume.databinding.ItemFollowedPublicationBinding
 import com.cornellappdev.volume.models.Publication
 import com.squareup.picasso.Picasso
 
-class FollowingHorizontalAdapter(private val followedPublications: MutableList<Publication>) :
-        RecyclerView.Adapter<FollowingHorizontalAdapter.FollowHorizontalVH>() {
+class FollowingHorizontalAdapter(
+    var followedPublications: MutableList<Publication>,
+    private val mAdapterOnClickHandler: AdapterOnClickHandler?
+) :
+    RecyclerView.Adapter<FollowingHorizontalAdapter.FollowHorizontalVH>() {
+
+    interface AdapterOnClickHandler {
+        fun onPublicationClick(publication: Publication)
+    }
 
     class FollowHorizontalVH(
-            val binding: ItemFollowedPublicationBinding) : RecyclerView.ViewHolder(binding.root)
+        val binding: ItemFollowedPublicationBinding
+    ) : RecyclerView.ViewHolder(binding.root)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FollowHorizontalVH {
         val binding = ItemFollowedPublicationBinding
-                .inflate(LayoutInflater.from(parent.context), parent, false)
+            .inflate(LayoutInflater.from(parent.context), parent, false)
         return FollowHorizontalVH(binding)
     }
 
@@ -33,11 +41,8 @@ class FollowingHorizontalAdapter(private val followedPublications: MutableList<P
             Picasso.get().load(currentItem.profileImageURL).into(holder.binding.ivLogo)
         }
         holder.binding.tvName.text = currentItem.name
-        holder.binding.clVeticalPublicationLayout.setOnClickListener { view ->
-            val intent = Intent(view.context, PublicationProfileActivity::class.java)
-            intent.putExtra(Publication.INTENT_KEY, currentItem)
-            intent.putParcelableExtra(NavigationSource.INTENT_KEY, NavigationSource.FOLLOWING_PUBLICATIONS)
-            view.context.startActivity(intent)
+        holder.binding.clVeticalPublicationLayout.setOnClickListener {
+            mAdapterOnClickHandler?.onPublicationClick(currentItem)
         }
     }
 
