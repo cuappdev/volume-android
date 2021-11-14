@@ -19,6 +19,7 @@ import com.cornellappdev.volume.databinding.ActivityPublicationProfileBinding
 import com.cornellappdev.volume.models.Article
 import com.cornellappdev.volume.models.Publication
 import com.cornellappdev.volume.models.Social
+import com.cornellappdev.volume.util.ActivityForResultConstants
 import com.cornellappdev.volume.util.GraphQlUtil
 import com.cornellappdev.volume.util.PrefUtils
 import com.kotlin.graphql.ArticlesByPublicationIDQuery
@@ -49,7 +50,7 @@ class PublicationProfileActivity : AppCompatActivity() {
         setContentView(binding.root)
         resultLauncher =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-                if (result.resultCode == RESULT_OK) {
+                if (result.resultCode == ActivityForResultConstants.FROM_NO_INTERNET.code) {
                     initializePublicationProfileActivity()
                 }
             }
@@ -310,7 +311,7 @@ class PublicationProfileActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-        setResult(RESULT_OK)
+        setResult(ActivityForResultConstants.FROM_PUBLICATION_PROFILE_ACTIVITY.code)
         super.onBackPressed()
     }
 }

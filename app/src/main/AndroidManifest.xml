@@ -46,7 +46,7 @@
 
         <!-- [START firebase_service] -->
         <service
-            android:name=".NotificationService"
+            android:name=".util.NotificationService"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />

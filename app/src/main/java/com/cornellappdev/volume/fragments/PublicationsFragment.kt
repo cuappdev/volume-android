@@ -1,6 +1,5 @@
 package com.cornellappdev.volume.fragments
 
-import android.app.Activity.RESULT_OK
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -13,6 +12,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.apollographql.apollo.api.Response
 import com.cornellappdev.volume.DiffUtilCallback
+import com.cornellappdev.volume.NoInternetActivity
 import com.cornellappdev.volume.PublicationProfileActivity
 import com.cornellappdev.volume.adapters.FollowingHorizontalAdapter
 import com.cornellappdev.volume.adapters.MorePublicationsAdapter
@@ -22,6 +22,7 @@ import com.cornellappdev.volume.databinding.FragmentPublicationsBinding
 import com.cornellappdev.volume.models.Article
 import com.cornellappdev.volume.models.Publication
 import com.cornellappdev.volume.models.Social
+import com.cornellappdev.volume.util.ActivityForResultConstants
 import com.cornellappdev.volume.util.GraphQlUtil
 import com.cornellappdev.volume.util.GraphQlUtil.Companion.hasInternetConnection
 import com.cornellappdev.volume.util.PrefUtils
@@ -63,10 +64,10 @@ class PublicationsFragment : Fragment(), FollowingHorizontalAdapter.AdapterOnCli
 
         resultLauncher =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-                if (result.resultCode == RESULT_OK) {
+                if (result.resultCode == ActivityForResultConstants.FROM_PUBLICATION_PROFILE_ACTIVITY.code) {
                     setupPublicationsView(binding, isRefreshing = true)
                 }
-                if (result.resultCode == RESULT_OK) {
+                if (result.resultCode == ActivityForResultConstants.FROM_NO_INTERNET.code) {
                     setupPublicationFragment()
                 }
             }

@@ -13,6 +13,7 @@ import com.cornellappdev.volume.analytics.NavigationSource
 import com.cornellappdev.volume.analytics.VolumeEvent
 import com.cornellappdev.volume.databinding.ActivityMainBinding
 import com.cornellappdev.volume.models.Article
+import com.cornellappdev.volume.util.ActivityForResultConstants
 import com.cornellappdev.volume.util.GraphQlUtil
 import com.cornellappdev.volume.util.PrefUtils
 import com.google.firebase.analytics.FirebaseAnalytics
@@ -38,7 +39,7 @@ class MainActivity : AppCompatActivity() {
 
         resultLauncher =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-                if (result.resultCode == RESULT_OK) {
+                if (result.resultCode == ActivityForResultConstants.FROM_NO_INTERNET.code) {
                     initializeMainActivity()
                 }
             }
