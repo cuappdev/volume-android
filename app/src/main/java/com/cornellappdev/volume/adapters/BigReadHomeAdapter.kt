@@ -15,7 +15,7 @@ import com.cornellappdev.volume.databinding.ItemBigReadBinding
 import com.cornellappdev.volume.models.Article
 import com.squareup.picasso.Picasso
 
-class BigReadHomeAdapter(private val articles: MutableList<Article>) :
+class BigReadHomeAdapter(var articles: MutableList<Article>) :
     RecyclerView.Adapter<BigReadHomeAdapter.BigReadArticleVH>() {
 
     private lateinit var context: Context
