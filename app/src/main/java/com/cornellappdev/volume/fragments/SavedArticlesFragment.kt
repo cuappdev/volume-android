@@ -20,6 +20,7 @@ import com.cornellappdev.volume.databinding.FragmentSavedArticlesBinding
 import com.cornellappdev.volume.models.Article
 import com.cornellappdev.volume.models.Publication
 import com.cornellappdev.volume.models.Social
+import com.cornellappdev.volume.util.ActivityForResultConstants
 import com.cornellappdev.volume.util.GraphQlUtil
 import com.cornellappdev.volume.util.PrefUtils
 import com.kotlin.graphql.ArticlesByIDsQuery
@@ -49,7 +50,7 @@ class SavedArticlesFragment : Fragment() {
     ): View {
         _binding = FragmentSavedArticlesBinding.inflate(inflater, container, false)
         resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            if (result.resultCode == Activity.RESULT_OK) {
+            if (result.resultCode == ActivityForResultConstants.FROM_NO_INTERNET.code) {
                 setupSavedArticlesFragment()
             }
         }

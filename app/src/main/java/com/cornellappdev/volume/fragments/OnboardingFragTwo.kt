@@ -17,6 +17,7 @@ import com.cornellappdev.volume.databinding.FragmentOnboardingTwoBinding
 import com.cornellappdev.volume.models.Article
 import com.cornellappdev.volume.models.Publication
 import com.cornellappdev.volume.models.Social
+import com.cornellappdev.volume.util.ActivityForResultConstants
 import com.cornellappdev.volume.util.GraphQlUtil
 import com.cornellappdev.volume.util.PrefUtils
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -53,7 +54,7 @@ class OnboardingFragTwo : Fragment(), MorePublicationsAdapter.AdapterOnClickHand
         mCallback = activity as DataPassListener
         _binding = FragmentOnboardingTwoBinding.inflate(inflater, container, false)
         resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            if (result.resultCode == Activity.RESULT_OK) {
+            if (result.resultCode == ActivityForResultConstants.FROM_NO_INTERNET.code) {
                 setupOnboardingFragment()
             }
         }

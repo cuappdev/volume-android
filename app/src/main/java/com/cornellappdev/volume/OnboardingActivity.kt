@@ -18,6 +18,7 @@ import com.cornellappdev.volume.analytics.EventType
 import com.cornellappdev.volume.analytics.VolumeEvent
 import com.cornellappdev.volume.databinding.ActivityOnboardingBinding
 import com.cornellappdev.volume.fragments.OnboardingFragTwo
+import com.cornellappdev.volume.util.ActivityForResultConstants
 import com.cornellappdev.volume.util.GraphQlUtil.Companion.hasInternetConnection
 import com.cornellappdev.volume.util.PrefUtils
 import io.reactivex.disposables.CompositeDisposable
@@ -50,7 +51,7 @@ class OnboardingActivity : AppCompatActivity(), OnboardingFragTwo.DataPassListen
         setContentView(binding.root)
         resultLauncher =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-                if (result.resultCode == RESULT_OK && !isOnboarding) {
+                if (result.resultCode == ActivityForResultConstants.FROM_NO_INTERNET.code && !isOnboarding) {
                     initializeOnboarding()
                 }
             }

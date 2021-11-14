@@ -3,6 +3,7 @@ package com.cornellappdev.volume
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.cornellappdev.volume.databinding.ActivityNoInternetBinding
+import com.cornellappdev.volume.util.ActivityForResultConstants
 
 class NoInternetActivity : AppCompatActivity() {
 
@@ -15,7 +16,7 @@ class NoInternetActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-        setResult(RESULT_OK)
+        setResult(ActivityForResultConstants.FROM_NO_INTERNET.code)
         super.onBackPressed()
     }
 }
