@@ -339,6 +339,10 @@ class PublicationsFragment : Fragment(), FollowingHorizontalAdapter.AdapterOnCli
         _binding = null
     }
 
+    /**
+     * Handles the callback from the Following publications RecyclerView; onClick of a view
+     * opens the publication profile for the specific publication.
+     */
     override fun onPublicationClick(publication: Publication) {
         val intent = Intent(context, PublicationProfileActivity::class.java)
         intent.putExtra(Publication.INTENT_KEY, publication)
@@ -349,6 +353,10 @@ class PublicationsFragment : Fragment(), FollowingHorizontalAdapter.AdapterOnCli
         resultLauncher.launch(intent)
     }
 
+    /**
+     * Handles the callback from the follow button being pressed on the More publications RecyclerView;
+     * refreshes both RecyclerViews to display the correct following list.
+     */
     override fun onFollowClick(wasFollowed: Boolean) {
         setupPublicationsView(binding, isRefreshing = true)
     }
