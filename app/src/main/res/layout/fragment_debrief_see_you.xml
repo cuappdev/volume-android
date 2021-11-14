@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/iv_see_you_next_week"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:contentDescription="@string/description_see_you_next_week"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/see_you_next_week"
+        tools:srcCompat="@drawable/see_you_next_week" />
+
+    <ImageView
+        android:id="@+id/iv_volume_logo"
+        android:layout_width="250dp"
+        android:layout_height="78dp"
+        android:layout_marginTop="178dp"
+        android:contentDescription="@string/description_main_volume_logo"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/volume_title"
+        tools:srcCompat="@drawable/volume_title" />
+
+    <TextView
+        android:id="@+id/tv_pitch"
+        android:layout_width="275dp"
+        android:layout_height="40dp"
+        app:layout_constraintTop_toBottomOf="@id/iv_volume_logo"
+        android:layout_marginTop="16dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        style="@style/begum_black"
+        android:textSize="16sp"
+        android:text="@string/debrief_pitch"
+        android:gravity="center"/>
+
+    <Button
+        android:id="@+id/b_continue"
+        android:layout_width="184dp"
+        android:layout_height="45dp"
+        app:layout_constraintTop_toBottomOf="@id/tv_pitch"
+        android:layout_marginTop="170dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:contentDescription="@string/continue_to_volume"
+        android:background="@drawable/continue_to_volume"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
