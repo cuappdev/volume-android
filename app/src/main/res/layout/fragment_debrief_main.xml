@@ -79,7 +79,7 @@
         app:layout_constraintTop_toTopOf="@id/tv_read" />
 
     <TextView
-        android:id="@+id/read_articles"
+        android:id="@+id/tv_read_articles"
         style="@style/begum_black"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -128,7 +128,7 @@
         app:layout_constraintTop_toTopOf="@id/tv_gave" />
 
     <TextView
-        android:id="@+id/shouts"
+        android:id="@+id/tv_shouts"
         style="@style/begum_black"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -139,20 +139,57 @@
         app:layout_constraintLeft_toRightOf="@id/tv_number_articles_shouted"
         app:layout_constraintTop_toTopOf="@id/tv_gave" />
 
-    <!--    <ImageView-->
-    <!--        android:id="@+id/iv_bookmark_icon"-->
-    <!--        android:layout_width="wrap_content"-->
-    <!--        android:layout_height="wrap_content"-->
-    <!--        app:layout_constraintTop_toBottomOf="@id/iv_shoutout"-->
-    <!--        android:layout_marginTop="26dp"-->
-    <!--        app:layout_constraintLeft_toLeftOf="parent"-->
-    <!--        android:layout_marginLeft="44dp"-->
-    <!--        android:contentDescription="@string/description_bookmark_icon"-->
-    <!--        app:srcCompat="@drawable/orange_bookmark_svg"-->
-    <!--        tools:srcCompat="@drawable/orange_bookmark_svg"/>-->
+    <ImageView
+        android:id="@+id/iv_bookmark_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="44dp"
+        android:layout_marginTop="26dp"
+        android:contentDescription="@string/description_bookmark_icon"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/iv_shoutout"
+        app:srcCompat="@drawable/orange_bookmark_svg"
+        tools:srcCompat="@drawable/orange_bookmark_svg" />
 
     <TextView
-        android:id="@+id/you_were_top"
+        android:id="@+id/tv_bookmarked"
+        style="@style/begum_black"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="26dp"
+        android:text="@string/bookmarked"
+        android:textSize="17sp"
+        app:layout_constraintBottom_toBottomOf="@id/iv_bookmark_icon"
+        app:layout_constraintLeft_toRightOf="@id/iv_bookmark_icon"
+        app:layout_constraintTop_toTopOf="@id/iv_bookmark_icon" />
+
+    <TextView
+        android:id="@+id/tv_number_articles_bookmarked"
+        style="@style/begum_black"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:text="@string/number_shouted_articles"
+        android:textColor="@color/volume_orange"
+        android:textSize="36sp"
+        app:layout_constraintBottom_toBottomOf="@id/tv_bookmarked"
+        app:layout_constraintLeft_toRightOf="@id/tv_bookmarked"
+        app:layout_constraintTop_toTopOf="@id/tv_bookmarked" />
+
+    <TextView
+        android:id="@+id/tv_bookmark_articles"
+        style="@style/begum_black"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:text="@string/articles"
+        android:textSize="17sp"
+        app:layout_constraintBottom_toBottomOf="@id/tv_bookmarked"
+        app:layout_constraintLeft_toRightOf="@id/tv_number_articles_bookmarked"
+        app:layout_constraintTop_toTopOf="@id/tv_bookmarked" />
+
+    <TextView
+        android:id="@+id/tv_you_were_top"
         style="@style/begum_black"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -173,7 +210,7 @@
         android:text="@string/top_percent"
         android:textColor="@color/volume_orange"
         android:textSize="36dp"
-        app:layout_constraintLeft_toRightOf="@id/you_were_top"
-        app:layout_constraintTop_toTopOf="@id/you_were_top" />
+        app:layout_constraintLeft_toRightOf="@id/tv_you_were_top"
+        app:layout_constraintTop_toTopOf="@id/tv_you_were_top" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
