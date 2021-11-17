@@ -33,8 +33,7 @@ class WebviewBottom @JvmOverloads constructor(
     private lateinit var disposables: CompositeDisposable
     private lateinit var graphQlUtil: GraphQlUtil
     private lateinit var article: Article
-    private val currentBookmarks =
-        prefUtils.getStringSet(PrefUtils.SAVED_ARTICLES_KEY, mutableSetOf()).toMutableSet()
+    private lateinit var currentBookmarks: MutableSet<String>
 
     private val binding: LayoutWebviewBottomBinding =
         LayoutWebviewBottomBinding.inflate(
@@ -51,17 +50,19 @@ class WebviewBottom @JvmOverloads constructor(
     /**
      * Sets up the WebviewBottom.
      */
-    fun setUpView() {
-        disposables = CompositeDisposable()
+    fun setUpView(prefUtils: PrefUtils, disposables: CompositeDisposable) {
+        this.disposables = disposables
+        this.prefUtils = prefUtils
         graphQlUtil = GraphQlUtil()
-        prefUtils = PrefUtils()
+        currentBookmarks =
+            prefUtils.getStringSet(PrefUtils.SAVED_ARTICLES_KEY, mutableSetOf()).toMutableSet()
 
         if (!article.publication?.profileImageURL.isNullOrBlank()) {
             Picasso.get().load(article.publication?.profileImageURL).into(binding.ivPublicationLogo)
         }
 
-        disposables.add(GraphQlUtil.hasInternetConnection().subscribe { hasInternet ->
-            if (prefUtils.getInt(article.id, 0) >= MAX_SHOUTOUTS) {
+        this.disposables.add(GraphQlUtil.hasInternetConnection().subscribe { hasInternet ->
+            if (this.prefUtils.getInt(article.id, 0) >= MAX_SHOUTOUTS) {
                 binding.ivShoutout.setImageResource(R.drawable.filled_shoutout)
             } else {
                 if (hasInternet) {
@@ -76,7 +77,7 @@ class WebviewBottom @JvmOverloads constructor(
         } else {
             binding.ivBookmarkIcon.setImageResource(R.drawable.ic_black_bookmarksvg)
         }
-        prefUtils.save(PrefUtils.SAVED_ARTICLES_KEY, currentBookmarks)
+        this.prefUtils.save(PrefUtils.SAVED_ARTICLES_KEY, currentBookmarks)
         binding.ivBookmarkIcon.setOnClickListener { bookmarkArticle() }
         binding.btnSeeMore.setOnClickListener { publicationIntent() }
         binding.ivShare.setOnClickListener { shareArticle() }

@@ -1,6 +1,7 @@
 package com.cornellappdev.volume.fragments
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -45,6 +46,11 @@ class OnboardingFragTwo : Fragment(), MorePublicationsAdapter.AdapterOnClickHand
     private val binding get() = _binding!!
     private var followCounter = 0
 
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        prefUtils = PrefUtils(context)
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -60,7 +66,6 @@ class OnboardingFragTwo : Fragment(), MorePublicationsAdapter.AdapterOnClickHand
         }
         disposables = CompositeDisposable()
         graphQlUtil = GraphQlUtil()
-        prefUtils = PrefUtils()
         return binding.root
     }
 
@@ -157,11 +162,6 @@ class OnboardingFragTwo : Fragment(), MorePublicationsAdapter.AdapterOnClickHand
             followCounter = (followCounter - 1).coerceAtLeast(0)
         }
         mCallback.onPublicationFollowed(followCounter)
-    }
-
-    override fun onResume() {
-        super.onResume()
-        setupOnboardingFragment()
     }
 
     override fun onDestroy() {

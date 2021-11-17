@@ -1,5 +1,6 @@
 package com.cornellappdev.volume.fragments
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -30,6 +31,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 
+
 /**
  * Fragment for the publications page, displays publications that the user is currently following
  * and all other publications the user isn't.
@@ -46,6 +48,11 @@ class PublicationsFragment : Fragment(), FollowingHorizontalAdapter.AdapterOnCli
     private var _binding: FragmentPublicationsBinding? = null
     private val binding get() = _binding!!
 
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        prefUtils = PrefUtils(context)
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -60,7 +67,6 @@ class PublicationsFragment : Fragment(), FollowingHorizontalAdapter.AdapterOnCli
         super.onViewCreated(view, savedInstanceState)
         graphQlUtil = GraphQlUtil()
         disposables = CompositeDisposable()
-        prefUtils = PrefUtils()
 
         resultLauncher =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->

@@ -49,13 +49,28 @@ class OnboardingActivity : AppCompatActivity(), OnboardingFragTwo.DataPassListen
         super.onCreate(savedInstanceState)
         binding = ActivityOnboardingBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        prefUtils = PrefUtils()
+        prefUtils = PrefUtils(this)
         disposables = CompositeDisposable()
 
         resultLauncher =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
                 if (result.resultCode == ActivityForResultConstants.FROM_NO_INTERNET.code && !isOnboarding) {
                     initializeOnboarding()
+                } else if (result.resultCode == ActivityForResultConstants.FROM_PUBLICATION_PROFILE_ACTIVITY.code) {
+                    val followingPublications =
+                        prefUtils.getStringSet(PrefUtils.FOLLOWING_KEY, mutableSetOf())
+
+                    // When the user returns to the OnboardingActivity, e.g., in the case that they click
+                    // on a publication, we must check to see if the following list is non-empty as there's no
+                    // callback from other activities to check for a new follow.
+                    if (followingPublications.isNotEmpty()) {
+                        binding.btnNext.isClickable = true
+                        binding.btnNext.setTextColor(
+                            ContextCompat.getColor(
+                                this@OnboardingActivity, R.color.volume_orange
+                            )
+                        )
+                    }
                 }
             }
         initializeOnboarding()
@@ -224,24 +239,6 @@ class OnboardingActivity : AppCompatActivity(), OnboardingFragTwo.DataPassListen
                         this@OnboardingActivity, R.color.gray
                     )
                 }
-            )
-        }
-    }
-
-    override fun onResume() {
-        super.onResume()
-
-        val followingPublications =
-            prefUtils.getStringSet(PrefUtils.FOLLOWING_KEY, mutableSetOf())
-        // When the user returns to the OnboardingActivity, e.g., in the case that they click
-        // on a publication, we must check to see if the following list is non-empty as there's no
-        // callback from other activities to check for a new follow.
-        if (followingPublications.isNotEmpty() && this::binding.isInitialized) {
-            binding.btnNext.isClickable = true
-            binding.btnNext.setTextColor(
-                ContextCompat.getColor(
-                    this@OnboardingActivity, R.color.volume_orange
-                )
             )
         }
     }

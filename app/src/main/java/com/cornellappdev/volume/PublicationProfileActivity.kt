@@ -56,7 +56,7 @@ class PublicationProfileActivity : AppCompatActivity() {
             }
         disposables = CompositeDisposable()
         graphQlUtil = GraphQlUtil()
-        prefUtils = PrefUtils()
+        prefUtils = PrefUtils(this)
         initializePublicationProfileActivity()
     }
 

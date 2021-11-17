@@ -63,7 +63,7 @@ class MainActivity : AppCompatActivity() {
                 // Sets up the webview using the article passed in.
                 binding.wvTop.setName(article)
                 binding.wvBottom.setArticle(article)
-                binding.wvBottom.setUpView()
+                binding.wvBottom.setUpView(PrefUtils(this), disposables)
                 with(binding.wvArticle) {
                     setWebViews(binding.wvTop, binding.wvBottom)
                     // Code to prevent from launching in external browser, but instead within the Volume app.

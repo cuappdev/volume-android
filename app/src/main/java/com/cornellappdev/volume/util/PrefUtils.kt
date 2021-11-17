@@ -11,16 +11,17 @@ import androidx.preference.PreferenceManager
  */
 class PrefUtils {
 
+    private lateinit var preferences: SharedPreferences
+    private lateinit var editor: SharedPreferences.Editor
+
     companion object {
         const val FOLLOWING_KEY: String = "following"
         const val FIRST_START_KEY: String = "firstStart"
         const val SAVED_ARTICLES_KEY: String = "savedArticles"
-        private lateinit var preferences: SharedPreferences
-        private lateinit var editor: SharedPreferences.Editor
-
     }
 
-    constructor()
+    // Should not be instantiated through this constructor
+    private constructor()
 
     @SuppressLint("CommitPrefEdits")
     constructor(context: Context) {
