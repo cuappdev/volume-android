@@ -64,6 +64,10 @@ class PrefUtils {
         }
     }
 
+    fun getString(key: String, defValue: String?): String? {
+        return preferences.getString(key, defValue)
+    }
+
     fun contains(key: String): Boolean {
         return preferences.contains(key)
     }
