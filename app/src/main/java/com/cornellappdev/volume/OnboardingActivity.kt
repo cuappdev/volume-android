@@ -13,15 +13,29 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.viewpager2.widget.ViewPager2
+import com.apollographql.apollo.api.Response
 import com.cornellappdev.volume.adapters.OnboardingPagerAdapter
 import com.cornellappdev.volume.analytics.EventType
 import com.cornellappdev.volume.analytics.VolumeEvent
 import com.cornellappdev.volume.databinding.ActivityOnboardingBinding
 import com.cornellappdev.volume.fragments.OnboardingFragTwo
+import com.cornellappdev.volume.models.Article
+import com.cornellappdev.volume.models.Publication
+import com.cornellappdev.volume.models.Social
 import com.cornellappdev.volume.util.ActivityForResultConstants
+import com.cornellappdev.volume.util.GraphQlUtil
 import com.cornellappdev.volume.util.GraphQlUtil.Companion.hasInternetConnection
+import com.cornellappdev.volume.util.NotificationService
 import com.cornellappdev.volume.util.PrefUtils
+import com.kotlin.graphql.ArticleByIDQuery
+import io.reactivex.Observable
+import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.schedulers.Schedulers
+import kotlinx.datetime.Clock
+import kotlinx.datetime.DateTimeUnit
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.plus
 
 /**
  * This activity is responsible for Onboarding, what the users first see when they install the app.
@@ -43,6 +57,7 @@ class OnboardingActivity : AppCompatActivity(), OnboardingFragTwo.DataPassListen
     private lateinit var resultLauncher: ActivityResultLauncher<Intent>
     private lateinit var prefUtils: PrefUtils
     private lateinit var disposables: CompositeDisposable
+    private lateinit var graphQlUtil: GraphQlUtil
     private var isOnboarding = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -51,10 +66,11 @@ class OnboardingActivity : AppCompatActivity(), OnboardingFragTwo.DataPassListen
         setContentView(binding.root)
         prefUtils = PrefUtils(this)
         disposables = CompositeDisposable()
+        graphQlUtil = GraphQlUtil()
 
         resultLauncher =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-                if (result.resultCode == ActivityForResultConstants.FROM_NO_INTERNET.code && !isOnboarding) {
+                if (result.resultCode == ActivityForResultConstants.FROM_NO_INTERNET.code && !isOnboarding || result.resultCode == ActivityForResultConstants.FROM_MAIN_ACTIVITY.code) {
                     initializeOnboarding()
                 } else if (result.resultCode == ActivityForResultConstants.FROM_PUBLICATION_PROFILE_ACTIVITY.code) {
                     val followingPublications =
@@ -73,7 +89,62 @@ class OnboardingActivity : AppCompatActivity(), OnboardingFragTwo.DataPassListen
                     }
                 }
             }
-        initializeOnboarding()
+
+        val extras = intent.extras
+        if (extras != null) {
+            when (extras[NotificationService.NotificationDataKeys.NOTIFICATION_TYPE.key]) {
+                NotificationService.NotificationType.NEW_ARTICLE.type -> {
+                    val articleID = extras[NotificationService.NotificationDataKeys.ARTICLE_ID.key]
+                    val getArticleObs =
+                        graphQlUtil.getArticleByID(articleID as String)
+                            .subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread())
+                    launchArticleView(getArticleObs)
+                }
+                NotificationService.NotificationType.WEEKLY_DEBRIEF.type -> {
+                    // Get new weekly debrief
+                    // Cache
+                    val currentMoment = Clock.System.now()
+                    val expiration = currentMoment.plus(7, DateTimeUnit.DAY, TimeZone.UTC)
+                    currentMoment.toEpochMilliseconds()
+                    expiration.toEpochMilliseconds()
+                }
+            }
+        } else {
+            initializeOnboarding()
+        }
+    }
+
+    private fun launchArticleView(articleObs: Observable<Response<ArticleByIDQuery.Data>>) {
+        disposables.add(articleObs.subscribe { response ->
+            val rawArticles = response?.data?.getArticleByID!!
+            val publication = rawArticles.publication
+            val article = Article(
+                title = rawArticles.title,
+                articleURL = rawArticles.articleURL,
+                date = rawArticles.date.toString(),
+                id = rawArticles.id,
+                imageURL = rawArticles.imageURL,
+                publication = Publication(
+                    id = publication.id,
+                    backgroundImageURL = publication.backgroundImageURL,
+                    bio = publication.bio,
+                    name = publication.name,
+                    profileImageURL = publication.profileImageURL,
+                    rssName = publication.rssName,
+                    rssURL = publication.rssURL,
+                    slug = publication.slug,
+                    shoutouts = publication.shoutouts,
+                    websiteURL = publication.websiteURL,
+                    socials = publication.socials.toList()
+                        .map { Social(it.social, it.uRL) }),
+                shoutouts = rawArticles.shoutouts,
+                nsfw = rawArticles.nsfw
+            )
+            val intent = Intent(this, MainActivity::class.java)
+            intent.putExtra(Article.INTENT_KEY, article)
+            resultLauncher.launch(intent)
+        })
     }
 
     private fun initializeOnboarding() {
