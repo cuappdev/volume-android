@@ -14,8 +14,12 @@ import com.cornellappdev.volume.analytics.VolumeEvent
 import com.cornellappdev.volume.databinding.ItemMorePublicationBinding
 import com.cornellappdev.volume.models.Article
 import com.cornellappdev.volume.models.Publication
+import com.cornellappdev.volume.util.GraphQlUtil
 import com.cornellappdev.volume.util.PrefUtils
 import com.squareup.picasso.Picasso
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.schedulers.Schedulers
 
 class MorePublicationsAdapter(
     var publicationList: MutableList<Publication>,
@@ -63,6 +67,10 @@ class MorePublicationsAdapter(
             holder.binding.btnFollow.setImageResource(R.drawable.ic_followplussvg)
         }
 
+        val UUID = prefUtils.getString(PrefUtils.UUID, null)
+        val disposables = CompositeDisposable()
+        val graphQlUtil = GraphQlUtil()
+
         holder.binding.btnFollow.setOnClickListener {
             if (holder.binding.btnFollow.drawable.constantState == ContextCompat.getDrawable(
                     it.context,
@@ -83,6 +91,19 @@ class MorePublicationsAdapter(
                 tempSet.add(currentItem.id)
                 prefUtils.save(PrefUtils.FOLLOWING_KEY, tempSet)
                 mAdapterOnClickHandler?.onFollowClick(wasFollowed = true)
+
+                // Follow by user.
+                val followObservable = UUID?.let { uuid ->
+                    graphQlUtil
+                        .followPublication(currentItem.id, uuid)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                }
+
+                if (followObservable != null) {
+                    disposables.add(followObservable.subscribe { _ ->
+                    })
+                }
             } else {
                 holder.binding.btnFollow.setImageResource(R.drawable.ic_followplussvg)
                 val tempSet =
@@ -95,6 +116,19 @@ class MorePublicationsAdapter(
                 tempSet.remove(currentItem.id)
                 prefUtils.save(PrefUtils.FOLLOWING_KEY, tempSet)
                 mAdapterOnClickHandler?.onFollowClick(wasFollowed = false)
+
+                // Unfollow by user.
+                val unfollowObservable = UUID?.let { uuid ->
+                    graphQlUtil
+                        .unfollowPublication(currentItem.id, uuid)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                }
+
+                if (unfollowObservable != null) {
+                    disposables.add(unfollowObservable.subscribe { _ ->
+                    })
+                }
             }
         }
 
