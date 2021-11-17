@@ -101,6 +101,11 @@ class GraphQlUtil {
         return client.rxQuery(query)
     }
 
+    fun getArticleByID(id: String): Observable<Response<ArticleByIDQuery.Data>> {
+        val query = (ArticleByIDQuery(id))
+        return client.rxQuery(query)
+    }
+
     fun shoutoutArticle(id: String): Single<Response<IncrementShoutoutMutation.Data>> {
         val mutation = (IncrementShoutoutMutation(id))
         return client.rxMutate(mutation)
