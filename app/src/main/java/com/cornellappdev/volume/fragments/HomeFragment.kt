@@ -369,11 +369,11 @@ class HomeFragment : Fragment() {
                                 )
                         )
                     }
+                    binding.shimmerFollowing.visibility = View.GONE
+                    followingRV.visibility = View.VISIBLE
+                    val params = binding.volumeLogoMoreArticles.layoutParams as ConstraintLayout.LayoutParams
+                    params.topToBottom = followingRV.id
                 }
-                binding.shimmerFollowing.visibility = View.GONE
-                followingRV.visibility = View.VISIBLE
-                val params = binding.volumeLogoMoreArticles.layoutParams as ConstraintLayout.LayoutParams
-                params.topToBottom = followingRV.id
             })
         }
     }

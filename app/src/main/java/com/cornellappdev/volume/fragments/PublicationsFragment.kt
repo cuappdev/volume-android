@@ -1,18 +1,24 @@
 package com.cornellappdev.volume.fragments
 
+import android.app.Activity.RESULT_OK
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.apollographql.apollo.api.Response
-import com.cornellappdev.volume.R
+import com.cornellappdev.volume.DiffUtilCallback
+import com.cornellappdev.volume.PublicationProfileActivity
 import com.cornellappdev.volume.adapters.FollowingHorizontalAdapter
 import com.cornellappdev.volume.adapters.MorePublicationsAdapter
+import com.cornellappdev.volume.analytics.NavigationSource
+import com.cornellappdev.volume.analytics.NavigationSource.Companion.putParcelableExtra
 import com.cornellappdev.volume.databinding.FragmentPublicationsBinding
 import com.cornellappdev.volume.models.Article
 import com.cornellappdev.volume.models.Publication
@@ -33,10 +39,10 @@ import io.reactivex.schedulers.Schedulers
  *
  *  @see {@link com.cornellappdev.volume.R.layout#fragment_publications}
  */
-class PublicationsFragment : Fragment() {
+class PublicationsFragment : Fragment(), FollowingHorizontalAdapter.AdapterOnClickHandler,
+    MorePublicationsAdapter.AdapterOnClickHandler {
 
-    private lateinit var followingPublicationsRV: RecyclerView
-    private lateinit var morePublicationsRV: RecyclerView
+    private lateinit var resultLauncher: ActivityResultLauncher<Intent>
     private val graphQlUtil = GraphQlUtil()
     private val disposables = CompositeDisposable()
     private val prefUtils = PrefUtils()
@@ -56,27 +62,14 @@ class PublicationsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        resultLauncher =
+            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+                if (result.resultCode == RESULT_OK) {
+                    setupPublicationsView(binding, isRefreshing = true)
+                }
+            }
+
         setupPublicationsView(binding, isRefreshing = false)
-
-        val volumeOrange: Int? = context?.let { ContextCompat.getColor(it, R.color.volume_orange) }
-        with(binding.srlQuery) {
-            if (volumeOrange != null) {
-                setColorSchemeColors(volumeOrange)
-            }
-
-            // Re-populates the RecyclerViews on refresh, is dependent on whether or not they are
-            // initialized.
-            setOnRefreshListener {
-                setupPublicationsView(
-                    binding,
-                    isRefreshing = (this@PublicationsFragment::followingPublicationsRV.isInitialized &&
-                            this@PublicationsFragment::morePublicationsRV.isInitialized)
-
-                )
-                // After repopulating, can stop signifying the refresh animation.
-                binding.srlQuery.isRefreshing = false
-            }
-        }
     }
 
     /**
@@ -113,22 +106,10 @@ class PublicationsFragment : Fragment() {
                 }
 
                 binding.clPublicationPage.visibility = View.VISIBLE
-
-                if (!followingPublicationsIDs.isNullOrEmpty()) {
-                    handleFollowingObservable(
-                        followingObs,
-                        isRefreshing
-                    )
-                } else if (isRefreshing) {
-                    // Can simply just clear adapter, since there's no following article data
-                    // to populate from (the user doesn't follow any publications).
-                    val adapter = followingPublicationsRV.adapter as FollowingHorizontalAdapter
-                    adapter.clear()
-                }
-                if (followingPublicationsIDs.isNullOrEmpty()) {
-                    binding.shimmerFollowingPublication.visibility = View.GONE
-                }
-
+                handleFollowingObservable(
+                    followingObs,
+                    isRefreshing
+                )
 
                 // It's important that handleMorePublicationObservable comes after handleFollowingObservable
                 // since we filter what other publications to display based on what publications the user follows.
@@ -139,12 +120,6 @@ class PublicationsFragment : Fragment() {
                 )
             }
         })
-
-        // Updates the UI if the user doesn't follow any publications.
-        if (followingPublicationsIDs?.isEmpty() == true) {
-            binding.groupFollowing.visibility = View.GONE
-            binding.groupNotFollowing.visibility = View.VISIBLE
-        }
     }
 
     /**
@@ -260,9 +235,11 @@ class PublicationsFragment : Fragment() {
 
                 // If not refreshing, must initialize the followingPublicationsRV
                 if (!isRefreshing) {
-                    followingPublicationsRV = binding.rvFollowing
-                    with(followingPublicationsRV) {
-                        adapter = FollowingHorizontalAdapter(followingPublications)
+                    with(binding.rvFollowing) {
+                        adapter = FollowingHorizontalAdapter(
+                            followingPublications,
+                            this@PublicationsFragment
+                        )
                         layoutManager = LinearLayoutManager(context)
                         (layoutManager as LinearLayoutManager).orientation =
                             LinearLayoutManager.HORIZONTAL
@@ -271,14 +248,27 @@ class PublicationsFragment : Fragment() {
                 } else {
                     // followingPublicationsRV is already created if initialized, only need to repopulate adapter data.
                     val adapter =
-                        followingPublicationsRV.adapter as FollowingHorizontalAdapter
-                    adapter.clear()
-                    adapter.addAll(followingPublications)
+                        binding.rvFollowing.adapter as FollowingHorizontalAdapter
+                    val result = DiffUtil.calculateDiff(
+                        DiffUtilCallback(
+                            adapter.followedPublications,
+                            followingPublications
+                        )
+                    )
+                    adapter.followedPublications = followingPublications
+                    result.dispatchUpdatesTo(adapter)
                 }
 
-                binding.groupNotFollowing.visibility = View.GONE
-                binding.groupFollowing.visibility = View.VISIBLE
-                binding.shimmerFollowingPublication.visibility=View.INVISIBLE
+                // Updates the UI if the user doesn't follow any publications.
+                if (followingPublications.isEmpty()) {
+                    binding.groupFollowing.visibility = View.GONE
+                    binding.groupNotFollowing.visibility = View.VISIBLE
+                } else {
+                    binding.groupNotFollowing.visibility = View.GONE
+                    binding.groupFollowing.visibility = View.VISIBLE
+                }
+
+                binding.shimmerFollowingPublication.visibility = View.INVISIBLE
             })
         }
     }
@@ -311,37 +301,63 @@ class PublicationsFragment : Fragment() {
 
                 // If not refreshing, must initialize the morePublicationsRV.
                 if (!isRefreshing) {
-                    morePublicationsRV = binding.rvMorePublications
-                    with(morePublicationsRV) {
+                    with(binding.rvMorePublications) {
                         adapter =
-                            MorePublicationsAdapter(morePublications, prefUtils, null)
+                            MorePublicationsAdapter(
+                                morePublications,
+                                prefUtils,
+                                this@PublicationsFragment
+                            )
                         layoutManager = LinearLayoutManager(context)
                         setHasFixedSize(true)
                     }
                 } else {
                     // morePublicationsRV is already created if initialized, only need to repopulate adapter data.
                     val adapter =
-                        morePublicationsRV.adapter as MorePublicationsAdapter
-                    adapter.clear()
-                    adapter.addAll(morePublications)
+                        binding.rvMorePublications.adapter as MorePublicationsAdapter
+                    val result = DiffUtil.calculateDiff(
+                        DiffUtilCallback(
+                            adapter.publicationList,
+                            morePublications
+                        )
+                    )
+                    adapter.publicationList = morePublications
+                    result.dispatchUpdatesTo(adapter)
                 }
             }
             binding.shimmerMorePublication.visibility = View.INVISIBLE
         })
     }
 
-    override fun onResume() {
-        super.onResume()
-        setupPublicationsView(
-            binding,
-            isRefreshing = (this@PublicationsFragment::followingPublicationsRV.isInitialized &&
-                    this@PublicationsFragment::morePublicationsRV.isInitialized)
-
-        )
+    override fun onDestroy() {
+        disposables.clear()
+        super.onDestroy()
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    /**
+     * Handles the callback from the Following publications RecyclerView; onClick of a view
+     * opens the publication profile for the specific publication.
+     */
+    override fun onPublicationClick(publication: Publication) {
+        val intent = Intent(context, PublicationProfileActivity::class.java)
+        intent.putExtra(Publication.INTENT_KEY, publication)
+        intent.putParcelableExtra(
+            NavigationSource.INTENT_KEY,
+            NavigationSource.FOLLOWING_PUBLICATIONS
+        )
+        resultLauncher.launch(intent)
+    }
+
+    /**
+     * Handles the callback from the follow button being pressed on the More publications RecyclerView;
+     * refreshes both RecyclerViews to display the correct following list.
+     */
+    override fun onFollowClick(wasFollowed: Boolean) {
+        setupPublicationsView(binding, isRefreshing = true)
     }
 }
