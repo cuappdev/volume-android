@@ -15,7 +15,6 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.apollographql.apollo.api.Response
-import com.cornellappdev.volume.MyDiffCallback
 import com.cornellappdev.volume.NoInternetActivity
 import com.cornellappdev.volume.R
 import com.cornellappdev.volume.adapters.BigReadHomeAdapter
@@ -25,6 +24,7 @@ import com.cornellappdev.volume.models.Article
 import com.cornellappdev.volume.models.Publication
 import com.cornellappdev.volume.models.Social
 import com.cornellappdev.volume.util.ActivityForResultConstants
+import com.cornellappdev.volume.util.DiffUtilCallbackArticle
 import com.cornellappdev.volume.util.GraphQlUtil
 import com.cornellappdev.volume.util.GraphQlUtil.Companion.hasInternetConnection
 import com.cornellappdev.volume.util.PrefUtils
@@ -306,7 +306,12 @@ class HomeFragment : Fragment() {
                 // binding.rvBigRead is already created if initialized, only need to repopulate adapter data.
                 val adapter = binding.rvBigRead.adapter as BigReadHomeAdapter
                 val result =
-                    DiffUtil.calculateDiff(MyDiffCallback(adapter.articles, trendingArticles))
+                    DiffUtil.calculateDiff(
+                        DiffUtilCallbackArticle(
+                            adapter.articles,
+                            trendingArticles
+                        )
+                    )
                 adapter.articles = trendingArticles
                 result.dispatchUpdatesTo(adapter)
             }
@@ -356,7 +361,7 @@ class HomeFragment : Fragment() {
                     val adapter = binding.rvFollowing.adapter as HomeArticlesAdapter
                     val result =
                         DiffUtil.calculateDiff(
-                            MyDiffCallback(
+                            DiffUtilCallbackArticle(
                                 adapter.articles,
                                 newFollowingArticles
                             )
@@ -456,12 +461,16 @@ class HomeFragment : Fragment() {
                     )
                 }
 
+                var newOtherArticles = otherArticles.shuffled().take(NUMBER_OF_OTHER_ARTICLES)
+                newOtherArticles =
+                    if (newOtherArticles.isEmpty()) mutableListOf() else newOtherArticles as MutableList<Article>
+
+
                 // If not refreshing, must initialize binding.rvOtherArticles.
                 if (!isRefreshing) {
                     with(binding.rvOtherArticles) {
                         adapter = HomeArticlesAdapter(
-                            otherArticles.shuffled().take(NUMBER_OF_OTHER_ARTICLES)
-                                    as MutableList<Article>, true
+                            newOtherArticles, true
                         )
                         layoutManager = LinearLayoutManager(context)
                     }
@@ -471,11 +480,14 @@ class HomeFragment : Fragment() {
 
                     // binding.rvOtherArticles is already created if initialized, only need to repopulate adapter data.
                     val adapter = binding.rvOtherArticles.adapter as HomeArticlesAdapter
-                    val newArticles = otherArticles.shuffled()
-                        .take(NUMBER_OF_OTHER_ARTICLES) as MutableList<Article>
                     val result =
-                        DiffUtil.calculateDiff(MyDiffCallback(adapter.articles, newArticles))
-                    adapter.articles = newArticles
+                        DiffUtil.calculateDiff(
+                            DiffUtilCallbackArticle(
+                                adapter.articles,
+                                newOtherArticles
+                            )
+                        )
+                    adapter.articles = newOtherArticles
                     result.dispatchUpdatesTo(adapter)
 
                     binding.rvOtherArticles.visibility = View.VISIBLE

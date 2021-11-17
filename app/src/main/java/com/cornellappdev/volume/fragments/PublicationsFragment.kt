@@ -11,7 +11,6 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.apollographql.apollo.api.Response
-import com.cornellappdev.volume.DiffUtilCallback
 import com.cornellappdev.volume.NoInternetActivity
 import com.cornellappdev.volume.PublicationProfileActivity
 import com.cornellappdev.volume.adapters.FollowingHorizontalAdapter
@@ -22,10 +21,8 @@ import com.cornellappdev.volume.databinding.FragmentPublicationsBinding
 import com.cornellappdev.volume.models.Article
 import com.cornellappdev.volume.models.Publication
 import com.cornellappdev.volume.models.Social
-import com.cornellappdev.volume.util.ActivityForResultConstants
-import com.cornellappdev.volume.util.GraphQlUtil
+import com.cornellappdev.volume.util.*
 import com.cornellappdev.volume.util.GraphQlUtil.Companion.hasInternetConnection
-import com.cornellappdev.volume.util.PrefUtils
 import com.kotlin.graphql.AllPublicationsQuery
 import com.kotlin.graphql.PublicationsByIDsQuery
 import io.reactivex.Observable
@@ -43,9 +40,9 @@ class PublicationsFragment : Fragment(), FollowingHorizontalAdapter.AdapterOnCli
     MorePublicationsAdapter.AdapterOnClickHandler {
 
     private lateinit var resultLauncher: ActivityResultLauncher<Intent>
-    private val graphQlUtil = GraphQlUtil()
-    private val disposables = CompositeDisposable()
-    private val prefUtils = PrefUtils()
+    private lateinit var prefUtils: PrefUtils
+    private lateinit var disposables: CompositeDisposable
+    private lateinit var graphQlUtil: GraphQlUtil
     private var _binding: FragmentPublicationsBinding? = null
     private val binding get() = _binding!!
 
@@ -61,6 +58,9 @@ class PublicationsFragment : Fragment(), FollowingHorizontalAdapter.AdapterOnCli
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        graphQlUtil = GraphQlUtil()
+        disposables = CompositeDisposable()
+        prefUtils = PrefUtils()
 
         resultLauncher =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
@@ -71,6 +71,8 @@ class PublicationsFragment : Fragment(), FollowingHorizontalAdapter.AdapterOnCli
                     setupPublicationFragment()
                 }
             }
+
+        setupPublicationFragment()
     }
 
     /**
@@ -255,7 +257,7 @@ class PublicationsFragment : Fragment(), FollowingHorizontalAdapter.AdapterOnCli
                     val adapter =
                         binding.rvFollowing.adapter as FollowingHorizontalAdapter
                     val result = DiffUtil.calculateDiff(
-                        DiffUtilCallback(
+                        DiffUtilCallbackPublication(
                             adapter.followedPublications,
                             followingPublications
                         )
@@ -321,7 +323,7 @@ class PublicationsFragment : Fragment(), FollowingHorizontalAdapter.AdapterOnCli
                     val adapter =
                         binding.rvMorePublications.adapter as MorePublicationsAdapter
                     val result = DiffUtil.calculateDiff(
-                        DiffUtilCallback(
+                        DiffUtilCallbackPublication(
                             adapter.publicationList,
                             morePublications
                         )
