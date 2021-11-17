@@ -67,6 +67,7 @@ class PublicationProfileActivity : AppCompatActivity() {
             } else {
                 val currentFollowingSet =
                     prefUtils.getStringSet(PrefUtils.FOLLOWING_KEY, mutableSetOf()).toMutableSet()
+                val UUID = prefUtils.getString(PrefUtils.UUID, null)
 
                 publication = intent.getParcelableExtra("publication")!!
                 setupPublication(publication)
@@ -88,7 +89,7 @@ class PublicationProfileActivity : AppCompatActivity() {
                     binding.srlQuery.isRefreshing = false
                 }
 
-                setupFollowButton(currentFollowingSet)
+                setupFollowButton(currentFollowingSet, UUID)
                 setupArticleRV()
             }
         })
@@ -97,7 +98,7 @@ class PublicationProfileActivity : AppCompatActivity() {
     /**
      * Sets up interactions with the follow button.
      */
-    private fun setupFollowButton(currentFollowingSet: MutableSet<String>?) {
+    private fun setupFollowButton(currentFollowingSet: MutableSet<String>?, UUID: String?) {
         // Updates follow button given whether or not user follows publication.
         if (currentFollowingSet!!.contains(publication.id)) {
             binding.btnFollow.apply {
@@ -133,6 +134,19 @@ class PublicationProfileActivity : AppCompatActivity() {
                         VolumeEvent.UNFOLLOW_PUBLICATION,
                         id = publication.id
                     )
+
+                    // Unfollow by user.
+                    val unfollowObservable = UUID?.let { uuid ->
+                        graphQlUtil
+                            .unfollowPublication(publication.id, uuid)
+                            .subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread())
+                    }
+
+                    if (unfollowObservable != null) {
+                        disposables.add(unfollowObservable.subscribe { _ ->
+                        })
+                    }
                 }
             } else {
                 binding.btnFollow.apply {
@@ -148,6 +162,19 @@ class PublicationProfileActivity : AppCompatActivity() {
                         NavigationSource.PUBLICATION_DETAIL,
                         publication.id
                     )
+
+                    // Follow by user.
+                    val followObservable = UUID?.let { uuid ->
+                        graphQlUtil
+                            .followPublication(publication.id, uuid)
+                            .subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread())
+                    }
+
+                    if (followObservable != null) {
+                        disposables.add(followObservable.subscribe { _ ->
+                        })
+                    }
                 }
             }
         }
@@ -167,7 +194,7 @@ class PublicationProfileActivity : AppCompatActivity() {
                 disposables.add(articleByPublicationObservable.subscribe { response ->
                     binding.mShimmerViewContainer.stopShimmer()
                     binding.mShimmerViewContainer.visibility = View.GONE
-                    val articles = getArticlesFromResponse(response)
+                    val articles = getArticlesFromResponse(response, publication)
                     // Initializes many of the properties of the Article RecyclerView.
                     with(binding.rvArticles) {
                         adapter = ArticleAdapter(articles)
@@ -191,28 +218,19 @@ class PublicationProfileActivity : AppCompatActivity() {
      * Parses the raw articles from our ArticlesByPublicationID query, turning them into our Article
      * model. The articles returned are sorted descending by the date published.
      */
-    private fun getArticlesFromResponse(response: Response<ArticlesByPublicationIDQuery.Data>?): MutableList<Article> {
+    private fun getArticlesFromResponse(
+        response: Response<ArticlesByPublicationIDQuery.Data>?,
+        publication: Publication
+    ): MutableList<Article> {
         val articles = mutableListOf<Article>()
         response?.data?.getArticlesByPublicationID?.mapTo(articles, { article ->
-            val publication = article.publication
             Article(
                 title = article.title,
                 articleURL = article.articleURL,
                 date = article.date.toString(),
                 id = article.id,
                 imageURL = article.imageURL,
-                publication = Publication(
-                    id = publication.id,
-                    backgroundImageURL = publication.backgroundImageURL,
-                    bio = publication.bio,
-                    name = publication.name,
-                    profileImageURL = publication.profileImageURL,
-                    rssName = publication.rssName,
-                    rssURL = publication.rssURL,
-                    slug = publication.slug,
-                    shoutouts = publication.shoutouts,
-                    websiteURL = publication.websiteURL,
-                    socials = publication.socials.toList().map { Social(it.social, it.uRL) }),
+                publication = publication,
                 shoutouts = article.shoutouts,
                 nsfw = article.nsfw
             )

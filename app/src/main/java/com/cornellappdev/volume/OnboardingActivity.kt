@@ -27,6 +27,8 @@ import com.cornellappdev.volume.util.GraphQlUtil
 import com.cornellappdev.volume.util.GraphQlUtil.Companion.hasInternetConnection
 import com.cornellappdev.volume.util.NotificationService
 import com.cornellappdev.volume.util.PrefUtils
+import com.google.android.gms.tasks.OnCompleteListener
+import com.google.firebase.messaging.FirebaseMessaging
 import com.kotlin.graphql.ArticleByIDQuery
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -208,19 +210,16 @@ class OnboardingActivity : AppCompatActivity(), OnboardingFragTwo.DataPassListen
      */
     private fun setupNextButton() {
         binding.btnNext.setOnClickListener {
-            val current = binding.vpOnboarding.currentItem
-            val context = it.context
-
-            when (current) {
+            when (binding.vpOnboarding.currentItem) {
                 0 -> binding.vpOnboarding.currentItem = 1
                 1 -> {
                     VolumeEvent.logEvent(EventType.GENERAL, VolumeEvent.COMPLETE_ONBOARDING)
                     // On the second page, if the button is clickable then the user is able to
                     // transition to the home page.
-                    val intent = Intent(context, TabActivity::class.java)
-                    context.startActivity(intent)
-                    prefUtils.save(PrefUtils.FIRST_START_KEY, false)
+                    val intent = Intent(this, TabActivity::class.java)
+                    startActivity(intent)
 
+                    prefUtils.save(PrefUtils.FIRST_START_KEY, false)
                     // It's important that this activity is closed, so the user can't accidentally
                     // swipe back to this activity.
                     finish()
