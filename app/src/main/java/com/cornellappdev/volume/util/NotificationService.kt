@@ -16,11 +16,25 @@ import com.cornellappdev.volume.R
 import com.google.firebase.installations.FirebaseInstallations
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.schedulers.Schedulers
 import java.io.InputStream
 import java.net.HttpURLConnection
 import java.net.URL
 
 class NotificationService : FirebaseMessagingService() {
+
+    enum class NotificationDataKeys(val key: String) {
+        ARTICLE_ID("articleID"),
+        ARTICLE_URL("articleURL"),
+        NOTIFICATION_TYPE("notification_type")
+    }
+
+    enum class NotificationType(val type: String) {
+        WEEKLY_DEBRIEF("weekly_debrief"),
+        NEW_ARTICLE("new_article")
+    }
 
     enum class NotificationIntentKeys(val key: String) {
         ARTICLE("article")
@@ -59,6 +73,44 @@ class NotificationService : FirebaseMessagingService() {
     // [END receive_message]
 
     /**
+     * Called if the FCM registration token is updated. This may occur if the security of
+     * the previous token had been compromised. Note that this is called when the
+     * FCM registration token is initially generated so this is where you would retrieve the token.
+     */
+    override fun onNewToken(token: String) {
+        sendRegistrationToServer(token)
+    }
+
+    /**
+     * Persist token to third-party servers.
+     *
+     * Modify this method to associate the user's FCM registration token with any server-side account
+     * maintained by your application.
+     *
+     * @param token The new token.
+     */
+    private fun sendRegistrationToServer(token: String?) {
+        val prefUtils = PrefUtils(this)
+        val graphQlUtil = GraphQlUtil()
+        val disposables = CompositeDisposable()
+
+        // Create user.
+        val createUserObservable = token?.let {
+            graphQlUtil
+                .createUser(
+                    prefUtils.getStringSet(PrefUtils.FOLLOWING_KEY, mutableSetOf()).toList(),
+                    it
+                )
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+        }
+
+        createUserObservable?.subscribe { response ->
+            response.data?.createUser?.let { user -> prefUtils.save(PrefUtils.UUID, user.uuid) }
+        }?.let { disposables.add(it) }
+    }
+
+    /**
      * Create and show a simple notification containing the received FCM message.
      */
     private fun sendNotification(
@@ -67,11 +119,25 @@ class NotificationService : FirebaseMessagingService() {
     ) {
         val intent = Intent(this, OnboardingActivity::class.java)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-        val pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_IMMUTABLE)
         intent.putExtra(
             NotificationIntentKeys.ARTICLE.key,
             data[NotificationIntentKeys.ARTICLE.key]
         )
+
+        when (data[NotificationDataKeys.NOTIFICATION_TYPE.key]) {
+            NotificationType.NEW_ARTICLE.type -> {
+                intent.putExtra(
+                    NotificationDataKeys.ARTICLE_ID.key,
+                    data[NotificationDataKeys.ARTICLE_ID.key]
+                )
+                intent.putExtra(
+                    NotificationDataKeys.ARTICLE_URL.key,
+                    data[NotificationDataKeys.ARTICLE_URL.key]
+                )
+            }
+        }
+
+        val pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_IMMUTABLE)
 
         val channelId = getString((R.string.default_notification_channel_id))
         val notificationBuilder = NotificationCompat.Builder(this, channelId)
