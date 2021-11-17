@@ -14,6 +14,7 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import java.io.IOException
 import java.net.*
+import java.util.concurrent.TimeUnit
 
 /**
  * Holds the various API calls to our backend.
@@ -55,6 +56,8 @@ class GraphQlUtil {
         val okHttp = OkHttpClient
             .Builder()
             .addInterceptor(logging)
+            .connectTimeout(30, TimeUnit.SECONDS)
+            .readTimeout(30, TimeUnit.SECONDS)
         return ApolloClient.builder()
             .serverUrl(baseURL)
             .okHttpClient(okHttp.build())
