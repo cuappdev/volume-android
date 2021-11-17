@@ -24,10 +24,10 @@ import java.util.concurrent.TimeUnit
 class GraphQlUtil {
 
     enum class Endpoints(val endpoint: String){
-        DEV("https://volume-dev.cornellappdev.com/graphql"), // Our development endpoint
-        PROD("https://volume-backend.cornellappdev.com/graphql"), // Our deployment endpoint
-        DEV_PING("volume-dev.cornellappdev.com"),
-        PROD_PING("volume-backend.cornellappdev.com")
+        DEV(""), // Our development endpoint
+        PROD(""), // Our deployment endpoint
+        DEV_PING(""),
+        PROD_PING("")
     }
 
     companion object {
