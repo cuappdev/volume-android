@@ -49,14 +49,14 @@ class OnboardingActivity : AppCompatActivity(), OnboardingFragTwo.DataPassListen
         super.onCreate(savedInstanceState)
         binding = ActivityOnboardingBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        prefUtils = PrefUtils(this)
+        disposables = CompositeDisposable()
         resultLauncher =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
                 if (result.resultCode == ActivityForResultConstants.FROM_NO_INTERNET.code && !isOnboarding) {
                     initializeOnboarding()
                 }
             }
-        prefUtils = PrefUtils(this)
-        disposables = CompositeDisposable()
         initializeOnboarding()
     }
 
@@ -74,13 +74,13 @@ class OnboardingActivity : AppCompatActivity(), OnboardingFragTwo.DataPassListen
                     // It's important that this activity is closed, so the user can't accidentally
                     // swipe back to this activity.
                     finish()
+                } else {
+                    isOnboarding = true
+                    prefUtils.save(PrefUtils.FOLLOWING_KEY, mutableSetOf())
+                    setupViewPager()
+                    setupNextButton()
+                    setupAnimations()
                 }
-
-                isOnboarding = true
-                prefUtils.save(PrefUtils.FOLLOWING_KEY, mutableSetOf())
-                setupViewPager()
-                setupNextButton()
-                setupAnimations()
             }
         })
     }
