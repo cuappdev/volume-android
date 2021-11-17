@@ -49,8 +49,9 @@ class OnboardingActivity : AppCompatActivity(), OnboardingFragTwo.DataPassListen
         super.onCreate(savedInstanceState)
         binding = ActivityOnboardingBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        prefUtils = PrefUtils(this)
+        prefUtils = PrefUtils()
         disposables = CompositeDisposable()
+
         resultLauncher =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
                 if (result.resultCode == ActivityForResultConstants.FROM_NO_INTERNET.code && !isOnboarding) {

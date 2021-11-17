@@ -29,9 +29,9 @@ class WebviewBottom @JvmOverloads constructor(
     defStyleAttr: Int = 0
 ) : ConstraintLayout(context, attrs, defStyleAttr) {
 
-    private val prefUtils = PrefUtils(context)
-    private var graphQlUtil = GraphQlUtil()
-    private var disposables = CompositeDisposable()
+    private lateinit var prefUtils: PrefUtils
+    private lateinit var disposables: CompositeDisposable
+    private lateinit var graphQlUtil: GraphQlUtil
     private lateinit var article: Article
     private val currentBookmarks =
         prefUtils.getStringSet(PrefUtils.SAVED_ARTICLES_KEY, mutableSetOf()).toMutableSet()
@@ -52,6 +52,10 @@ class WebviewBottom @JvmOverloads constructor(
      * Sets up the WebviewBottom.
      */
     fun setUpView() {
+        disposables = CompositeDisposable()
+        graphQlUtil = GraphQlUtil()
+        prefUtils = PrefUtils()
+
         if (!article.publication?.profileImageURL.isNullOrBlank()) {
             Picasso.get().load(article.publication?.profileImageURL).into(binding.ivPublicationLogo)
         }

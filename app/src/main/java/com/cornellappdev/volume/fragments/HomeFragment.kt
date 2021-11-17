@@ -63,15 +63,15 @@ class HomeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
+        disposables = CompositeDisposable()
+        graphQlUtil = GraphQlUtil()
+        prefUtils = PrefUtils()
         resultLauncher =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
                 if (result.resultCode == ActivityForResultConstants.FROM_NO_INTERNET.code) {
                     setupHomeFragment()
                 }
             }
-        disposables = CompositeDisposable()
-        graphQlUtil = GraphQlUtil()
-        prefUtils = PrefUtils()
         return binding.root
     }
 
