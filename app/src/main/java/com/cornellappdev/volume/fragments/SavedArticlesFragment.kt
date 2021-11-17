@@ -1,6 +1,7 @@
 package com.cornellappdev.volume.fragments
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -43,6 +44,11 @@ class SavedArticlesFragment : Fragment() {
     private var _binding: FragmentSavedArticlesBinding? = null
     private val binding get() = _binding!!
 
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        prefUtils = PrefUtils(context)
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -56,7 +62,6 @@ class SavedArticlesFragment : Fragment() {
         }
         disposables = CompositeDisposable()
         graphQlUtil = GraphQlUtil()
-        prefUtils = PrefUtils()
         return binding.root
     }
 

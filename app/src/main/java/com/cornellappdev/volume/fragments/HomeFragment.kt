@@ -1,5 +1,6 @@
 package com.cornellappdev.volume.fragments
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
@@ -57,6 +58,11 @@ class HomeFragment : Fragment() {
         private const val NUMBER_OF_OTHER_ARTICLES = 45
     }
 
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        prefUtils = PrefUtils(context)
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -65,7 +71,6 @@ class HomeFragment : Fragment() {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         disposables = CompositeDisposable()
         graphQlUtil = GraphQlUtil()
-        prefUtils = PrefUtils()
         resultLauncher =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
                 if (result.resultCode == ActivityForResultConstants.FROM_NO_INTERNET.code) {
