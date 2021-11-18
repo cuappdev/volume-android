@@ -35,6 +35,7 @@
     <string name="caught_up">You\'ve seen all the new articles from the publications you have been following.</string>
     <string name="nothing_to_see">Nothing to see here!</string>
     <string name="follow_some">Follow some student publications that you are interested in.</string>
+    <string name="your_weekly_debrief">Your \nWeekly \nDebrief</string>
 
     <!-- Publication Fragment -->
     <string name="follow_below">Follow some student publications below and we’ll \n show them up here.</string>
@@ -109,9 +110,12 @@
     <string name="shouts">shout-outs</string>
     <string name="you_were_top">You were among the top <br/><br/>active readers last week! <br/><br/><br/>Keep up the volume! 📣</string>
     <string name="top_percent">%1$s</string>
+<<<<<<< HEAD
     <string name="debrief_pitch">Stay updated with Cornell student publications, all in one place</string>
     <string name="continue_to_volume">Continue to Volume</string>
     <string name="bookmarked">bookmarked</string>
+=======
+>>>>>>> f4f8cd8 (Add main debrief fragment)
 
     <!-- Content descriptions -->
     <string name="description_main_volume_logo">Main Volume logo</string>
