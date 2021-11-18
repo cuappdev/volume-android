@@ -122,6 +122,7 @@ class HomeFragment : Fragment() {
                             // After repopulating, can stop signifying the refresh animation.
                             binding.srlQuery.isRefreshing = false
 
+                            // Sets limit on refreshing so users do not try to overload with queries
                             binding.srlQuery.isEnabled = false
                             Handler(Looper.getMainLooper()).postDelayed({
                                 binding.srlQuery.isEnabled = true
@@ -299,7 +300,7 @@ class HomeFragment : Fragment() {
                 trendingArticlesId
             )
 
-            // If not refreshing, must initialize binding.rvBigRead.
+            // If not refreshing, must initialize rvBigRead.
             if (!isRefreshing) {
                 with(binding.rvBigRead) {
                     adapter = BigReadHomeAdapter(trendingArticles)
@@ -308,7 +309,7 @@ class HomeFragment : Fragment() {
                         LinearLayoutManager.HORIZONTAL
                 }
             } else {
-                // binding.rvBigRead is already created if initialized, only need to repopulate adapter data.
+                // rvBigRead is already created if initialized, only need to repopulate adapter data.
                 val adapter = binding.rvBigRead.adapter as BigReadHomeAdapter
                 val result =
                     DiffUtil.calculateDiff(
@@ -471,7 +472,7 @@ class HomeFragment : Fragment() {
                     if (newOtherArticles.isEmpty()) mutableListOf() else newOtherArticles as MutableList<Article>
 
 
-                // If not refreshing, must initialize binding.rvOtherArticles.
+                // If not refreshing, must initialize rvOtherArticles.
                 if (!isRefreshing) {
                     with(binding.rvOtherArticles) {
                         adapter = HomeArticlesAdapter(
@@ -483,7 +484,7 @@ class HomeFragment : Fragment() {
                     binding.rvOtherArticles.visibility = View.VISIBLE
                     binding.shimmerOtherArticles.visibility = View.GONE
 
-                    // binding.rvOtherArticles is already created if initialized, only need to repopulate adapter data.
+                    // rvOtherArticles is already created if initialized, only need to repopulate adapter data.
                     val adapter = binding.rvOtherArticles.adapter as HomeArticlesAdapter
                     val result =
                         DiffUtil.calculateDiff(
