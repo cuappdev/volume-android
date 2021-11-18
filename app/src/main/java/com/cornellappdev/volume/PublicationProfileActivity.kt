@@ -311,6 +311,7 @@ class PublicationProfileActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
+        // Signals back that the user is leaving the PublicationProfileActivity
         setResult(ActivityForResultConstants.FROM_PUBLICATION_PROFILE_ACTIVITY.code)
         super.onBackPressed()
     }
