@@ -16,6 +16,7 @@ class NoInternetActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
+        // Signals back that the user is leaving the NoInternetActivity
         setResult(ActivityForResultConstants.FROM_NO_INTERNET.code)
         super.onBackPressed()
     }
