@@ -94,4 +94,9 @@ class MainActivity : AppCompatActivity() {
         VolumeEvent.logEvent(EventType.ARTICLE, VolumeEvent.CLOSE_ARTICLE, id = article.id)
         disposables.clear()
     }
+
+    override fun onBackPressed() {
+        setResult(ActivityForResultConstants.FROM_MAIN_ACTIVITY.code)
+        super.onBackPressed()
+    }
 }
