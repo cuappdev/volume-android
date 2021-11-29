@@ -74,8 +74,8 @@
 
         <ImageView
             android:id="@+id/btn_follow"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
             android:layout_marginEnd="10dp"
             android:contentDescription="@string/follow_button"
             android:src="@drawable/ic_followplussvg"
