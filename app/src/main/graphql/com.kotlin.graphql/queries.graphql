@@ -353,4 +353,20 @@ query ArticlesAfterDate($since: String!){
     }
 }
 
+mutation CreateUser($deviceType:String!, $followedPublications: [String!]!, $deviceToken:String!) {
+    createUser(deviceType:$deviceType, followedPublications:$followedPublications, deviceToken:$deviceToken) {
+        uuid
+    }
+}
 
+mutation FollowPublication($pubID:String!, $uuid: String!) {
+    followPublication(pubID:$pubID, uuid:$uuid) {
+        uuid
+    }
+}
+
+mutation UnfollowPublication($pubID:String!, $uuid: String!) {
+    unfollowPublication(pubID:$pubID, uuid:$uuid) {
+        uuid
+    }
+}

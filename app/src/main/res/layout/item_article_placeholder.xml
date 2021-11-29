@@ -43,7 +43,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@color/placeholder"
-            android:text="@string/x_h_ago"
             android:textColor="@color/placeholder"
             android:textSize="12sp"
             app:layout_constraintStart_toStartOf="parent"
