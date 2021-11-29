@@ -16,14 +16,14 @@ import kotlin.math.abs
 
 @Parcelize
 class Article(
-        val id: String,
-        val title: String,
-        val articleURL: String,
-        val imageURL: String,
-        val publication: Publication? = null,
-        val date: String,
-        val shoutouts: Double,
-        val nsfw: Boolean = false
+    val id: String,
+    val title: String,
+    val articleURL: String,
+    val imageURL: String,
+    val publication: Publication? = null,
+    val date: String,
+    val shoutouts: Double,
+    val nsfw: Boolean = false
 ) : Parcelable {
 
     companion object {
@@ -49,38 +49,28 @@ class Article(
             val format = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
             val datePublished = LocalDateTime.parse(article.date, format)
             val dur = Duration.between(datePublished, LocalDateTime.now())
-            val hours = dur.toHours()
-            val days = dur.toDays()
+            val hours = abs(dur.toHours()).toInt()
+            val days = abs(dur.toDays()).toInt()
 
             val weeks = days / 7
             val months = days / 30
             val years = days / 365
 
-            target.text = if (days < 1) {
-                context.getString(R.string.x_h_ago, abs(hours))
-            } else if (days in 1..6) {
-                if (days <= 1) {
-                    context.getString(R.string.one_day_ago)
-                } else {
-                    context.getString(R.string.x_days_ago, dur.toDays())
+            target.text = when {
+                days < 1 -> {
+                    context.resources.getQuantityString(R.plurals.x_h_ago, hours, hours)
                 }
-            } else if (days in 7..29) {
-                if (weeks <= 1) {
-                    context.getString(R.string.one_week_ago)
-                } else {
-                    context.getString(R.string.x_weeks_ago, weeks)
+                days in 1..6 -> {
+                    context.resources.getQuantityString(R.plurals.x_days_ago, days, days)
                 }
-            } else if (days in 30..364) {
-                if (months <= 1) {
-                    context.getString(R.string.one_month_ago)
-                } else {
-                    context.getString(R.string.x_months_ago, months)
+                days in 7..29 -> {
+                    context.resources.getQuantityString(R.plurals.x_weeks_ago, weeks, weeks)
                 }
-            } else {
-                if (years <= 1) {
-                    context.getString(R.string.one_year_ago)
-                } else {
-                    context.getString(R.string.x_years_ago, years)
+                days in 30..364 -> {
+                    context.resources.getQuantityString(R.plurals.x_months_ago, months, months)
+                }
+                else -> {
+                    context.resources.getQuantityString(R.plurals.x_years_ago, years, years)
                 }
             }
         }

@@ -29,12 +29,11 @@ class WebviewBottom @JvmOverloads constructor(
     defStyleAttr: Int = 0
 ) : ConstraintLayout(context, attrs, defStyleAttr) {
 
-    private val prefUtils = PrefUtils(context)
-    private var graphQlUtil = GraphQlUtil()
-    private var disposables = CompositeDisposable()
+    private lateinit var prefUtils: PrefUtils
+    private lateinit var disposables: CompositeDisposable
+    private lateinit var graphQlUtil: GraphQlUtil
     private lateinit var article: Article
-    private val currentBookmarks =
-        prefUtils.getStringSet(PrefUtils.SAVED_ARTICLES_KEY, mutableSetOf())?.toMutableSet()
+    private lateinit var currentBookmarks: MutableSet<String>
 
     private val binding: LayoutWebviewBottomBinding =
         LayoutWebviewBottomBinding.inflate(
@@ -51,13 +50,19 @@ class WebviewBottom @JvmOverloads constructor(
     /**
      * Sets up the WebviewBottom.
      */
-    fun setUpView() {
+    fun setUpView(prefUtils: PrefUtils, disposables: CompositeDisposable) {
+        this.disposables = disposables
+        this.prefUtils = prefUtils
+        graphQlUtil = GraphQlUtil()
+        currentBookmarks =
+            prefUtils.getStringSet(PrefUtils.SAVED_ARTICLES_KEY, mutableSetOf()).toMutableSet()
+
         if (!article.publication?.profileImageURL.isNullOrBlank()) {
             Picasso.get().load(article.publication?.profileImageURL).into(binding.ivPublicationLogo)
         }
 
-        disposables.add(GraphQlUtil.hasInternetConnection().subscribe { hasInternet ->
-            if (prefUtils.getInt(article.id, 0) >= MAX_SHOUTOUTS) {
+        this.disposables.add(GraphQlUtil.hasInternetConnection().subscribe { hasInternet ->
+            if (this.prefUtils.getInt(article.id, 0) >= MAX_SHOUTOUTS) {
                 binding.ivShoutout.setImageResource(R.drawable.filled_shoutout)
             } else {
                 if (hasInternet) {
@@ -67,14 +72,12 @@ class WebviewBottom @JvmOverloads constructor(
         })
 
         binding.tvShoutoutCount.text = article.shoutouts.toInt().toString()
-        if (currentBookmarks != null) {
-            if (currentBookmarks.contains(article.id)) {
-                binding.ivBookmarkIcon.setImageResource(R.drawable.orange_bookmark_svg)
-            } else {
-                binding.ivBookmarkIcon.setImageResource(R.drawable.ic_black_bookmarksvg)
-            }
-            prefUtils.save(PrefUtils.SAVED_ARTICLES_KEY, currentBookmarks)
+        if (currentBookmarks.contains(article.id)) {
+            binding.ivBookmarkIcon.setImageResource(R.drawable.orange_bookmark_svg)
+        } else {
+            binding.ivBookmarkIcon.setImageResource(R.drawable.ic_black_bookmarksvg)
         }
+        this.prefUtils.save(PrefUtils.SAVED_ARTICLES_KEY, currentBookmarks)
         binding.ivBookmarkIcon.setOnClickListener { bookmarkArticle() }
         binding.btnSeeMore.setOnClickListener { publicationIntent() }
         binding.ivShare.setOnClickListener { shareArticle() }
@@ -103,39 +106,37 @@ class WebviewBottom @JvmOverloads constructor(
      * Adds/removes the respective article to/from the user's bookmarks, updating UI as needed.
      */
     private fun bookmarkArticle() {
-        if (currentBookmarks != null) {
-            if (!currentBookmarks.contains(article.id)) {
-                VolumeEvent.logEvent(
-                    EventType.ARTICLE,
-                    VolumeEvent.BOOKMARK_ARTICLE,
-                    id = article.id
+        if (!currentBookmarks.contains(article.id)) {
+            VolumeEvent.logEvent(
+                EventType.ARTICLE,
+                VolumeEvent.BOOKMARK_ARTICLE,
+                id = article.id
+            )
+            currentBookmarks.add(article.id)
+            binding.ivBookmarkIcon.startAnimation(
+                AnimationUtils.loadAnimation(
+                    context,
+                    R.anim.shake
                 )
-                currentBookmarks.add(article.id)
-                binding.ivBookmarkIcon.startAnimation(
-                    AnimationUtils.loadAnimation(
-                        context,
-                        R.anim.shake
-                    )
-                )
+            )
 
-                binding.ivBookmarkIcon.setImageResource(R.drawable.orange_bookmark_svg)
-            } else {
-                VolumeEvent.logEvent(
-                    EventType.ARTICLE,
-                    VolumeEvent.UNBOOKMARK_ARTICLE,
-                    id = article.id
+            binding.ivBookmarkIcon.setImageResource(R.drawable.orange_bookmark_svg)
+        } else {
+            VolumeEvent.logEvent(
+                EventType.ARTICLE,
+                VolumeEvent.UNBOOKMARK_ARTICLE,
+                id = article.id
+            )
+            currentBookmarks.remove(article.id)
+            binding.ivBookmarkIcon.startAnimation(
+                AnimationUtils.loadAnimation(
+                    context,
+                    R.anim.shake
                 )
-                currentBookmarks.remove(article.id)
-                binding.ivBookmarkIcon.startAnimation(
-                    AnimationUtils.loadAnimation(
-                        context,
-                        R.anim.shake
-                    )
-                )
-                binding.ivBookmarkIcon.setImageResource(R.drawable.ic_black_bookmarksvg)
-            }
-            prefUtils.save(PrefUtils.SAVED_ARTICLES_KEY, currentBookmarks)
+            )
+            binding.ivBookmarkIcon.setImageResource(R.drawable.ic_black_bookmarksvg)
         }
+        prefUtils.save(PrefUtils.SAVED_ARTICLES_KEY, currentBookmarks)
     }
 
     /**

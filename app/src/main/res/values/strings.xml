@@ -3,6 +3,10 @@
     <string name="follow_button">Follow Button</string>
 
     <!-- General -->
+    <plurals name="shoutout_count">
+        <item quantity="one">%1$d shout-out</item>
+        <item quantity="other">%1$d shout-outs</item>
+    </plurals>
     <string name="shoutout_count">%1$d shout-outs</string>
     <string name="dot">&#160;•&#160;</string>
     <string name="title_example">Top 6 Ice Cream Places in Ithaca: Ranked</string>
@@ -31,24 +35,36 @@
     <string name="caught_up">You\'ve seen all the new articles from the publications you have been following.</string>
     <string name="nothing_to_see">Nothing to see here!</string>
     <string name="follow_some">Follow some student publications that you are interested in.</string>
+    <string name="your_weekly_debrief">Your \nWeekly \nDebrief</string>
 
     <!-- Publication Fragment -->
-    <string name="follow_below">Follow some below and we’ll show them up here.</string>
+    <string name="follow_below">Follow some student publications below and we’ll \n show them up here.</string>
     <string name="no_followed">Nothing to see here!</string>
 
     <!-- Saved Fragment -->
     <string name="no_saved_articles">You have no saved articles.</string>
 
     <!-- Article class -->
-    <string name="x_h_ago">%1$d h ago</string>
-    <string name="one_day_ago">1 day ago</string>
-    <string name="x_days_ago">%1$d days ago</string>
-    <string name="one_week_ago">1 week ago</string>
-    <string name="x_weeks_ago">%1$d weeks ago</string>
-    <string name="one_month_ago">1 month ago</string>
-    <string name="x_months_ago">%1$d months ago</string>
-    <string name="one_year_ago">1 year ago</string>
-    <string name="x_years_ago">%1$d years ago</string>
+    <plurals name="x_h_ago">
+        <item quantity="one">%d hour ago</item>
+        <item quantity="other">%d hours ago</item>
+    </plurals>
+    <plurals name="x_days_ago">
+        <item quantity="one">%d day ago</item>
+        <item quantity="other">%d days ago</item>
+    </plurals>
+    <plurals name="x_weeks_ago">
+        <item quantity="one">%d week ago</item>
+        <item quantity="other">%d weeks ago</item>
+    </plurals>
+    <plurals name="x_months_ago">
+        <item quantity="one">%d month ago</item>
+        <item quantity="other">%d months ago</item>
+    </plurals>
+    <plurals name="x_years_ago">
+        <item quantity="one">%d year ago</item>
+        <item quantity="other">%d years ago</item>
+    </plurals>
 
     <!-- Settings Activity -->
     <string name="settings">Settings</string>

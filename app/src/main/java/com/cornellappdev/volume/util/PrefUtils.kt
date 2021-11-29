@@ -6,22 +6,23 @@ import android.content.SharedPreferences
 import androidx.preference.PreferenceManager
 
 /**
- * Class responsible for directly interacting with the SharedPreferences, where device-persistant
+ * Class responsible for directly interacting with the SharedPreferences, where device-persistent
  * information is stored.
  */
 class PrefUtils {
+
+    private lateinit var preferences: SharedPreferences
+    private lateinit var editor: SharedPreferences.Editor
 
     companion object {
         const val FOLLOWING_KEY: String = "following"
         const val FIRST_START_KEY: String = "firstStart"
         const val SAVED_ARTICLES_KEY: String = "savedArticles"
-        private var singleton: PrefUtils? = null
-        private lateinit var preferences: SharedPreferences
-        private lateinit var editor: SharedPreferences.Editor
-
+        const val UUID: String = "UUID"
     }
 
-    constructor()
+    // Should not be instantiated through this constructor
+    private constructor()
 
     @SuppressLint("CommitPrefEdits")
     constructor(context: Context) {
@@ -43,6 +44,10 @@ class PrefUtils {
         editor.putInt(key, value).apply()
     }
 
+    fun save(key: String, value: String) {
+        editor.putString(key, value).apply()
+    }
+
     fun save(key: String, value: Set<String>) {
         editor.putStringSet(key, value).apply()
     }
@@ -59,27 +64,16 @@ class PrefUtils {
         }
     }
 
+    fun getString(key: String, defValue: String?): String? {
+        return preferences.getString(key, defValue)
+    }
+
     fun contains(key: String): Boolean {
         return preferences.contains(key)
     }
 
-    fun getStringSet(key: String, defValue: Set<String>): Set<String>? {
-        return preferences.getStringSet(key, defValue)
+    fun getStringSet(key: String, defValue: Set<String>): Set<String> {
+        val stringSet = preferences.getStringSet(key, defValue)
+        return stringSet ?: setOf()
     }
-
-    fun remove(key: String) {
-        editor.remove(key).apply()
-    }
-
-    private class Builder(val context: Context, val name: String?, val mode: Int) {
-
-        fun build(): PrefUtils {
-            if (mode == -1 || name == null) {
-                return PrefUtils(context)
-            }
-            return PrefUtils(context, name, mode)
-        }
-    }
-
-
 }
