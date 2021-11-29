@@ -1,18 +1,22 @@
 package com.cornellappdev.volume.fragments
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
-import android.util.Log
+import android.os.Handler
+import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.apollographql.apollo.api.Response
+import com.cornellappdev.volume.NoInternetActivity
 import com.cornellappdev.volume.R
 import com.cornellappdev.volume.adapters.BigReadHomeAdapter
 import com.cornellappdev.volume.adapters.HomeArticlesAdapter
@@ -20,11 +24,11 @@ import com.cornellappdev.volume.databinding.FragmentHomeBinding
 import com.cornellappdev.volume.models.Article
 import com.cornellappdev.volume.models.Publication
 import com.cornellappdev.volume.models.Social
+import com.cornellappdev.volume.util.ActivityForResultConstants
+import com.cornellappdev.volume.util.DiffUtilCallbackArticle
 import com.cornellappdev.volume.util.GraphQlUtil
 import com.cornellappdev.volume.util.GraphQlUtil.Companion.hasInternetConnection
 import com.cornellappdev.volume.util.PrefUtils
-import com.google.android.gms.tasks.OnCompleteListener
-import com.google.firebase.messaging.FirebaseMessaging
 import com.kotlin.graphql.AllPublicationsQuery
 import com.kotlin.graphql.ArticlesByPublicationIDsQuery
 import com.kotlin.graphql.TrendingArticlesQuery
@@ -41,14 +45,12 @@ import io.reactivex.schedulers.Schedulers
  */
 class HomeFragment : Fragment() {
 
-    private lateinit var bigRedRV: RecyclerView
-    private lateinit var followingRV: RecyclerView
-    private lateinit var otherRV: RecyclerView
+    private lateinit var resultLauncher: ActivityResultLauncher<Intent>
+    private lateinit var prefUtils: PrefUtils
     private lateinit var disposables: CompositeDisposable
     private lateinit var graphQlUtil: GraphQlUtil
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
-    private val prefUtils = PrefUtils()
 
     companion object {
         private const val NUMBER_OF_TRENDING_ARTICLES = 7.0
@@ -56,50 +58,88 @@ class HomeFragment : Fragment() {
         private const val NUMBER_OF_OTHER_ARTICLES = 45
     }
 
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        prefUtils = PrefUtils(context)
+    }
+
     override fun onCreateView(
-            inflater: LayoutInflater,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
+        disposables = CompositeDisposable()
+        graphQlUtil = GraphQlUtil()
+        resultLauncher =
+            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+                if (result.resultCode == ActivityForResultConstants.FROM_NO_INTERNET.code) {
+                    setupHomeFragment()
+                }
+            }
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        disposables = CompositeDisposable()
-        graphQlUtil = GraphQlUtil()
-
-        setUpHomeView(binding, isRefreshing = false)
-
-        val volumeOrange: Int? = context?.let { ContextCompat.getColor(it, R.color.volume_orange) }
-        with(binding.srlQuery) {
-            if (volumeOrange != null) {
-                setColorSchemeColors(volumeOrange)
-            }
-
-            // Re-populates the RecyclerViews on refresh, is dependent on whether or not they are
-            // initialized.
-            setOnRefreshListener {
-                setUpHomeView(
-                        binding, isRefreshing = (
-                        this@HomeFragment::bigRedRV.isInitialized &&
-                                this@HomeFragment::followingRV.isInitialized &&
-                                this@HomeFragment::otherRV.isInitialized)
-                )
-                // After repopulating, can stop signifying the refresh animation.
-                binding.srlQuery.isRefreshing = false
-            }
-        }
+        setupHomeFragment()
     }
 
+    /**
+     * Sets up the entirety of the home fragment, adds onClicks, checks for internet, and sets up
+     * the articles.
+     */
+    private fun setupHomeFragment() {
+        disposables.add(hasInternetConnection().subscribe { hasInternet ->
+            if (!hasInternet) {
+                resultLauncher.launch(Intent(context, NoInternetActivity::class.java))
+            } else {
+                setUpArticles(binding, isRefreshing = false)
+
+                val volumeOrange: Int? =
+                    context?.let { ContextCompat.getColor(it, R.color.volume_orange) }
+                with(binding.srlQuery) {
+                    if (volumeOrange != null) {
+                        setColorSchemeColors(volumeOrange)
+                    }
+
+                    // Re-populates the RecyclerViews on refresh, is dependent on whether or not they are
+                    // initialized.
+                    setOnRefreshListener {
+                        disposables.add(hasInternetConnection().subscribe { hasInternet ->
+                            if (!hasInternet) {
+                                startActivity(Intent(context, NoInternetActivity::class.java))
+                            } else {
+                                binding.rvFollowing.visibility = View.GONE
+                                binding.shimmerFollowing.visibility = View.VISIBLE
+                                val params =
+                                    binding.volumeLogoMoreArticles.layoutParams as ConstraintLayout.LayoutParams
+                                params.topToBottom = binding.shimmerFollowing.id
+                                setUpArticles(
+                                    binding, isRefreshing = true
+                                )
+                            }
+                            // After repopulating, can stop signifying the refresh animation.
+                            binding.srlQuery.isRefreshing = false
+
+                            // Sets limit on refreshing so users do not try to overload with queries
+                            binding.srlQuery.isEnabled = false
+                            Handler(Looper.getMainLooper()).postDelayed({
+                                binding.srlQuery.isEnabled = true
+                            }, 6000)
+                        })
+                    }
+                }
+            }
+        })
+    }
 
     /**
      * Sets up the home view and all three sections on the home page.
      */
-    private fun setUpHomeView(binding: FragmentHomeBinding, isRefreshing: Boolean) {
+    private fun setUpArticles(binding: FragmentHomeBinding, isRefreshing: Boolean) {
         val followingPublications =
-                prefUtils.getStringSet(PrefUtils.FOLLOWING_KEY, mutableSetOf())?.toMutableList()
+            prefUtils.getStringSet(PrefUtils.FOLLOWING_KEY, mutableSetOf()).toMutableList()
 
         val trendingArticles = mutableListOf<Article>()
         val trendingArticlesId = hashSetOf<String>()
@@ -109,81 +149,52 @@ class HomeFragment : Fragment() {
 
         // Creates API call observation for retrieving trending articles.
         val trendingObs =
-                graphQlUtil.getTrendingArticles(NUMBER_OF_TRENDING_ARTICLES)
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
+            graphQlUtil.getTrendingArticles(NUMBER_OF_TRENDING_ARTICLES)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
 
         // Creates API call observation for retrieving articles from publications the user follows.
         val followingObs =
-                followingPublications?.let {
-                    graphQlUtil.getArticleByPublicationIDs(it)
-                            .subscribeOn(Schedulers.io())
-                            .observeOn(AndroidSchedulers.mainThread())
-                }
+            followingPublications.let {
+                graphQlUtil.getArticlesByPublicationIDs(it)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+            }
 
         // Creates API call observation for retrieving all publications in the Volume database.
         val allPublicationsObs =
-                graphQlUtil.getAllPublications()
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
+            graphQlUtil.getAllPublications()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
 
-        disposables.add(hasInternetConnection().subscribe { hasInternet ->
-            if (!hasInternet) {
-                binding.clHomePage.visibility = View.GONE
-                val ft = childFragmentManager.beginTransaction()
-                val dialog = NoInternetDialog()
-                ft.replace(
-                        binding.fragmentContainer.id,
-                        dialog,
-                        NoInternetDialog.TAG
-                ).commit()
-            } else {
-                childFragmentManager.findFragmentByTag(NoInternetDialog.TAG).let { dialogFrag ->
-                    (dialogFrag as? DialogFragment)?.dismiss()
-                }
+        handleTrendingObservable(
+            trendingObs,
+            isRefreshing,
+            trendingArticles,
+            trendingArticlesId
+        )
 
-                binding.clHomePage.visibility = View.VISIBLE
+        handleFollowingObservable(
+            followingObs,
+            isRefreshing,
+            followingArticles,
+            trendingArticlesId
+        )
 
-                handleTrendingObservable(
-                        trendingObs,
-                        isRefreshing,
-                        trendingArticles,
-                        trendingArticlesId
-                )
+        // Get the articles for the other section, first taken from
+        // publications the user doesn't follow and then taken from publications the user does follow
+        // to make up the difference of the amount needed.
+        handleOtherSection(
+            allPublicationsObs,
+            isRefreshing,
+            followingPublications,
+            followingArticles,
+            allPublicationIdsExcludingFollowing,
+            otherArticles,
+            trendingArticlesId
+        )
 
-                if (!followingPublications.isNullOrEmpty()) {
-                    handleFollowingObservable(
-                            followingObs,
-                            isRefreshing,
-                            followingArticles,
-                            trendingArticlesId
-                    )
-                } else if (isRefreshing) {
-                    // Can simply just clear adapter, since there's no following article data
-                    // to populate from (the user doesn't follow any publications).
-                    val adapter = followingRV.adapter as HomeArticlesAdapter
-                    adapter.clear()
-                } else {
-                    // shimmer off
-                    binding.shimmerFollowing.visibility = View.GONE
-                }
-
-                // Get the articles for the other section, first taken from
-                // publications the user doesn't follow and then taken from publications the user does follow
-                // to make up the difference of the amount needed.
-                handleOtherSection(
-                        allPublicationsObs,
-                        isRefreshing,
-                        followingPublications,
-                        followingArticles,
-                        allPublicationIdsExcludingFollowing,
-                        otherArticles,
-                        trendingArticlesId
-                )
-            }
-        })
-
-        if (followingPublications?.isEmpty() == true) {
+        if (followingPublications.isEmpty()) {
             binding.groupFollowing.visibility = View.INVISIBLE
             binding.groupNotFollowing.visibility = View.VISIBLE
         } else {
@@ -197,19 +208,60 @@ class HomeFragment : Fragment() {
      * model, adding said articles to the list passed in.
      */
     private fun retrieveArticlesFromResponse(
-            response: Response<ArticlesByPublicationIDsQuery.Data>?,
-            articles: MutableList<Article>,
+        response: Response<ArticlesByPublicationIDsQuery.Data>?,
+        articles: MutableList<Article>,
     ) {
         response?.data?.getArticlesByPublicationIDs?.mapTo(
-                articles, { article ->
-            val publication = article.publication
-            Article(
+            articles, { article ->
+                val publication = article.publication
+                Article(
                     title = article.title,
                     articleURL = article.articleURL,
                     date = article.date.toString(),
                     id = article.id,
                     imageURL = article.imageURL,
                     publication = Publication(
+                        id = publication.id,
+                        backgroundImageURL = publication.backgroundImageURL,
+                        bio = publication.bio,
+                        name = publication.name,
+                        profileImageURL = publication.profileImageURL,
+                        rssName = publication.rssName,
+                        rssURL = publication.rssURL,
+                        slug = publication.slug,
+                        shoutouts = publication.shoutouts,
+                        websiteURL = publication.websiteURL,
+                        socials = publication.socials.toList()
+                            .map { Social(it.social, it.uRL) }),
+                    shoutouts = article.shoutouts,
+                    nsfw = article.nsfw
+                )
+            })
+    }
+
+    /**
+     * Parses the raw articles from our TrendingArticles query, turning them into our Article
+     * model, adding said articles to trendingArticles.
+     *
+     * Also adds the trending article ids to trendingArticlesId.
+     */
+    private fun retrieveTrendingArticlesFromResponse(
+        response: Response<TrendingArticlesQuery.Data>,
+        trendingArticles: MutableList<Article>,
+        trendingArticlesId: HashSet<String>
+    ) {
+        val rawTrendingArticles = response.data?.getTrendingArticles
+        if (rawTrendingArticles != null) {
+            for (trendingArticle in rawTrendingArticles) {
+                val publication = trendingArticle.publication
+                trendingArticles.add(
+                    Article(
+                        title = trendingArticle.title,
+                        articleURL = trendingArticle.articleURL,
+                        date = trendingArticle.date.toString(),
+                        id = trendingArticle.id,
+                        imageURL = trendingArticle.imageURL,
+                        publication = Publication(
                             id = publication.id,
                             backgroundImageURL = publication.backgroundImageURL,
                             bio = publication.bio,
@@ -221,51 +273,10 @@ class HomeFragment : Fragment() {
                             shoutouts = publication.shoutouts,
                             websiteURL = publication.websiteURL,
                             socials = publication.socials.toList()
-                                    .map { Social(it.social, it.uRL) }),
-                    shoutouts = article.shoutouts,
-                    nsfw = article.nsfw
-            )
-        })
-    }
-
-    /**
-     * Parses the raw articles from our TrendingArticles query, turning them into our Article
-     * model, adding said articles to trendingArticles.
-     *
-     * Also adds the trending article ids to trendingArticlesId.
-     */
-    private fun retrieveTrendingArticlesFromResponse(
-            response: Response<TrendingArticlesQuery.Data>,
-            trendingArticles: MutableList<Article>,
-            trendingArticlesId: HashSet<String>
-    ) {
-        val rawTrendingArticles = response.data?.getTrendingArticles
-        if (rawTrendingArticles != null) {
-            for (trendingArticle in rawTrendingArticles) {
-                val publication = trendingArticle.publication
-                trendingArticles.add(
-                        Article(
-                                title = trendingArticle.title,
-                                articleURL = trendingArticle.articleURL,
-                                date = trendingArticle.date.toString(),
-                                id = trendingArticle.id,
-                                imageURL = trendingArticle.imageURL,
-                                publication = Publication(
-                                        id = publication.id,
-                                        backgroundImageURL = publication.backgroundImageURL,
-                                        bio = publication.bio,
-                                        name = publication.name,
-                                        profileImageURL = publication.profileImageURL,
-                                        rssName = publication.rssName,
-                                        rssURL = publication.rssURL,
-                                        slug = publication.slug,
-                                        shoutouts = publication.shoutouts,
-                                        websiteURL = publication.websiteURL,
-                                        socials = publication.socials.toList()
-                                                .map { Social(it.social, it.uRL) }),
-                                shoutouts = trendingArticle.shoutouts,
-                                nsfw = trendingArticle.nsfw
-                        )
+                                .map { Social(it.social, it.uRL) }),
+                        shoutouts = trendingArticle.shoutouts,
+                        nsfw = trendingArticle.nsfw
+                    )
                 )
                 trendingArticlesId.add(trendingArticle.id)
             }
@@ -277,39 +288,43 @@ class HomeFragment : Fragment() {
      * RecyclerView.
      */
     private fun handleTrendingObservable(
-            trendingObs: Observable<Response<TrendingArticlesQuery.Data>>,
-            isRefreshing: Boolean,
-            trendingArticles: MutableList<Article>,
-            trendingArticlesId: HashSet<String>
+        trendingObs: Observable<Response<TrendingArticlesQuery.Data>>,
+        isRefreshing: Boolean,
+        trendingArticles: MutableList<Article>,
+        trendingArticlesId: HashSet<String>
     ) {
         disposables.add(trendingObs.subscribe { response ->
             retrieveTrendingArticlesFromResponse(
-                    response,
-                    trendingArticles,
-                    trendingArticlesId
+                response,
+                trendingArticles,
+                trendingArticlesId
             )
 
-            // If not refreshing, must initialize bigRedRV.
+            // If not refreshing, must initialize rvBigRead.
             if (!isRefreshing) {
-                bigRedRV = binding.rvBigRead
-                with(bigRedRV) {
+                with(binding.rvBigRead) {
                     adapter = BigReadHomeAdapter(trendingArticles)
                     layoutManager = LinearLayoutManager(context)
                     (layoutManager as LinearLayoutManager).orientation =
-                            LinearLayoutManager.HORIZONTAL
+                        LinearLayoutManager.HORIZONTAL
                 }
             } else {
-                // bigRedRV is already created if initialized, only need to repopulate adapter data.
-                val adapter = bigRedRV.adapter as BigReadHomeAdapter
-                adapter.clear()
-                adapter.addAll(trendingArticles)
+                // rvBigRead is already created if initialized, only need to repopulate adapter data.
+                val adapter = binding.rvBigRead.adapter as BigReadHomeAdapter
+                val result =
+                    DiffUtil.calculateDiff(
+                        DiffUtilCallbackArticle(
+                            adapter.articles,
+                            trendingArticles
+                        )
+                    )
+                adapter.articles = trendingArticles
+                result.dispatchUpdatesTo(adapter)
             }
 
             // shimmer off
-            binding.shimmerBigRead.visibility = View.GONE
-            bigRedRV.visibility = View.VISIBLE
-            val params = binding.ivFollowingHeader.layoutParams as ConstraintLayout.LayoutParams
-            params.topToBottom = bigRedRV.id
+            binding.shimmerBigRead.visibility = View.INVISIBLE
+            binding.rvBigRead.visibility = View.VISIBLE
         })
     }
 
@@ -321,10 +336,10 @@ class HomeFragment : Fragment() {
      * articles. Following articles do not contain any of the articles from the Big Red Read.
      */
     private fun handleFollowingObservable(
-            followingObs: Observable<Response<ArticlesByPublicationIDsQuery.Data>>?,
-            isRefreshing: Boolean,
-            followingArticles: MutableList<Article>,
-            trendingArticlesId: HashSet<String>
+        followingObs: Observable<Response<ArticlesByPublicationIDsQuery.Data>>?,
+        isRefreshing: Boolean,
+        followingArticles: MutableList<Article>,
+        trendingArticlesId: HashSet<String>
     ) {
         if (followingObs != null) {
             disposables.add(followingObs.subscribe { response ->
@@ -335,45 +350,45 @@ class HomeFragment : Fragment() {
                     trendingArticlesId.contains(article.id)
                 }
 
-                if (followingArticles.isNotEmpty()) {
-                    Article.sortByDate(followingArticles)
+                Article.sortByDate(followingArticles)
 
-                    // If not refreshing, must initialize followingRV.
-                    if (!isRefreshing) {
-                        followingRV = binding.rvFollowing
-                        with(followingRV) {
-                            adapter = HomeArticlesAdapter(
-                                    followingArticles.take(NUMBER_OF_FOLLOWING_ARTICLES)
-                                            as MutableList<Article>
+                var newFollowingArticles = followingArticles.take(NUMBER_OF_FOLLOWING_ARTICLES)
+                newFollowingArticles =
+                    if (newFollowingArticles.isEmpty()) mutableListOf() else newFollowingArticles as MutableList<Article>
+
+                // If not refreshing, must initialize followingRV.
+                if (!isRefreshing) {
+                    with(binding.rvFollowing) {
+                        adapter = HomeArticlesAdapter(newFollowingArticles)
+                        layoutManager = LinearLayoutManager(context)
+                    }
+                } else {
+                    // followingRV is already created if initialized, only need to repopulate adapter data.
+                    val adapter = binding.rvFollowing.adapter as HomeArticlesAdapter
+                    val result =
+                        DiffUtil.calculateDiff(
+                            DiffUtilCallbackArticle(
+                                adapter.articles,
+                                newFollowingArticles
                             )
-                            layoutManager = LinearLayoutManager(context)
-                        }
-                    } else {
-                        // followingRV is already created if initialized, only need to repopulate adapter data.
-                        val adapter = followingRV.adapter as HomeArticlesAdapter
-                        adapter.clear()
-                        adapter.addAll(followingArticles.take(NUMBER_OF_FOLLOWING_ARTICLES))
-                    }
-
-                    if (followingArticles.size
-                            <= NUMBER_OF_FOLLOWING_ARTICLES
-                    ) {
-                        // There would be nothing left if we dropped twenty, so we clear.
-                        followingArticles.clear()
-                    } else {
-                        // We took the first twenty articles, the remaining ones (after removing them)
-                        // can be used for the other article section (see the description of handleOtherObservable).
-                        followingArticles.removeAll(
-                                followingArticles.take(
-                                        NUMBER_OF_FOLLOWING_ARTICLES
-                                )
                         )
-                    }
-                    binding.shimmerFollowing.visibility = View.GONE
-                    followingRV.visibility = View.VISIBLE
-                    val params = binding.volumeLogoMoreArticles.layoutParams as ConstraintLayout.LayoutParams
-                    params.topToBottom = followingRV.id
+                    adapter.articles = newFollowingArticles
+                    result.dispatchUpdatesTo(adapter)
                 }
+
+                // We took the first twenty articles, the remaining ones (after removing them)
+                // can be used for the other article section (see the description of handleOtherObservable).
+                followingArticles.removeAll(
+                    followingArticles.take(
+                        NUMBER_OF_FOLLOWING_ARTICLES
+                    )
+                )
+
+                binding.rvFollowing.visibility = View.VISIBLE
+                binding.shimmerFollowing.visibility = View.GONE
+                val params =
+                    binding.volumeLogoMoreArticles.layoutParams as ConstraintLayout.LayoutParams
+                params.topToBottom = binding.rvFollowing.id
             })
         }
     }
@@ -382,13 +397,13 @@ class HomeFragment : Fragment() {
      * Populates the section that contains articles from other publications.
      */
     private fun handleOtherSection(
-            allPublicationsObs: Observable<Response<AllPublicationsQuery.Data>>,
-            isRefreshing: Boolean,
-            followingPublications: MutableList<String>?,
-            followingArticles: MutableList<Article>,
-            allPublicationIdsExcludingFollowing: MutableList<String>,
-            otherArticles: MutableList<Article>,
-            trendingArticlesId: HashSet<String>
+        allPublicationsObs: Observable<Response<AllPublicationsQuery.Data>>,
+        isRefreshing: Boolean,
+        followingPublications: MutableList<String>?,
+        followingArticles: MutableList<Article>,
+        allPublicationIdsExcludingFollowing: MutableList<String>,
+        otherArticles: MutableList<Article>,
+        trendingArticlesId: HashSet<String>
     ) {
         disposables.add(allPublicationsObs.subscribe { response ->
             val rawPublications = response.data?.getAllPublications
@@ -404,16 +419,16 @@ class HomeFragment : Fragment() {
             }
 
             val otherObs = graphQlUtil
-                    .getArticleByPublicationIDs(allPublicationIdsExcludingFollowing)
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
+                .getArticlesByPublicationIDs(allPublicationIdsExcludingFollowing)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
 
             handleOtherObservable(
-                    otherObs,
-                    isRefreshing,
-                    followingArticles,
-                    otherArticles,
-                    trendingArticlesId
+                otherObs,
+                isRefreshing,
+                followingArticles,
+                otherArticles,
+                trendingArticlesId
             )
         })
     }
@@ -427,11 +442,11 @@ class HomeFragment : Fragment() {
      * isn't enough to populate other reads.
      */
     private fun handleOtherObservable(
-            otherObs: Observable<Response<ArticlesByPublicationIDsQuery.Data>>?,
-            isRefreshing: Boolean,
-            followingArticles: MutableList<Article>,
-            otherArticles: MutableList<Article>,
-            trendingArticlesId: HashSet<String>
+        otherObs: Observable<Response<ArticlesByPublicationIDsQuery.Data>>?,
+        isRefreshing: Boolean,
+        followingArticles: MutableList<Article>,
+        otherArticles: MutableList<Article>,
+        trendingArticlesId: HashSet<String>
     ) {
         if (otherObs != null) {
             disposables.add(otherObs.subscribe { response ->
@@ -446,38 +461,55 @@ class HomeFragment : Fragment() {
                 if (otherArticles.size < NUMBER_OF_OTHER_ARTICLES && !followingArticles.isNullOrEmpty()
                 ) {
                     otherArticles.addAll(
-                            followingArticles.take(
-                                    NUMBER_OF_OTHER_ARTICLES - otherArticles.size
-                            )
+                        followingArticles.take(
+                            NUMBER_OF_OTHER_ARTICLES - otherArticles.size
+                        )
                     )
                 }
 
-                // If not refreshing, must initialize otherRV.
+                var newOtherArticles = otherArticles.shuffled().take(NUMBER_OF_OTHER_ARTICLES)
+                newOtherArticles =
+                    if (newOtherArticles.isEmpty()) mutableListOf() else newOtherArticles as MutableList<Article>
+
+
+                // If not refreshing, must initialize rvOtherArticles.
                 if (!isRefreshing) {
-                    otherRV = binding.rvOtherArticles
-                    with(otherRV) {
+                    with(binding.rvOtherArticles) {
                         adapter = HomeArticlesAdapter(
-                                otherArticles.shuffled()
-                                        as MutableList<Article>, true
+                            newOtherArticles, true
                         )
                         layoutManager = LinearLayoutManager(context)
                     }
                 } else {
-                    // otherRV is already created if initialized, only need to repopulate adapter data.
-                    val adapter = otherRV.adapter as HomeArticlesAdapter
-                    adapter.clear()
-                    adapter.addAll(otherArticles.shuffled())
+                    binding.rvOtherArticles.visibility = View.VISIBLE
+                    binding.shimmerOtherArticles.visibility = View.GONE
+
+                    // rvOtherArticles is already created if initialized, only need to repopulate adapter data.
+                    val adapter = binding.rvOtherArticles.adapter as HomeArticlesAdapter
+                    val result =
+                        DiffUtil.calculateDiff(
+                            DiffUtilCallbackArticle(
+                                adapter.articles,
+                                newOtherArticles
+                            )
+                        )
+                    adapter.articles = newOtherArticles
+                    result.dispatchUpdatesTo(adapter)
+
+                    binding.rvOtherArticles.visibility = View.VISIBLE
+                    binding.shimmerOtherArticles.visibility = View.GONE
                 }
+
                 // shimmer off
                 binding.shimmerOtherArticles.visibility = View.GONE
-                otherRV.visibility = View.VISIBLE
+                binding.rvOtherArticles.visibility = View.VISIBLE
             })
         }
     }
 
     override fun onDestroy() {
-        disposables.clear()
         super.onDestroy()
+        disposables.clear()
     }
 
     override fun onDestroyView() {

@@ -34,8 +34,6 @@
 .idea/kotlinc.xml
 .idea/*.iml
 .idea/modules
-.idea/compiler.xml
-.idea/misc.xml
 .idea/runConfigurations.xml
 
 # File-based project format

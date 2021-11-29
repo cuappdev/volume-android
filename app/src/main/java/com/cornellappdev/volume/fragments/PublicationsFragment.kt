@@ -1,6 +1,6 @@
 package com.cornellappdev.volume.fragments
 
-import android.app.Activity.RESULT_OK
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,12 +8,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.apollographql.apollo.api.Response
-import com.cornellappdev.volume.DiffUtilCallback
+import com.cornellappdev.volume.NoInternetActivity
 import com.cornellappdev.volume.PublicationProfileActivity
 import com.cornellappdev.volume.adapters.FollowingHorizontalAdapter
 import com.cornellappdev.volume.adapters.MorePublicationsAdapter
@@ -23,15 +22,15 @@ import com.cornellappdev.volume.databinding.FragmentPublicationsBinding
 import com.cornellappdev.volume.models.Article
 import com.cornellappdev.volume.models.Publication
 import com.cornellappdev.volume.models.Social
-import com.cornellappdev.volume.util.GraphQlUtil
+import com.cornellappdev.volume.util.*
 import com.cornellappdev.volume.util.GraphQlUtil.Companion.hasInternetConnection
-import com.cornellappdev.volume.util.PrefUtils
 import com.kotlin.graphql.AllPublicationsQuery
 import com.kotlin.graphql.PublicationsByIDsQuery
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
+
 
 /**
  * Fragment for the publications page, displays publications that the user is currently following
@@ -43,11 +42,16 @@ class PublicationsFragment : Fragment(), FollowingHorizontalAdapter.AdapterOnCli
     MorePublicationsAdapter.AdapterOnClickHandler {
 
     private lateinit var resultLauncher: ActivityResultLauncher<Intent>
-    private val graphQlUtil = GraphQlUtil()
-    private val disposables = CompositeDisposable()
-    private val prefUtils = PrefUtils()
+    private lateinit var prefUtils: PrefUtils
+    private lateinit var disposables: CompositeDisposable
+    private lateinit var graphQlUtil: GraphQlUtil
     private var _binding: FragmentPublicationsBinding? = null
     private val binding get() = _binding!!
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        prefUtils = PrefUtils(context)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -61,15 +65,37 @@ class PublicationsFragment : Fragment(), FollowingHorizontalAdapter.AdapterOnCli
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        graphQlUtil = GraphQlUtil()
+        disposables = CompositeDisposable()
 
         resultLauncher =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-                if (result.resultCode == RESULT_OK) {
+                if (result.resultCode == ActivityForResultConstants.FROM_PUBLICATION_PROFILE_ACTIVITY.code) {
                     setupPublicationsView(binding, isRefreshing = true)
+                }
+                if (result.resultCode == ActivityForResultConstants.FROM_NO_INTERNET.code) {
+                    setupPublicationFragment()
                 }
             }
 
-        setupPublicationsView(binding, isRefreshing = false)
+        setupPublicationFragment()
+    }
+
+    /**
+     * Sets up the entirety of the publication fragment, adds onClicks, checks for internet, and sets up
+     * the articles.
+     */
+    private fun setupPublicationFragment() {
+        disposables.add(hasInternetConnection().subscribe { hasInternet ->
+            if (!hasInternet) {
+                resultLauncher.launch(Intent(context, NoInternetActivity::class.java))
+            } else {
+                setupPublicationsView(
+                    binding,
+                    isRefreshing = false
+                )
+            }
+        })
     }
 
     /**
@@ -81,7 +107,7 @@ class PublicationsFragment : Fragment(), FollowingHorizontalAdapter.AdapterOnCli
 
         // Creates API call observation for retrieving all publications the user follows.
         val followingObs =
-            followingPublicationsIDs?.let {
+            followingPublicationsIDs.let {
                 graphQlUtil
                     .getPublicationsByIDs(it.toMutableList())
                     .subscribeOn(Schedulers.io())
@@ -94,32 +120,19 @@ class PublicationsFragment : Fragment(), FollowingHorizontalAdapter.AdapterOnCli
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
 
-        disposables.add(hasInternetConnection().subscribe { hasInternet ->
-            if (!hasInternet) {
-                binding.clPublicationPage.visibility = View.GONE
-                val ft = childFragmentManager.beginTransaction()
-                val dialog = NoInternetDialog()
-                ft.replace(binding.fragmentContainer.id, dialog, NoInternetDialog.TAG).commit()
-            } else {
-                childFragmentManager.findFragmentByTag(NoInternetDialog.TAG).let { dialogFrag ->
-                    (dialogFrag as? DialogFragment)?.dismiss()
-                }
+        binding.clPublicationPage.visibility = View.VISIBLE
+        handleFollowingObservable(
+            followingObs,
+            isRefreshing
+        )
 
-                binding.clPublicationPage.visibility = View.VISIBLE
-                handleFollowingObservable(
-                    followingObs,
-                    isRefreshing
-                )
-
-                // It's important that handleMorePublicationObservable comes after handleFollowingObservable
-                // since we filter what other publications to display based on what publications the user follows.
-                handleMorePublicationObservable(
-                    allPublicationsObs,
-                    isRefreshing,
-                    followingPublicationsIDs as HashSet<String>?
-                )
-            }
-        })
+        // It's important that handleMorePublicationObservable comes after handleFollowingObservable
+        // since we filter what other publications to display based on what publications the user follows.
+        handleMorePublicationObservable(
+            allPublicationsObs,
+            isRefreshing,
+            followingPublicationsIDs as HashSet<String>?
+        )
     }
 
     /**
@@ -250,7 +263,7 @@ class PublicationsFragment : Fragment(), FollowingHorizontalAdapter.AdapterOnCli
                     val adapter =
                         binding.rvFollowing.adapter as FollowingHorizontalAdapter
                     val result = DiffUtil.calculateDiff(
-                        DiffUtilCallback(
+                        DiffUtilCallbackPublication(
                             adapter.followedPublications,
                             followingPublications
                         )
@@ -316,7 +329,7 @@ class PublicationsFragment : Fragment(), FollowingHorizontalAdapter.AdapterOnCli
                     val adapter =
                         binding.rvMorePublications.adapter as MorePublicationsAdapter
                     val result = DiffUtil.calculateDiff(
-                        DiffUtilCallback(
+                        DiffUtilCallbackPublication(
                             adapter.publicationList,
                             morePublications
                         )

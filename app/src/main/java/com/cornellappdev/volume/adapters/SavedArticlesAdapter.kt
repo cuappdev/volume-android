@@ -17,15 +17,16 @@ import com.cornellappdev.volume.models.Article
 import com.squareup.picasso.Picasso
 
 class SavedArticlesAdapter(private val articles: List<Article>) :
-        RecyclerView.Adapter<SavedArticlesAdapter.SavedArticleVH>() {
+    RecyclerView.Adapter<SavedArticlesAdapter.SavedArticleVH>() {
 
     private lateinit var context: Context
 
-    class SavedArticleVH(val binding: ItemSavedArticleBinding) : RecyclerView.ViewHolder(binding.root)
+    class SavedArticleVH(val binding: ItemSavedArticleBinding) :
+        RecyclerView.ViewHolder(binding.root)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SavedArticleVH {
         val binding = ItemSavedArticleBinding
-                .inflate(LayoutInflater.from(parent.context), parent, false)
+            .inflate(LayoutInflater.from(parent.context), parent, false)
         context = parent.context
         return SavedArticleVH(binding)
     }
@@ -37,16 +38,25 @@ class SavedArticlesAdapter(private val articles: List<Article>) :
         Article.applyNSFWFilter(currentItem, holder.binding.tvArticleTitle)
         if (currentItem.imageURL.isNotBlank()) {
             holder.binding.ivArticleImage.visibility = View.VISIBLE
-            Picasso.get().load(currentItem.imageURL).fit().centerCrop().into(holder.binding.ivArticleImage)
+            Picasso.get().load(currentItem.imageURL).fit().centerCrop()
+                .into(holder.binding.ivArticleImage)
         }
         Article.setCorrectDateText(currentItem, holder.binding.tvTimePosted, context)
         holder.binding.tvShoutoutCount.text =
-                context.getString(R.string.shoutout_count, currentItem.shoutouts.toInt())
+            context.resources.getQuantityString(
+                R.plurals.shoutout_count,
+                currentItem.shoutouts.toInt(),
+                currentItem.shoutouts.toInt()
+            )
+
         holder.binding.tvPublicationName.text = currentItem.publication!!.name
         holder.binding.clArticleLayout.setOnClickListener { view ->
             val intent = Intent(view.context, MainActivity::class.java)
             intent.putExtra(Article.INTENT_KEY, currentItem)
-            intent.putParcelableExtra(NavigationSource.INTENT_KEY, NavigationSource.BOOKMARK_ARTICLES)
+            intent.putParcelableExtra(
+                NavigationSource.INTENT_KEY,
+                NavigationSource.BOOKMARK_ARTICLES
+            )
             view.context.startActivity(intent)
         }
     }

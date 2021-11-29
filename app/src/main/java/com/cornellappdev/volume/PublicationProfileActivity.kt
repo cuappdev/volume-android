@@ -5,6 +5,8 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.view.View
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -17,6 +19,7 @@ import com.cornellappdev.volume.databinding.ActivityPublicationProfileBinding
 import com.cornellappdev.volume.models.Article
 import com.cornellappdev.volume.models.Publication
 import com.cornellappdev.volume.models.Social
+import com.cornellappdev.volume.util.ActivityForResultConstants
 import com.cornellappdev.volume.util.GraphQlUtil
 import com.cornellappdev.volume.util.PrefUtils
 import com.kotlin.graphql.ArticlesByPublicationIDQuery
@@ -36,41 +39,66 @@ class PublicationProfileActivity : AppCompatActivity() {
     private lateinit var publication: Publication
     private lateinit var navigationSource: NavigationSource
     private lateinit var binding: ActivityPublicationProfileBinding
-    private val disposables = CompositeDisposable()
-    private val graphQlUtil = GraphQlUtil()
-    private val prefUtils = PrefUtils()
+    private lateinit var resultLauncher: ActivityResultLauncher<Intent>
+    private lateinit var prefUtils: PrefUtils
+    private lateinit var disposables: CompositeDisposable
+    private lateinit var graphQlUtil: GraphQlUtil
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityPublicationProfileBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        resultLauncher =
+            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+                if (result.resultCode == ActivityForResultConstants.FROM_NO_INTERNET.code) {
+                    initializePublicationProfileActivity()
+                }
+            }
+        disposables = CompositeDisposable()
+        graphQlUtil = GraphQlUtil()
+        prefUtils = PrefUtils(this)
+        initializePublicationProfileActivity()
+    }
 
-        val currentFollowingSet =
-            prefUtils.getStringSet(PrefUtils.FOLLOWING_KEY, mutableSetOf())?.toMutableSet()
+    private fun initializePublicationProfileActivity() {
+        disposables.add(GraphQlUtil.hasInternetConnection().subscribe { hasInternet ->
+            if (!hasInternet) {
+                resultLauncher.launch(Intent(this, NoInternetActivity::class.java))
+            } else {
+                val currentFollowingSet =
+                    prefUtils.getStringSet(PrefUtils.FOLLOWING_KEY, mutableSetOf()).toMutableSet()
+                val UUID = prefUtils.getString(PrefUtils.UUID, null)
 
-        publication = intent.getParcelableExtra("publication")!!
-        setupPublication(publication)
-        navigationSource = intent.getParcelableExtra(NavigationSource.INTENT_KEY)!!
-        VolumeEvent.logEvent(EventType.PUBLICATION, VolumeEvent.OPEN_PUBLICATION, navigationSource, publication.id)
+                publication = intent.getParcelableExtra("publication")!!
+                setupPublication(publication)
+                navigationSource = intent.getParcelableExtra(NavigationSource.INTENT_KEY)!!
+                VolumeEvent.logEvent(
+                    EventType.PUBLICATION,
+                    VolumeEvent.OPEN_PUBLICATION,
+                    navigationSource,
+                    publication.id
+                )
 
-        val volumeOrange = ContextCompat.getColor(this, R.color.volume_orange)
-        binding.srlQuery.setColorSchemeColors(volumeOrange, volumeOrange, volumeOrange)
+                val volumeOrange = ContextCompat.getColor(this, R.color.volume_orange)
+                binding.srlQuery.setColorSchemeColors(volumeOrange, volumeOrange, volumeOrange)
 
-        // The article RecyclerView attempts to re-populate on refresh,
-        // useful if user regains internet again and wants to re-query.
-        binding.srlQuery.setOnRefreshListener {
-            setupArticleRV()
-            binding.srlQuery.isRefreshing = false
-        }
+                // The article RecyclerView attempts to re-populate on refresh,
+                // useful if user regains internet again and wants to re-query.
+                binding.srlQuery.setOnRefreshListener {
+                    setupArticleRV()
+                    binding.srlQuery.isRefreshing = false
+                }
 
-        setupFollowButton(currentFollowingSet)
-        setupArticleRV()
+                setupFollowButton(currentFollowingSet, UUID)
+                setupArticleRV()
+            }
+        })
     }
 
     /**
      * Sets up interactions with the follow button.
      */
-    private fun setupFollowButton(currentFollowingSet: MutableSet<String>?) {
+    private fun setupFollowButton(currentFollowingSet: MutableSet<String>?, UUID: String?) {
         // Updates follow button given whether or not user follows publication.
         if (currentFollowingSet!!.contains(publication.id)) {
             binding.btnFollow.apply {
@@ -93,10 +121,32 @@ class PublicationProfileActivity : AppCompatActivity() {
                     // Removes and updates UI.
                     text = this@PublicationProfileActivity.getString(R.string.follow)
                     setBackgroundResource(R.drawable.rounded_rectangle_button)
-                    setTextColor(ContextCompat.getColor(this.context, R.color.volume_orange))
+                    setTextColor(
+                        ContextCompat.getColor(
+                            this.context,
+                            R.color.volume_orange
+                        )
+                    )
                     currentFollowingSet.remove(publication.id)
                     prefUtils.save(PrefUtils.FOLLOWING_KEY, currentFollowingSet)
-                    VolumeEvent.logEvent(EventType.PUBLICATION, VolumeEvent.UNFOLLOW_PUBLICATION, id = publication.id)
+                    VolumeEvent.logEvent(
+                        EventType.PUBLICATION,
+                        VolumeEvent.UNFOLLOW_PUBLICATION,
+                        id = publication.id
+                    )
+
+                    // Unfollow by user.
+                    val unfollowObservable = UUID?.let { uuid ->
+                        graphQlUtil
+                            .unfollowPublication(publication.id, uuid)
+                            .subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread())
+                    }
+
+                    if (unfollowObservable != null) {
+                        disposables.add(unfollowObservable.subscribe { _ ->
+                        })
+                    }
                 }
             } else {
                 binding.btnFollow.apply {
@@ -106,10 +156,25 @@ class PublicationProfileActivity : AppCompatActivity() {
                     setBackgroundResource(R.drawable.rounded_rectange_button_orange)
                     currentFollowingSet.add(publication.id)
                     prefUtils.save(PrefUtils.FOLLOWING_KEY, currentFollowingSet)
-                    VolumeEvent.logEvent(EventType.PUBLICATION,
-                            VolumeEvent.FOLLOW_PUBLICATION,
-                            NavigationSource.PUBLICATION_DETAIL,
-                            publication.id)
+                    VolumeEvent.logEvent(
+                        EventType.PUBLICATION,
+                        VolumeEvent.FOLLOW_PUBLICATION,
+                        NavigationSource.PUBLICATION_DETAIL,
+                        publication.id
+                    )
+
+                    // Follow by user.
+                    val followObservable = UUID?.let { uuid ->
+                        graphQlUtil
+                            .followPublication(publication.id, uuid)
+                            .subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread())
+                    }
+
+                    if (followObservable != null) {
+                        disposables.add(followObservable.subscribe { _ ->
+                        })
+                    }
                 }
             }
         }
@@ -129,7 +194,7 @@ class PublicationProfileActivity : AppCompatActivity() {
                 disposables.add(articleByPublicationObservable.subscribe { response ->
                     binding.mShimmerViewContainer.stopShimmer()
                     binding.mShimmerViewContainer.visibility = View.GONE
-                    val articles = getArticlesFromResponse(response)
+                    val articles = getArticlesFromResponse(response, publication)
                     // Initializes many of the properties of the Article RecyclerView.
                     with(binding.rvArticles) {
                         adapter = ArticleAdapter(articles)
@@ -153,28 +218,19 @@ class PublicationProfileActivity : AppCompatActivity() {
      * Parses the raw articles from our ArticlesByPublicationID query, turning them into our Article
      * model. The articles returned are sorted descending by the date published.
      */
-    private fun getArticlesFromResponse(response: Response<ArticlesByPublicationIDQuery.Data>?): MutableList<Article> {
+    private fun getArticlesFromResponse(
+        response: Response<ArticlesByPublicationIDQuery.Data>?,
+        publication: Publication
+    ): MutableList<Article> {
         val articles = mutableListOf<Article>()
         response?.data?.getArticlesByPublicationID?.mapTo(articles, { article ->
-            val publication = article.publication
             Article(
                 title = article.title,
                 articleURL = article.articleURL,
                 date = article.date.toString(),
                 id = article.id,
                 imageURL = article.imageURL,
-                publication = Publication(
-                    id = publication.id,
-                    backgroundImageURL = publication.backgroundImageURL,
-                    bio = publication.bio,
-                    name = publication.name,
-                    profileImageURL = publication.profileImageURL,
-                    rssName = publication.rssName,
-                    rssURL = publication.rssURL,
-                    slug = publication.slug,
-                    shoutouts = publication.shoutouts,
-                    websiteURL = publication.websiteURL,
-                    socials = publication.socials.toList().map { Social(it.social, it.uRL) }),
+                publication = publication,
                 shoutouts = article.shoutouts,
                 nsfw = article.nsfw
             )
@@ -188,10 +244,14 @@ class PublicationProfileActivity : AppCompatActivity() {
      */
     private fun setupPublication(publication: Publication) {
         binding.tvName.text = publication.name
-        binding.tvShoutoutCount.text =
-            this.getString(R.string.shoutout_count, publication.shoutouts.toInt())
+        binding.tvShoutoutCount.text = this.resources.getQuantityString(
+            R.plurals.shoutout_count,
+            publication.shoutouts.toInt(),
+            publication.shoutouts.toInt()
+        )
         binding.tvDescription.text = publication.bio
-        Picasso.get().load(publication.backgroundImageURL).fit().centerCrop().into(binding.ivBanner)
+        Picasso.get().load(publication.backgroundImageURL).fit().centerCrop()
+            .into(binding.ivBanner)
         Picasso.get().load(publication.profileImageURL).into(binding.ivLogo)
 
         setupMedia(publication)
@@ -260,11 +320,17 @@ class PublicationProfileActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        VolumeEvent.logEvent(EventType.PUBLICATION, VolumeEvent.CLOSE_PUBLICATION, id = publication.id)
+        VolumeEvent.logEvent(
+            EventType.PUBLICATION,
+            VolumeEvent.CLOSE_PUBLICATION,
+            id = publication.id
+        )
+        disposables.clear()
     }
 
     override fun onBackPressed() {
-        setResult(RESULT_OK)
+        // Signals back that the user is leaving the PublicationProfileActivity
+        setResult(ActivityForResultConstants.FROM_PUBLICATION_PROFILE_ACTIVITY.code)
         super.onBackPressed()
     }
 }

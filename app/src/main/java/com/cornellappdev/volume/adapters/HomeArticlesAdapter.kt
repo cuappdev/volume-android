@@ -16,9 +16,11 @@ import com.cornellappdev.volume.databinding.ItemHomeArticleBinding
 import com.cornellappdev.volume.models.Article
 import com.squareup.picasso.Picasso
 
-class HomeArticlesAdapter(private val articles: MutableList<Article>,
-                          private val isOtherArticles: Boolean = false) :
-        RecyclerView.Adapter<HomeArticlesAdapter.HomeArticleVH>() {
+class HomeArticlesAdapter(
+    var articles: MutableList<Article>,
+    private val isOtherArticles: Boolean = false
+) :
+    RecyclerView.Adapter<HomeArticlesAdapter.HomeArticleVH>() {
 
     private lateinit var context: Context
 
@@ -26,7 +28,7 @@ class HomeArticlesAdapter(private val articles: MutableList<Article>,
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HomeArticleVH {
         val binding = ItemHomeArticleBinding
-                .inflate(LayoutInflater.from(parent.context), parent, false)
+            .inflate(LayoutInflater.from(parent.context), parent, false)
         context = parent.context
         return HomeArticleVH(binding)
     }
@@ -38,36 +40,34 @@ class HomeArticlesAdapter(private val articles: MutableList<Article>,
         Article.applyNSFWFilter(currentItem, holder.binding.tvArticleTitle)
         if (currentItem.imageURL.isNotBlank()) {
             holder.binding.ivArticleImage.visibility = View.VISIBLE
-            Picasso.get().load(currentItem.imageURL).fit().centerCrop().into(holder.binding.ivArticleImage)
+            Picasso.get().load(currentItem.imageURL).fit().centerCrop()
+                .into(holder.binding.ivArticleImage)
         }
         Article.setCorrectDateText(currentItem, holder.binding.tvTimePosted, context)
         holder.binding.tvShoutoutCount.text =
-                context.getString(R.string.shoutout_count, currentItem.shoutouts.toInt())
+            context.resources.getQuantityString(
+                R.plurals.shoutout_count,
+                currentItem.shoutouts.toInt(),
+                currentItem.shoutouts.toInt()
+            )
+
         holder.binding.tvPublicationName.text = currentItem.publication?.name
 
         holder.binding.clArticleLayout.setOnClickListener { view ->
             val intent = Intent(view.context, MainActivity::class.java)
             intent.putExtra(Article.INTENT_KEY, currentItem)
-            intent.putParcelableExtra(NavigationSource.INTENT_KEY, if (isOtherArticles) {
-                NavigationSource.OTHER_ARTICLES
-            } else {
-                NavigationSource.FOLLOWING_ARTICLES
-            })
+            intent.putParcelableExtra(
+                NavigationSource.INTENT_KEY, if (isOtherArticles) {
+                    NavigationSource.OTHER_ARTICLES
+                } else {
+                    NavigationSource.FOLLOWING_ARTICLES
+                }
+            )
             view.context.startActivity(intent)
         }
     }
 
     override fun getItemCount(): Int {
         return articles.size
-    }
-
-    fun clear() {
-        articles.clear()
-        notifyDataSetChanged()
-    }
-
-    fun addAll(list: List<Article>) {
-        articles.addAll(list)
-        notifyDataSetChanged()
     }
 }

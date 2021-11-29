@@ -15,8 +15,8 @@ import com.cornellappdev.volume.databinding.ItemBigReadBinding
 import com.cornellappdev.volume.models.Article
 import com.squareup.picasso.Picasso
 
-class BigReadHomeAdapter(private val articles: MutableList<Article>) :
-        RecyclerView.Adapter<BigReadHomeAdapter.BigReadArticleVH>() {
+class BigReadHomeAdapter(var articles: MutableList<Article>) :
+    RecyclerView.Adapter<BigReadHomeAdapter.BigReadArticleVH>() {
 
     private lateinit var context: Context
 
@@ -24,7 +24,7 @@ class BigReadHomeAdapter(private val articles: MutableList<Article>) :
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BigReadArticleVH {
         val binding = ItemBigReadBinding
-                .inflate(LayoutInflater.from(parent.context), parent, false)
+            .inflate(LayoutInflater.from(parent.context), parent, false)
         context = parent.context
         return BigReadArticleVH(binding)
     }
@@ -39,22 +39,31 @@ class BigReadHomeAdapter(private val articles: MutableList<Article>) :
         holder.binding.tvArticleTitle.text = currentItem.title
         Article.applyNSFWFilter(currentItem, holder.binding.tvArticleTitle)
         if (currentItem.imageURL.isNotBlank()) {
-            Picasso.get().load(currentItem.imageURL).fit().centerCrop().into(holder.binding.ivArticleImage)
+            Picasso.get().load(currentItem.imageURL).fit().centerCrop()
+                .into(holder.binding.ivArticleImage)
         } else if (!currentItem.publication?.profileImageURL.isNullOrEmpty()) {
             Picasso.get()
-                    .load(currentItem.publication?.profileImageURL)
-                    .fit()
-                    .centerCrop()
-                    .into(holder.binding.ivArticleImage)
+                .load(currentItem.publication?.profileImageURL)
+                .fit()
+                .centerCrop()
+                .into(holder.binding.ivArticleImage)
         }
         Article.setCorrectDateText(currentItem, holder.binding.tvTimePosted, context)
         holder.binding.tvShoutoutCount.text =
-                context.getString(R.string.shoutout_count, currentItem.shoutouts.toInt())
+            context.resources.getQuantityString(
+                R.plurals.shoutout_count,
+                currentItem.shoutouts.toInt(),
+                currentItem.shoutouts.toInt()
+            )
+
         holder.binding.tvPublicationName.text = currentItem.publication?.name
         holder.binding.clBigReadLayout.setOnClickListener { view ->
             val intent = Intent(view.context, MainActivity::class.java)
             intent.putExtra(Article.INTENT_KEY, currentItem)
-            intent.putParcelableExtra(NavigationSource.INTENT_KEY, NavigationSource.TRENDING_ARTICLES)
+            intent.putParcelableExtra(
+                NavigationSource.INTENT_KEY,
+                NavigationSource.TRENDING_ARTICLES
+            )
             view.context.startActivity(intent)
         }
     }
@@ -64,8 +73,4 @@ class BigReadHomeAdapter(private val articles: MutableList<Article>) :
         notifyDataSetChanged()
     }
 
-    fun addAll(list: List<Article>) {
-        articles.addAll(list)
-        notifyDataSetChanged()
-    }
 }
