@@ -18,6 +18,7 @@ class PrefUtils {
         const val FOLLOWING_KEY: String = "following"
         const val FIRST_START_KEY: String = "firstStart"
         const val SAVED_ARTICLES_KEY: String = "savedArticles"
+        const val UUID: String = "UUID"
     }
 
     // Should not be instantiated through this constructor
@@ -43,6 +44,10 @@ class PrefUtils {
         editor.putInt(key, value).apply()
     }
 
+    fun save(key: String, value: String) {
+        editor.putString(key, value).apply()
+    }
+
     fun save(key: String, value: Set<String>) {
         editor.putStringSet(key, value).apply()
     }
@@ -59,6 +64,10 @@ class PrefUtils {
         }
     }
 
+    fun getString(key: String, defValue: String?): String? {
+        return preferences.getString(key, defValue)
+    }
+
     fun contains(key: String): Boolean {
         return preferences.contains(key)
     }
@@ -67,6 +76,4 @@ class PrefUtils {
         val stringSet = preferences.getStringSet(key, defValue)
         return stringSet ?: setOf()
     }
-
-
 }
