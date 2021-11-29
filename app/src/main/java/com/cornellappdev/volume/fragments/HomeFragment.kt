@@ -24,6 +24,7 @@ import com.cornellappdev.volume.databinding.FragmentHomeBinding
 import com.cornellappdev.volume.models.Article
 import com.cornellappdev.volume.models.Publication
 import com.cornellappdev.volume.models.Social
+import com.cornellappdev.volume.models.WeeklyDebrief
 import com.cornellappdev.volume.util.ActivityForResultConstants
 import com.cornellappdev.volume.util.DiffUtilCallbackArticle
 import com.cornellappdev.volume.util.GraphQlUtil
@@ -83,6 +84,9 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupHomeFragment()
+        if (arguments != null && requireArguments().getBoolean(WeeklyDebrief.INTENT_KEY)) {
+            // Get cached weekly debrief
+        }
     }
 
     /**

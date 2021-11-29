@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.Animation
@@ -22,6 +23,7 @@ import com.cornellappdev.volume.fragments.OnboardingFragTwo
 import com.cornellappdev.volume.models.Article
 import com.cornellappdev.volume.models.Publication
 import com.cornellappdev.volume.models.Social
+import com.cornellappdev.volume.models.WeeklyDebrief
 import com.cornellappdev.volume.util.ActivityForResultConstants
 import com.cornellappdev.volume.util.GraphQlUtil
 import com.cornellappdev.volume.util.GraphQlUtil.Companion.hasInternetConnection
@@ -49,6 +51,7 @@ import kotlinx.datetime.plus
 class OnboardingActivity : AppCompatActivity(), OnboardingFragTwo.DataPassListener {
 
     companion object {
+        private const val TAG = "ONBOARDING_ACTIVITY"
         private const val FRAGMENT_COUNT = 2
         private const val SLIDE_UP_DURATION_MS = 1000L
         private const val VOLUME_LOGO_FADE_AWAY_MS = 3000L
@@ -94,8 +97,13 @@ class OnboardingActivity : AppCompatActivity(), OnboardingFragTwo.DataPassListen
 
         val extras = intent.extras
         if (extras != null) {
+            Log.d(TAG, "Contains extras")
+            Log.d(TAG,
+                extras[NotificationService.NotificationDataKeys.NOTIFICATION_TYPE.key] as String
+            )
             when (extras[NotificationService.NotificationDataKeys.NOTIFICATION_TYPE.key]) {
                 NotificationService.NotificationType.NEW_ARTICLE.type -> {
+                    Log.d(TAG, "New Article")
                     val articleID = extras[NotificationService.NotificationDataKeys.ARTICLE_ID.key]
                     val getArticleObs =
                         graphQlUtil.getArticleByID(articleID as String)
@@ -110,6 +118,15 @@ class OnboardingActivity : AppCompatActivity(), OnboardingFragTwo.DataPassListen
                     val expiration = currentMoment.plus(7, DateTimeUnit.DAY, TimeZone.UTC)
                     currentMoment.toEpochMilliseconds()
                     expiration.toEpochMilliseconds()
+
+
+                    val intent = Intent(this, TabActivity::class.java)
+                    intent.putExtra(WeeklyDebrief.INTENT_KEY, true)
+                    this.startActivity(intent)
+
+                    // It's important that this activity is closed, so the user can't accidentally
+                    // swipe back to this activity.
+                    finish()
                 }
             }
         } else {

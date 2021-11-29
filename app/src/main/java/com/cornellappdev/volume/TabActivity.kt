@@ -27,7 +27,7 @@ class TabActivity : AppCompatActivity() {
 
         binding.vpFragments.reduceDragSensitivity()
         binding.vpFragments.isUserInputEnabled = true
-        binding.vpFragments.adapter = CustomPagerAdapter(this, binding.tlTabs.tabCount)
+        binding.vpFragments.adapter = CustomPagerAdapter(this, binding.tlTabs.tabCount, intent.extras)
         TabLayoutMediator(binding.tlTabs, binding.vpFragments) { _, _ -> }.attach()
 
         // Initially we are at the HomeFragment
