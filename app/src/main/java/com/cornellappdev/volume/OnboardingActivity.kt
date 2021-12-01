@@ -29,17 +29,12 @@ import com.cornellappdev.volume.util.GraphQlUtil
 import com.cornellappdev.volume.util.GraphQlUtil.Companion.hasInternetConnection
 import com.cornellappdev.volume.util.NotificationService
 import com.cornellappdev.volume.util.PrefUtils
-import com.google.android.gms.tasks.OnCompleteListener
-import com.google.firebase.messaging.FirebaseMessaging
 import com.kotlin.graphql.ArticleByIDQuery
+import com.kotlin.graphql.GetUserQuery
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
-import kotlinx.datetime.Clock
-import kotlinx.datetime.DateTimeUnit
-import kotlinx.datetime.TimeZone
-import kotlinx.datetime.plus
 
 /**
  * This activity is responsible for Onboarding, what the users first see when they install the app.
@@ -98,7 +93,8 @@ class OnboardingActivity : AppCompatActivity(), OnboardingFragTwo.DataPassListen
         val extras = intent.extras
         if (extras != null) {
             Log.d(TAG, "Contains extras")
-            Log.d(TAG,
+            Log.d(
+                TAG,
                 extras[NotificationService.NotificationDataKeys.NOTIFICATION_TYPE.key] as String
             )
             when (extras[NotificationService.NotificationDataKeys.NOTIFICATION_TYPE.key]) {
@@ -113,25 +109,103 @@ class OnboardingActivity : AppCompatActivity(), OnboardingFragTwo.DataPassListen
                 }
                 NotificationService.NotificationType.WEEKLY_DEBRIEF.type -> {
                     // Get new weekly debrief
-                    // Cache
-                    val currentMoment = Clock.System.now()
-                    val expiration = currentMoment.plus(7, DateTimeUnit.DAY, TimeZone.UTC)
-                    currentMoment.toEpochMilliseconds()
-                    expiration.toEpochMilliseconds()
-
-
-                    val intent = Intent(this, TabActivity::class.java)
-                    intent.putExtra(WeeklyDebrief.INTENT_KEY, true)
-                    this.startActivity(intent)
-
-                    // It's important that this activity is closed, so the user can't accidentally
-                    // swipe back to this activity.
-                    finish()
+                    val uuid = prefUtils.getString(PrefUtils.UUID, null)
+                    if (uuid != null) {
+                        val getWeeklyDebrief =
+                            graphQlUtil.getUser(uuid)
+                                .subscribeOn(Schedulers.io())
+                                .observeOn(AndroidSchedulers.mainThread())
+                        processWeeklyDebrief(getWeeklyDebrief)
+                    } else {
+                        initializeOnboarding()
+                    }
                 }
             }
         } else {
             initializeOnboarding()
         }
+    }
+
+    private fun processWeeklyDebrief(weeklyDebriefObs: Observable<Response<GetUserQuery.Data>>) {
+        disposables.add(weeklyDebriefObs.subscribe { response ->
+            val rawWeeklyDebrief = response?.data?.getUser?.weeklyDebrief
+            val randomArticles = mutableListOf<Article>()
+            val readArticles = mutableListOf<Article>()
+
+            if (rawWeeklyDebrief != null) {
+                rawWeeklyDebrief.randomArticles.mapTo(
+                    randomArticles, { article ->
+                        val publication = article.publication
+                        Article(
+                            title = article.title,
+                            articleURL = article.articleURL,
+                            date = article.date.toString(),
+                            id = article.id,
+                            imageURL = article.imageURL,
+                            publication = Publication(
+                                id = publication.id,
+                                backgroundImageURL = publication.backgroundImageURL,
+                                bio = publication.bio,
+                                name = publication.name,
+                                profileImageURL = publication.profileImageURL,
+                                rssName = publication.rssName,
+                                rssURL = publication.rssURL,
+                                slug = publication.slug,
+                                shoutouts = publication.shoutouts,
+                                websiteURL = publication.websiteURL,
+                                socials = publication.socials.toList()
+                                    .map { Social(it.social, it.uRL) }),
+                            shoutouts = article.shoutouts,
+                            nsfw = article.nsfw
+                        )
+                    })
+                rawWeeklyDebrief.readArticles.mapTo(
+                    readArticles, { article ->
+                        val publication = article.publication
+                        Article(
+                            title = article.title,
+                            articleURL = article.articleURL,
+                            date = article.date.toString(),
+                            id = article.id,
+                            imageURL = article.imageURL,
+                            publication = Publication(
+                                id = publication.id,
+                                backgroundImageURL = publication.backgroundImageURL,
+                                bio = publication.bio,
+                                name = publication.name,
+                                profileImageURL = publication.profileImageURL,
+                                rssName = publication.rssName,
+                                rssURL = publication.rssURL,
+                                slug = publication.slug,
+                                shoutouts = publication.shoutouts,
+                                websiteURL = publication.websiteURL,
+                                socials = publication.socials.toList()
+                                    .map { Social(it.social, it.uRL) }),
+                            shoutouts = article.shoutouts,
+                            nsfw = article.nsfw
+                        )
+                    })
+
+                val weeklyDebrief = WeeklyDebrief(
+                    rawWeeklyDebrief.createdAt.time,
+                    rawWeeklyDebrief.expirationDate.time,
+                    rawWeeklyDebrief.numShoutouts,
+                    rawWeeklyDebrief.numBookmarkedArticles,
+                    rawWeeklyDebrief.numReadArticles,
+                    readArticles,
+                    randomArticles
+                )
+
+                prefUtils.save(PrefUtils.CACHED_DEBRIEF, weeklyDebrief)
+                val intent = Intent(this, TabActivity::class.java)
+                intent.putExtra(WeeklyDebrief.INTENT_KEY, true)
+                this.startActivity(intent)
+
+                // It's important that this activity is closed, so the user can't accidentally
+                // swipe back to this activity.
+                finish()
+            }
+        })
     }
 
     private fun launchArticleView(articleObs: Observable<Response<ArticleByIDQuery.Data>>) {

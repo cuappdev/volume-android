@@ -1,11 +1,14 @@
 package com.cornellappdev.volume.util
 
 import com.apollographql.apollo.ApolloClient
+import com.apollographql.apollo.api.CustomTypeAdapter
+import com.apollographql.apollo.api.CustomTypeValue
 import com.apollographql.apollo.api.Response
 import com.apollographql.apollo.api.toInput
 import com.apollographql.apollo.rx2.rxMutate
 import com.apollographql.apollo.rx2.rxQuery
 import com.kotlin.graphql.*
+import com.kotlin.graphql.type.CustomType
 import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -14,7 +17,12 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import java.io.IOException
 import java.net.*
+import java.text.DateFormat
+import java.text.ParseException
+import java.text.SimpleDateFormat
+import java.util.*
 import java.util.concurrent.TimeUnit
+
 
 /**
  * Holds the various API calls to our backend.
@@ -55,6 +63,22 @@ class GraphQlUtil {
         }
     }
 
+    val dateCustomTypeAdapter = object : CustomTypeAdapter<Date> {
+        val format: DateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z", Locale.ENGLISH)
+
+        override fun decode(value: CustomTypeValue<*>): Date {
+            return try {
+                format.parse(value.value.toString())!!
+            } catch (e: ParseException) {
+                throw RuntimeException(e)
+            }
+        }
+
+        override fun encode(value: Date): CustomTypeValue<*> {
+            return CustomTypeValue.GraphQLString(format.format(value))
+        }
+    }
+
     private var client: ApolloClient = setUpApolloClient()
 
     private fun setUpApolloClient(): ApolloClient {
@@ -68,6 +92,7 @@ class GraphQlUtil {
         return ApolloClient.builder()
             .serverUrl(BASE_URL)
             .okHttpClient(okHttp.build())
+            .addCustomTypeAdapter(CustomType.DATETIME, dateCustomTypeAdapter)
             .build()
     }
 
@@ -111,18 +136,42 @@ class GraphQlUtil {
         return client.rxMutate(mutation)
     }
 
-    fun createUser(followedPublications: List<String>, deviceToken: String): Single<Response<CreateUserMutation.Data>> {
+    fun createUser(
+        followedPublications: List<String>,
+        deviceToken: String
+    ): Single<Response<CreateUserMutation.Data>> {
         val mutation = CreateUserMutation(DEVICE_TYPE, followedPublications, deviceToken)
         return client.rxMutate(mutation)
     }
 
-    fun followPublication(pubID: String, uuid: String): Single<Response<FollowPublicationMutation.Data>> {
+    fun getUser(uuid: String): Observable<Response<GetUserQuery.Data>> {
+        val query = GetUserQuery(uuid)
+        return client.rxQuery(query)
+    }
+
+    fun followPublication(
+        pubID: String,
+        uuid: String
+    ): Single<Response<FollowPublicationMutation.Data>> {
         val mutation = FollowPublicationMutation(pubID, uuid)
         return client.rxMutate(mutation)
     }
 
-    fun unfollowPublication(pubID: String, uuid: String): Single<Response<UnfollowPublicationMutation.Data>> {
+    fun unfollowPublication(
+        pubID: String,
+        uuid: String
+    ): Single<Response<UnfollowPublicationMutation.Data>> {
         val mutation = UnfollowPublicationMutation(pubID, uuid)
+        return client.rxMutate(mutation)
+    }
+
+    fun readArticle(articleID: String, uuid: String): Single<Response<ReadArticleMutation.Data>> {
+        val mutation = ReadArticleMutation(articleID, uuid)
+        return client.rxMutate(mutation)
+    }
+
+    fun bookmarkArticle(uuid: String): Single<Response<BookmarkArticleMutation.Data>> {
+        val mutation = BookmarkArticleMutation(uuid)
         return client.rxMutate(mutation)
     }
 }

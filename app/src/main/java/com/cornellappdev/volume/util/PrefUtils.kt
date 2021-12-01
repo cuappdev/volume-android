@@ -4,6 +4,8 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.SharedPreferences
 import androidx.preference.PreferenceManager
+import com.cornellappdev.volume.models.WeeklyDebrief
+import com.google.gson.Gson
 
 /**
  * Class responsible for directly interacting with the SharedPreferences, where device-persistent
@@ -18,6 +20,7 @@ class PrefUtils {
         const val FOLLOWING_KEY: String = "following"
         const val FIRST_START_KEY: String = "firstStart"
         const val SAVED_ARTICLES_KEY: String = "savedArticles"
+        const val CACHED_DEBRIEF: String = "weeklyDebrief"
         const val UUID: String = "UUID"
     }
 
@@ -50,6 +53,11 @@ class PrefUtils {
 
     fun save(key: String, value: Set<String>) {
         editor.putStringSet(key, value).apply()
+    }
+
+    fun save(key: String, value: WeeklyDebrief) {
+        val json = Gson().toJson(value)
+        save(key, json)
     }
 
     fun getBoolean(key: String, defValue: Boolean): Boolean {

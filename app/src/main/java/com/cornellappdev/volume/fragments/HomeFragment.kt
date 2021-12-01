@@ -30,6 +30,7 @@ import com.cornellappdev.volume.util.DiffUtilCallbackArticle
 import com.cornellappdev.volume.util.GraphQlUtil
 import com.cornellappdev.volume.util.GraphQlUtil.Companion.hasInternetConnection
 import com.cornellappdev.volume.util.PrefUtils
+import com.google.gson.Gson
 import com.kotlin.graphql.AllPublicationsQuery
 import com.kotlin.graphql.ArticlesByPublicationIDsQuery
 import com.kotlin.graphql.TrendingArticlesQuery
@@ -37,6 +38,7 @@ import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
+import java.util.*
 
 /**
  * Fragment for the home page, holds the Big Red Read, articles from publications users follows,
@@ -78,7 +80,105 @@ class HomeFragment : Fragment() {
                     setupHomeFragment()
                 }
             }
+
+        val weeklyDebriefJson = prefUtils.getString(PrefUtils.CACHED_DEBRIEF, null)
+        if (weeklyDebriefJson != null) {
+            val weeklyDebrief = Gson().fromJson(weeklyDebriefJson, WeeklyDebrief::class.java)
+            if (Date(weeklyDebrief.expiration).before(Date())) {
+                getNewWeeklyDebrief()
+            } else {
+                displayWeeklyDebrief(weeklyDebrief)
+            }
+        }
+
+//        binding.clDebriefPoint.setOnClickListener {
+//
+//        }
         return binding.root
+    }
+
+    private fun getNewWeeklyDebrief() {
+        val uuid = prefUtils.getString(PrefUtils.UUID, null)
+        if (uuid != null) {
+            val weeklyDebriefObs =
+                graphQlUtil.getUser(uuid)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+
+            disposables.add(weeklyDebriefObs.subscribe { response ->
+                val rawWeeklyDebrief = response?.data?.getUser?.weeklyDebrief
+                val randomArticles = mutableListOf<Article>()
+                val readArticles = mutableListOf<Article>()
+
+                if (rawWeeklyDebrief != null) {
+                    rawWeeklyDebrief.randomArticles.mapTo(
+                        randomArticles, { article ->
+                            val publication = article.publication
+                            Article(
+                                title = article.title,
+                                articleURL = article.articleURL,
+                                date = article.date.toString(),
+                                id = article.id,
+                                imageURL = article.imageURL,
+                                publication = Publication(
+                                    id = publication.id,
+                                    backgroundImageURL = publication.backgroundImageURL,
+                                    bio = publication.bio,
+                                    name = publication.name,
+                                    profileImageURL = publication.profileImageURL,
+                                    rssName = publication.rssName,
+                                    rssURL = publication.rssURL,
+                                    slug = publication.slug,
+                                    shoutouts = publication.shoutouts,
+                                    websiteURL = publication.websiteURL,
+                                    socials = publication.socials.toList()
+                                        .map { Social(it.social, it.uRL) }),
+                                shoutouts = article.shoutouts,
+                                nsfw = article.nsfw
+                            )
+                        })
+                    rawWeeklyDebrief.readArticles.mapTo(
+                        readArticles, { article ->
+                            val publication = article.publication
+                            Article(
+                                title = article.title,
+                                articleURL = article.articleURL,
+                                date = article.date.toString(),
+                                id = article.id,
+                                imageURL = article.imageURL,
+                                publication = Publication(
+                                    id = publication.id,
+                                    backgroundImageURL = publication.backgroundImageURL,
+                                    bio = publication.bio,
+                                    name = publication.name,
+                                    profileImageURL = publication.profileImageURL,
+                                    rssName = publication.rssName,
+                                    rssURL = publication.rssURL,
+                                    slug = publication.slug,
+                                    shoutouts = publication.shoutouts,
+                                    websiteURL = publication.websiteURL,
+                                    socials = publication.socials.toList()
+                                        .map { Social(it.social, it.uRL) }),
+                                shoutouts = article.shoutouts,
+                                nsfw = article.nsfw
+                            )
+                        })
+
+                    val weeklyDebrief = WeeklyDebrief(
+                        rawWeeklyDebrief.createdAt.time,
+                        rawWeeklyDebrief.expirationDate.time,
+                        rawWeeklyDebrief.numShoutouts,
+                        rawWeeklyDebrief.numBookmarkedArticles,
+                        rawWeeklyDebrief.numReadArticles,
+                        readArticles,
+                        randomArticles
+                    )
+
+                    prefUtils.save(PrefUtils.CACHED_DEBRIEF, weeklyDebrief)
+                    displayWeeklyDebrief(weeklyDebrief)
+                }
+            })
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -86,7 +186,15 @@ class HomeFragment : Fragment() {
         setupHomeFragment()
         if (arguments != null && requireArguments().getBoolean(WeeklyDebrief.INTENT_KEY)) {
             // Get cached weekly debrief
+            val weeklyDebriefJson = prefUtils.getString(PrefUtils.CACHED_DEBRIEF, null)
+            val weeklyDebrief = Gson().fromJson(weeklyDebriefJson, WeeklyDebrief::class.java)
+            displayWeeklyDebrief(weeklyDebrief)
         }
+    }
+
+    private fun displayWeeklyDebrief(weeklyDebrief: WeeklyDebrief) {
+        binding.clDebriefPoint.visibility = View.VISIBLE
+        TODO("Pass in weeklyDebrief to create fragment / adapter")
     }
 
     /**

@@ -1,17 +1,15 @@
 package com.cornellappdev.volume.models
 
 import android.os.Parcelable
-import kotlinx.datetime.Instant
-import kotlinx.datetime.LocalDate
-import kotlinx.datetime.LocalDateTime
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
 class WeeklyDebrief(
     val createdAt: Long,
     val expiration: Long,
-    val shoutouts: Int,
-    val numArticles: Int,
+    val numShoutouts: Double,
+    val numBookmarkedArticles: Double,
+    val numReadArticles: Double,
     val readArticles: List<Article>,
     val randomArticles: List<Article>
 ) : Parcelable {

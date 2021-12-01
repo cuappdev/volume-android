@@ -46,6 +46,7 @@ android {
 apollo {
     // instruct the compiler to generate Kotlin models
     generateKotlinModels.set(true)
+    customTypeMapping['DateTime'] = "java.util.Date"
 }
 
 repositories {
@@ -101,5 +102,7 @@ dependencies {
     // Shimmer
     implementation 'com.facebook.shimmer:shimmer:0.5.0'
 
+    // GSON
+    implementation 'com.google.code.gson:gson:2.8.9'
 }
 

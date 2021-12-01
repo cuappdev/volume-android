@@ -307,7 +307,6 @@ query ArticlesByPublicationIDs($publicationIDs:[String!]!){
 }
 
 mutation IncrementShoutout($id:String!){
-
     incrementShoutouts(id:$id){
         id
         shoutouts
@@ -359,6 +358,86 @@ mutation CreateUser($deviceType:String!, $followedPublications: [String!]!, $dev
     }
 }
 
+query GetUser($uuid: String!) {
+    getUser(uuid:$uuid) {
+        weeklyDebrief{
+            createdAt
+            expirationDate
+            numShoutouts
+            numBookmarkedArticles
+            numReadArticles
+            readArticles {
+                id
+                articleURL
+                date
+                imageURL
+                publication{
+                    id
+                    backgroundImageURL
+                    bio
+                    name
+                    profileImageURL
+                    rssName
+                    rssURL
+                    slug
+                    shoutouts
+                    websiteURL
+                    socials{
+                        social
+                        URL
+                    }
+                    mostRecentArticle{
+                        id
+                        articleURL
+                        imageURL
+                        date
+                        title
+                        shoutouts
+                        nsfw
+                    }
+                }
+                shoutouts
+                title
+                nsfw
+            }
+            randomArticles{
+                id
+                articleURL
+                date
+                imageURL
+                publication{
+                    id
+                    backgroundImageURL
+                    bio
+                    name
+                    profileImageURL
+                    rssName
+                    rssURL
+                    slug
+                    shoutouts
+                    websiteURL
+                    socials{
+                        social
+                        URL
+                    }
+                    mostRecentArticle{
+                        id
+                        articleURL
+                        imageURL
+                        date
+                        title
+                        shoutouts
+                        nsfw
+                    }
+                }
+                shoutouts
+                title
+                nsfw
+            }
+        }
+    }
+}
+
 mutation FollowPublication($pubID:String!, $uuid: String!) {
     followPublication(pubID:$pubID, uuid:$uuid) {
         uuid
@@ -370,3 +449,16 @@ mutation UnfollowPublication($pubID:String!, $uuid: String!) {
         uuid
     }
 }
+
+mutation ReadArticle($articleID:String!, $uuid: String!) {
+    readArticle(articleID:$articleID, uuid:$uuid) {
+        uuid
+    }
+}
+
+mutation BookmarkArticle($uuid: String!) {
+    bookmarkArticle(uuid:$uuid) {
+        uuid
+    }
+}
+
