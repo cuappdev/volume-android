@@ -15,5 +15,6 @@ class WeeklyDebrief(
 ) : Parcelable {
     companion object {
         const val INTENT_KEY = "weekly_debrief"
+        const val TAG = "weekly_debrief"
     }
 }

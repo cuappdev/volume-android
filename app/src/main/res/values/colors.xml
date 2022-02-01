@@ -8,5 +8,7 @@
     <color name="placeholder">#E5E6E5</color>
     <color name="black">#000000</color>
     <color name="weekly_debrief">#FFEFDC</color>
+    <color name="gray_dot_color">#999999</color>
+    <color name="gray_stroke_color">#C4C4C4</color>
 
 </resources>

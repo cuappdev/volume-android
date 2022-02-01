@@ -4,7 +4,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
-import com.cornellappdev.volume.adapters.CustomPagerAdapter
+import com.cornellappdev.volume.adapters.MainPagesAdapter
 import com.cornellappdev.volume.databinding.ActivityTabBinding
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
@@ -27,7 +27,7 @@ class TabActivity : AppCompatActivity() {
 
         binding.vpFragments.reduceDragSensitivity()
         binding.vpFragments.isUserInputEnabled = true
-        binding.vpFragments.adapter = CustomPagerAdapter(this, binding.tlTabs.tabCount, intent.extras)
+        binding.vpFragments.adapter = MainPagesAdapter(this, binding.tlTabs.tabCount)
         TabLayoutMediator(binding.tlTabs, binding.vpFragments) { _, _ -> }.attach()
 
         // Initially we are at the HomeFragment

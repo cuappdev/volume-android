@@ -11,9 +11,7 @@ import com.cornellappdev.volume.fragments.SavedArticlesFragment
 /**
  * Used by the ViewPager in TabActivity. Holds all three of our pages.
  */
-class CustomPagerAdapter(fa: FragmentActivity, private val numOfTabs: Int, private val bundle: Bundle?) : FragmentStateAdapter(fa) {
-
-    private var firstTime = true
+class MainPagesAdapter(fa: FragmentActivity, private val numOfTabs: Int) : FragmentStateAdapter(fa) {
 
     override fun getItemCount(): Int {
         return numOfTabs
@@ -21,14 +19,7 @@ class CustomPagerAdapter(fa: FragmentActivity, private val numOfTabs: Int, priva
 
     override fun createFragment(position: Int): Fragment {
         return when (position) {
-            0 -> {
-                val homeFragment = HomeFragment()
-                if (firstTime) {
-                    homeFragment.arguments = bundle
-                    firstTime = false
-                }
-                homeFragment
-            }
+            0 -> HomeFragment()
             1 -> PublicationsFragment()
             else -> SavedArticlesFragment()
         }

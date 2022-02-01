@@ -198,7 +198,6 @@ class OnboardingActivity : AppCompatActivity(), OnboardingFragTwo.DataPassListen
 
                 prefUtils.save(PrefUtils.CACHED_DEBRIEF, weeklyDebrief)
                 val intent = Intent(this, TabActivity::class.java)
-                intent.putExtra(WeeklyDebrief.INTENT_KEY, true)
                 this.startActivity(intent)
 
                 // It's important that this activity is closed, so the user can't accidentally

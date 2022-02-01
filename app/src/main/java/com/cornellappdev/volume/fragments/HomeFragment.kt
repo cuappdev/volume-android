@@ -80,7 +80,12 @@ class HomeFragment : Fragment() {
                     setupHomeFragment()
                 }
             }
+        return binding.root
+    }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        setupHomeFragment()
         val weeklyDebriefJson = prefUtils.getString(PrefUtils.CACHED_DEBRIEF, null)
         if (weeklyDebriefJson != null) {
             val weeklyDebrief = Gson().fromJson(weeklyDebriefJson, WeeklyDebrief::class.java)
@@ -90,11 +95,6 @@ class HomeFragment : Fragment() {
                 displayWeeklyDebrief(weeklyDebrief)
             }
         }
-
-//        binding.clDebriefPoint.setOnClickListener {
-//
-//        }
-        return binding.root
     }
 
     private fun getNewWeeklyDebrief() {
@@ -181,20 +181,12 @@ class HomeFragment : Fragment() {
         }
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        setupHomeFragment()
-        if (arguments != null && requireArguments().getBoolean(WeeklyDebrief.INTENT_KEY)) {
-            // Get cached weekly debrief
-            val weeklyDebriefJson = prefUtils.getString(PrefUtils.CACHED_DEBRIEF, null)
-            val weeklyDebrief = Gson().fromJson(weeklyDebriefJson, WeeklyDebrief::class.java)
-            displayWeeklyDebrief(weeklyDebrief)
-        }
-    }
-
     private fun displayWeeklyDebrief(weeklyDebrief: WeeklyDebrief) {
         binding.clDebriefPoint.visibility = View.VISIBLE
-        TODO("Pass in weeklyDebrief to create fragment / adapter")
+        binding.clDebriefPoint.setOnClickListener {
+            val bottomSheet = WeeklyDebriefBottomSheet(weeklyDebrief)
+            bottomSheet.show(childFragmentManager, WeeklyDebrief.TAG)
+        }
     }
 
     /**

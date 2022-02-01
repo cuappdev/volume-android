@@ -1,10 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-    <component name="ProjectRootManager" default="true" languageLevel="JDK_1_8" project-jdk-name="1.8"
-        project-jdk-type="JavaSDK" version="2">
-        <output url="file://$PROJECT_DIR$/build/classes" />
-    </component>
-    <component name="ProjectType">
-        <option name="id" value="Android" />
-    </component>
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="..\:/Users/chris/OneDrive/Desktop/AppDev Projects/volume-android/app/src/main/res/layout/a.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/chris/OneDrive/Desktop/AppDev Projects/volume-android/app/src/main/res/layout/fragment_debrief_checkout.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/chris/OneDrive/Desktop/AppDev Projects/volume-android/app/src/main/res/layout/fragment_debrief_main.xml" value="0.14042553191489363" />
+        <entry key="..\:/Users/chris/OneDrive/Desktop/AppDev Projects/volume-android/app/src/main/res/layout/fragment_debrief_see_you.xml" value="0.13692946058091288" />
+        <entry key="..\:/Users/chris/OneDrive/Desktop/AppDev Projects/volume-android/app/src/main/res/layout/fragment_debrief_share.xml" value="0.2920353982300885" />
+        <entry key="..\:/Users/chris/OneDrive/Desktop/AppDev Projects/volume-android/app/src/main/res/layout/fragment_home.xml" value="0.1" />
+        <entry key="..\:/Users/chris/OneDrive/Desktop/AppDev Projects/volume-android/app/src/main/res/layout/fragment_weekly_debrief.xml" value="0.25" />
+        <entry key="..\:/Users/chris/OneDrive/Desktop/AppDev Projects/volume-android/app/src/main/res/layout/fragment_weeklydebrief.xml" value="0.17147922998986828" />
+        <entry key="..\:/Users/chris/OneDrive/Desktop/AppDev Projects/volume-android/app/src/main/res/layout/item_article.xml" value="0.1" />
+        <entry key="..\:/Users/chris/OneDrive/Desktop/AppDev Projects/volume-android/app/src/main/res/layout/item_big_read.xml" value="0.1" />
+      </map>
+    </option>
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" project-jdk-name="1.8" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/build/classes" />
+  </component>
+  <component name="ProjectType">
+    <option name="id" value="Android" />
+  </component>
 </project>
