@@ -4,6 +4,9 @@ apply plugin: 'kotlin-parcelize'
 apply plugin: 'com.apollographql.apollo'
 apply plugin: 'com.google.gms.google-services'
 
+def secretsPropertiesFile = rootProject.file("secrets.properties")
+def secretsProperties = new Properties()
+secretsProperties.load(new FileInputStream(secretsPropertiesFile))
 
 android {
     compileSdkVersion 31
@@ -16,6 +19,13 @@ android {
         versionCode 201
         versionName "2.0.1"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        buildConfigField "String", "DEV_ENDPOINT", secretsProperties['DEV_ENDPOINT']
+        buildConfigField("String", "PROD_ENDPOINT", secretsProperties['PROD_ENDPOINT'])
+        buildConfigField("String", "DEV_PING", secretsProperties['DEV_ENDPOINT'])
+        buildConfigField("String", "PROD_PING", secretsProperties['PROD_ENDPOINT'])
+        buildConfigField("String", "FEEDBACK_FORM", secretsProperties['FEEDBACK_FORM'])
+        buildConfigField("String", "WEBSITE", secretsProperties['WEBSITE'])
     }
 
     buildFeatures {
