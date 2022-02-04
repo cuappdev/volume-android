@@ -5,6 +5,7 @@ import com.apollographql.apollo.api.Response
 import com.apollographql.apollo.api.toInput
 import com.apollographql.apollo.rx2.rxMutate
 import com.apollographql.apollo.rx2.rxQuery
+import com.cornellappdev.volume.BuildConfig
 import com.kotlin.graphql.*
 import io.reactivex.Observable
 import io.reactivex.Single
@@ -13,7 +14,6 @@ import io.reactivex.schedulers.Schedulers
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import java.io.IOException
-import java.net.*
 import java.util.concurrent.TimeUnit
 
 /**
@@ -23,20 +23,12 @@ import java.util.concurrent.TimeUnit
  */
 class GraphQlUtil {
 
-    enum class Endpoints(val endpoint: String){
-        DEV("https://volume-dev.cornellappdev.com/graphql"), // Our development endpoint
-        PROD("https://volume-backend.cornellappdev.com/graphql"), // Our deployment endpoint
-        DEV_PING("volume-dev.cornellappdev.com"),
-        PROD_PING("volume-backend.cornellappdev.com")
-    }
-
     companion object {
         // When developing anything, make sure to use the development endpoint. When deploying, make sure
         // the endpoint is set to deployment.
         private const val IS_USING_DEV_ENDPOINT = true
-
-        private val BASE_URL = if (IS_USING_DEV_ENDPOINT) Endpoints.DEV.endpoint else Endpoints.PROD.endpoint
-        private val PING_URL: String = if (IS_USING_DEV_ENDPOINT) Endpoints.DEV_PING.endpoint else Endpoints.PROD_PING.endpoint
+        private val BASE_URL = if (IS_USING_DEV_ENDPOINT) BuildConfig.DEV_ENDPOINT else BuildConfig.PROD_ENDPOINT
+        private val PING_URL: String = if (IS_USING_DEV_ENDPOINT) BuildConfig.DEV_PING else BuildConfig.PROD_PING
         private const val DEVICE_TYPE: String = "ANDROID"
 
         /**
