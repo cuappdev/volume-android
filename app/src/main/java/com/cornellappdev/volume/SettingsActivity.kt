@@ -14,8 +14,6 @@ import com.cornellappdev.volume.databinding.ActivitySettingsBinding
 class SettingsActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivitySettingsBinding
-    private val website = "https://www.cornellappdev.com/"
-    private val feedbackForm = "https://forms.gle/ZLqCFZ259EPky4Zm7"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,12 +26,12 @@ class SettingsActivity : AppCompatActivity() {
         }
 
         binding.clVisitOurWebsite.setOnClickListener {
-            val i = Intent(Intent.ACTION_VIEW, Uri.parse(website))
+            val i = Intent(Intent.ACTION_VIEW, Uri.parse(BuildConfig.WEBSITE))
             startActivity(i)
         }
 
         binding.clSendFeedback.setOnClickListener {
-            val i = Intent(Intent.ACTION_VIEW, Uri.parse(feedbackForm))
+            val i = Intent(Intent.ACTION_VIEW, Uri.parse(BuildConfig.FEEDBACK_FORM))
             startActivity(i)
         }
     }
