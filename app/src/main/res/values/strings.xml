@@ -100,7 +100,7 @@
     <string name="please_try_again_later">Please try again later</string>
 
     <!-- Weekly Debrief -->
-    <string name="your_weekly_debrief">Your weekly debrief, %1$s- %2$s</string>
+    <string name="your_weekly_debrief_date">Your weekly debrief, %1$s- %2$s</string>
     <string name="in_the_past_week">In the past week, you…</string>
     <string name="read">read</string>
     <string name="number_read_articles">%1$d</string>
