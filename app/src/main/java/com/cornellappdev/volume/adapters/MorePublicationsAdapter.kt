@@ -1,6 +1,7 @@
 package com.cornellappdev.volume.adapters
 
 import android.content.Intent
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
@@ -67,11 +68,12 @@ class MorePublicationsAdapter(
             holder.binding.btnFollow.setImageResource(R.drawable.ic_followplussvg)
         }
 
-        val UUID = prefUtils.getString(PrefUtils.UUID, null)
         val disposables = CompositeDisposable()
         val graphQlUtil = GraphQlUtil()
 
+
         holder.binding.btnFollow.setOnClickListener {
+            val UUID = prefUtils.getString(PrefUtils.UUID, null)
             if (holder.binding.btnFollow.drawable.constantState == ContextCompat.getDrawable(
                     it.context,
                     R.drawable.ic_followplussvg

@@ -107,7 +107,9 @@ class NotificationService : FirebaseMessagingService() {
         }
 
         createUserObservable?.subscribe { response ->
-            response.data?.createUser?.let { user -> prefUtils.save(PrefUtils.UUID, user.uuid) }
+            response.data?.createUser?.let {
+                    user -> prefUtils.save(PrefUtils.UUID, user.uuid)
+            }
         }?.let { disposables.add(it) }
     }
 
