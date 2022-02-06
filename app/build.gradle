@@ -22,8 +22,8 @@ android {
 
         buildConfigField "String", "DEV_ENDPOINT", secretsProperties['DEV_ENDPOINT']
         buildConfigField("String", "PROD_ENDPOINT", secretsProperties['PROD_ENDPOINT'])
-        buildConfigField("String", "DEV_PING", secretsProperties['DEV_ENDPOINT'])
-        buildConfigField("String", "PROD_PING", secretsProperties['PROD_ENDPOINT'])
+        buildConfigField("String", "DEV_PING", secretsProperties['DEV_PING'])
+        buildConfigField("String", "PROD_PING", secretsProperties['PROD_PING'])
         buildConfigField("String", "FEEDBACK_FORM", secretsProperties['FEEDBACK_FORM'])
         buildConfigField("String", "WEBSITE", secretsProperties['WEBSITE'])
     }
