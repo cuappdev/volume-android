@@ -1,22 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 3612530a34a309e9c10cd8ad4c0b0a07d1cd09d7
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+<<<<<<< HEAD
 =======
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 >>>>>>> f4f8cd8 (Add main debrief fragment)
+=======
+>>>>>>> 3612530a34a309e9c10cd8ad4c0b0a07d1cd09d7
 
     <ImageView
         android:id="@+id/iv_volume_logo"
         android:layout_width="244dp"
         android:layout_height="76dp"
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 3612530a34a309e9c10cd8ad4c0b0a07d1cd09d7
         android:layout_marginTop="36dp"
         android:contentDescription="@string/description_main_volume_logo"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -48,6 +57,7 @@
         android:textSize="16sp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="@+id/tv_your_debrief" />
+<<<<<<< HEAD
 =======
         app:layout_constraintTop_toTopOf="parent"
         android:layout_marginTop="36dp"
@@ -81,12 +91,17 @@
         android:textSize="16sp"
         android:text="@string/in_the_past_week"/>
 >>>>>>> f4f8cd8 (Add main debrief fragment)
+=======
+>>>>>>> 3612530a34a309e9c10cd8ad4c0b0a07d1cd09d7
 
     <ImageView
         android:id="@+id/iv_volume_bars"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 3612530a34a309e9c10cd8ad4c0b0a07d1cd09d7
         android:layout_marginLeft="44dp"
         android:layout_marginTop="26dp"
         android:contentDescription="@string/description_volume_bars_logo"
@@ -131,6 +146,7 @@
         app:layout_constraintBottom_toBottomOf="@id/tv_read"
         app:layout_constraintLeft_toRightOf="@id/tv_number_articles_read"
         app:layout_constraintTop_toTopOf="@id/tv_read" />
+<<<<<<< HEAD
 =======
         app:layout_constraintTop_toBottomOf="@id/tv_in_the_past_week"
         android:layout_marginTop="26dp"
@@ -177,12 +193,17 @@
         android:textSize="17sp"
         android:text="@string/articles"/>
 >>>>>>> f4f8cd8 (Add main debrief fragment)
+=======
+>>>>>>> 3612530a34a309e9c10cd8ad4c0b0a07d1cd09d7
 
     <ImageView
         android:id="@+id/iv_shoutout"
         android:layout_width="24dp"
         android:layout_height="24dp"
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 3612530a34a309e9c10cd8ad4c0b0a07d1cd09d7
         android:layout_marginLeft="44dp"
         android:layout_marginTop="26dp"
         android:contentDescription="@string/description_shout_out_icon"
@@ -301,6 +322,7 @@
         android:textSize="36dp"
         app:layout_constraintLeft_toRightOf="@id/tv_you_were_top"
         app:layout_constraintTop_toTopOf="@id/tv_you_were_top" />
+<<<<<<< HEAD
 =======
         app:layout_constraintTop_toBottomOf="@id/iv_volume_bars"
         android:layout_marginTop="26dp"
@@ -384,5 +406,7 @@
         android:textSize="36dp"
         android:text="@string/top_percent"/>
 >>>>>>> f4f8cd8 (Add main debrief fragment)
+=======
+>>>>>>> 3612530a34a309e9c10cd8ad4c0b0a07d1cd09d7
 
 </androidx.constraintlayout.widget.ConstraintLayout>
