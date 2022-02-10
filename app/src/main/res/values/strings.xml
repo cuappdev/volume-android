@@ -100,7 +100,7 @@
     <string name="please_try_again_later">Please try again later</string>
 
     <!-- Weekly Debrief -->
-    <string name="your_weekly_debrief">Your weekly debrief, %1$s- %2$s</string>
+    <string name="your_weekly_debrief_date">Your weekly debrief, %1$s- %2$s</string>
     <string name="in_the_past_week">In the past week, you…</string>
     <string name="read">read</string>
     <string name="number_read_articles">%1$d</string>
@@ -110,18 +110,9 @@
     <string name="shouts">shout-outs</string>
     <string name="you_were_top">You were among the top <br/><br/>active readers last week! <br/><br/><br/>Keep up the volume! 📣</string>
     <string name="top_percent">%1$s</string>
-<<<<<<< HEAD
-<<<<<<< HEAD
     <string name="debrief_pitch">Stay updated with Cornell student publications, all in one place</string>
     <string name="continue_to_volume">Continue to Volume</string>
     <string name="bookmarked">bookmarked</string>
-=======
->>>>>>> f4f8cd8 (Add main debrief fragment)
-=======
-    <string name="debrief_pitch">Stay updated with Cornell student publications, all in one place</string>
-    <string name="continue_to_volume">Continue to Volume</string>
-    <string name="bookmarked">bookmarked</string>
->>>>>>> 3612530a34a309e9c10cd8ad4c0b0a07d1cd09d7
 
     <!-- Content descriptions -->
     <string name="description_main_volume_logo">Main Volume logo</string>
