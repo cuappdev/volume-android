@@ -25,11 +25,15 @@ class MorePublicationsAdapter(
     var publicationList: MutableList<Publication>,
     private val prefUtils: PrefUtils,
     private val mAdapterOnClickHandler: AdapterOnClickHandler?,
-    private val isOnboarding: Boolean = false) :
+    private val isOnboarding: Boolean = false,
+    private val mAdapterOnClicker:AdapterOnClicker?) :
         RecyclerView.Adapter<MorePublicationsAdapter.MorePublicationVH>() {
 
     interface AdapterOnClickHandler {
         fun onFollowClick(wasFollowed: Boolean)
+    }
+    interface AdapterOnClicker{
+        fun onMorePublicationClicked(publication: Publication, isOnboarding: Boolean)
     }
 
     class MorePublicationVH(
@@ -133,16 +137,7 @@ class MorePublicationsAdapter(
         }
 
         holder.binding.clPublicationLayout.setOnClickListener { view ->
-            val intent = Intent(view.context, PublicationProfileActivity::class.java)
-            intent.putExtra(Publication.INTENT_KEY, currentItem)
-            intent.putParcelableExtra(
-                NavigationSource.INTENT_KEY, if (isOnboarding) {
-                    NavigationSource.ONBOARDING
-                } else {
-                    NavigationSource.MORE_PUBLICATIONS
-                }
-            )
-            view.context.startActivity(intent)
+            mAdapterOnClicker?.onMorePublicationClicked(currentItem,isOnboarding)
         }
     }
 

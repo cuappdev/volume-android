@@ -1,14 +1,18 @@
 package com.cornellappdev.volume.fragments
 
+import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.apollographql.apollo.api.Response
@@ -39,7 +43,7 @@ import io.reactivex.schedulers.Schedulers
  *  @see {@link com.cornellappdev.volume.R.layout#fragment_publications}
  */
 class PublicationsFragment : Fragment(), FollowingHorizontalAdapter.AdapterOnClickHandler,
-    MorePublicationsAdapter.AdapterOnClickHandler {
+    MorePublicationsAdapter.AdapterOnClickHandler, MorePublicationsAdapter.AdapterOnClicker {
 
     private lateinit var resultLauncher: ActivityResultLauncher<Intent>
     private lateinit var prefUtils: PrefUtils
@@ -47,6 +51,7 @@ class PublicationsFragment : Fragment(), FollowingHorizontalAdapter.AdapterOnCli
     private lateinit var graphQlUtil: GraphQlUtil
     private var _binding: FragmentPublicationsBinding? = null
     private val binding get() = _binding!!
+//    private lateinit var receiver:Receiver
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -319,7 +324,8 @@ class PublicationsFragment : Fragment(), FollowingHorizontalAdapter.AdapterOnCli
                             MorePublicationsAdapter(
                                 morePublications,
                                 prefUtils,
-                                this@PublicationsFragment
+                                this@PublicationsFragment,
+                                    mAdapterOnClicker = this@PublicationsFragment
                             )
                         layoutManager = LinearLayoutManager(context)
                         setHasFixedSize(true)
@@ -373,4 +379,42 @@ class PublicationsFragment : Fragment(), FollowingHorizontalAdapter.AdapterOnCli
     override fun onFollowClick(wasFollowed: Boolean) {
         setupPublicationsView(binding, isRefreshing = true)
     }
+
+
+    override fun onMorePublicationClicked(publication: Publication, isOnboarding: Boolean) {
+        val intent = Intent(view?.context, PublicationProfileActivity::class.java)
+        intent.putExtra(Publication.INTENT_KEY, publication)
+        intent.putParcelableExtra(
+                NavigationSource.INTENT_KEY, if (isOnboarding) {
+            NavigationSource.ONBOARDING
+        } else {
+            NavigationSource.MORE_PUBLICATIONS
+        }
+        )
+        resultLauncher.launch(intent)
+    }
+
+//    fun refresh(){
+//        setupPublicationsView(binding, isRefreshing = true)
+//        binding.rvMorePublications.adapter?.notifyDataSetChanged()
+//        binding.rvFollowing.adapter?.notifyDataSetChanged()
+//    }
+
+    override fun onResume() {
+        super.onResume()
+//        receiver= Receiver()
+//        context?.let { LocalBroadcastManager.getInstance(it).registerReceiver(receiver, IntentFilter("TAG_REFRESH")) }
+    }
+
+    override fun onPause() {
+        super.onPause()
+//        context?.let { LocalBroadcastManager.getInstance(it).unregisterReceiver(receiver)}
+    }
+
+//    inner class Receiver: BroadcastReceiver() {
+//        override fun onReceive(context: Context?, intent: Intent?) {
+//            refresh()
+//        }
+//
+//    }
 }

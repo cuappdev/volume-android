@@ -30,7 +30,7 @@ import io.reactivex.schedulers.Schedulers
  *
  * @see {@link com.cornellappdev.volume.R.layout#fragment_onboarding_two}
  */
-class OnboardingFragTwo : Fragment(), MorePublicationsAdapter.AdapterOnClickHandler {
+class OnboardingFragTwo : Fragment(), MorePublicationsAdapter.AdapterOnClickHandler, MorePublicationsAdapter.AdapterOnClicker {
 
     interface DataPassListener {
         fun onPublicationFollowed(numFollowed: Int)
@@ -145,7 +145,7 @@ class OnboardingFragTwo : Fragment(), MorePublicationsAdapter.AdapterOnClickHand
             publicationRV = onboardingBinding.rvPublications
             with(publicationRV) {
                 adapter =
-                    MorePublicationsAdapter(allPublicationsList, prefUtils, this@OnboardingFragTwo)
+                    MorePublicationsAdapter(allPublicationsList, prefUtils, this@OnboardingFragTwo, mAdapterOnClicker = this@OnboardingFragTwo)
                 layoutManager = LinearLayoutManager(context)
                 setHasFixedSize(true)
             }
@@ -173,4 +173,6 @@ class OnboardingFragTwo : Fragment(), MorePublicationsAdapter.AdapterOnClickHand
         super.onDestroyView()
         _binding = null
     }
+
+    override fun onMorePublicationClicked(publication: Publication, isOnboarding: Boolean) = Unit
 }
