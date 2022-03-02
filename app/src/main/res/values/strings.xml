@@ -146,5 +146,6 @@
     <string name="description_see_you_next_week">See you next week</string>
 
     <string name="default_notification_channel_id" translatable="false">fcm_default_channel</string>
+    <string name="debrief_button">debrief button</string>
 
 </resources>
