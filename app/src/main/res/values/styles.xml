@@ -61,5 +61,50 @@
         <item name="android:textColor">#000000</item>
     </style>
 
+    <style name="noto_serif_display_black">
+        <item name="android:fontFamily">@font/notoserifdisplaymedium</item>
+        <item name="android:textColor">#000000</item>
+    </style>
+
+    <style name="noto_serif_display_medium">
+        <item name="android:fontFamily">@font/notoserifdisplaylight</item>
+        <item name="android:textColor">#000000</item>
+    </style>
+
+    <style name="noto_serif_display_gray">
+        <item name="android:fontFamily">@font/notoserifdisplaymedium</item>
+        <item name="android:textColor">@color/gray</item>
+    </style>
+
+    <style name="noto_serif_display_black_bold">
+        <item name="android:fontFamily">@font/notoserifdisplayregular</item>
+        <item name="android:textColor">#000000</item>
+    </style>
+
+    <style name="lato_black">
+        <item name="android:fontFamily">@font/latoregular</item>
+        <item name="android:textColor">#000000</item>
+    </style>
+
+    <style name="lato_orange">
+        <item name="android:fontFamily">@font/latoregular</item>
+        <item name="android:textColor">@color/volumeOrange</item>
+    </style>
+
+    <style name="lato_bold">
+        <item name="android:fontFamily">@font/latobold</item>
+        <item name="android:textColor">#000000</item>
+    </style>
+
+    <style name="lato_gray">
+        <item name="android:fontFamily">@font/latoregular</item>
+        <item name="android:textColor">@color/gray</item>
+    </style>
+
+    <style name="jost_medium">
+        <item name="android:fontFamily">@font/jostmedium</item>
+        <item name="android:textColor">#000000</item>
+    </style>
+
 
 </resources>
