@@ -10,7 +10,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="65dp"
-        android:fontFamily="@font/begummedium"
+        android:fontFamily="@font/notoserifdisplaymedium"
         android:lineSpacingExtra="-5sp"
         android:text="@string/settings"
         android:textColor="@color/black"
@@ -43,7 +43,7 @@
 
         <TextView
             android:id="@+id/tv_send_feedback"
-            style="@style/helvetica_black"
+            style="@style/lato_black"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
@@ -88,7 +88,7 @@
 
         <TextView
             android:id="@+id/tv_visit_our_website"
-            style="@style/helvetica_black"
+            style="@style/lato_black"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
@@ -133,7 +133,7 @@
 
         <TextView
             android:id="@+id/tv_about_us"
-            style="@style/helvetica_black"
+            style="@style/lato_black"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
