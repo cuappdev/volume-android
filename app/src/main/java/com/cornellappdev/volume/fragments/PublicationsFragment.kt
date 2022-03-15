@@ -39,7 +39,7 @@ import io.reactivex.schedulers.Schedulers
  *  @see {@link com.cornellappdev.volume.R.layout#fragment_publications}
  */
 class PublicationsFragment : Fragment(), FollowingHorizontalAdapter.AdapterOnClickHandler,
-    MorePublicationsAdapter.AdapterOnClickHandler {
+    MorePublicationsAdapter.AdapterOnClickHandler, MorePublicationsAdapter.AdapterOnClicker {
 
     private lateinit var resultLauncher: ActivityResultLauncher<Intent>
     private lateinit var prefUtils: PrefUtils
@@ -319,7 +319,8 @@ class PublicationsFragment : Fragment(), FollowingHorizontalAdapter.AdapterOnCli
                             MorePublicationsAdapter(
                                 morePublications,
                                 prefUtils,
-                                this@PublicationsFragment
+                                this@PublicationsFragment,
+                                mAdapterOnClicker = this@PublicationsFragment
                             )
                         layoutManager = LinearLayoutManager(context)
                         setHasFixedSize(true)
@@ -373,4 +374,18 @@ class PublicationsFragment : Fragment(), FollowingHorizontalAdapter.AdapterOnCli
     override fun onFollowClick(wasFollowed: Boolean) {
         setupPublicationsView(binding, isRefreshing = true)
     }
+
+
+    override fun onMorePublicationClicked(publication: Publication, isOnboarding: Boolean) {
+        val intent = Intent(view?.context, PublicationProfileActivity::class.java)
+        intent.putExtra(Publication.INTENT_KEY, publication)
+        intent.putParcelableExtra(
+                NavigationSource.INTENT_KEY, if (isOnboarding) {
+            NavigationSource.ONBOARDING
+        } else {
+            NavigationSource.MORE_PUBLICATIONS
+        })
+        resultLauncher.launch(intent)
+    }
+
 }
