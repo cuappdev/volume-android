@@ -39,7 +39,7 @@
 
             <TextView
                 android:id="@+id/tv_name"
-                style="@style/begum_black_bold"
+                style="@style/noto_serif_display_medium_bold"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="15dp"
@@ -74,7 +74,7 @@
 
                 <TextView
                     android:id="@+id/tv_article_count"
-                    style="@style/begum_grey"
+                    style="@style/noto_serif_display_gray"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/article_count"
@@ -98,7 +98,7 @@
 
                 <TextView
                     android:id="@+id/tv_shoutout_count"
-                    style="@style/begum_grey"
+                    style="@style/noto_serif_display_gray"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
@@ -110,7 +110,7 @@
 
             <TextView
                 android:id="@+id/tv_description"
-                style="@style/helvetica_black"
+                style="@style/lato_black"
                 android:layout_width="380dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="15dp"
@@ -148,7 +148,7 @@
 
                     <TextView
                         android:id="@+id/tv_insta"
-                        style="@style/helvetica_orange"
+                        style="@style/lato_orange"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="5dp"
@@ -180,7 +180,7 @@
 
                     <TextView
                         android:id="@+id/tv_fb"
-                        style="@style/helvetica_orange"
+                        style="@style/lato_orange"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="5dp"
@@ -212,7 +212,7 @@
 
                     <TextView
                         android:id="@+id/tv_website_link"
-                        style="@style/helvetica_orange"
+                        style="@style/lato_orange"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="5dp"
@@ -238,22 +238,31 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/cl_social_media_holder" />
 
-            <ImageView
-                android:id="@+id/iv_articles_header"
+            <TextView
+                android:id="@+id/tv_articles_header"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="40dp"
                 android:contentDescription="@string/description_header_for_articles"
-                android:src="@drawable/ic_articles"
+                android:text="@string/articles"
+                style="@style/noto_serif_display_medium"
+                android:textSize="19sp"
                 app:layout_constraintStart_toStartOf="@id/tv_name"
                 app:layout_constraintTop_toBottomOf="@id/iv_divider" />
+            <ImageView
+                android:layout_width="73dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toTopOf="@id/tv_articles_header"
+                app:layout_constraintLeft_toLeftOf="@id/tv_articles_header"
+                android:layout_marginTop="20dp"
+                android:src="@drawable/ic_line"/>
 
             <com.facebook.shimmer.ShimmerFrameLayout
                 android:id="@+id/mShimmerViewContainer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                app:layout_constraintTop_toBottomOf="@+id/iv_articles_header"
+                app:layout_constraintTop_toBottomOf="@+id/tv_articles_header"
                 app:shimmer_duration="3000">
 
                 <LinearLayout
@@ -281,7 +290,7 @@
                 android:clickable="false"
                 android:nestedScrollingEnabled="false"
                 android:visibility="gone"
-                app:layout_constraintTop_toBottomOf="@+id/iv_articles_header"
+                app:layout_constraintTop_toBottomOf="@+id/tv_articles_header"
                 tools:listitem="@layout/item_article_placeholder" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
