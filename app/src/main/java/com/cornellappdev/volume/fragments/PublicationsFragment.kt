@@ -320,7 +320,7 @@ class PublicationsFragment : Fragment(), FollowingHorizontalAdapter.AdapterOnCli
                                 morePublications,
                                 prefUtils,
                                 this@PublicationsFragment,
-                                    mAdapterOnClicker = this@PublicationsFragment
+                                mAdapterOnClicker = this@PublicationsFragment
                             )
                         layoutManager = LinearLayoutManager(context)
                         setHasFixedSize(true)
@@ -384,8 +384,7 @@ class PublicationsFragment : Fragment(), FollowingHorizontalAdapter.AdapterOnCli
             NavigationSource.ONBOARDING
         } else {
             NavigationSource.MORE_PUBLICATIONS
-        }
-        )
+        })
         resultLauncher.launch(intent)
     }
 

@@ -32,6 +32,7 @@ class MorePublicationsAdapter(
     interface AdapterOnClickHandler {
         fun onFollowClick(wasFollowed: Boolean)
     }
+
     interface AdapterOnClicker{
         fun onMorePublicationClicked(publication: Publication, isOnboarding: Boolean)
     }
@@ -137,7 +138,7 @@ class MorePublicationsAdapter(
         }
 
         holder.binding.clPublicationLayout.setOnClickListener { view ->
-            mAdapterOnClicker?.onMorePublicationClicked(currentItem,isOnboarding)
+            mAdapterOnClicker?.onMorePublicationClicked(currentItem, isOnboarding)
         }
     }
 
