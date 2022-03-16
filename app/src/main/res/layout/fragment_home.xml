@@ -47,17 +47,27 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/iv_volume_logo">
 
-                <ImageView
-                    android:id="@+id/iv_big_read_header"
+                <TextView
+                    android:id="@+id/tv_big_read_header"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="12dp"
-                    android:layout_marginTop="15dp"
+                    android:layout_marginTop="11dp"
                     android:contentDescription="@string/description_big_read_header"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:srcCompat="@drawable/ic_big_read_text"
-                    tools:srcCompat="@drawable/ic_big_read_text" />
+                    android:text="@string/the_big_read"
+                    style="@style/noto_serif_display_medium"
+                    android:textSize="20sp"/>
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toTopOf="@id/tv_big_read_header"
+                    app:layout_constraintLeft_toLeftOf="@id/tv_big_read_header"
+                    android:layout_marginTop="21dp"
+                    android:src="@drawable/ic_underline_big_read"
+                    android:contentDescription="@string/description_big_read_header"/>
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rv_big_read"
@@ -66,7 +76,7 @@
                     android:layout_marginStart="6dp"
                     android:nestedScrollingEnabled="false"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/iv_big_read_header" />
+                    app:layout_constraintTop_toBottomOf="@id/tv_big_read_header" />
 
                 <androidx.constraintlayout.widget.Group
                     android:id="@+id/group_following"
@@ -84,17 +94,27 @@
                     app:constraint_referenced_ids="more_articles_message_nothing,
                 more_articles_message_long_nothing" />
 
-                <ImageView
-                    android:id="@+id/iv_following_header"
+                <TextView
+                    android:id="@+id/tv_following_header"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="12dp"
-                    android:layout_marginTop="36dp"
+                    android:layout_marginTop="30dp"
                     android:contentDescription="@string/description_following_header"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/rv_big_read"
-                    app:srcCompat="@drawable/ic_following_text"
-                    tools:srcCompat="@drawable/ic_following_text" />
+                    android:text="@string/following"
+                    style="@style/noto_serif_display_medium"
+                    android:textSize="20sp"/>
+
+                <ImageView
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toTopOf="@id/tv_following_header"
+                    app:layout_constraintLeft_toLeftOf="@id/tv_following_header"
+                    android:layout_marginTop="20dp"
+                    android:src="@drawable/ic_underline_big_read"
+                    android:contentDescription="@string/description_following_header"/>
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rv_following"
@@ -103,7 +123,7 @@
                     android:layout_marginStart="6dp"
                     android:nestedScrollingEnabled="false"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/iv_following_header" />
+                    app:layout_constraintTop_toBottomOf="@id/tv_following_header" />
 
                 <ImageView
                     android:id="@+id/volume_logo_more_articles"
@@ -119,7 +139,7 @@
 
                 <TextView
                     android:id="@+id/more_articles_message"
-                    style="@style/begum_black"
+                    style="@style/noto_serif_display_medium"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/up_to_date"
@@ -140,7 +160,7 @@
 
                 <TextView
                     android:id="@+id/more_articles_message_long"
-                    style="@style/helvetica_black"
+                    style="@style/lato_black"
                     android:layout_width="291dp"
                     android:layout_height="wrap_content"
                     android:text="@string/caught_up"
@@ -152,7 +172,7 @@
 
                 <TextView
                     android:id="@+id/more_articles_message_nothing"
-                    style="@style/begum_black"
+                    style="@style/noto_serif_display_medium"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/nothing_to_see"
@@ -163,7 +183,7 @@
 
                 <TextView
                     android:id="@+id/more_articles_message_long_nothing"
-                    style="@style/helvetica_black"
+                    style="@style/lato_black"
                     android:layout_width="291dp"
                     android:layout_height="wrap_content"
                     android:text="@string/follow_some"
@@ -173,17 +193,27 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/more_articles_message_nothing" />
 
-                <ImageView
-                    android:id="@+id/iv_other_articles_header"
+                <TextView
+                    android:id="@+id/tv_other_articles_header"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="12dp"
-                    android:layout_marginTop="45dp"
+                    android:layout_marginTop="40dp"
                     android:contentDescription="@string/description_other_articles_header"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/more_articles_message_long"
-                    app:srcCompat="@drawable/ic_other_articles_text"
-                    tools:srcCompat="@drawable/ic_other_articles_text" />
+                    android:text="@string/other_articles"
+                    android:textSize="20sp"
+                    style="@style/noto_serif_display_medium"/>
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toTopOf="@id/tv_other_articles_header"
+                    app:layout_constraintLeft_toLeftOf="@id/tv_other_articles_header"
+                    android:layout_marginTop="21dp"
+                    android:src="@drawable/ic_underline_other_articles"
+                    android:contentDescription="@string/description_other_articles_header"/>
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rv_other_articles"
@@ -192,7 +222,7 @@
                     android:layout_marginStart="6dp"
                     android:nestedScrollingEnabled="false"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/iv_other_articles_header" />
+                    app:layout_constraintTop_toBottomOf="@id/tv_other_articles_header" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
