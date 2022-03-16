@@ -38,6 +38,7 @@
     <!-- Publication Fragment -->
     <string name="follow_below">Follow some below and we’ll show them up here.</string>
     <string name="no_followed">No Followed Publications!</string>
+    <string name="publications">Publications</string>
 
     <!-- Saved Fragment -->
     <string name="no_saved_articles">You have no saved articles.</string>
